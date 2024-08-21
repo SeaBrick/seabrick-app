@@ -1,0 +1,31 @@
+[
+  { "inputs": [], "name": "NotBought", "type": "error" },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "", "type": "uint256" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "name": "NotEnoughtCurrencies",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "buyer", "type": "address" }
+    ],
+    "name": "buy",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "token", "type": "address" },
+      { "internalType": "address", "name": "payment_token", "type": "address" },
+      { "internalType": "uint256", "name": "price", "type": "uint256" }
+    ],
+    "name": "initialization",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
