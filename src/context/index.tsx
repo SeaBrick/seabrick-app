@@ -19,7 +19,11 @@ createWeb3Modal({
   metadata,
   wagmiConfig: config,
   projectId,
-  enableAnalytics: true, // Optional - defaults to your Cloud configuration
+  enableAnalytics: true,
+  themeMode: "light",
+  themeVariables: {
+    "--w3m-border-radius-master": "0.9px",
+  },
 });
 
 export default function AppKitProvider({
