@@ -1,4 +1,4 @@
-import ConnectButton from "./buttons/ConnectButton";
+import ConnectButton from "../buttons/ConnectButton";
 
 export function Navbar() {
   return (
