@@ -125,6 +125,35 @@ function InitMarket() {
   );
 }
 
+function SelectTokens({ selected, setSelected }: any) {
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    setSelected(value);
+  };
+
+  return (
+    <>
+      <form className="max-w-sm mx-auto">
+        <label htmlFor="oracles" className="block mb-2 text-sm font-medium">
+          Select an payment
+        </label>
+        <select
+          onChange={(e) => handleSelectChange(e)}
+          defaultValue={selected}
+          id="countries"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        >
+          {Object.keys(OracleData).map((oracleName, i) => (
+            <option key={oracleName + i} value={oracleName}>
+              {oracleName}
+            </option>
+          ))}
+        </select>
+      </form>
+    </>
+  );
+}
+
 function ApproveTokens({ selected }: { selected: string }) {
   const oracleInfo = OracleData[selected];
 
@@ -243,35 +272,6 @@ function BuyNFT({ selected }: { selected: string }) {
         {isConfirmed && <div>Transaction confirmed.</div>}
       </form>
     </div>
-  );
-}
-
-function SelectTokens({ selected, setSelected }: any) {
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = e.target;
-    setSelected(value);
-  };
-
-  return (
-    <>
-      <form className="max-w-sm mx-auto">
-        <label htmlFor="oracles" className="block mb-2 text-sm font-medium">
-          Select an payment
-        </label>
-        <select
-          onChange={(e) => handleSelectChange(e)}
-          defaultValue={selected}
-          id="countries"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        >
-          {Object.keys(OracleData).map((oracleName, i) => (
-            <option key={oracleName + i} value={oracleName}>
-              {oracleName}
-            </option>
-          ))}
-        </select>
-      </form>
-    </>
   );
 }
 
