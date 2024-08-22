@@ -1,8 +1,11 @@
+import Seabrick from "./components/contracts/seabrick";
+
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex flex-col items-center p-10">
       <div>
         <p>Site</p>
+        <Seabrick />
       </div>
     </main>
   );
