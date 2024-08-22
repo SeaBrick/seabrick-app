@@ -49,7 +49,11 @@ createWeb3Modal({
   ethersConfig,
   chains: [arbitrum, arb_sepolia],
   projectId,
-  enableAnalytics: true, // Optional - defaults to your Cloud configuration
+  enableAnalytics: true,
+  themeMode: "light",
+  themeVariables: {
+    "--w3m-border-radius-master": "0.9px",
+  },
 });
 
 export function AppKit({ children }: any) {

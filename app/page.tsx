@@ -1,11 +1,8 @@
-import Image from "next/image";
-import ConnectButton from "./components/buttons/ConnectButton";
-
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div>
-        <ConnectButton />
+        <p>Site</p>
       </div>
     </main>
   );
