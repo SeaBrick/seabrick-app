@@ -11,11 +11,11 @@ function App() {
 
       <div className="">
         <TabList>
-          <TabItem label="Seabrick">
-            <Seabrick />
-          </TabItem>
           <TabItem label="Market">
             <Market />
+          </TabItem>
+          <TabItem label="Seabrick">
+            <Seabrick />
           </TabItem>
           <TabItem label="ERC20 Mock">
             <ERC20Mock />
