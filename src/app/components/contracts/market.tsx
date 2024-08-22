@@ -3,7 +3,7 @@
 import { addresses } from "@/app/lib/contracts";
 import IMarket from "@/app/lib/contracts/abis/IMarket.json";
 import IERC20 from "@/app/lib/contracts/abis/IERC20.json";
-import { getAddress, maxUint256 } from "viem";
+import { getAddress, maxUint256, toBytes } from "viem";
 import {
   useAccount,
   useReadContract,
@@ -43,7 +43,13 @@ const OracleData: {
 };
 
 function InitMarket() {
-  const { data: hash, writeContract, isPending } = useWriteContract();
+  const {
+    data: hash,
+    writeContract,
+    isPending,
+    error,
+    failureReason,
+  } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({
       hash,
@@ -121,6 +127,15 @@ function InitMarket() {
 
       {isConfirming && <div>Waiting for confirmation...</div>}
       {isConfirmed && <div>Transaction confirmed.</div>}
+
+      <button
+        onClick={() => {
+          console.log(error);
+          console.log(failureReason);
+        }}
+      >
+        xdd
+      </button>
     </form>
   );
 }
@@ -192,37 +207,33 @@ function ApproveTokens({ selected }: { selected: string }) {
 }
 
 function BuyNFT({ selected }: { selected: string }) {
-  const [isApproved, setIsApproved] = useState<boolean>(false);
+  const oracleInfo = OracleData[selected];
 
-  const { data: hash, writeContract, isPending } = useWriteContract();
+  const {
+    data: hash,
+    writeContract,
+    isPending,
+    error,
+    failureReason,
+  } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({
       hash,
     });
 
+  const { address } = useAccount();
+
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
-    const price = formData.get("price") as string;
-    const nftAddress = formData.get("nftAddress") as string;
-
-    const rawNames = formData.get("names") as string;
-    const names = rawNames.replace("[", "").replace("]", "").split(",");
-
-    const rawAgregators = formData.get("agregators") as string;
-    const agregators = rawAgregators
-      .replace("[", "")
-      .replace("]", "")
-      .split(",");
-
-    const rawTokens = formData.get("tokens") as string;
-    const tokens = rawTokens.replace("[", "").replace("]", "").split(",");
+    const buyer = getAddress(formData.get("buyer") as string);
+    const name = toBytes(oracleInfo.name);
 
     writeContract({
       address: getAddress(addresses.SeabrickMarket),
       abi: IMarket,
-      functionName: "initialization",
-      args: [BigInt(price), getAddress(nftAddress), names, agregators, tokens],
+      functionName: "buy",
+      args: [buyer, name],
     });
   }
 
@@ -232,44 +243,27 @@ function BuyNFT({ selected }: { selected: string }) {
       <form onSubmit={submit} className="rounded flex flex-col gap-y-2">
         <input
           className="bg-gray-300 p-2 rounded"
-          name="price"
-          placeholder="USD price"
+          name="buyer"
+          placeholder="Buyer of the NFT (owner of the funds)"
           required
-        />
-        <input
-          className="bg-gray-300 p-2 rounded"
-          name="nftAddress"
-          placeholder="Seabrick NFT address"
-          required
-          defaultValue={addresses.SeabrickNFT}
-        />
-        <input
-          className="bg-gray-300 p-2 rounded"
-          name="names"
-          placeholder="Names hashed keccack256"
-          required
-          defaultValue={marketData.NAMES.toString()}
-        />
-        <input
-          className="bg-gray-300 p-2 rounded"
-          name="agregators"
-          placeholder="Chainlink oracles agregators"
-          required
-          defaultValue={marketData.AGGREGATORS.toString()}
-        />
-        <input
-          className="bg-gray-300 p-2 rounded"
-          name="tokens"
-          placeholder="Payment tokens for each typo of oracle"
-          required
-          defaultValue={marketData.TOKENS.toString()}
+          defaultValue={address}
         />
         <button disabled={isPending} className="bg-green-400 p-2" type="submit">
-          {isPending ? "Confirming..." : "Init contract"}
+          {isPending ? "Confirming..." : "Buy NFT"}
         </button>
-
+        hash: {hash}
         {isConfirming && <div>Waiting for confirmation...</div>}
         {isConfirmed && <div>Transaction confirmed.</div>}
+        <button
+          onClick={() => {
+            console.log("error: ");
+            console.log(error);
+            console.log("failureReason: ");
+            console.log(failureReason);
+          }}
+        >
+          aver
+        </button>
       </form>
     </div>
   );
@@ -288,6 +282,7 @@ export default function Market() {
   return (
     <>
       <div>
+        <InitMarket />
         <SelectTokens selected={selected} setSelected={setSelected} />
         {selected && (
           <>
