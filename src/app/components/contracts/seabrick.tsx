@@ -40,7 +40,7 @@ function InitSeabrick() {
         name="owner"
         placeholder="Address owner"
         required
-        defaultValue={addresses.SeabrickNFT}
+        defaultValue={addresses.SeabrickMarket}
       />
       <button disabled={isPending} className="bg-green-400 p-2" type="submit">
         {isPending ? "Confirming..." : "Init contract"}
