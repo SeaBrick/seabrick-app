@@ -1,16 +1,16 @@
 "use client";
 
 import { addresses } from "@/app/lib/contracts";
-import ISeabrick from "@/app/lib/contracts/abis/ISeabrick.json";
+import IMarket from "@/app/lib/contracts/abis/IMarket.json";
 import { getAddress } from "viem";
 import { useAccount, useReadContract } from "wagmi";
 
-export default function Seabrick() {
+export default function Market() {
   const { address, isConnecting, isDisconnected } = useAccount();
 
   const { data: owner } = useReadContract({
-    abi: ISeabrick,
-    address: getAddress(addresses.SeabrickNFT),
+    abi: IMarket,
+    address: getAddress(addresses.SeabrickMarket),
     functionName: "owner",
   });
 
