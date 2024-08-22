@@ -1,6 +1,4 @@
 [
-  { "inputs": [], "name": "MismatchData", "type": "error" },
-  { "inputs": [], "name": "NotBought", "type": "error" },
   {
     "inputs": [
       { "internalType": "address", "name": "buyer", "type": "address" },
