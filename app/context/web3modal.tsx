@@ -7,12 +7,13 @@ const projectId =
   "6b210571a14914a01545e7e5dbef6dfc";
 
 // 2. Set chains
-const mainnet = {
-  chainId: 1,
-  name: "Ethereum",
+const arbitrum = {
+  chainId: 42161,
+  name: "Arbitrum One",
   currency: "ETH",
-  explorerUrl: "https://etherscan.io",
-  rpcUrl: "https://cloudflare-eth.com",
+  explorerUrl: "https://arbiscan.io",
+  rpcUrl:
+    "https://arb-mainnet.g.alchemy.com/v2/Wet0SaQS47eHKLeUsYqyc5MlRU4WgP2T",
 };
 const arb_sepolia = {
   chainId: 421614,
@@ -46,7 +47,7 @@ const ethersConfig = defaultConfig({
 // 5. Create a AppKit instance
 createWeb3Modal({
   ethersConfig,
-  chains: [mainnet, arb_sepolia],
+  chains: [arbitrum, arb_sepolia],
   projectId,
   enableAnalytics: true, // Optional - defaults to your Cloud configuration
 });
