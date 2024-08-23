@@ -11,6 +11,37 @@ import {
   useWriteContract,
 } from "wagmi";
 
+function TokenData() {
+  const { address } = useAccount();
+
+  const { data: totalSupply } = useReadContract({
+    abi: ISeabrick,
+    address: getAddress(addresses.SeabrickNFT),
+    functionName: "totalSupply",
+  });
+
+  const { data: symbol } = useReadContract({
+    abi: ISeabrick,
+    address: getAddress(addresses.SeabrickNFT),
+    functionName: "symbol",
+  });
+  const { data: name } = useReadContract({
+    abi: ISeabrick,
+    address: getAddress(addresses.SeabrickNFT),
+    functionName: "name",
+  });
+
+  return (
+    <div className="w-full flex flex-col gap-y-4 shadow-md rounded px-8 pt-6 pb-8 mb-4 ">
+      <div>Name: {"SeaBrick NFT"}</div>
+      <div>Symbol: {"SB_NFT"}</div>
+      {/* <div>Name: {name ? name?.toString() : "SeaBrick NFT"}</div>
+      <div>Symbol: {symbol?.toString() || "SB_NFT"}</div> */}
+      <div>Total Supply: {totalSupply?.toString()}</div>
+    </div>
+  );
+}
+
 function InitSeabrick() {
   const { data: hash, writeContract, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
@@ -72,6 +103,11 @@ export default function Seabrick() {
       <div className="w-full flex flex-col gap-y-4 shadow-md rounded px-8 pt-6 pb-8 mb-4 ">
         <div>Owner: {owner?.toString()}</div>
       </div>
+
+      <>
+        <TokenData />
+      </>
+
       <div>
         <>
           <div className="flex items-center mb-4">
