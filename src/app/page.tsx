@@ -23,7 +23,7 @@ function App() {
               <TabItem label="Seabrick">
                 <Seabrick />
               </TabItem>
-              <TabItem label="ERC20 Mock">
+              <TabItem label="Get test funds">
                 <ERC20Mock />
               </TabItem>
             </TabList>
