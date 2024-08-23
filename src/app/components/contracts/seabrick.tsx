@@ -2,6 +2,7 @@
 
 import { addresses } from "@/app/lib/contracts";
 import ISeabrick from "@/app/lib/contracts/abis/ISeabrick.json";
+import { useState } from "react";
 import { getAddress } from "viem";
 import {
   useAccount,
@@ -54,6 +55,7 @@ function InitSeabrick() {
 
 export default function Seabrick() {
   const { address, isConnecting, isDisconnected } = useAccount();
+  const [isChecked, setIsChecked] = useState<boolean>(false);
 
   const { data: owner } = useReadContract({
     abi: ISeabrick,
@@ -61,13 +63,35 @@ export default function Seabrick() {
     functionName: "owner",
   });
 
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+  };
+
   return (
     <>
       <div className="w-full flex flex-col gap-y-4 shadow-md rounded px-8 pt-6 pb-8 mb-4 ">
         <div>Owner: {owner?.toString()}</div>
       </div>
       <div>
-        <InitSeabrick />
+        <>
+          <div className="flex items-center mb-4">
+            <input
+              id="default-checkbox"
+              type="checkbox"
+              checked={isChecked}
+              onChange={handleCheckboxChange}
+              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            />
+            <label
+              htmlFor="default-checkbox"
+              className="ms-2 text-sm font-medium text-neutral-500 hover:text-black"
+            >
+              Show initialization method
+            </label>
+          </div>
+
+          {isChecked && <InitSeabrick />}
+        </>
       </div>
     </>
   );
