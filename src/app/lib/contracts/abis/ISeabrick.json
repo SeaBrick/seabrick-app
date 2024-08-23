@@ -1,4 +1,5 @@
 [
+  { "inputs": [], "name": "AlreadyInit", "type": "error" },
   { "inputs": [], "name": "AlreadyMinted", "type": "error" },
   {
     "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
@@ -14,6 +15,8 @@
     "name": "NotApproved",
     "type": "error"
   },
+  { "inputs": [], "name": "NotBurned", "type": "error" },
+  { "inputs": [], "name": "NotMinted", "type": "error" },
   {
     "inputs": [
       { "internalType": "address", "name": "", "type": "address" },
@@ -23,6 +26,7 @@
     "name": "NotOwner",
     "type": "error"
   },
+  { "inputs": [], "name": "OnlyContractOwner", "type": "error" },
   {
     "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "name": "OwnableInvalidOwner",
