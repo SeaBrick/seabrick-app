@@ -227,13 +227,13 @@ function BuyNFT({ selected }: { selected: string }) {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
     const buyer = getAddress(formData.get("buyer") as string);
-    const name = toBytes(oracleInfo.name);
+    // const name = toBytes(oracleInfo.name);
 
     writeContract({
       address: getAddress(addresses.SeabrickMarket),
       abi: IMarket,
       functionName: "buy",
-      args: [buyer, name],
+      args: [buyer, oracleInfo.name],
     });
   }
 
@@ -281,6 +281,9 @@ export default function Market() {
 
   return (
     <>
+      <div className="w-full flex flex-col gap-y-4 shadow-md rounded px-8 pt-6 pb-8 mb-4 ">
+        <div>Owner: {owner?.toString() ?? "No owner"}</div>
+      </div>
       <div>
         <InitMarket />
         <SelectTokens selected={selected} setSelected={setSelected} />
