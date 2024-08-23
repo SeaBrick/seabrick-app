@@ -133,9 +133,7 @@ function InitMarket() {
           console.log(error);
           console.log(failureReason);
         }}
-      >
-        xdd
-      </button>
+      ></button>
     </form>
   );
 }
