@@ -251,19 +251,22 @@ function BuyNFT({ selected }: { selected: string }) {
         <button disabled={isPending} className="bg-green-400 p-2" type="submit">
           {isPending ? "Confirming..." : "Buy NFT"}
         </button>
-        hash: {hash}
+        {hash && <div>Tx hash: {hash}</div>}
         {isConfirming && <div>Waiting for confirmation...</div>}
         {isConfirmed && <div>Transaction confirmed.</div>}
-        <button
-          onClick={() => {
-            console.log("error: ");
-            console.log(error);
-            console.log("failureReason: ");
-            console.log(failureReason);
-          }}
-        >
-          aver
-        </button>
+        {error && (
+          <button
+            className="bg-red-300 p-2 rounded w-fit"
+            onClick={() => {
+              console.log("error: ");
+              console.log(error);
+              console.log("failureReason: ");
+              console.log(failureReason);
+            }}
+          >
+            Show errors on console
+          </button>
+        )}
       </form>
     </div>
   );
