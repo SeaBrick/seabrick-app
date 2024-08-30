@@ -7,6 +7,7 @@ import { cookieToInitialState } from "wagmi";
 import { config } from "@/config";
 import AppKitProvider from "@/context";
 import { Navbar } from "./components/layout/Navbar";
+import SplashScreen from "./components/layout/SplashScreen";
 
 export const metadata: Metadata = {
   title: "Seabrick Demo App",
@@ -24,7 +25,7 @@ export default function RootLayout({
       <body className="">
         <AppKitProvider initialState={initialState}>
           <Navbar />
-          {children}
+          <SplashScreen>{children}</SplashScreen>
         </AppKitProvider>
       </body>
     </html>
