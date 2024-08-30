@@ -7,6 +7,7 @@ import { cookieToInitialState } from "wagmi";
 import { config } from "@/config";
 import AppKitProvider from "@/context";
 import { Navbar } from "./components/layout/Navbar";
+import { GraphQLClientProvider } from "@/context/graphql";
 
 export const metadata: Metadata = {
   title: "Seabrick Demo App",
@@ -23,9 +24,11 @@ export default function RootLayout({
     <html lang="en">
       <body className="">
         <AppKitProvider initialState={initialState}>
-          <Navbar />
+          <GraphQLClientProvider>
+            <Navbar />
 
-          {children}
+            {children}
+          </GraphQLClientProvider>
         </AppKitProvider>
       </body>
     </html>
