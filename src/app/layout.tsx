@@ -23,8 +23,8 @@ export default function RootLayout({
 }>) {
   const initialState = cookieToInitialState(config, headers().get("cookie"));
   return (
-    <ContractProvider>
-      <AppKitProvider initialState={initialState}>
+    <AppKitProvider initialState={initialState}>
+      <ContractProvider>
         <html lang="en">
           <body className="flex flex-col min-h-svh">
             <Navbar />
@@ -34,7 +34,7 @@ export default function RootLayout({
             <Footer />
           </body>
         </html>
-      </AppKitProvider>
-    </ContractProvider>
+      </ContractProvider>
+    </AppKitProvider>
   );
 }
