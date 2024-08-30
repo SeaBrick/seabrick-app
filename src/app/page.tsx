@@ -6,17 +6,19 @@ import TabItem from "./components/tabs/TabItem";
 import Market from "./components/contracts/market";
 import ContractDetail from "./components/contracts/SeabrickNFTDetails";
 import LatestBuys from "./components/contracts/LatestBuys";
-import { useAccount } from "wagmi";
+// import { useAccount } from "wagmi";
+import LatestTransfers from "./components/contracts/LatestTransfers";
 
 function Home() {
-  const { isConnected } = useAccount();
+  // const { isConnected } = useAccount();
 
   return (
     <div className="w-1/2 mx-auto pt-8 flex flex-col gap-y-8">
       <ContractDetail />
       <LatestBuys />
+      <LatestTransfers />
 
-      {isConnected ? (
+      {/* {isConnected ? (
         <>
           <div className="mb-8 mt-14 text-2xl text-gray-800">Contracts</div>
 
@@ -38,7 +40,7 @@ function Home() {
         <div className="mb-8 mt-14 text-2xl text-gray-800">
           Please, connect your wallet
         </div>
-      )}
+      )} */}
     </div>
   );
 }
