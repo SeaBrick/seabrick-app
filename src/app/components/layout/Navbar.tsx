@@ -1,3 +1,4 @@
+"use client";
 import ConnectButton from "../buttons/ConnectButton";
 import SeabrickSVG from "../utils/SeabrickSVG";
 
