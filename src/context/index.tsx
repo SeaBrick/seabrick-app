@@ -22,7 +22,8 @@ createWeb3Modal({
   enableAnalytics: true,
   themeMode: "light",
   themeVariables: {
-    "--w3m-border-radius-master": "0.9px",
+    "--w3m-border-radius-master": "4px",
+    "--w3m-accent": "#52b09f",
   },
 });
 
