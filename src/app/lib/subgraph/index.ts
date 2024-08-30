@@ -91,3 +91,26 @@ export async function getLatestTransfers(first: number = 10): Promise<any[]> {
 
   return (await generateRequest(document)).transfers;
 }
+
+export async function getAggregatorsData(): Promise<any[]> {
+  const document = gql`
+    {
+      aggregatorDatas {
+        id
+        name
+        nameReadable
+        aggregator
+        decimals
+        token {
+          address
+          decimals
+          id
+          name
+          symbol
+        }
+      }
+    }
+  `;
+
+  return (await generateRequest(document)).aggregatorDatas;
+}

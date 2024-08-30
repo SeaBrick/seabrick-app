@@ -1,8 +1,7 @@
 "use client";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense } from "react";
 import {
   addressResumer,
-  formatDate,
   hashResumer,
   processTime,
   timeAgo,

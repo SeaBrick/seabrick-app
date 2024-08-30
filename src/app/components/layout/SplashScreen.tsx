@@ -1,30 +1,9 @@
 "use client";
 
-import { useContractContext } from "@/context/contractContext";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense } from "react";
 import ContractLoader from "../loaders/ContractLoader";
 
 const SplashScreen = ({ children }: any) => {
-  const { data, dispatch } = useContractContext();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  const getSeabrickNftData = async () => {
-    // const resp = await getSeabrickContract(addresses.SeabrickNFT);
-    // dispatch((prevData) => ({
-    //   ...prevData,
-    //   seabrick: resp,
-    // }));
-  };
-
-  async function loadData() {
-    await getSeabrickNftData();
-    setIsLoading(false);
-  }
-
-  useEffect(() => {
-    loadData();
-  });
-
   return (
     <>
       <Suspense
