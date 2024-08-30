@@ -26,7 +26,6 @@ export default function SeabrickNFTDetails() {
               <p>
                 Address:<span>{seabrick.id}</span>
               </p>
-              <p></p>
               <p>
                 Total Supply: <span>{seabrick.totalSupply}</span>
               </p>

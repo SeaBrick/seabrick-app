@@ -19,7 +19,6 @@ const ContractLoader: React.FC = () => {
   const contracts = getContractsData.read();
 
   useEffect(() => {
-    console.log("contr: ", contracts);
     dispatch((prevData) => ({
       ...prevData,
       seabrick: contracts.seabrick,

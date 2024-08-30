@@ -42,6 +42,7 @@ export async function getSeabrickContract(address: string): Promise<any> {
 
   return (await generateRequest(document)).seabrickContract;
 }
+
 export async function getSeabrickMarket(address: string): Promise<any> {
   const document = gql`
     {
@@ -55,4 +56,38 @@ export async function getSeabrickMarket(address: string): Promise<any> {
   `;
 
   return (await generateRequest(document)).seabrickMarketContract;
+}
+
+export async function getLatestBuys(first: number = 10): Promise<any[]> {
+  const document = gql`
+    {
+      buys(orderBy: blockTimestamp, orderDirection: desc, first: ${first}) {
+        buyer
+        blockNumber
+        blockTimestamp
+        transactionHash
+        tokenId
+      }
+    }
+  `;
+
+  return (await generateRequest(document)).buys;
+}
+
+export async function getLatestTransfers(first: number = 10): Promise<any[]> {
+  const document = gql`
+    {
+      transfers(orderBy: blockTimestamp, orderDirection: desc, first: ${first}) {
+        id
+        tokenId
+        from
+        to
+        transactionHash
+        blockTimestamp
+        blockNumber
+      }
+    }
+  `;
+
+  return (await generateRequest(document)).transfers;
 }

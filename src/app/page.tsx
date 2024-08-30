@@ -4,16 +4,18 @@ import Seabrick from "./components/contracts/seabrick";
 import TabList from "./components/tabs/Tablist";
 import TabItem from "./components/tabs/TabItem";
 import Market from "./components/contracts/market";
-import { useAccount } from "wagmi";
-import { getAccounts } from "./lib/subgraph";
 import ContractDetail from "./components/contracts/SeabrickNFTDetails";
+import LatestBuys from "./components/contracts/LatestBuys";
+import { useAccount } from "wagmi";
 
 function Home() {
   const { isConnected } = useAccount();
 
   return (
-    <div className="w-1/2 mx-auto pt-8">
+    <div className="w-1/2 mx-auto pt-8 flex flex-col gap-y-8">
       <ContractDetail />
+      <LatestBuys />
+
       {isConnected ? (
         <>
           <div className="mb-8 mt-14 text-2xl text-gray-800">Contracts</div>
