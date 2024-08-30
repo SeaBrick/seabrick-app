@@ -5,12 +5,20 @@ import TabList from "./components/tabs/Tablist";
 import TabItem from "./components/tabs/TabItem";
 import Market from "./components/contracts/market";
 import { useAccount } from "wagmi";
+import { getAccounts } from "./lib/subgraph";
+import ContractDetail from "./components/contracts/ContractDetail";
+
+async function aver() {
+  console.log("doc_a: ", await getAccounts());
+}
 
 function Home() {
   const { isConnected } = useAccount();
 
   return (
     <div className="w-1/2 mx-auto">
+      <button onClick={() => aver()}>averr</button>
+      <ContractDetail />
       {isConnected ? (
         <>
           <div className="mb-8 mt-14 text-2xl text-gray-800">Contracts</div>

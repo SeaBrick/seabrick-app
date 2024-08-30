@@ -1,3 +1,4 @@
+"use client";
 import { gql, GraphQLClient } from "graphql-request";
 
 export const SubgraphClient = new GraphQLClient(
@@ -26,19 +27,32 @@ export async function getAccounts(): Promise<any> {
   return await generateRequest(document);
 }
 
-export async function getDataContracts(): Promise<any> {
+export async function getSeabrickContract(address: string): Promise<any> {
   const document = gql`
     {
-      accounts {
+      seabrickContract(id: "${address}") {
         id
-        isMinter
-        tokens {
-          id
-          tokenId
-        }
+        owner
+        name
+        symbol
+        totalSupply
       }
     }
   `;
 
-  return await generateRequest(document);
+  return (await generateRequest(document)).seabrickContract;
+}
+export async function getSeabrickMarket(address: string): Promise<any> {
+  const document = gql`
+    {
+      seabrickMarketContract(id: "${address}") {
+        id
+        owner
+        price
+        token
+      }
+    }
+  `;
+
+  return (await generateRequest(document)).seabrickMarketContract;
 }

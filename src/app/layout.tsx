@@ -9,6 +9,7 @@ import AppKitProvider from "@/context";
 import { Navbar } from "./components/layout/Navbar";
 import SplashScreen from "./components/layout/SplashScreen";
 import { Footer } from "./components/layout/Footer";
+import { ContractProvider } from "@/context/contractContext";
 
 export const metadata: Metadata = {
   title: "Seabrick Demo App",
@@ -22,16 +23,18 @@ export default function RootLayout({
 }>) {
   const initialState = cookieToInitialState(config, headers().get("cookie"));
   return (
-    <html lang="en">
-      <body className="flex flex-col min-h-svh">
-        <AppKitProvider initialState={initialState}>
-          <Navbar />
-          <main className="flex-grow">
-            <SplashScreen>{children}</SplashScreen>
-          </main>
-          <Footer />
-        </AppKitProvider>
-      </body>
-    </html>
+    <ContractProvider>
+      <AppKitProvider initialState={initialState}>
+        <html lang="en">
+          <body className="flex flex-col min-h-svh">
+            <Navbar />
+            <main className="flex-grow">
+              <SplashScreen>{children}</SplashScreen>
+            </main>
+            <Footer />
+          </body>
+        </html>
+      </AppKitProvider>
+    </ContractProvider>
   );
 }
