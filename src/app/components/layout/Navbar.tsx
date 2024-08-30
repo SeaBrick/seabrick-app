@@ -1,5 +1,5 @@
 import ConnectButton from "../buttons/ConnectButton";
-import SeabrickSVG from "./SeabrickSVG";
+import SeabrickSVG from "../utils/SeabrickSVG";
 
 export function Navbar() {
   return (
