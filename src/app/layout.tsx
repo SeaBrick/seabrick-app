@@ -21,11 +21,11 @@ export default function RootLayout({
   const initialState = cookieToInitialState(config, headers().get("cookie"));
   return (
     <html lang="en">
-      <body>
+      <body className="">
         <AppKitProvider initialState={initialState}>
           <Navbar />
 
-          {children}
+          <div className="w-1/2 mx-auto">{children}</div>
         </AppKitProvider>
       </body>
     </html>

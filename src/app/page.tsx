@@ -6,11 +6,11 @@ import TabItem from "./components/tabs/TabItem";
 import Market from "./components/contracts/market";
 import { useAccount } from "wagmi";
 
-function App() {
+function Home() {
   const { isConnected } = useAccount();
 
   return (
-    <div className="w-3/4 mx-auto">
+    <div>
       {isConnected ? (
         <>
           <div className="mb-8 mt-14 text-2xl text-gray-800">Contracts</div>
@@ -38,4 +38,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;
