@@ -25,7 +25,7 @@ export default function RootLayout({
         <AppKitProvider initialState={initialState}>
           <Navbar />
 
-          <div className="w-1/2 mx-auto">{children}</div>
+          {children}
         </AppKitProvider>
       </body>
     </html>

@@ -10,7 +10,7 @@ function Home() {
   const { isConnected } = useAccount();
 
   return (
-    <div>
+    <div className="w-1/2 mx-auto">
       {isConnected ? (
         <>
           <div className="mb-8 mt-14 text-2xl text-gray-800">Contracts</div>
