@@ -17,7 +17,7 @@ const SplashScreen = ({ children }: any) => {
     loadData();
   });
 
-  return isLoading ? <div>Loading...</div> : <div>{children}</div>;
+  return isLoading ? <div>Loading...</div> : <>{children}</>;
 };
 
 export default SplashScreen;

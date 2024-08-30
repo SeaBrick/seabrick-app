@@ -1,3 +1,5 @@
+import plugin from 'tailwindcss/plugin'
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -6,8 +8,18 @@ module.exports = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "seabrick-blue": "#005493"
+      }
+    },
   },
-  plugins: [],
+  plugins: [
+    plugin(function ({ addVariant }) {
+      addVariant('not-first-last', '&:not(:last-child):not(:first-child)')
+      addVariant('first-last', ['&:first-child', '&:last-child'])
+      addVariant('direct-children', '&>*')
+    }),
+  ],
 }
 
