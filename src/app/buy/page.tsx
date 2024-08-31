@@ -1,12 +1,9 @@
 "use client";
 import React, { Suspense } from "react";
-import { useAccount } from "wagmi";
 import RequireWallet from "@/app/components/utils/RequireWallet";
 import BuyNFT from "./BuyNFT";
 
 export default function BuyPage() {
-  const { isConnected } = useAccount();
-
   return (
     <RequireWallet>
       <div className="w-1/2 mx-auto pt-8">
