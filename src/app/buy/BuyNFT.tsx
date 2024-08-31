@@ -16,41 +16,41 @@ export default function BuyNFT() {
   const [open, setOpen] = useState<boolean>(false);
 
   return (
-    <Container>
+    <>
+      {/* Aggregators data loader */}
       <AggregatorsLoader
         dispatchAggregators={setAggregators}
         dispatchTokens={setTokens}
       />
+      <Container>
+        <div className="px-8 pt-6 pb-8 flex flex-col gap-y-4">
+          <div className="flex">
+            <SelectTokens
+              index={index}
+              setIndex={setIndex}
+              aggregators={aggregators}
+              tokens={tokens}
+            />
 
-      <GetFundsModal setOpen={setOpen} open={open} />
+            {tokens && tokens.length > 0 && (
+              <>
+                <GetFundsModal
+                  setOpen={setOpen}
+                  open={open}
+                  token={tokens[index]}
+                />
 
-      <div className="px-8 pt-6 pb-8 flex flex-col gap-y-4">
-        <div className="flex">
-          <SelectTokens
-            index={index}
-            setIndex={setIndex}
-            aggregators={aggregators}
-            tokens={tokens}
-          />
-
-          <p
-            onClick={() => setOpen(true)}
-            className="self-center hover:text-seabrick-blue hover:cursor-pointer"
-          >
-            Get funds!
-          </p>
+                <p
+                  onClick={() => setOpen(true)}
+                  className="self-center hover:text-seabrick-blue hover:cursor-pointer underline"
+                >
+                  Get funds!
+                </p>
+              </>
+            )}
+          </div>
         </div>
-        <button
-          className="bg-seabrick-blue p-2 w-fit rounded-xl text-white self-center"
-          onClick={() => {
-            console.log("index: ", index);
-            console.log(aggregators[index]);
-            console.log(tokens[index]);
-          }}
-        >
-          Print
-        </button>
-      </div>
-    </Container>
+      </Container>
+    </>
   );
 }
