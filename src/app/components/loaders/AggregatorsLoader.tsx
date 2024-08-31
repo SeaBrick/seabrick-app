@@ -12,7 +12,7 @@ const getAggregatorsInfo = async () => {
 };
 const getData = wrapPromise(getAggregatorsInfo());
 
-const Aggregators: React.FC<AggregatorsProps> = ({
+const AggregatorsLoader: React.FC<AggregatorsProps> = ({
   dispatchAggregators,
   dispatchTokens,
 }) => {
@@ -28,4 +28,4 @@ const Aggregators: React.FC<AggregatorsProps> = ({
   return <></>;
 };
 
-export default Aggregators;
+export default AggregatorsLoader;

@@ -4,7 +4,8 @@ import SelectTokens from "@/app/components/selects/SelectTokens";
 import { Aggregator, Token } from "@/app/lib/interfaces";
 import { wrapPromise } from "@/app/lib/utils";
 import { getAggregatorsData } from "@/app/lib/subgraph";
-import Aggregators from "../components/loaders/Aggregators";
+import AggregatorsLoader from "../components/loaders/AggregatorsLoader";
+import Link from "next/link";
 
 export default function BuyNFT() {
   const [aggregators, setAggregators] = useState<Aggregator[]>([]);
@@ -13,26 +14,31 @@ export default function BuyNFT() {
 
   return (
     <Container>
+      <AggregatorsLoader
+        dispatchAggregators={setAggregators}
+        dispatchTokens={setTokens}
+      />
       <div className="px-8 pt-6 pb-8 flex flex-col gap-y-4">
-        <Aggregators
-          dispatchAggregators={setAggregators}
-          dispatchTokens={setTokens}
-        />
-        <SelectTokens
-          index={index}
-          setIndex={setIndex}
-          aggregators={aggregators}
-          tokens={tokens}
-        />
-        Index: {index}
+        <div className="flex">
+          <SelectTokens
+            index={index}
+            setIndex={setIndex}
+            aggregators={aggregators}
+            tokens={tokens}
+          />
+          <Link href="/">
+            <p>Get test funds!</p>
+          </Link>
+        </div>
         <button
+          className="bg-seabrick-blue p-2 w-fit rounded-xl text-white self-center"
           onClick={() => {
-            console.log(aggregators);
-            console.log(tokens);
             console.log("index: ", index);
+            console.log(aggregators[index]);
+            console.log(tokens[index]);
           }}
         >
-          Print2
+          Print
         </button>
       </div>
     </Container>
