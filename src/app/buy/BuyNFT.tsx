@@ -5,12 +5,15 @@ import { Aggregator, Token } from "@/app/lib/interfaces";
 import { wrapPromise } from "@/app/lib/utils";
 import { getAggregatorsData } from "@/app/lib/subgraph";
 import AggregatorsLoader from "../components/loaders/AggregatorsLoader";
-import Link from "next/link";
+import Modal from "../components/modals/Modal";
+import GetFundsModal from "../components/modals/GetFundsModal";
 
 export default function BuyNFT() {
   const [aggregators, setAggregators] = useState<Aggregator[]>([]);
   const [tokens, setTokens] = useState<Token[]>([]);
   const [index, setIndex] = useState<number>(0);
+
+  const [open, setOpen] = useState<boolean>(false);
 
   return (
     <Container>
@@ -18,6 +21,9 @@ export default function BuyNFT() {
         dispatchAggregators={setAggregators}
         dispatchTokens={setTokens}
       />
+
+      <GetFundsModal setOpen={setOpen} open={open} />
+
       <div className="px-8 pt-6 pb-8 flex flex-col gap-y-4">
         <div className="flex">
           <SelectTokens
@@ -26,9 +32,13 @@ export default function BuyNFT() {
             aggregators={aggregators}
             tokens={tokens}
           />
-          <Link href="/">
-            <p>Get test funds!</p>
-          </Link>
+
+          <p
+            onClick={() => setOpen(true)}
+            className="self-center hover:text-seabrick-blue hover:cursor-pointer"
+          >
+            Get funds!
+          </p>
         </div>
         <button
           className="bg-seabrick-blue p-2 w-fit rounded-xl text-white self-center"
