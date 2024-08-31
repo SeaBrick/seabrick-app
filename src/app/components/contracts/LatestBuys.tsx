@@ -1,5 +1,5 @@
 "use client";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import {
   addressResumer,
   hashResumer,
@@ -21,7 +21,12 @@ const getLatestBuysInfo = async () => {
 const getData = wrapPromise(getLatestBuysInfo());
 
 const LatestBuysData: React.FC = () => {
+  const [buys, setBuys] = useState<any[]>([]);
+
   const data = getData.read();
+  useEffect(() => {
+    setBuys(data);
+  }, []);
 
   return (
     <Table>
@@ -32,9 +37,9 @@ const LatestBuysData: React.FC = () => {
         <th scope="col">Time</th>
       </TableHeader>
       <TableBody>
-        {data &&
-          data.map((buy, i) => (
-            <TableBodyRow uniqueId={`id-${i}`}>
+        {buys &&
+          buys.map((buy, i) => (
+            <TableBodyRow key={`id-${i}`}>
               <td className="text-black">{buy.tokenId}</td>
               <td title={buy.buyer} className="text-black">
                 {addressResumer(buy.buyer, 3)}
@@ -43,7 +48,7 @@ const LatestBuysData: React.FC = () => {
                 {hashResumer(buy.transactionHash, 3)}
               </td>
               <td
-                title={processTime(buy.blockTimestamp).toLocaleString()}
+                title={processTime(buy.blockTimestamp).toLocaleString("en-US")}
                 className="text-black"
               >
                 {timeAgo(processTime(buy.blockTimestamp))}

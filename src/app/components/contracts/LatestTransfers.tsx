@@ -34,7 +34,7 @@ const LatestTransfersData: React.FC = () => {
       <TableBody>
         {data &&
           data.map((transfer, i) => (
-            <TableBodyRow uniqueId={`id-${i}`}>
+            <TableBodyRow key={`id-${i}`}>
               <td title={transfer.transactionHash} className="text-black">
                 {hashResumer(transfer.transactionHash, 3)}
               </td>
@@ -45,7 +45,9 @@ const LatestTransfersData: React.FC = () => {
                 {addressResumer(transfer.to, 3)}
               </td>
               <td
-                title={processTime(transfer.blockTimestamp).toLocaleString()}
+                title={processTime(transfer.blockTimestamp).toLocaleString(
+                  "en-US"
+                )}
                 className="text-black"
               >
                 {timeAgo(processTime(transfer.blockTimestamp))}
