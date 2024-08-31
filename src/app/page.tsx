@@ -10,7 +10,7 @@ import LatestTransfers from "./components/contracts/LatestTransfers";
 
 function Home() {
   return (
-    <div className="w-1/2 mx-auto pt-8 flex flex-col gap-y-8">
+    <div className="w-1/2 mx-auto flex flex-col gap-y-8">
       <ContractDetail />
       <LatestBuys />
       <LatestTransfers />

@@ -38,7 +38,7 @@ function FooterSVG(details: {
 
 export function Footer() {
   return (
-    <div className="bg-seabrick-blue min-h-[334px]">
+    <div className="bg-seabrick-blue min-h-[334px] mt-8">
       <div className="w-1/2 mx-auto h-max">
         <div className="min-h-[272px] p-10 flex flex-col gap-y-[30px]">
           <div>

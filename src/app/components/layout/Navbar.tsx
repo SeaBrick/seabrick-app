@@ -8,7 +8,7 @@ export function Navbar() {
   const pathname = usePathname();
 
   return (
-    <header className="z-10 h-24 shadow">
+    <header className="z-10 h-24 shadow mb-8">
       <div className="flex h-full items-center justify-between w-1/2 mx-auto">
         <SeabrickSVG />
 
