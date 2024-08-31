@@ -6,7 +6,7 @@ import {
   processTime,
   timeAgo,
   wrapPromise,
-} from "../utils";
+} from "../../lib/utils";
 import { getLatestBuys } from "@/app/lib/subgraph";
 import Container from "../utils/Container";
 import Table from "../table/Table";

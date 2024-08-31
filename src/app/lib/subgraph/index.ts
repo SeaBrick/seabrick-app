@@ -1,5 +1,6 @@
 "use client";
 import { gql, GraphQLClient } from "graphql-request";
+import { AggregatorResponse } from "../interfaces/subgraph";
 
 export const SubgraphClient = new GraphQLClient(
   "https://api.studio.thegraph.com/query/15039/seabrick/version/latest"
@@ -92,7 +93,7 @@ export async function getLatestTransfers(first: number = 10): Promise<any[]> {
   return (await generateRequest(document)).transfers;
 }
 
-export async function getAggregatorsData(): Promise<any[]> {
+export async function getAggregatorsData(): Promise<AggregatorResponse[]> {
   const document = gql`
     {
       aggregatorDatas {
