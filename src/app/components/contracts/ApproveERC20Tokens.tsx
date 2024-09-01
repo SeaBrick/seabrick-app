@@ -67,7 +67,6 @@ export default function ApproveERC20Tokens({
   };
 
   return (
-    // <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col gap-y-4">
     <div className="rounded py-4 flex flex-col gap-y-4">
       <h1 className="text-xl">Approve {token.symbol} tokens </h1>
       <p className="text-yellow-500">We will approve with 5% slip page</p>

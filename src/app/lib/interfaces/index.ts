@@ -1,8 +1,8 @@
-import { Address } from "viem";
+import { Address, Hex } from "viem";
 
 export interface Aggregator {
   id: string;
-  name: string;
+  name: Hex;
   nameReadable: string;
   aggregator: Address;
   decimals: string;

@@ -11,6 +11,7 @@ import { aggregatorV3InterfaceAbi, ierc20Abi } from "../lib/contracts/abis";
 import { useContractContext } from "@/context/contractContext";
 import { CheckCircleIcon } from "@heroicons/react/16/solid";
 import ApproveERC20Tokens from "../components/contracts/ApproveERC20Tokens";
+import Buy from "../components/contracts/Buy";
 
 export default function BuyNFT() {
   // TODO : use a context for this aggregator and tokens
@@ -38,7 +39,7 @@ export default function BuyNFT() {
       setSelectedToken(tokens[index]);
       setSelectedAggregator(aggregators[index]);
     }
-  }, [tokens, index]);
+  }, [tokens, index, aggregators]);
 
   // Can use the status field to get the status of the call
   const { data: balance } = useReadContract({
@@ -47,12 +48,13 @@ export default function BuyNFT() {
     functionName: "balanceOf",
     args: [walletAddress!],
   });
-  const { data: marketAllowance, refetch: refetchMarketAllowance } = useReadContract({
-    abi: ierc20Abi,
-    address: selectedToken?.address,
-    functionName: "allowance",
-    args: [walletAddress!, marketAddress],
-  });
+  const { data: marketAllowance, refetch: refetchMarketAllowance } =
+    useReadContract({
+      abi: ierc20Abi,
+      address: selectedToken?.address,
+      functionName: "allowance",
+      args: [walletAddress!, marketAddress],
+    });
 
   const { data: latestRoundData } = useReadContract({
     abi: aggregatorV3InterfaceAbi,
@@ -90,7 +92,13 @@ export default function BuyNFT() {
     } else {
       setPaymentPrice(0n);
     }
-  }, [latestRoundData, marketAllowance]);
+  }, [
+    latestRoundData,
+    marketAllowance,
+    marketPrice,
+    selectedAggregator,
+    selectedToken,
+  ]);
 
   useEffect(() => {
     /* FIXME: Use other strategy for this kind of thing (marketAllowance can be undefined) and about the slip page*/
@@ -163,8 +171,6 @@ export default function BuyNFT() {
                   </span>
                 </p>
 
-                <p>marketAllowance: {marketAllowance?.toString()}</p>
-
                 {/* FIXME: Use other strategy for this kind of thing (marketAllowance can be undefined) and about the slip page*/}
                 {!enoughApproved && marketAllowance != undefined ? (
                   <div>
@@ -182,6 +188,10 @@ export default function BuyNFT() {
                   </div>
                 )}
               </div>
+
+              {/* Actual buy */}
+
+              {enoughApproved && <Buy aggregator={selectedAggregator} />}
             </>
           )}
         </div>

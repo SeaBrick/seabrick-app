@@ -1,6 +1,7 @@
 "use client";
 import { gql, GraphQLClient } from "graphql-request";
-import { AggregatorResponse } from "../interfaces/subgraph";
+import { AggregatorResponse, SingleBuyResponse } from "../interfaces/subgraph";
+import { Hash } from "viem";
 
 export const SubgraphClient = new GraphQLClient(
   "https://api.studio.thegraph.com/query/15039/seabrick/version/latest"
@@ -114,4 +115,25 @@ export async function getAggregatorsData(): Promise<AggregatorResponse[]> {
   `;
 
   return (await generateRequest(document)).aggregatorDatas;
+}
+
+export async function getSingleBuy(
+  txHash: Hash
+): Promise<SingleBuyResponse | null> {
+  const document = gql`
+    {
+      buys(where: {transactionHash: "${txHash}"}) {
+        tokenId
+        transactionHash
+        buyer
+        blockNumber
+        blockTimestamp
+      }
+    }
+  `;
+
+  const buys = (await generateRequest(document)).buys;
+  if (buys.length == 0) return null;
+
+  return buys[0];
 }
