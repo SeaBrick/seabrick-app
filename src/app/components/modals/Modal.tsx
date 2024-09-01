@@ -12,7 +12,9 @@ interface ModalProps {
   children: ReactNode;
 }
 const Modal = ({ open, setOpen, children }: ModalProps) => {
-  const handleModalClose = (e: any) => {
+  const handleModalClose = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
     if (e.target === e.currentTarget) {
       setOpen(false);
     }
@@ -48,7 +50,9 @@ const Modal = ({ open, setOpen, children }: ModalProps) => {
               >
                 <DialogPanel
                   className="z-20"
-                  onClick={(e) => handleModalClose(e)}
+                  onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+                    handleModalClose(e)
+                  }
                 >
                   {children}
                 </DialogPanel>
