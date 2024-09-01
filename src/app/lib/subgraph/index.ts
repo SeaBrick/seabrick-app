@@ -120,6 +120,7 @@ export async function getAggregatorsData(): Promise<AggregatorResponse[]> {
 export async function getSingleBuy(
   txHash: Hash
 ): Promise<SingleBuyResponse | null> {
+  console.log("txHash: ", txHash);
   const document = gql`
     {
       buys(where: {transactionHash: "${txHash}"}) {
@@ -132,7 +133,12 @@ export async function getSingleBuy(
     }
   `;
 
+  console.log("document: ");
+  console.log(document);
+
   const buys = (await generateRequest(document)).buys;
+  console.log("buys: ", buys);
+
   if (buys.length == 0) return null;
 
   return buys[0];

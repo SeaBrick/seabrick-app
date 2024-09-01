@@ -27,10 +27,15 @@ export default function Buy({ aggregator }: BuyProps) {
     error,
     failureReason,
   } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess: isConfirmed } =
-    useWaitForTransactionReceipt({
-      hash,
-    });
+  const {
+    data: receipt,
+    isLoading: isConfirming,
+    isSuccess: isConfirmed,
+  } = useWaitForTransactionReceipt({
+    hash,
+  });
+
+  
 
   const { address: walletAddress } = useAccount();
   const [open, setOpen] = useState<boolean>(false);
@@ -77,7 +82,12 @@ export default function Buy({ aggregator }: BuyProps) {
         {isConfirmed && <div>Transaction confirmed.</div>}
 
         {isConfirmed && hash && (
-          <SuccessBuyModal open={open} setOpen={setOpen} txHash={hash} />
+          <SuccessBuyModal
+            open={open}
+            setOpen={setOpen}
+            txHash={hash}
+            receipt={receipt}
+          />
         )}
 
         {error && (

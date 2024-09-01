@@ -3,19 +3,22 @@ import Container from "../utils/Container";
 import Modal from "./Modal";
 import { CheckCircleIcon } from "@heroicons/react/16/solid";
 import Link from "next/link";
-import { Hash } from "viem";
+import { Hash, parseEventLogs, TransactionReceipt } from "viem";
 import { getSingleBuy } from "@/app/lib/subgraph";
 import { useAccount } from "wagmi";
+import { iMarketAbi, iSeabrickAbi } from "@/app/lib/contracts/abis";
 
 interface SuccessBuyModalProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   txHash: Hash;
+  receipt: TransactionReceipt;
 }
 export default function SuccessBuyModal({
   open,
   setOpen,
   txHash,
+  receipt,
 }: SuccessBuyModalProps) {
   const { chain } = useAccount();
   const [tokenId, setTokenId] = useState<string>("");
@@ -23,14 +26,26 @@ export default function SuccessBuyModal({
 
   useEffect(() => {
     async function getBuy() {
-      const buyItem = await getSingleBuy(txHash);
+      const logsBuy = parseEventLogs({
+        abi: iMarketAbi,
+        eventName: "Buy",
+        logs: receipt.logs,
+      });
 
-      if (buyItem) {
-        setTokenId(buyItem.tokenId);
+      if (logsBuy.length > 0) {
+        const log = logsBuy[0];
+        log.args.id;
+        setTokenId(log.args.id.toString());
+      } else {
+        // Try to use the sg
+        const buyItem = await getSingleBuy(txHash);
+        if (buyItem) {
+          setTokenId(buyItem.tokenId);
+        }
       }
     }
     getBuy();
-  });
+  }, [txHash]);
 
   useEffect(() => {
     const explorerUrl = chain?.blockExplorers?.default.url;
