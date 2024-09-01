@@ -52,17 +52,17 @@ export default function ApproveERC20Tokens({
   }
 
   useEffect(() => {
-    if (isConfirmed) {
+    if (isConfirmed == true) {
       refetch();
     }
-  }, [isConfirmed]);
+  }, [isConfirmed, refetch]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     try {
       setAmountToAprove(parseUnits(inputValue, parseInt(token.decimals)));
     } catch (error) {
-      console.log("not valid bigint value");
+      console.log("not valid bigint value: ", error);
     }
   };
 
