@@ -1,11 +1,12 @@
-import { Dispatch, ReactNode, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 import Container from "../utils/Container";
 import Modal from "./Modal";
 import { Token } from "@/app/lib/interfaces";
-import IERC20 from "@/app/lib/contracts/abis/IERC20.json";
+// import IERC20 from "@/app/lib/contracts/abis/IERC20.json";
 import { useAccount, useWriteContract } from "wagmi";
 import { getAddress, parseUnits } from "viem";
 import { addressResumer } from "@/app/lib/utils";
+import { ierc20Abi } from "@/app/lib/contracts/abis";
 
 interface ModalProps {
   open: boolean;
@@ -24,17 +25,11 @@ export default function GetFundsModal({ open, setOpen, token }: ModalProps) {
     const amount = formData.get("amount") as string;
     const toAddress = formData.get("toAddress") as string;
 
-    console.log("amount: ", amount);
-    console.log("walletAddress: ", walletAddress);
-    console.log(toAddress);
-
-    console.log(parseUnits(amount, parseInt(decimals)));
-
     writeContract({
-      address: getAddress(tokenAddress),
-      abi: IERC20,
+      address: tokenAddress,
+      abi: ierc20Abi,
       functionName: "mint",
-      args: [getAddress(toAddress), BigInt(amount)],
+      args: [getAddress(toAddress), parseUnits(amount, parseInt(decimals))],
     });
   }
 
