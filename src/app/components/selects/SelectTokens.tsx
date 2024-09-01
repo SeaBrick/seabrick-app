@@ -10,7 +10,6 @@ interface SelectTokensProps {
 export default function SelectTokens({
   index,
   setIndex,
-  aggregators,
   tokens,
 }: SelectTokensProps) {
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

@@ -34,7 +34,6 @@ export default function SuccessBuyModal({
 
       if (logsBuy.length > 0) {
         const log = logsBuy[0];
-        log.args.id;
         setTokenId(log.args.id.toString());
       } else {
         // Try to use the sg
