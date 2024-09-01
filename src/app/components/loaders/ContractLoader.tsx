@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { wrapPromise } from "../utils";
+import { wrapPromise } from "@/app/lib/utils";
 import { getSeabrickContract, getSeabrickMarket } from "@/app/lib/subgraph";
 import { addresses } from "@/app/lib/contracts";
 import { useContractContext } from "@/context/contractContext";

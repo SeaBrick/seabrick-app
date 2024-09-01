@@ -1,11 +1,11 @@
 "use client";
 
 import { addresses } from "@/app/lib/contracts";
-import IERC20 from "@/app/lib/contracts/abis/IERC20.json";
 import { getAddress, formatUnits } from "viem";
 import { useAccount, useReadContract, useWriteContract } from "wagmi";
 import { OracleData } from "./data";
 import { useState } from "react";
+import { ierc20Abi } from "@/app/lib/contracts/abis";
 
 function MintTokens({ selected }: { selected: string }) {
   const oracleInfo = OracleData[selected];
@@ -20,7 +20,7 @@ function MintTokens({ selected }: { selected: string }) {
 
     writeContract({
       address: getAddress(oracleInfo.token),
-      abi: IERC20,
+      abi: ierc20Abi,
       functionName: "mint",
       args: [getAddress(toAddress), BigInt(amount)],
     });
@@ -88,22 +88,22 @@ export function TokenData({ selected }: { selected: string }) {
   const { address } = useAccount();
 
   const { data: decimals } = useReadContract({
-    abi: IERC20,
+    abi: ierc20Abi,
     address: getAddress(oracleInfo.token),
     functionName: "decimals",
   });
 
   const { data: totalSupply } = useReadContract({
-    abi: IERC20,
+    abi: ierc20Abi,
     address: getAddress(oracleInfo.token),
     functionName: "totalSupply",
   });
 
   const { data: balance } = useReadContract({
-    abi: IERC20,
+    abi: ierc20Abi,
     address: getAddress(oracleInfo.token),
     functionName: "balanceOf",
-    args: [address],
+    args: [address!],
   });
 
   return (

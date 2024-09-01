@@ -1,5 +1,7 @@
 "use client";
 import { gql, GraphQLClient } from "graphql-request";
+import { AggregatorResponse, SingleBuyResponse } from "../interfaces/subgraph";
+import { Hash } from "viem";
 
 export const SubgraphClient = new GraphQLClient(
   "https://api.studio.thegraph.com/query/15039/seabrick/version/latest"
@@ -92,10 +94,10 @@ export async function getLatestTransfers(first: number = 10): Promise<any[]> {
   return (await generateRequest(document)).transfers;
 }
 
-export async function getAggregatorsData(): Promise<any[]> {
+export async function getAggregatorsData(): Promise<AggregatorResponse[]> {
   const document = gql`
     {
-      aggregatorDatas {
+      aggregatorDatas(orderBy: nameReadable, orderDirection: desc) {
         id
         name
         nameReadable
@@ -113,4 +115,31 @@ export async function getAggregatorsData(): Promise<any[]> {
   `;
 
   return (await generateRequest(document)).aggregatorDatas;
+}
+
+export async function getSingleBuy(
+  txHash: Hash
+): Promise<SingleBuyResponse | null> {
+  console.log("txHash: ", txHash);
+  const document = gql`
+    {
+      buys(where: {transactionHash: "${txHash}"}) {
+        tokenId
+        transactionHash
+        buyer
+        blockNumber
+        blockTimestamp
+      }
+    }
+  `;
+
+  console.log("document: ");
+  console.log(document);
+
+  const buys = (await generateRequest(document)).buys;
+  console.log("buys: ", buys);
+
+  if (buys.length == 0) return null;
+
+  return buys[0];
 }

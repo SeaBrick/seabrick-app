@@ -1,92 +1,201 @@
+"use client";
 import { useEffect, useState } from "react";
-import { wrapPromise } from "../components/utils";
-import { getAggregatorsData } from "../lib/subgraph";
-import Container from "../components/utils/Container";
+import Container from "@/app/components/utils/Container";
+import SelectTokens from "@/app/components/selects/SelectTokens";
+import { Aggregator, Token } from "@/app/lib/interfaces";
+import AggregatorsLoader from "../components/loaders/AggregatorsLoader";
+import GetFundsModal from "../components/modals/GetFundsModal";
+import { useAccount, useReadContract } from "wagmi";
+import { formatUnits } from "viem";
+import { aggregatorV3InterfaceAbi, ierc20Abi } from "../lib/contracts/abis";
+import { useContractContext } from "@/context/contractContext";
+import { CheckCircleIcon } from "@heroicons/react/16/solid";
+import ApproveERC20Tokens from "../components/contracts/ApproveERC20Tokens";
+import Buy from "../components/contracts/Buy";
 
-interface AggregatorsProps {
-  dispatchAggregators: React.Dispatch<React.SetStateAction<any[]>>;
-  dispatchTokens: React.Dispatch<React.SetStateAction<any[]>>;
-}
-const getAggregatorsInfo = async () => {
-  return await getAggregatorsData();
-};
-const getData = wrapPromise(getAggregatorsInfo());
+export default function BuyNFT() {
+  // TODO : use a context for this aggregator and tokens
+  const [aggregators, setAggregators] = useState<Aggregator[]>([]);
+  const [tokens, setTokens] = useState<Token[]>([]);
+  const [selectedAggregator, setSelectedAggregator] = useState<Aggregator>();
+  const [selectedToken, setSelectedToken] = useState<Token>();
 
-const Aggregators: React.FC<AggregatorsProps> = ({
-  dispatchAggregators,
-  dispatchTokens,
-}) => {
-  const data = getData.read();
+  const {
+    data: {
+      market: { price: marketPrice, id: marketAddress },
+    },
+  } = useContractContext();
+  const [index, setIndex] = useState<number>(0);
+  const [open, setOpen] = useState<boolean>(false);
+  const [paymentPrice, setPaymentPrice] = useState<bigint>(0n);
+  const [paymentPriceSlipPage, setPaymentPriceSlipPage] = useState<bigint>(0n);
+
+  const [enoughApproved, setEnoughApproved] = useState<boolean>(false);
+
+  const { address: walletAddress } = useAccount();
 
   useEffect(() => {
-    const tokensArray = data.map((item) => item.token);
-    const aggregatorsArray = data.map(({ token, ...rest }) => rest);
-    dispatchTokens(tokensArray);
-    dispatchAggregators(aggregatorsArray);
-  }, []);
+    if (tokens.length > 0) {
+      setSelectedToken(tokens[index]);
+      setSelectedAggregator(aggregators[index]);
+    }
+  }, [tokens, index, aggregators]);
 
-  return <></>;
-};
+  // Can use the status field to get the status of the call
+  const { data: balance } = useReadContract({
+    abi: ierc20Abi,
+    address: selectedToken?.address,
+    functionName: "balanceOf",
+    args: [walletAddress!],
+  });
+  const { data: marketAllowance, refetch: refetchMarketAllowance } =
+    useReadContract({
+      abi: ierc20Abi,
+      address: selectedToken?.address,
+      functionName: "allowance",
+      args: [walletAddress!, marketAddress],
+    });
 
-function SelectTokens({ index, setIndex, aggregators, tokens }: any) {
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = e.target;
-    setIndex(Number(value));
-  };
+  const { data: latestRoundData } = useReadContract({
+    abi: aggregatorV3InterfaceAbi,
+    address: selectedAggregator?.aggregator,
+    functionName: "latestRoundData",
+    args: [],
+  });
+
+  useEffect(() => {
+    if (latestRoundData && selectedToken && selectedAggregator) {
+      // - Calculations:
+      //
+      // Currency amount = marketUsdPrice  * (10^payment_decimals) * (10 ^ oracle_decimals)
+      //                   ---------------------------------------------------------------
+      //                                        latestRoundData
+      //
+      //
+      // Market Currency Price = Token Currency unit (with decimals) * latestRoundData
+      //                         ------------------------------------------------------
+      //                             (10^payment_decimals) * (10 ^ oracle_decimals)
+
+      const paymentAmount =
+        (BigInt(marketPrice) *
+          10n ** BigInt(selectedToken.decimals) *
+          10n ** BigInt(selectedAggregator.decimals)) /
+        BigInt(latestRoundData[1]);
+
+      // TODO: Make configurable the slip page
+      const slipPagePerc = 5n; // 5%
+      const amountWithSlipPage =
+        paymentAmount + (paymentAmount * slipPagePerc) / 100n;
+
+      setPaymentPrice(paymentAmount);
+      setPaymentPriceSlipPage(amountWithSlipPage);
+    } else {
+      setPaymentPrice(0n);
+    }
+  }, [
+    latestRoundData,
+    marketAllowance,
+    marketPrice,
+    selectedAggregator,
+    selectedToken,
+  ]);
+
+  useEffect(() => {
+    /* FIXME: Use other strategy for this kind of thing (marketAllowance can be undefined) and about the slip page*/
+    if (
+      marketAllowance != undefined &&
+      marketAllowance < paymentPriceSlipPage
+    ) {
+      setEnoughApproved(false);
+    } else {
+      setEnoughApproved(true);
+    }
+  }, [paymentPrice, paymentPriceSlipPage, marketAllowance]);
 
   return (
     <>
-      <form className="max-w-sm mx-auto">
-        <label htmlFor="oracles" className="block mb-2 text-sm font-medium">
-          Select an payment
-        </label>
+      {/* Aggregators data loader */}
+      <AggregatorsLoader
+        dispatchAggregators={setAggregators}
+        dispatchTokens={setTokens}
+      />
+      <Container>
+        <div className="px-8 pt-6 pb-8 flex flex-col gap-y-4 divide-y-2">
+          {selectedToken && selectedAggregator && (
+            <>
+              {/* Select funds */}
+              <div className="flex flex-col gap-y-4">
+                <div className="flex">
+                  <SelectTokens
+                    index={index}
+                    setIndex={setIndex}
+                    aggregators={aggregators}
+                    tokens={tokens}
+                  />
 
-        <select
-          onChange={(e) => handleSelectChange(e)}
-          defaultValue={index}
-          id="token-payment"
-          className="bg-gray-50 border border-gray-300 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        >
-          {tokens.map((token: any, i: number) => (
-            <option key={token.id + "-" + i} value={i}>
-              {token.name}
-            </option>
-          ))}
-        </select>
-      </form>
+                  <GetFundsModal
+                    setOpen={setOpen}
+                    open={open}
+                    token={selectedToken}
+                  />
+
+                  <p
+                    onClick={() => setOpen(true)}
+                    className="self-center hover:text-seabrick-blue hover:cursor-pointer underline"
+                  >
+                    Get funds!
+                  </p>
+                </div>
+
+                <p>
+                  Your {selectedToken.symbol} balance:{" "}
+                  <span>
+                    {formatUnits(
+                      BigInt(balance?.toString() || "0"),
+                      parseInt(selectedToken.decimals)
+                    )}
+                  </span>
+                </p>
+              </div>
+
+              {/* Calculate price */}
+              <div className="w-full pt-4 flex flex-col gap-y-4">
+                <p className="font-bold">
+                  NFT price (aprox):{" "}
+                  <span className="font-normal">
+                    {formatUnits(
+                      paymentPrice,
+                      parseInt(selectedToken.decimals)
+                    )}{" "}
+                    {selectedToken.symbol}
+                  </span>
+                </p>
+
+                {/* FIXME: Use other strategy for this kind of thing (marketAllowance can be undefined) and about the slip page*/}
+                {!enoughApproved && marketAllowance != undefined ? (
+                  <div>
+                    <ApproveERC20Tokens
+                      token={selectedToken}
+                      amount={paymentPriceSlipPage}
+                      marketAllowance={marketAllowance}
+                      refetch={refetchMarketAllowance}
+                    />
+                  </div>
+                ) : (
+                  <div className="flex flex-row gap-x-2">
+                    <CheckCircleIcon className="size-6 text-green-600" />
+                    <p>Enough approved tokens</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Actual buy */}
+
+              {enoughApproved && <Buy aggregator={selectedAggregator} />}
+            </>
+          )}
+        </div>
+      </Container>
     </>
-  );
-}
-
-export default function BuyNFT() {
-  const [aggregators, setAggregators] = useState<any[]>([]);
-  const [tokens, setTokens] = useState<any[]>([]);
-  const [index, setIndex] = useState<number>(0);
-
-  return (
-    <Container>
-      <div className="px-8 pt-6 pb-8 flex flex-col gap-y-4">
-        <Aggregators
-          dispatchAggregators={setAggregators}
-          dispatchTokens={setTokens}
-        />
-        <SelectTokens
-          index={index}
-          setIndex={setIndex}
-          aggregators={aggregators}
-          tokens={tokens}
-        />
-        Index: {index}
-        <button
-          onClick={() => {
-            console.log(aggregators);
-            console.log(tokens);
-            console.log("index: ", index);
-          }}
-        >
-          Print2
-        </button>
-      </div>
-    </Container>
   );
 }
