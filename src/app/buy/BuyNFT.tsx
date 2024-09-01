@@ -6,9 +6,11 @@ import { Aggregator, Token } from "@/app/lib/interfaces";
 import AggregatorsLoader from "../components/loaders/AggregatorsLoader";
 import GetFundsModal from "../components/modals/GetFundsModal";
 import { useAccount, useReadContract } from "wagmi";
-import { Abi, formatUnits, parseEther, parseUnits } from "viem";
+import { formatUnits } from "viem";
 import { aggregatorV3InterfaceAbi, ierc20Abi } from "../lib/contracts/abis";
 import { useContractContext } from "@/context/contractContext";
+import { CheckCircleIcon } from "@heroicons/react/16/solid";
+import ApproveERC20Tokens from "../components/contracts/ApproveERC20Tokens";
 
 export default function BuyNFT() {
   // TODO : use a context for this aggregator and tokens
@@ -19,12 +21,15 @@ export default function BuyNFT() {
 
   const {
     data: {
-      market: { price: marketPrice },
+      market: { price: marketPrice, id: marketAddress },
     },
   } = useContractContext();
   const [index, setIndex] = useState<number>(0);
   const [open, setOpen] = useState<boolean>(false);
   const [paymentPrice, setPaymentPrice] = useState<bigint>(0n);
+  const [paymentPriceSlipPage, setPaymentPriceSlipPage] = useState<bigint>(0n);
+
+  const [enoughApproved, setEnoughApproved] = useState<boolean>(false);
 
   const { address: walletAddress } = useAccount();
 
@@ -35,11 +40,18 @@ export default function BuyNFT() {
     }
   }, [tokens, index]);
 
+  // Can use the status field to get the status of the call
   const { data: balance } = useReadContract({
     abi: ierc20Abi,
     address: selectedToken?.address,
     functionName: "balanceOf",
     args: [walletAddress!],
+  });
+  const { data: marketAllowance, refetch: refetchMarketAllowance } = useReadContract({
+    abi: ierc20Abi,
+    address: selectedToken?.address,
+    functionName: "allowance",
+    args: [walletAddress!, marketAddress],
   });
 
   const { data: latestRoundData } = useReadContract({
@@ -68,11 +80,29 @@ export default function BuyNFT() {
           10n ** BigInt(selectedAggregator.decimals)) /
         BigInt(latestRoundData[1]);
 
+      // TODO: Make configurable the slip page
+      const slipPagePerc = 5n; // 5%
+      const amountWithSlipPage =
+        paymentAmount + (paymentAmount * slipPagePerc) / 100n;
+
       setPaymentPrice(paymentAmount);
+      setPaymentPriceSlipPage(amountWithSlipPage);
     } else {
       setPaymentPrice(0n);
     }
-  }, [latestRoundData]);
+  }, [latestRoundData, marketAllowance]);
+
+  useEffect(() => {
+    /* FIXME: Use other strategy for this kind of thing (marketAllowance can be undefined) and about the slip page*/
+    if (
+      marketAllowance != undefined &&
+      marketAllowance < paymentPriceSlipPage
+    ) {
+      setEnoughApproved(false);
+    } else {
+      setEnoughApproved(true);
+    }
+  }, [paymentPrice, paymentPriceSlipPage, marketAllowance]);
 
   return (
     <>
@@ -121,7 +151,7 @@ export default function BuyNFT() {
               </div>
 
               {/* Calculate price */}
-              <div className="w-full pt-4">
+              <div className="w-full pt-4 flex flex-col gap-y-4">
                 <p className="font-bold">
                   NFT price (aprox):{" "}
                   <span className="font-normal">
@@ -132,6 +162,25 @@ export default function BuyNFT() {
                     {selectedToken.symbol}
                   </span>
                 </p>
+
+                <p>marketAllowance: {marketAllowance?.toString()}</p>
+
+                {/* FIXME: Use other strategy for this kind of thing (marketAllowance can be undefined) and about the slip page*/}
+                {!enoughApproved && marketAllowance != undefined ? (
+                  <div>
+                    <ApproveERC20Tokens
+                      token={selectedToken}
+                      amount={paymentPriceSlipPage}
+                      marketAllowance={marketAllowance}
+                      refetch={refetchMarketAllowance}
+                    />
+                  </div>
+                ) : (
+                  <div className="flex flex-row gap-x-2">
+                    <CheckCircleIcon className="size-6 text-green-600" />
+                    <p>Enough approved tokens</p>
+                  </div>
+                )}
               </div>
             </>
           )}

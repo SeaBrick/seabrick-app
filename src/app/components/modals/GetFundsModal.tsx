@@ -68,7 +68,7 @@ export default function GetFundsModal({ open, setOpen, token }: ModalProps) {
                 value={walletAddress}
               />
               <input type="hidden" name="toAddress" value={walletAddress} />
-              <button className="bg-green-400 p-2 mt-4" type="submit">
+              <button className="bg-seabrick-green p-2 mt-4" type="submit">
                 Get tokens
               </button>
 
