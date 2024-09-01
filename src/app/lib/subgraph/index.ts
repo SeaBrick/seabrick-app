@@ -96,7 +96,7 @@ export async function getLatestTransfers(first: number = 10): Promise<any[]> {
 export async function getAggregatorsData(): Promise<AggregatorResponse[]> {
   const document = gql`
     {
-      aggregatorDatas {
+      aggregatorDatas(orderBy: nameReadable, orderDirection: desc) {
         id
         name
         nameReadable

@@ -1,11 +1,24 @@
 "use client";
 import { createContext, useContext, useState } from "react";
+import { Address, zeroAddress } from "viem";
 
 // Types
-
+interface SeabrickNFT {
+  id: Address;
+  owner: Address;
+  name: string;
+  symbol: string;
+  totalSupply: string;
+}
+interface SeabrickMarket {
+  id: Address;
+  owner: Address;
+  price: string;
+  token: Address;
+}
 type ContractStateType = {
-  seabrick: any;
-  market: any;
+  seabrick: SeabrickNFT;
+  market: SeabrickMarket;
 };
 
 type ContractContextType = {
@@ -14,8 +27,19 @@ type ContractContextType = {
 };
 
 const initialState: ContractStateType = {
-  seabrick: {},
-  market: {},
+  seabrick: {
+    id: zeroAddress,
+    owner: zeroAddress,
+    name: "",
+    symbol: "",
+    totalSupply: "",
+  },
+  market: {
+    id: zeroAddress,
+    owner: zeroAddress,
+    price: "",
+    token: zeroAddress,
+  },
 };
 
 export const ContractContext = createContext<ContractContextType>({

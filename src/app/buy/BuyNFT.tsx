@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import Container from "@/app/components/utils/Container";
 import SelectTokens from "@/app/components/selects/SelectTokens";
@@ -5,16 +6,26 @@ import { Aggregator, Token } from "@/app/lib/interfaces";
 import AggregatorsLoader from "../components/loaders/AggregatorsLoader";
 import GetFundsModal from "../components/modals/GetFundsModal";
 import { useAccount, useReadContract } from "wagmi";
-import { Abi, formatUnits } from "viem";
+import { Abi, formatUnits, parseEther, parseUnits } from "viem";
 import { aggregatorV3InterfaceAbi, ierc20Abi } from "../lib/contracts/abis";
+import { useContractContext } from "@/context/contractContext";
 
 export default function BuyNFT() {
+  // TODO : use a context for this aggregator and tokens
   const [aggregators, setAggregators] = useState<Aggregator[]>([]);
   const [tokens, setTokens] = useState<Token[]>([]);
+  const [selectedAggregator, setSelectedAggregator] = useState<Aggregator>();
+  const [selectedToken, setSelectedToken] = useState<Token>();
+
+  const {
+    data: {
+      market: { price: marketPrice },
+    },
+  } = useContractContext();
   const [index, setIndex] = useState<number>(0);
   const [open, setOpen] = useState<boolean>(false);
-  const [selectedToken, setSelectedToken] = useState<Token>();
-  const [selectedAggregator, setSelectedAggregator] = useState<Aggregator>();
+  const [paymentPrice, setPaymentPrice] = useState<bigint>(0n);
+
   const { address: walletAddress } = useAccount();
 
   useEffect(() => {
@@ -37,6 +48,31 @@ export default function BuyNFT() {
     functionName: "latestRoundData",
     args: [],
   });
+
+  useEffect(() => {
+    if (latestRoundData && selectedToken && selectedAggregator) {
+      // - Calculations:
+      //
+      // Currency amount = marketUsdPrice  * (10^payment_decimals) * (10 ^ oracle_decimals)
+      //                   ---------------------------------------------------------------
+      //                                        latestRoundData
+      //
+      //
+      // Market Currency Price = Token Currency unit (with decimals) * latestRoundData
+      //                         ------------------------------------------------------
+      //                             (10^payment_decimals) * (10 ^ oracle_decimals)
+
+      const paymentAmount =
+        (BigInt(marketPrice) *
+          10n ** BigInt(selectedToken.decimals) *
+          10n ** BigInt(selectedAggregator.decimals)) /
+        BigInt(latestRoundData[1]);
+
+      setPaymentPrice(paymentAmount);
+    } else {
+      setPaymentPrice(0n);
+    }
+  }, [latestRoundData]);
 
   return (
     <>
@@ -86,8 +122,16 @@ export default function BuyNFT() {
 
               {/* Calculate price */}
               <div className="w-full pt-4">
-                <p>Aprox NFT price: 100 {selectedToken.symbol}</p>
-                <p>answer: {latestRoundData ? latestRoundData[1] : 0}</p>
+                <p className="font-bold">
+                  NFT price (aprox):{" "}
+                  <span className="font-normal">
+                    {formatUnits(
+                      paymentPrice,
+                      parseInt(selectedToken.decimals)
+                    )}{" "}
+                    {selectedToken.symbol}
+                  </span>
+                </p>
               </div>
             </>
           )}
