@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Hash, parseEventLogs, TransactionReceipt } from "viem";
 import { getSingleBuy } from "@/app/lib/subgraph";
 import { useAccount } from "wagmi";
-import { iMarketAbi, iSeabrickAbi } from "@/app/lib/contracts/abis";
+import { iMarketAbi } from "@/app/lib/contracts/abis";
 
 interface SuccessBuyModalProps {
   open: boolean;
@@ -44,7 +44,7 @@ export default function SuccessBuyModal({
       }
     }
     getBuy();
-  }, [txHash]);
+  }, [receipt, txHash]);
 
   useEffect(() => {
     const explorerUrl = chain?.blockExplorers?.default.url;
