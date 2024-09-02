@@ -2,14 +2,16 @@
 
 import { Suspense } from "react";
 import ContractLoader from "../loaders/ContractLoader";
+import PageLoaderSpinner from "../spinners/PageLoaderSpinner";
 
 const SplashScreen = ({ children }: any) => {
   return (
     <>
       <Suspense
         fallback={
-          // This is the main spinner that will be show on load
-          <div className="mx-auto w-60">Loading...</div>
+          <div className="py-24 my-auto">
+            <PageLoaderSpinner height="h-max" width="w-1/2" />
+          </div>
         }
       >
         {/* Main node data for the app. NOTE: it is totally blocker, it will wait for 

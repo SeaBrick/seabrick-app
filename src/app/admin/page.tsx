@@ -34,14 +34,18 @@ export default function AdminPage() {
 
   return (
     <RequireWallet>
-      {isLoading ? (
-        <PageLoaderSpinner />
-      ) : (
-        <div className="w-1/2 mx-auto">
-          <h1>Admin Page</h1>
-          <p>Welcome to the admin section.</p>
-        </div>
-      )}
+      <div className="w-1/2 mx-auto">
+        {isLoading ? (
+          <div className="py-24 my-auto">
+            <PageLoaderSpinner height="h-max" width="w-1/2" />
+          </div>
+        ) : (
+          <div className="w-1/2 mx-auto">
+            <h1>Admin Page</h1>
+            <p>Welcome to the admin section.</p>
+          </div>
+        )}
+      </div>
     </RequireWallet>
   );
 }
