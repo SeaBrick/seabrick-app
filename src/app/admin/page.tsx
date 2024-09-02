@@ -14,8 +14,11 @@ export default function AdminPage() {
   const { data: accountData } = useAccountContext();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  const [isMinter, setIsMinter] = useState<boolean>(false);
+  const [isNFTContractOwner, setIsNFTContractOwner] = useState<boolean>(false);
+  const [isMarketOwner, setIsMarketOwner] = useState<boolean>(false);
+
   useEffect(() => {
-    console.log("walletAddress: ", walletAddress);
     if (!walletAddress) {
       router.push("/");
     }
@@ -28,6 +31,22 @@ export default function AdminPage() {
     ) {
       router.push("/");
     } else {
+      // Individually checking each scenario
+      // Is a token minter?
+      if (accountData.isMinter) {
+        setIsMinter(true);
+      }
+
+      // Is the market owner?
+      if (contractsData.market.owner === walletAddress) {
+        setIsMarketOwner(true);
+      }
+
+      // Is the NFT contract owner?
+      if (contractsData.seabrick.owner === walletAddress) {
+        setIsNFTContractOwner(true);
+      }
+
       setIsLoading(false);
     }
   }, [accountData, contractsData, router, walletAddress]);
