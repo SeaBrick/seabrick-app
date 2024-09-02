@@ -3,6 +3,7 @@ import { gql, GraphQLClient } from "graphql-request";
 import {
   AccountResponse,
   AggregatorResponse,
+  BuyResponse,
   SingleBuyResponse,
 } from "../interfaces/subgraph";
 import { Address, Hash } from "viem";
@@ -64,7 +65,9 @@ export async function getSeabrickMarket(address: string): Promise<any> {
   return (await generateRequest(document)).seabrickMarketContract;
 }
 
-export async function getLatestBuys(first: number = 10): Promise<any[]> {
+export async function getLatestBuys(
+  first: number = 10
+): Promise<BuyResponse[]> {
   const document = gql`
     {
       buys(orderBy: blockTimestamp, orderDirection: desc, first: ${first}) {

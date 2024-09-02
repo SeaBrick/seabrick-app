@@ -28,3 +28,11 @@ export interface Account {
   isMinter: boolean;
   tokens: TokenNFT[];
 }
+
+export interface Buy {
+  tokenId: string;
+  buyer: Address;
+  blockNumber: string;
+  blockTimestamp: string;
+  transactionHash: Hex;
+}

@@ -13,6 +13,7 @@ import Table from "../table/Table";
 import TableHeader from "../table/TableHeader";
 import TableBody from "../table/TableBody";
 import TableBodyRow from "../table/TableBodyRow";
+import PageLoaderSpinner from "../spinners/PageLoaderSpinner";
 
 const getLatestTransfersInfo = async () => {
   return await getLatestTransfers();
@@ -64,8 +65,9 @@ const LatestTransfers: React.FC = () => {
     <>
       <Suspense
         fallback={
-          // This is the main spinner that will be show on load
-          <div className="mx-auto w-60">Loading...</div>
+          <div className="py-4">
+            <PageLoaderSpinner height="h-1/3" width="w-1/3" />
+          </div>
         }
       >
         <Container>

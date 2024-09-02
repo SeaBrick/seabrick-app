@@ -100,6 +100,10 @@ export function timeAgo(date: Date): string {
   }
 }
 
-export const processTime = (time: number): Date => {
+export const processTime = (time: number | string): Date => {
+  if (typeof time == "string") {
+    time = parseInt(time);
+  }
+
   return new Date(time * 1000);
 };

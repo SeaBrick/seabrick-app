@@ -2,6 +2,7 @@
 import React, { Suspense } from "react";
 import RequireWallet from "@/app/components/utils/RequireWallet";
 import BuyNFT from "./BuyNFT";
+import PageLoaderSpinner from "../components/spinners/PageLoaderSpinner";
 
 export default function BuyPage() {
   return (
@@ -11,7 +12,8 @@ export default function BuyPage() {
         <Suspense
           fallback={
             // This is the main spinner that will be show on load
-            <div className="mx-auto w-60">Loading...</div>
+            // <div className="mx-auto w-60">Loading...</div>
+            <PageLoaderSpinner />
           }
         >
           <BuyNFT />

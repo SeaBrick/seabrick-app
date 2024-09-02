@@ -1,5 +1,5 @@
 "use client";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense } from "react";
 import {
   addressResumer,
   hashResumer,
@@ -13,6 +13,7 @@ import Table from "../table/Table";
 import TableHeader from "../table/TableHeader";
 import TableBody from "../table/TableBody";
 import TableBodyRow from "../table/TableBodyRow";
+import PageLoaderSpinner from "../spinners/PageLoaderSpinner";
 
 const getLatestBuysInfo = async () => {
   return await getLatestBuys();
@@ -21,12 +22,7 @@ const getLatestBuysInfo = async () => {
 const getData = wrapPromise(getLatestBuysInfo());
 
 const LatestBuysData: React.FC = () => {
-  const [buys, setBuys] = useState<any[]>([]);
-
   const data = getData.read();
-  useEffect(() => {
-    setBuys(data);
-  }, []);
 
   return (
     <Table>
@@ -37,8 +33,8 @@ const LatestBuysData: React.FC = () => {
         <th scope="col">Time</th>
       </TableHeader>
       <TableBody>
-        {buys &&
-          buys.map((buy, i) => (
+        {data &&
+          data.map((buy, i) => (
             <TableBodyRow key={`id-${i}`}>
               <td className="text-black">{buy.tokenId}</td>
               <td title={buy.buyer} className="text-black">
@@ -65,8 +61,9 @@ const LatestBuys: React.FC = () => {
     <>
       <Suspense
         fallback={
-          // This is the main spinner that will be show on load
-          <div className="mx-auto w-60">Loading...</div>
+          <div className="py-4">
+            <PageLoaderSpinner height="h-1/3" width="w-1/3" />
+          </div>
         }
       >
         <Container>
