@@ -1,6 +1,6 @@
 interface ContainerProps {
   children: React.ReactNode;
-  bgColor: `bg-${string}`;
+  bgColor?: `bg-${string}`;
 }
 export default function Container({
   children,
