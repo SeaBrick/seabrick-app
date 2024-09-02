@@ -9,6 +9,7 @@ import PageLoaderSpinner from "../components/spinners/PageLoaderSpinner";
 import Container from "../components/utils/Container";
 import { getAddress } from "viem";
 import MarketPanel from "./MarketPanel";
+import TokenPanel from "./TokenPanel";
 
 export default function AdminPage() {
   const router = useRouter();
@@ -67,11 +68,22 @@ export default function AdminPage() {
             <>
               <p className="text-3xl font-bold mb-8">Admin Page</p>
 
-              {isMarketOwner && (
-                <Container>
-                  <MarketPanel />
-                </Container>
-              )}
+              <div className="flex flex-col gap-y-8">
+                {isMarketOwner && (
+                  <Container>
+                    <MarketPanel />
+                  </Container>
+                )}
+
+                {(isMinter || isNFTContractOwner) && (
+                  <Container>
+                    <TokenPanel
+                      isNFTContractOwner={isNFTContractOwner}
+                      isMinter={isMinter}
+                    />
+                  </Container>
+                )}
+              </div>
             </>
           )}
         </div>
