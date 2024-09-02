@@ -14,7 +14,7 @@ export default function MarketPanel() {
   } = useAggregatorsContext();
   const {
     data: {
-      market: { id: marketAddress },
+      market: { id: marketAddress, owner, price },
     },
   } = useContractContext();
 
@@ -54,13 +54,23 @@ export default function MarketPanel() {
 
   return (
     <div className="px-8 pt-6 pb-8 flex flex-col gap-y-4">
-      {" "}
       <p className="text-2xl font-bold">Market panel</p>
-      <div className="flex flex-col gap-y-4 bg-seabrick-blue rounded p-4 text-white divide-y-2 divide-white direct-children:pt-4">
+      <div className="flex flex-col gap-y-4 bg-seabrick-blue rounded p-4 text-white divide-y-2 divide-white">
+        <div>
+          <p className="font-bold" title={marketAddress}>
+            Contract: <span className="font-normal">{marketAddress}</span>
+          </p>
+          <p className="font-bold" title={owner}>
+            Owner: <span className="font-normal">{owner}</span>
+          </p>
+          <p className="font-bold" title={owner}>
+            Price: <span className="font-normal">{price} USD</span>
+          </p>
+        </div>
         {tokens.map((token, i) => (
           <div
             key={`${token.id}-${i}`}
-            className="first:pt-0 flex items-center justify-between"
+            className="first:pt-0 flex items-center justify-between pt-4"
           >
             <div>
               <p className="font-bold">
