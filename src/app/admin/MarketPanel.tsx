@@ -56,7 +56,7 @@ export default function MarketPanel() {
     <div className="px-8 pt-6 pb-8 flex flex-col gap-y-4">
       {" "}
       <p className="text-2xl font-bold">Market panel</p>
-      <div className="flex flex-col gap-y-4 bg-seabrick-blue rounded p-4 text-white divide-y-2 direct-children:pt-4">
+      <div className="flex flex-col gap-y-4 bg-seabrick-blue rounded p-4 text-white divide-y-2 divide-white direct-children:pt-4">
         {tokens.map((token, i) => (
           <div
             key={`${token.id}-${i}`}
