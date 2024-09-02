@@ -2,7 +2,10 @@
 import React from "react";
 import { useAccount } from "wagmi";
 
-export default function RequireWallet({ children }: any) {
+interface RequireWalletProps {
+  children: React.ReactNode;
+}
+export default function RequireWallet({ children }: RequireWalletProps) {
   const { isConnected } = useAccount();
 
   return (
