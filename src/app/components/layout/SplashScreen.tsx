@@ -1,10 +1,13 @@
 "use client";
 
-import { Suspense } from "react";
+import React, { Suspense } from "react";
 import ContractLoader from "../loaders/ContractLoader";
 import PageLoaderSpinner from "../spinners/PageLoaderSpinner";
 
-const SplashScreen = ({ children }: any) => {
+interface SplashScreenProps {
+  children: React.ReactNode;
+}
+const SplashScreen = ({ children }: SplashScreenProps) => {
   return (
     <>
       <Suspense
