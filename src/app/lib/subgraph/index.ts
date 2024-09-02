@@ -13,7 +13,7 @@ export const SubgraphClient = new GraphQLClient(
   "https://api.studio.thegraph.com/query/15039/seabrick/version/latest"
 );
 
-async function generateRequest(queryDocument: string): Promise<any> {
+async function generateRequest<T>(queryDocument: string): Promise<T> {
   const client = SubgraphClient;
   return await client.request(queryDocument);
 }
@@ -48,7 +48,7 @@ export async function getSeabrickContract(address: string): Promise<any> {
     }
   `;
 
-  return (await generateRequest(document)).seabrickContract;
+  return (await generateRequest<any>(document)).seabrickContract;
 }
 
 export async function getSeabrickMarket(address: string): Promise<any> {
@@ -81,7 +81,7 @@ export async function getLatestBuys(
     }
   `;
 
-  return (await generateRequest(document)).buys;
+  return (await generateRequest<{ buys: BuyResponse[] }>(document)).buys;
 }
 
 export async function getLatestTransfers(
@@ -101,7 +101,8 @@ export async function getLatestTransfers(
     }
   `;
 
-  return (await generateRequest(document)).transfers;
+  return (await generateRequest<{ transfers: TransferResponse[] }>(document))
+    .transfers;
 }
 
 export async function getAggregatorsData(): Promise<AggregatorResponse[]> {
@@ -124,13 +125,14 @@ export async function getAggregatorsData(): Promise<AggregatorResponse[]> {
     }
   `;
 
-  return (await generateRequest(document)).aggregatorDatas;
+  return (
+    await generateRequest<{ aggregatorDatas: AggregatorResponse[] }>(document)
+  ).aggregatorDatas;
 }
 
 export async function getSingleBuy(
   txHash: Hash
 ): Promise<SingleBuyResponse | null> {
-  console.log("txHash: ", txHash);
   const document = gql`
     {
       buys(where: {transactionHash: "${txHash}"}) {
@@ -143,11 +145,8 @@ export async function getSingleBuy(
     }
   `;
 
-  console.log("document: ");
-  console.log(document);
-
-  const buys = (await generateRequest(document)).buys;
-  console.log("buys: ", buys);
+  const buys = (await generateRequest<{ buys: SingleBuyResponse[] }>(document))
+    .buys;
 
   if (buys.length == 0) return null;
 
@@ -176,5 +175,6 @@ export async function getAccount(
     }
   `;
 
-  return (await generateRequest(document)).account;
+  return (await generateRequest<{ account: AccountResponse }>(document))
+    .account;
 }
