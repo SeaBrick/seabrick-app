@@ -20,10 +20,10 @@ const AggregatorsLoader: React.FC<AggregatorsProps> = ({
 
   useEffect(() => {
     const tokensArray = data.map((item) => item.token);
-    const aggregatorsArray = data.map(({ token, ...rest }) => rest);
+    const aggregatorsArray = data.map(({ token: _, ...rest }) => rest);
     dispatchTokens(tokensArray);
     dispatchAggregators(aggregatorsArray);
-  }, []);
+  }, [data, dispatchAggregators, dispatchTokens]);
 
   return <></>;
 };
