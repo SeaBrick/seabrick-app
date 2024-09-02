@@ -20,7 +20,6 @@ export interface TokenNFT {
   id: Hex;
   tokenId: bigint;
   burned: bigint;
-  owner: Account;
 }
 
 export interface Account {
