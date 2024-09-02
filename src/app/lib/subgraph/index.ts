@@ -8,7 +8,7 @@ import {
   TransferResponse,
 } from "../interfaces/subgraph";
 import { Address, Hash } from "viem";
-import { SeabrickNFT } from "../interfaces";
+import { SeabrickMarket, SeabrickNFT } from "../interfaces";
 
 export const SubgraphClient = new GraphQLClient(
   "https://api.studio.thegraph.com/query/15039/seabrick/version/latest"
@@ -56,7 +56,9 @@ export async function getSeabrickContract(
     .seabrickContract;
 }
 
-export async function getSeabrickMarket(address: string): Promise<any> {
+export async function getSeabrickMarket(
+  address: string
+): Promise<SeabrickMarket> {
   const document = gql`
     {
       seabrickMarketContract(id: "${address}") {
@@ -68,7 +70,9 @@ export async function getSeabrickMarket(address: string): Promise<any> {
     }
   `;
 
-  return (await generateRequest(document)).seabrickMarketContract;
+  return (
+    await generateRequest<{ seabrickMarketContract: SeabrickMarket }>(document)
+  ).seabrickMarketContract;
 }
 
 export async function getLatestBuys(
