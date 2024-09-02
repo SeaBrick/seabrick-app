@@ -46,3 +46,17 @@ export interface Transfer {
   blockTimestamp: string;
   blockNumber: string;
 }
+
+export interface SeabrickNFT {
+  id: Address;
+  owner: Address;
+  name: string;
+  symbol: string;
+  totalSupply: string;
+}
+export interface SeabrickMarket {
+  id: Address;
+  owner: Address;
+  price: string;
+  token: Address;
+}

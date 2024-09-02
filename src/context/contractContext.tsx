@@ -1,21 +1,10 @@
 "use client";
+import { SeabrickMarket, SeabrickNFT } from "@/app/lib/interfaces";
 import { createContext, useContext, useState } from "react";
-import { Address, zeroAddress } from "viem";
+import { zeroAddress } from "viem";
 
 // Types
-interface SeabrickNFT {
-  id: Address;
-  owner: Address;
-  name: string;
-  symbol: string;
-  totalSupply: string;
-}
-interface SeabrickMarket {
-  id: Address;
-  owner: Address;
-  price: string;
-  token: Address;
-}
+
 type ContractStateType = {
   seabrick: SeabrickNFT;
   market: SeabrickMarket;
