@@ -11,9 +11,9 @@ export default function BuyPage() {
         <p className="text-3xl font-bold mb-8">Buy Seabrick NFT</p>
         <Suspense
           fallback={
-            // This is the main spinner that will be show on load
-            // <div className="mx-auto w-60">Loading...</div>
-            <PageLoaderSpinner />
+            <div className="py-24 my-auto">
+              <PageLoaderSpinner height="h-max" width="w-1/2" />
+            </div>
           }
         >
           <BuyNFT />
