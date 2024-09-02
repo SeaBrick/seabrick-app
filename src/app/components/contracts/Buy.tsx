@@ -10,6 +10,7 @@ import {
 import SuccessBuyModal from "../modals/SuccessBuyModal";
 import { useEffect, useState } from "react";
 import { RefetchOptions } from "@tanstack/react-query";
+import { useAggregatorsContext } from "@/context/aggregatorsContext";
 
 interface BuyProps {
   aggregator: Aggregator;
@@ -21,6 +22,8 @@ export default function Buy({ aggregator, refetch }: BuyProps) {
       market: { id: marketAddress },
     },
   } = useContractContext();
+
+  const { refetch: refetchAggregators } = useAggregatorsContext();
 
   const {
     data: hash,
@@ -57,8 +60,9 @@ export default function Buy({ aggregator, refetch }: BuyProps) {
   useEffect(() => {
     if (isConfirmed == true) {
       refetch();
+      refetchAggregators(receipt.blockNumber);
     }
-  }, [isConfirmed, refetch]);
+  }, [isConfirmed, receipt, refetch, refetchAggregators]);
 
   return (
     <div className="rounded py-4 flex flex-col gap-y-4">
