@@ -10,6 +10,7 @@ import { Navbar } from "./components/layout/Navbar";
 import SplashScreen from "./components/layout/SplashScreen";
 import { Footer } from "./components/layout/Footer";
 import { ContractProvider } from "@/context/contractContext";
+import { AccountProvider } from "@/context/accountContext";
 
 export const metadata: Metadata = {
   title: "Seabrick Demo App",
@@ -25,15 +26,17 @@ export default function RootLayout({
   return (
     <AppKitProvider initialState={initialState}>
       <ContractProvider>
-        <html lang="en">
-          <body className="flex flex-col min-h-svh">
-            <Navbar />
-            <main className="flex-grow">
-              <SplashScreen>{children}</SplashScreen>
-            </main>
-            <Footer />
-          </body>
-        </html>
+        <AccountProvider>
+          <html lang="en">
+            <body className="flex flex-col min-h-svh">
+              <Navbar />
+              <main className="flex-grow">
+                <SplashScreen>{children}</SplashScreen>
+              </main>
+              <Footer />
+            </body>
+          </html>
+        </AccountProvider>
       </ContractProvider>
     </AppKitProvider>
   );

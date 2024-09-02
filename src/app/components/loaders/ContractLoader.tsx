@@ -24,7 +24,7 @@ const ContractLoader: React.FC = () => {
       seabrick: contracts.seabrick,
       market: contracts.market,
     }));
-  }, []);
+  }, [contracts, dispatch]);
 
   return <></>;
 };

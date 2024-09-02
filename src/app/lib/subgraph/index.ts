@@ -157,7 +157,12 @@ export async function getAccount(
       account(id: "${address}") {
         id
         isMinter
-        tokens(first: ${first}, orderBy: id, orderDirection: desc) {
+        tokens(
+          first: ${first}, 
+          orderBy: id, 
+          orderDirection: desc, 
+          where: {burned: false}
+        ) {
           id
           tokenId
         }

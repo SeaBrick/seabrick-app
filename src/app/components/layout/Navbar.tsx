@@ -4,31 +4,35 @@ import { usePathname } from "next/navigation";
 import ConnectButton from "../buttons/ConnectButton";
 import SeabrickSVG from "../utils/SeabrickSVG";
 import { useAccount } from "wagmi";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getAccount } from "@/app/lib/subgraph";
 import { Address } from "viem";
-import { Account } from "@/app/lib/interfaces";
 import { useContractContext } from "@/context/contractContext";
+import {
+  accountInitialState,
+  useAccountContext,
+} from "@/context/accountContext";
 
 export function Navbar() {
   const pathname = usePathname();
   const { address: walletAddress } = useAccount();
-  const [accountData, setAccountData] = useState<Account>();
   const { data: contractsData } = useContractContext();
+  const { data: accountData, dispatch: dispatchAccount } = useAccountContext();
 
   useEffect(() => {
     async function callGetter(address: Address) {
       const account = await getAccount(address);
-      setAccountData(account);
+      dispatchAccount(account);
     }
 
-    // Check wallet address
+    // Check wallet address is defined to be call
     if (walletAddress) {
       callGetter(walletAddress);
     } else {
-      setAccountData(undefined);
+      // Or just put initial state otherwise
+      dispatchAccount(accountInitialState);
     }
-  }, [walletAddress]);
+  }, [dispatchAccount, walletAddress]);
 
   return (
     <header className="z-10 h-24 shadow mb-8">
@@ -50,7 +54,7 @@ export function Navbar() {
           </Link>
 
           {walletAddress &&
-            (accountData?.isMinter ||
+            (accountData.isMinter ||
               contractsData.market.owner == walletAddress ||
               contractsData.seabrick.owner == walletAddress) && (
               <Link
