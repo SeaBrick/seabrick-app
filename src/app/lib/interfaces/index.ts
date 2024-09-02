@@ -36,3 +36,13 @@ export interface Buy {
   blockTimestamp: string;
   transactionHash: Hex;
 }
+
+export interface Transfer {
+  id: Hex;
+  tokenId: string;
+  from: Address;
+  to: Address;
+  transactionHash: Hex;
+  blockTimestamp: string;
+  blockNumber: string;
+}

@@ -5,6 +5,7 @@ import {
   AggregatorResponse,
   BuyResponse,
   SingleBuyResponse,
+  TransferResponse,
 } from "../interfaces/subgraph";
 import { Address, Hash } from "viem";
 
@@ -83,7 +84,9 @@ export async function getLatestBuys(
   return (await generateRequest(document)).buys;
 }
 
-export async function getLatestTransfers(first: number = 10): Promise<any[]> {
+export async function getLatestTransfers(
+  first: number = 10
+): Promise<TransferResponse[]> {
   const document = gql`
     {
       transfers(orderBy: blockTimestamp, orderDirection: desc, first: ${first}) {
