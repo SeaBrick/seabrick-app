@@ -22,7 +22,9 @@ export function Navbar() {
   useEffect(() => {
     async function callGetter(address: Address) {
       const account = await getAccount(address);
-      dispatchAccount(account);
+      if (account) {
+        dispatchAccount(account);
+      }
     }
 
     // Check wallet address is defined to be call
