@@ -42,7 +42,7 @@ export default function BuyNFT() {
   }, [tokens, index, aggregators]);
 
   // Can use the status field to get the status of the call
-  const { data: balance } = useReadContract({
+  const { data: balance, refetch: refetchBalance } = useReadContract({
     abi: ierc20Abi,
     address: selectedToken?.address,
     functionName: "balanceOf",
@@ -191,7 +191,9 @@ export default function BuyNFT() {
 
               {/* Actual buy */}
 
-              {enoughApproved && <Buy aggregator={selectedAggregator} />}
+              {enoughApproved && (
+                <Buy aggregator={selectedAggregator} refetch={refetchBalance} />
+              )}
             </>
           )}
         </div>

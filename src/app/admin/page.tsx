@@ -6,6 +6,9 @@ import { useAccountContext } from "@/context/accountContext";
 import { useContractContext } from "@/context/contractContext";
 import { useAccount } from "wagmi";
 import PageLoaderSpinner from "../components/spinners/PageLoaderSpinner";
+import Container from "../components/utils/Container";
+import { getAddress } from "viem";
+import MarketPanel from "./MarketPanel";
 
 export default function AdminPage() {
   const router = useRouter();
@@ -26,24 +29,25 @@ export default function AdminPage() {
     // It has a wallet conntected, but it is not a NFT minter or owner contract
     if (
       !accountData.isMinter &&
-      contractsData.market.owner !== walletAddress &&
-      contractsData.seabrick.owner !== walletAddress
+      getAddress(contractsData.market.owner) !== walletAddress &&
+      getAddress(contractsData.seabrick.owner) !== walletAddress
     ) {
       router.push("/");
     } else {
       // Individually checking each scenario
+
       // Is a token minter?
       if (accountData.isMinter) {
         setIsMinter(true);
       }
 
       // Is the market owner?
-      if (contractsData.market.owner === walletAddress) {
+      if (getAddress(contractsData.market.owner) === walletAddress) {
         setIsMarketOwner(true);
       }
 
       // Is the NFT contract owner?
-      if (contractsData.seabrick.owner === walletAddress) {
+      if (getAddress(contractsData.seabrick.owner) === walletAddress) {
         setIsNFTContractOwner(true);
       }
 
@@ -52,19 +56,26 @@ export default function AdminPage() {
   }, [accountData, contractsData, router, walletAddress]);
 
   return (
-    <RequireWallet>
-      <div className="w-1/2 mx-auto">
-        {isLoading ? (
-          <div className="py-24 my-auto">
-            <PageLoaderSpinner height="h-max" width="w-1/2" />
-          </div>
-        ) : (
-          <>
-            <h1>Admin Page</h1>
-            <p>Welcome to the admin section.</p>
-          </>
-        )}
-      </div>
-    </RequireWallet>
+    <>
+      <RequireWallet>
+        <div className="w-1/2 mx-auto">
+          {isLoading ? (
+            <div className="py-24 my-auto">
+              <PageLoaderSpinner height="h-max" width="w-1/2" />
+            </div>
+          ) : (
+            <>
+              <p className="text-3xl font-bold mb-8">Admin Page</p>
+
+              {isMarketOwner && (
+                <Container>
+                  <MarketPanel />
+                </Container>
+              )}
+            </>
+          )}
+        </div>
+      </RequireWallet>
+    </>
   );
 }

@@ -14,6 +14,7 @@ export interface ERC20Token {
   decimals: string;
   name: string;
   symbol: string;
+  totalCollected: string;
 }
 
 export interface TokenNFT {

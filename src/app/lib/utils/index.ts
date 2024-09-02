@@ -107,3 +107,7 @@ export const processTime = (time: number | string): Date => {
 
   return new Date(time * 1000);
 };
+
+export function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}

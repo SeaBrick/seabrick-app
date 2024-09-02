@@ -4,11 +4,13 @@ import {
   AccountResponse,
   AggregatorResponse,
   BuyResponse,
+  MetaResponse,
   SingleBuyResponse,
   TransferResponse,
 } from "../interfaces/subgraph";
-import { Address, Hash } from "viem";
+import { Address, Hash, isHash } from "viem";
 import { SeabrickMarket, SeabrickNFT } from "../interfaces";
+import { sleep } from "../utils";
 
 export const SubgraphClient = new GraphQLClient(
   "https://api.studio.thegraph.com/query/15039/seabrick/version/latest"
@@ -17,6 +19,38 @@ export const SubgraphClient = new GraphQLClient(
 async function generateRequest<T>(queryDocument: string): Promise<T> {
   const client = SubgraphClient;
   return await client.request(queryDocument);
+}
+
+export async function checkSubgraph(blockNumber: bigint): Promise<boolean> {
+  const document = gql`
+    {
+      _meta(block: { number_gte: ${blockNumber.toString()} }) {
+        block {
+          number
+          timestamp
+          hash
+        }
+      }
+    }
+  `;
+
+  try {
+    const metaResp = await generateRequest<{ _meta: MetaResponse }>(document);
+    if (isHash(metaResp._meta.block.hash)) {
+      return true;
+    }
+
+    throw new Error("Error to query the meta SG for index status");
+  } catch (error) {
+    if (
+      error?.toString().includes("Failed to decode `block.number_gte` value")
+    ) {
+      return false;
+    } else {
+      console.log("error: ", error);
+      throw new Error("Error when fetching the subgraph");
+    }
+  }
 }
 
 export async function getAccounts(): Promise<AccountResponse[]> {
@@ -129,6 +163,7 @@ export async function getAggregatorsData(): Promise<AggregatorResponse[]> {
           id
           name
           symbol
+          totalCollected
         }
       }
     }
@@ -186,4 +221,28 @@ export async function getAccount(
 
   return (await generateRequest<{ account: AccountResponse }>(document))
     .account;
+}
+
+export async function waitForSgIndexed(
+  blockNumber: bigint,
+  callback?: () => void | Promise<void>
+): Promise<void> {
+  let counter = 0;
+
+  while (counter < 2) {
+    const result = await checkSubgraph(blockNumber);
+
+    if (result) {
+      if (callback) {
+        await callback();
+      }
+      return;
+    } else {
+      counter++;
+    }
+
+    if (counter < 4) {
+      await sleep(2000);
+    }
+  }
 }

@@ -13,6 +13,16 @@ export interface SingleBuyResponse {
   blockTimestamp: string;
 }
 
+export interface BlockResponse {
+  number: number;
+  timestamp: number;
+  hash: Hash;
+}
+
+export interface MetaResponse {
+  block: BlockResponse;
+}
+
 export type AccountResponse = Account;
 export type BuyResponse = Buy;
 export type TransferResponse = Transfer;

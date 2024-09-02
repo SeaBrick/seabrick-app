@@ -9,11 +9,13 @@ import {
 } from "wagmi";
 import SuccessBuyModal from "../modals/SuccessBuyModal";
 import { useEffect, useState } from "react";
+import { RefetchOptions } from "@tanstack/react-query";
 
 interface BuyProps {
   aggregator: Aggregator;
+  refetch: (options?: RefetchOptions) => Promise<unknown>;
 }
-export default function Buy({ aggregator }: BuyProps) {
+export default function Buy({ aggregator, refetch }: BuyProps) {
   const {
     data: {
       market: { id: marketAddress },
@@ -33,9 +35,8 @@ export default function Buy({ aggregator }: BuyProps) {
     isSuccess: isConfirmed,
   } = useWaitForTransactionReceipt({
     hash,
+    confirmations: 4,
   });
-
-  
 
   const { address: walletAddress } = useAccount();
   const [open, setOpen] = useState<boolean>(false);
@@ -54,8 +55,11 @@ export default function Buy({ aggregator }: BuyProps) {
   }
 
   useEffect(() => {
-    setOpen(true);
-  }, [isConfirmed]);
+    if (isConfirmed == true) {
+      refetch();
+    }
+  }, [isConfirmed, refetch]);
+
   return (
     <div className="rounded py-4 flex flex-col gap-y-4">
       <h1 className="text-xl">Buy NFT</h1>

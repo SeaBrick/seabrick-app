@@ -6,7 +6,7 @@ import SeabrickSVG from "../utils/SeabrickSVG";
 import { useAccount } from "wagmi";
 import { useEffect } from "react";
 import { getAccount } from "@/app/lib/subgraph";
-import { Address } from "viem";
+import { Address, getAddress } from "viem";
 import { useContractContext } from "@/context/contractContext";
 import {
   accountInitialState,
@@ -57,8 +57,8 @@ export function Navbar() {
 
           {walletAddress &&
             (accountData.isMinter ||
-              contractsData.market.owner == walletAddress ||
-              contractsData.seabrick.owner == walletAddress) && (
+              getAddress(contractsData.market.owner) == walletAddress ||
+              getAddress(contractsData.seabrick.owner) == walletAddress) && (
               <Link
                 className={`${pathname === "admin" && "text-seabrick-blue"}`}
                 href="/admin"
