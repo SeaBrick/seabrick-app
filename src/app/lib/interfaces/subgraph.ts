@@ -1,5 +1,5 @@
 import { Address, Hash, Hex } from "viem";
-import { Account, Aggregator, Buy, ERC20Token, Transfer } from ".";
+import { Account, Aggregator, Buy, ERC20Token, TokenNFT, Transfer } from ".";
 
 export interface AggregatorResponse extends Aggregator {
   token: ERC20Token;
@@ -20,6 +20,8 @@ export interface TokenResponse {
   owner: { id: Address };
 }
 
-export type AccountResponse = Account;
+export type AccountResponse = Omit<Account, "tokens"> & {
+  tokens: Pick<TokenNFT, "id" | "tokenId">[];
+};
 export type BuyResponse = Buy;
 export type TransferResponse = Transfer;

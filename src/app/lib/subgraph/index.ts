@@ -18,7 +18,7 @@ async function generateRequest<T>(queryDocument: string): Promise<T> {
   return await client.request(queryDocument);
 }
 
-export async function getAccounts(): Promise<any> {
+export async function getAccounts(): Promise<AccountResponse[]> {
   const document = gql`
     {
       accounts {
@@ -32,7 +32,8 @@ export async function getAccounts(): Promise<any> {
     }
   `;
 
-  return await generateRequest(document);
+  return (await generateRequest<{ accounts: AccountResponse[] }>(document))
+    .accounts;
 }
 
 export async function getSeabrickContract(address: string): Promise<any> {
