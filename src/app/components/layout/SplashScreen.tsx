@@ -9,8 +9,10 @@ const SplashScreen = ({ children }: any) => {
     <>
       <Suspense
         fallback={
-          <div className="py-24 my-auto">
-            <PageLoaderSpinner height="h-max" width="w-1/2" />
+          <div className="w-1/2 mx-auto">
+            <div className="py-24 my-auto">
+              <PageLoaderSpinner height="h-max" width="w-1/2" />
+            </div>
           </div>
         }
       >

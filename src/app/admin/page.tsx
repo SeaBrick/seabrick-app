@@ -40,10 +40,10 @@ export default function AdminPage() {
             <PageLoaderSpinner height="h-max" width="w-1/2" />
           </div>
         ) : (
-          <div className="w-1/2 mx-auto">
+          <>
             <h1>Admin Page</h1>
             <p>Welcome to the admin section.</p>
-          </div>
+          </>
         )}
       </div>
     </RequireWallet>
