@@ -8,10 +8,23 @@ export interface Aggregator {
   decimals: string;
 }
 
-export interface Token {
+export interface ERC20Token {
   id: string;
   address: Address;
   decimals: string;
   name: string;
   symbol: string;
+}
+
+export interface TokenNFT {
+  id: Hex;
+  tokenId: bigint;
+  burned: bigint;
+  owner: Account;
+}
+
+export interface Account {
+  id: Hex;
+  isMinter: boolean;
+  tokens: TokenNFT[];
 }

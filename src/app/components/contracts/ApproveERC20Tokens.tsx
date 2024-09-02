@@ -1,6 +1,6 @@
 "use client";
 import { ierc20Abi } from "@/app/lib/contracts/abis";
-import { Token } from "@/app/lib/interfaces";
+import { ERC20Token } from "@/app/lib/interfaces";
 import { useContractContext } from "@/context/contractContext";
 import { RefetchOptions } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -8,7 +8,7 @@ import { formatUnits, parseUnits } from "viem";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 
 interface ApproveERC20TokensProps {
-  token: Token;
+  token: ERC20Token;
   marketAllowance?: bigint;
   amount: bigint;
   refetch: (options?: RefetchOptions) => Promise<unknown>;

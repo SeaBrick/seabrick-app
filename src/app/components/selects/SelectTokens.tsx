@@ -1,10 +1,10 @@
-import { Aggregator, Token } from "@/app/lib/interfaces";
+import { Aggregator, ERC20Token } from "@/app/lib/interfaces";
 
 interface SelectTokensProps {
   index: number;
   setIndex: React.Dispatch<React.SetStateAction<number>>;
   aggregators: Aggregator[];
-  tokens: Token[];
+  tokens: ERC20Token[];
 }
 
 export default function SelectTokens({

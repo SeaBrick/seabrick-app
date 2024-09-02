@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Container from "@/app/components/utils/Container";
 import SelectTokens from "@/app/components/selects/SelectTokens";
-import { Aggregator, Token } from "@/app/lib/interfaces";
+import { Aggregator, ERC20Token } from "@/app/lib/interfaces";
 import AggregatorsLoader from "../components/loaders/AggregatorsLoader";
 import GetFundsModal from "../components/modals/GetFundsModal";
 import { useAccount, useReadContract } from "wagmi";
@@ -16,9 +16,9 @@ import Buy from "../components/contracts/Buy";
 export default function BuyNFT() {
   // TODO : use a context for this aggregator and tokens
   const [aggregators, setAggregators] = useState<Aggregator[]>([]);
-  const [tokens, setTokens] = useState<Token[]>([]);
+  const [tokens, setTokens] = useState<ERC20Token[]>([]);
   const [selectedAggregator, setSelectedAggregator] = useState<Aggregator>();
-  const [selectedToken, setSelectedToken] = useState<Token>();
+  const [selectedToken, setSelectedToken] = useState<ERC20Token>();
 
   const {
     data: {

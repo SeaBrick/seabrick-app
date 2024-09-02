@@ -1,8 +1,8 @@
-import { Address, Hash } from "viem";
-import { Aggregator, Token } from ".";
+import { Address, Hash, Hex } from "viem";
+import { Account, Aggregator, ERC20Token } from ".";
 
 export interface AggregatorResponse extends Aggregator {
-  token: Token;
+  token: ERC20Token;
 }
 
 export interface SingleBuyResponse {
@@ -12,3 +12,12 @@ export interface SingleBuyResponse {
   blockNumber: string;
   blockTimestamp: string;
 }
+
+export interface TokenResponse {
+  id: Hex;
+  tokenId: bigint;
+  burned: boolean;
+  owner: { id: Address };
+}
+
+export type AccountResponse = Account

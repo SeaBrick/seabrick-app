@@ -1,7 +1,11 @@
 "use client";
 import { gql, GraphQLClient } from "graphql-request";
-import { AggregatorResponse, SingleBuyResponse } from "../interfaces/subgraph";
-import { Hash } from "viem";
+import {
+  AccountResponse,
+  AggregatorResponse,
+  SingleBuyResponse,
+} from "../interfaces/subgraph";
+import { Address, Hash } from "viem";
 
 export const SubgraphClient = new GraphQLClient(
   "https://api.studio.thegraph.com/query/15039/seabrick/version/latest"
@@ -142,4 +146,24 @@ export async function getSingleBuy(
   if (buys.length == 0) return null;
 
   return buys[0];
+}
+
+export async function getAccount(
+  address: Address,
+  first: number = 10
+): Promise<AccountResponse> {
+  const document = gql`
+    {
+      account(id: "${address}") {
+        id
+        isMinter
+        tokens(first: ${first}, orderBy: id, orderDirection: desc) {
+          id
+          tokenId
+        }
+      }
+    }
+  `;
+
+  return (await generateRequest(document)).account;
 }

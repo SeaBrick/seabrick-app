@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 import Container from "../utils/Container";
 import Modal from "./Modal";
-import { Token } from "@/app/lib/interfaces";
+import { ERC20Token } from "@/app/lib/interfaces";
 // import IERC20 from "@/app/lib/contracts/abis/IERC20.json";
 import { useAccount, useWriteContract } from "wagmi";
 import { getAddress, parseUnits } from "viem";
@@ -11,7 +11,7 @@ import { ierc20Abi } from "@/app/lib/contracts/abis";
 interface ModalProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  token: Token;
+  token: ERC20Token;
 }
 export default function GetFundsModal({ open, setOpen, token }: ModalProps) {
   const { address: walletAddress } = useAccount();
