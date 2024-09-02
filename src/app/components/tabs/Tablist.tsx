@@ -1,7 +1,7 @@
 "use client";
 
 import React, { ReactElement, useState } from "react";
-import TabItem, { TabItemProps } from "./TabItem";
+import { TabItemProps } from "./TabItem";
 
 interface TabListProps {
   activeTabIndex?: number;
@@ -16,7 +16,7 @@ const TabLis: React.FC<TabListProps> = ({ activeTabIndex = 0, children }) => {
 
   const tabs = React.Children.toArray(children) as React.ReactElement<
     TabItemProps,
-    string | React.JSXElementConstructor<any>
+    string | React.JSXElementConstructor<unknown>
   >[];
 
   const tabBase = "w-full cursor-pointer py-4 transition-all";
