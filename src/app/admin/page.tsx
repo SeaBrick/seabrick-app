@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useAccountContext } from "@/context/accountContext";
 import { useContractContext } from "@/context/contractContext";
 import { useAccount } from "wagmi";
-import ColoredSpinner from "../components/spinners/ColoredSpinner";
 import PageLoaderSpinner from "../components/spinners/PageLoaderSpinner";
 
 export default function AdminPage() {
@@ -38,12 +37,10 @@ export default function AdminPage() {
       {isLoading ? (
         <PageLoaderSpinner />
       ) : (
-        <PageLoaderSpinner />
-
-        // <div className="w-1/2 mx-auto">
-        //   <h1>Admin Page</h1>
-        //   <p>Welcome to the admin section.</p>
-        // </div>
+        <div className="w-1/2 mx-auto">
+          <h1>Admin Page</h1>
+          <p>Welcome to the admin section.</p>
+        </div>
       )}
     </RequireWallet>
   );
