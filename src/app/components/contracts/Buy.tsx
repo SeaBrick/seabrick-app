@@ -25,13 +25,7 @@ export default function Buy({ aggregator, refetch }: BuyProps) {
 
   const { refetch: refetchAggregators } = useAggregatorsContext();
 
-  const {
-    data: hash,
-    writeContract,
-    isPending,
-    error,
-    failureReason,
-  } = useWriteContract();
+  const { data: hash, writeContract, isPending } = useWriteContract();
   const {
     data: receipt,
     isLoading: isConfirming,
@@ -79,8 +73,8 @@ export default function Buy({ aggregator, refetch }: BuyProps) {
           defaultValue={walletAddress}
         />
         <button
-          disabled={isPending}
-          className="bg-seabrick-green p-2 text-white"
+          disabled={isPending || isConfirming || isConfirmed}
+          className="bg-seabrick-green p-2 text-white disabled:bg-slate-400"
           type="submit"
         >
           {isPending ? "Confirming..." : "Buy NFT"}
@@ -96,20 +90,6 @@ export default function Buy({ aggregator, refetch }: BuyProps) {
             txHash={hash}
             receipt={receipt}
           />
-        )}
-
-        {error && (
-          <button
-            className="bg-red-300 p-2 rounded w-fit"
-            onClick={() => {
-              console.log("error: ");
-              console.log(error);
-              console.log("failureReason: ");
-              console.log(failureReason);
-            }}
-          >
-            Show errors on console
-          </button>
         )}
       </form>
     </div>
