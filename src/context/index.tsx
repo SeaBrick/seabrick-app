@@ -1,25 +1,29 @@
 "use client";
 
-import React, { ReactNode } from "react";
-import { config, projectId, metadata } from "@/config";
-
-import { createWeb3Modal } from "@web3modal/wagmi/react";
-
+import { wagmiAdapter, projectId, metadata, networks } from "@/config";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createAppKit } from "@reown/appkit/react";
+import { arbitrum } from "@reown/appkit/networks";
+import React, { type ReactNode } from "react";
+import { cookieToInitialState, WagmiProvider, type Config } from "wagmi";
 
-import { State, WagmiProvider } from "wagmi";
-
-// Setup queryClient
+// Set up queryClient
 const queryClient = new QueryClient();
 
-if (!projectId) throw new Error("Project ID is not defined");
+if (!projectId) {
+  throw new Error("Project ID is not defined");
+}
 
-// Create modal
-createWeb3Modal({
-  metadata,
-  wagmiConfig: config,
+// Create the modal
+createAppKit({
+  adapters: [wagmiAdapter],
   projectId,
-  enableAnalytics: true,
+  networks: networks,
+  defaultNetwork: arbitrum,
+  metadata: metadata,
+  features: {
+    analytics: true, // Optional - defaults to your Cloud configuration
+  },
   themeMode: "light",
   themeVariables: {
     "--w3m-border-radius-master": "4px",
@@ -27,16 +31,26 @@ createWeb3Modal({
   },
 });
 
-export default function AppKitProvider({
+function ContextProvider({
   children,
-  initialState,
+  cookies,
 }: {
   children: ReactNode;
-  initialState?: State;
+  cookies: string | null;
 }) {
+  const initialState = cookieToInitialState(
+    wagmiAdapter.wagmiConfig as Config,
+    cookies
+  );
+
   return (
-    <WagmiProvider config={config} initialState={initialState}>
+    <WagmiProvider
+      config={wagmiAdapter.wagmiConfig as Config}
+      initialState={initialState}
+    >
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </WagmiProvider>
   );
 }
+
+export default ContextProvider;
