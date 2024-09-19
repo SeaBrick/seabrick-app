@@ -23,6 +23,9 @@ createAppKit({
   metadata: metadata,
   features: {
     analytics: true, // Optional - defaults to your Cloud configuration
+    email: true, // default to true
+    socials: ["google", "github", "discord", "apple", "facebook"],
+    emailShowWallets: true, // default to true
   },
   themeMode: "light",
   themeVariables: {
