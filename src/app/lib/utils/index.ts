@@ -96,7 +96,7 @@ export function timeAgo(date: Date): string {
   } else if (days < 7) {
     return `${days} ${days == 1 ? "day" : "days"} ago`;
   } else {
-    return date.toLocaleDateString();
+    return date.toLocaleDateString("en-US");
   }
 }
 
