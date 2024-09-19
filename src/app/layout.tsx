@@ -2,9 +2,6 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 
-import { cookieToInitialState } from "wagmi";
-
-import { config } from "@/config";
 import AppKitProvider from "@/context";
 import { Navbar } from "./components/layout/Navbar";
 import SplashScreen from "./components/layout/SplashScreen";
@@ -23,7 +20,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookies = headers().get('cookie')
+  const cookies = headers().get("cookie");
 
   return (
     <AppKitProvider cookies={cookies}>
