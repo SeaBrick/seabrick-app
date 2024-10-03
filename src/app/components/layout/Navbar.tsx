@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import ConnectButton from "../buttons/ConnectButton";
 import SeabrickSVG from "../utils/SeabrickSVG";
 import { useAccount } from "wagmi";
 import { useEffect } from "react";
@@ -43,13 +42,7 @@ export function Navbar() {
 
         <div className="ml-60 flex gap-x-10 hover:direct-children:text-seabrick-blue mr-5">
           <Link
-            className={`${pathname === "/" && "text-seabrick-blue"}`}
-            href="/"
-          >
-            Home
-          </Link>
-          <Link
-            className={`${pathname === "buy" && "text-seabrick-blue"}`}
+            className={`${pathname === "/buy" && "text-seabrick-blue"}`}
             href="/buy"
           >
             Buy
@@ -60,7 +53,7 @@ export function Navbar() {
               getAddress(contractsData.market.owner) == walletAddress ||
               getAddress(contractsData.seabrick.owner) == walletAddress) && (
               <Link
-                className={`${pathname === "admin" && "text-seabrick-blue"}`}
+                className={`${pathname === "/admin" && "text-seabrick-blue"}`}
                 href="/admin"
               >
                 Admin
@@ -68,9 +61,13 @@ export function Navbar() {
             )}
         </div>
 
-        <div>
-          <ConnectButton />
-        </div>
+        {/* <div>{window.ethereum && <ConnectButton />}</div> */}
+        <Link
+          className={`${pathname === "/login" && "text-seabrick-blue"} hover:text-seabrick-blue`}
+          href="/login"
+        >
+          Log in
+        </Link>
       </div>
     </header>
   );
