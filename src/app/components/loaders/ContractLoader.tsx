@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { wrapPromise } from "@/app/lib/utils";
 import { getSeabrickContract, getSeabrickMarket } from "@/app/lib/subgraph";
 import { addresses } from "@/app/lib/contracts";
