@@ -61,7 +61,6 @@ export function Navbar() {
             )}
         </div>
 
-        {/* <div>{window.ethereum && <ConnectButton />}</div> */}
         <Link
           className={`${pathname === "/login" && "text-seabrick-blue"} hover:text-seabrick-blue`}
           href="/login"
