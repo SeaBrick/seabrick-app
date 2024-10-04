@@ -23,7 +23,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const initialState = cookieToInitialState(config, headers().get("cookie"));
+  // const initialState = cookieToInitialState(config, headers().get("cookie"));
+  const initialState = cookieToInitialState(config);
   return (
     <AppKitProvider initialState={initialState}>
       <ContractProvider>
