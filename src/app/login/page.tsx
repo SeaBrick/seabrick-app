@@ -1,9 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import ConnectButton from "../components/buttons/ConnectButton";
-import { useAccount } from "wagmi";
+import { useAccount, useSignMessage } from "wagmi";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { signMessage } from "@wagmi/core";
+
+function ConnectButton2() {
+  return <w3m-connect-button />;
+}
 
 type LoginEmailFormProps = unknown;
 function LoginEmailForm(_props: LoginEmailFormProps) {
@@ -14,10 +19,13 @@ function LoginEmailForm(_props: LoginEmailFormProps) {
     setShowPassword(!showPassword);
   };
 
+  const formActionSignIn = async (formData: FormData) => {
+    console.log("log in with email");
+  };
+
   return (
     <div className="flex flex-col gap-y-4 items-center w-full max-w-xl">
-      <p className="text-gray-700">Log into your account</p>
-      <form className="flex flex-col gap-y-4 w-full" action={() => {}}>
+      <form className="flex flex-col gap-y-4 w-full" action={formActionSignIn}>
         <input
           id="email"
           name="email"
@@ -70,38 +78,114 @@ function LoginEmailForm(_props: LoginEmailFormProps) {
   );
 }
 
+function LoginWalletForm() {
+  const { address, isConnected } = useAccount();
+  const { signMessageAsync } = useSignMessage();
+
+  const formActionSignIn = async (formData: FormData) => {
+    try {
+      console.log("address: ", formData.get("address"));
+
+      const address = formData.get("address")?.toString();
+      if (!address) {
+        throw new Error("Not address passed or connected to log in");
+      }
+
+      const params = new URLSearchParams({
+        address,
+      });
+
+      const response = await fetch(`/api/request_message?${params}`, {
+        method: "GET",
+      });
+
+      if (response.ok) {
+        //
+        const respJson = await response.json();
+        const message = respJson.message;
+        console.log("msg: ", message);
+
+        // Ask to sign it
+
+        const resp = await signMessageAsync({ message });
+        console.log("response: ", resp);
+
+        formData.set("message", resp);
+        console.log("formData: ", formData);
+      } else {
+        // Error to get message
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-y-4 items-center w-full max-w-xl">
+      <div>{<ConnectButton />}</div>
+
+      {isConnected && (
+        <form
+          className="flex flex-col gap-y-4 w-full"
+          action={formActionSignIn}
+        >
+          <input
+            id="address"
+            name="address"
+            type="text"
+            // hidden
+            readOnly
+            value={address}
+            className="bg-gray-300 py-2 px-4 rounded-md border border-seabrick-green text-gray-800 disabled:cursor-not-allowed"
+          />
+          <button
+            className="bg-seabrick-green p-2 rounded-md text-white"
+            type="submit"
+          >
+            Sign in
+          </button>
+        </form>
+      )}
+    </div>
+  );
+}
+
 export default function LoginPage() {
   const [haveWallet, setHaveWallet] = useState<boolean>(false);
-  const { isConnected } = useAccount();
+  const [withEmail, setWithEmail] = useState<boolean>(false);
 
   useEffect(() => {
+    console.log("xd");
     if (window.ethereum) {
       setHaveWallet(true);
+    } else {
+      setWithEmail(true);
     }
   }, []);
 
   return (
-    <div className="w-1/2 mx-auto">
-      <h1>Login Page</h1>
+    <div className="w-1/2 mx-auto space-y-10">
+      <h1 className="text-gray-700 text-2xl w-fit mx-auto">
+        Log into your account
+      </h1>
 
-      {!haveWallet && <p>Login directly with email</p>}
-      {haveWallet && !isConnected && (
-        <p>
-          Ask to connect wallet. Show first login with wallet, give other option
-          as email
-        </p>
-      )}
+      <div className="flex flex-col items-center w-full gap-y-4">
+        {!haveWallet && <LoginEmailForm />}
 
-      {haveWallet && isConnected && (
-        <p>Show first login with wallet, give other option as email</p>
-      )}
+        {haveWallet && (
+          <div className="divide-y-2 space-y-6 max-w-xl w-full">
+            <div className="flex flex-col gap-y-4 items-center">
+              <p className="text-gray-800">Use your wallet to sign in</p>
 
-      {/* <div>{haveWallet && !isConnected && <Connect />}</div>
-      <div>{haveWallet && !isConnected && <ConnectButton />}</div> */}
-      <div>{haveWallet && <ConnectButton />}</div>
+              <LoginWalletForm />
+            </div>
+            <div className="pt-4 flex flex-col gap-y-4 items-center">
+              <p className="text-gray-800">Or use your email</p>
 
-      <div className="flex flex-col items-center">
-        <LoginEmailForm />
+              <LoginEmailForm />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
