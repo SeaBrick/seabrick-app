@@ -4,7 +4,6 @@ import ConnectButton from "../components/buttons/ConnectButton";
 import { useAccount, useSignMessage } from "wagmi";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { signMessage } from "@wagmi/core";
 
 function ConnectButton2() {
   return <w3m-connect-button />;
@@ -82,43 +81,52 @@ function LoginWalletForm() {
   const { address, isConnected } = useAccount();
   const { signMessageAsync } = useSignMessage();
 
-  const formActionSignIn = async (formData: FormData) => {
+  async function formActionSignIn(formData: FormData): Promise<void> {
     try {
-      console.log("address: ", formData.get("address"));
-
       const address = formData.get("address")?.toString();
       if (!address) {
-        throw new Error("Not address passed or connected to log in");
+        throw new Error("No address passed or connected to log in");
       }
+      console.log("addre: ", address);
 
-      const params = new URLSearchParams({
-        address,
-      });
-
+      const params = new URLSearchParams({ address });
       const response = await fetch(`/api/request_message?${params}`, {
         method: "GET",
       });
 
+      console.log("a: ", `/api/request_message?${params}`);
+      console.log(response);
+
       if (response.ok) {
-        //
-        const respJson = await response.json();
-        const message = respJson.message;
-        console.log("msg: ", message);
+        // If the response is OK, retrieve and sign the message
+        const messageGenerateda = await response.json();
+        console.log("messageGenerateda: ", messageGenerateda);
+        const messageGenerated = messageGenerateda.message;
 
-        // Ask to sign it
+        // Sign the message
+        const resp = await signMessageAsync({ message: messageGenerated });
 
-        const resp = await signMessageAsync({ message });
-        console.log("response: ", resp);
-
+        // Store signed message in formData
         formData.set("message", resp);
-        console.log("formData: ", formData);
+
+        // Send the formData to the login endpoint
+        const formResp = await fetch("/api/login", {
+          method: "POST",
+          body: formData,
+        });
+
+        console.log("formREsp: ", formResp);
+
+        const a = await formResp.json();
+        console.log("averL ", a);
       } else {
-        // Error to get message
+        // Cannot get the message from server to sign in
+        throw new Error("Error getting the message to sign");
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
-  };
+  }
 
   return (
     <div className="flex flex-col gap-y-4 items-center w-full max-w-xl">
@@ -133,10 +141,10 @@ function LoginWalletForm() {
             id="address"
             name="address"
             type="text"
-            // hidden
+            hidden
             readOnly
             value={address}
-            className="bg-gray-300 py-2 px-4 rounded-md border border-seabrick-green text-gray-800 disabled:cursor-not-allowed"
+            className="disabled:cursor-not-allowed"
           />
           <button
             className="bg-seabrick-green p-2 rounded-md text-white"

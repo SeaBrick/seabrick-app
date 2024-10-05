@@ -1,13 +1,13 @@
-"use server";
 import { type NextRequest, NextResponse } from "next/server";
-import { isAddress } from "viem";
 import { generateMessage } from "../utils";
+import { checkAddress } from "@/app/lib/utils";
+// import { checkAddress } from "@/app/lib/utils";
 
 export async function GET(request: NextRequest, response: NextResponse) {
   const address = request.nextUrl.searchParams.get("address");
 
   // Not a valid address value
-  if (!address || !isAddress(address)) {
+  if (!checkAddress(address)) {
     return NextResponse.json(
       { error: "Invalid wallet address" },
       { status: 400 }

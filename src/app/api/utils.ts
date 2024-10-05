@@ -1,5 +1,7 @@
 import { createHmac } from "crypto";
-import { Address } from "viem";
+import { Address, Hex, verifyMessage } from "viem";
+// import { checkAddress } from "../lib/utils";
+// import { NextResponse } from "next/server";
 
 const keyHash = process.env.MESSAGE_HASH_KEY;
 if (!keyHash) {
@@ -15,4 +17,17 @@ export function generateMessage(address: Address): string {
   
     - Wallet address: ${address}
     - ID: ${computedHmac}`;
+}
+
+export async function verifySignature(
+  address: Address,
+  signature: Hex
+): Promise<boolean> {
+  const message = generateMessage(address);
+
+  return verifyMessage({
+    address,
+    message: message,
+    signature,
+  });
 }

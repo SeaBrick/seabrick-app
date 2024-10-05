@@ -1,6 +1,4 @@
-"use client";
-
-import { Hex, isAddress, isHex, slice } from "viem";
+import { Address, Hex, isAddress, isHex, slice } from "viem";
 
 export function wrapPromise<T>(promise: Promise<T>) {
   let status: "pending" | "success" | "error" = "pending";
@@ -110,4 +108,10 @@ export const processTime = (time: number | string): Date => {
 
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export function checkAddress(
+  value: string | undefined | null
+): value is Address {
+  return value !== null && value !== undefined && isAddress(value);
 }
