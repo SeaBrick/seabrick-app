@@ -1,30 +1,32 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import ConnectButton from "../components/buttons/ConnectButton";
 import { useAccount, useSignMessage } from "wagmi";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
-
-function ConnectButton2() {
-  return <w3m-connect-button />;
-}
+import ConnectButton from "../components/buttons/ConnectButton";
+import Modal from "../components/modals/Modal";
+import Container from "../components/utils/Container";
+import { login, signup } from "./actions";
 
 type LoginEmailFormProps = unknown;
 function LoginEmailForm(_props: LoginEmailFormProps) {
-  const [showPassword, setShowPassword] = useState(false);
-  const [password, setPassword] = useState("");
+  const [open, setOpen] = useState<boolean>(false);
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+  function FormSignEmail({
+    signUp = false,
+    formAction,
+  }: {
+    signUp?: boolean;
+    formAction: (formData: FormData) => void;
+  }) {
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [password, setPassword] = useState<string>("");
 
-  const formActionSignIn = async (formData: FormData) => {
-    console.log("log in with email");
-  };
+    const togglePasswordVisibility = () => {
+      setShowPassword(!showPassword);
+    };
 
-  return (
-    <div className="flex flex-col gap-y-4 items-center w-full max-w-xl">
-      <form className="flex flex-col gap-y-4 w-full" action={formActionSignIn}>
+    return (
+      <form className="flex flex-col gap-y-4 w-full" action={formAction}>
         <input
           id="email"
           name="email"
@@ -59,20 +61,36 @@ function LoginEmailForm(_props: LoginEmailFormProps) {
           className="bg-seabrick-green p-2 rounded-md text-white"
           type="submit"
         >
-          Log in
+          {signUp ? "Sign up " : "Log in"}
         </button>
       </form>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-y-4 items-center w-full max-w-xl">
+      <FormSignEmail formAction={login} />
 
       <p>
         Do not have an account?{" "}
-        <Link
-          className="text-seabrick-green hover:underline"
-          href={"/signup"}
-          prefetch={true}
+        <span
+          className="text-seabrick-green hover:underline hover:cursor-pointer"
+          onClick={() => setOpen(true)}
         >
           Sign up
-        </Link>
+        </span>{" "}
+        with your email
       </p>
+
+      <Modal open={open} setOpen={setOpen}>
+        <Container>
+          <div className="border rounded py-8 px-10 flex flex-col items-center gap-y-4 w-[40rem]">
+            <p className="text-gray-800">Create an account</p>
+
+            <FormSignEmail signUp formAction={signup} />
+          </div>
+        </Container>
+      </Modal>
     </div>
   );
 }
@@ -94,14 +112,9 @@ function LoginWalletForm() {
         method: "GET",
       });
 
-      console.log("a: ", `/api/request_message?${params}`);
-      console.log(response);
-
       if (response.ok) {
         // If the response is OK, retrieve and sign the message
-        const messageGenerateda = await response.json();
-        console.log("messageGenerateda: ", messageGenerateda);
-        const messageGenerated = messageGenerateda.message;
+        const messageGenerated = (await response.json()).message;
 
         // Sign the message
         const resp = await signMessageAsync({ message: messageGenerated });
@@ -160,14 +173,10 @@ function LoginWalletForm() {
 
 export default function LoginPage() {
   const [haveWallet, setHaveWallet] = useState<boolean>(false);
-  const [withEmail, setWithEmail] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("xd");
     if (window.ethereum) {
       setHaveWallet(true);
-    } else {
-      setWithEmail(true);
     }
   }, []);
 
