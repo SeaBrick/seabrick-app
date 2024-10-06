@@ -12,6 +12,7 @@ import { Footer } from "./components/layout/Footer";
 import { ContractProvider } from "@/context/contractContext";
 import { AccountProvider } from "@/context/accountContext";
 import { AggregatorsProvider } from "@/context/aggregatorsContext";
+import { AuthProvider } from "@/context/authContext";
 
 export const metadata: Metadata = {
   title: "Seabrick Demo App",
@@ -26,22 +27,24 @@ export default function RootLayout({
   // const initialState = cookieToInitialState(config, headers().get("cookie"));
   const initialState = cookieToInitialState(config);
   return (
-    <AppKitProvider initialState={initialState}>
-      <ContractProvider>
-        <AggregatorsProvider>
-          <AccountProvider>
-            <html lang="en">
-              <body className="flex flex-col min-h-svh">
-                <Navbar />
-                <main className="flex-grow">
-                  <SplashScreen>{children}</SplashScreen>
-                </main>
-                <Footer />
-              </body>
-            </html>
-          </AccountProvider>
-        </AggregatorsProvider>
-      </ContractProvider>
-    </AppKitProvider>
+    <AuthProvider>
+      <AppKitProvider initialState={initialState}>
+        <ContractProvider>
+          <AggregatorsProvider>
+            <AccountProvider>
+              <html lang="en">
+                <body className="flex flex-col min-h-svh">
+                  <Navbar />
+                  <main className="flex-grow">
+                    <SplashScreen>{children}</SplashScreen>
+                  </main>
+                  <Footer />
+                </body>
+              </html>
+            </AccountProvider>
+          </AggregatorsProvider>
+        </ContractProvider>
+      </AppKitProvider>
+    </AuthProvider>
   );
 }
