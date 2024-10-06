@@ -6,9 +6,12 @@ import ConnectButton from "../components/buttons/ConnectButton";
 import Modal from "../components/modals/Modal";
 import Container from "../components/utils/Container";
 import { login, signup } from "./actions";
+import { useAuth } from "@/context/authContext";
 
 type LoginEmailFormProps = unknown;
 function LoginEmailForm(_props: LoginEmailFormProps) {
+  const { refetch } = useAuth();
+
   const [open, setOpen] = useState<boolean>(false);
 
   function FormSignEmail({
@@ -69,7 +72,13 @@ function LoginEmailForm(_props: LoginEmailFormProps) {
 
   return (
     <div className="flex flex-col gap-y-4 items-center w-full max-w-xl">
-      <FormSignEmail formAction={login} />
+      <FormSignEmail
+        formAction={(data) => {
+          login(data).then(() => {
+            refetch();
+          });
+        }}
+      />
 
       <p>
         Do not have an account?{" "}
@@ -87,7 +96,14 @@ function LoginEmailForm(_props: LoginEmailFormProps) {
           <div className="border rounded py-8 px-10 flex flex-col items-center gap-y-4 w-[40rem]">
             <p className="text-gray-800">Create an account</p>
 
-            <FormSignEmail signUp formAction={signup} />
+            <FormSignEmail
+              signUp
+              formAction={(data) => {
+                signup(data).then(() => {
+                  refetch();
+                });
+              }}
+            />
           </div>
         </Container>
       </Modal>
