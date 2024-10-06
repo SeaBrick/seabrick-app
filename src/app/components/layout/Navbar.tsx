@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import SeabrickSVG from "../utils/SeabrickSVG";
 import { useAccount } from "wagmi";
 import { useEffect } from "react";
@@ -20,6 +20,8 @@ export function Navbar() {
   const { data: contractsData } = useContractContext();
   const { data: accountData, dispatch: dispatchAccount } = useAccountContext();
   const { user } = useAuth();
+  const supabaseClient = createClient();
+  const router = useRouter();
 
   useEffect(() => {
     async function callGetter(address: Address) {
@@ -74,12 +76,12 @@ export function Navbar() {
         {user ? (
           <button
             onClick={async () => {
-              const sbClient = createClient();
-              const { error } = await sbClient.auth.signOut();
+              const { error } = await supabaseClient.auth.signOut();
               if (error) {
-                console.log("there is an error");
                 console.log(error);
               }
+
+              router.push("/login");
             }}
           >
             User: {user.email}
