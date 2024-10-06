@@ -19,14 +19,16 @@ export async function login(formData: FormData) {
     await supabase.auth.signInWithPassword(data);
 
   if (error) {
-    console.log("dataResp: ", dataResp);
-    console.log("xdd error");
-    console.log(error);
+    console.log("Login error");
+    if (dataResp) {
+      console.log("data response with error: ", dataResp);
+    }
+    console.log("error: ", error);
     redirect("/error");
   }
 
-  console.log("coool xd");
   revalidatePath("/", "layout");
+
   redirect("/");
 }
 
@@ -41,11 +43,14 @@ export async function signup(formData: FormData) {
     password: formData.get("password") as string,
   };
 
-  const { error, data: aver } = await supabase.auth.signUp(data);
+  const { error, data: dataResp } = await supabase.auth.signUp(data);
 
   if (error) {
-    console.log(error);
-    console.log(aver);
+    console.log("Login error");
+    if (dataResp) {
+      console.log("data response with error: ", dataResp);
+    }
+    console.log("error: ", error);
     redirect("/error");
   }
 
