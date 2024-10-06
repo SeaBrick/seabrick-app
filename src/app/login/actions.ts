@@ -15,9 +15,11 @@ export async function login(formData: FormData) {
     password: formData.get("password") as string,
   };
 
-  const { error } = await supabase.auth.signInWithPassword(data);
+  const { error, data: dataResp } =
+    await supabase.auth.signInWithPassword(data);
 
   if (error) {
+    console.log("dataResp: ", dataResp);
     console.log("xdd error");
     console.log(error);
     redirect("/error");
@@ -25,7 +27,7 @@ export async function login(formData: FormData) {
 
   console.log("coool xd");
   revalidatePath("/", "layout");
-  redirect("/buy");
+  redirect("/");
 }
 
 export async function signup(formData: FormData) {
@@ -49,5 +51,5 @@ export async function signup(formData: FormData) {
 
   console.log("coool xd");
   revalidatePath("/", "layout");
-  redirect("/buy");
+  redirect("/");
 }
