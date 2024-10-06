@@ -121,7 +121,6 @@ function LoginWalletForm() {
       if (!address) {
         throw new Error("No address passed or connected to log in");
       }
-      console.log("addre: ", address);
 
       const params = new URLSearchParams({ address });
       const response = await fetch(`/api/request_message?${params}`, {
@@ -136,7 +135,7 @@ function LoginWalletForm() {
         const resp = await signMessageAsync({ message: messageGenerated });
 
         // Store signed message in formData
-        formData.set("message", resp);
+        formData.set("signature", resp);
 
         // Send the formData to the login endpoint
         const formResp = await fetch("/api/login", {

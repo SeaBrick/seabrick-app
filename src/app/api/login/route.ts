@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
 
   // Example: process the address
   const address = formData.get("address")?.toString();
-  const message = formData.get("message")?.toString(); // This will be sent after signing in your client code
+  const message = formData.get("signature")?.toString(); // This will be sent after signing in your client code
 
   // Not a valid address value
   if (!checkAddress(address)) {
