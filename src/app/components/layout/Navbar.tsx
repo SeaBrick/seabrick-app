@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import SeabrickSVG from "../utils/SeabrickSVG";
 import { useAccount } from "wagmi";
 import { useEffect } from "react";
@@ -21,7 +21,6 @@ export function Navbar() {
   const { data: accountData, dispatch: dispatchAccount } = useAccountContext();
   const { user } = useAuth();
   const supabaseClient = createClient();
-  const router = useRouter();
 
   useEffect(() => {
     async function callGetter(address: Address) {
@@ -80,8 +79,6 @@ export function Navbar() {
               if (error) {
                 console.log(error);
               }
-
-              router.push("/login");
             }}
           >
             User: {user.email}
