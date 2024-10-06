@@ -11,12 +11,15 @@ import {
   accountInitialState,
   useAccountContext,
 } from "@/context/accountContext";
+import { useAuth } from "@/context/authContext";
+import { createClient } from "@/app/lib/supabase/client";
 
 export function Navbar() {
   const pathname = usePathname();
   const { address: walletAddress } = useAccount();
   const { data: contractsData } = useContractContext();
   const { data: accountData, dispatch: dispatchAccount } = useAccountContext();
+  const { user } = useAuth();
 
   useEffect(() => {
     async function callGetter(address: Address) {
@@ -47,6 +50,12 @@ export function Navbar() {
           >
             Buy
           </Link>
+          <Link
+            className={`${pathname === "/private" && "text-seabrick-blue"}`}
+            href="/private"
+          >
+            Private
+          </Link>
 
           {walletAddress &&
             (accountData.isMinter ||
@@ -61,12 +70,28 @@ export function Navbar() {
             )}
         </div>
 
-        <Link
-          className={`${pathname === "/login" && "text-seabrick-blue"} hover:text-seabrick-blue`}
-          href="/login"
-        >
-          Log in
-        </Link>
+        {/* TODO: Better UX for account details */}
+        {user ? (
+          <button
+            onClick={async () => {
+              const sbClient = createClient();
+              const { error } = await sbClient.auth.signOut();
+              if (error) {
+                console.log("there is an error");
+                console.log(error);
+              }
+            }}
+          >
+            User: {user.email}
+          </button>
+        ) : (
+          <Link
+            className={`${pathname === "/login" && "text-seabrick-blue"} hover:text-seabrick-blue`}
+            href="/login"
+          >
+            Log in
+          </Link>
+        )}
       </div>
     </header>
   );
