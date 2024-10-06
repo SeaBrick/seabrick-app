@@ -9,6 +9,7 @@ export async function login(formData: FormData) {
 
   // type-casting here for convenience
   // in practice, you should validate your inputs
+  // TODO: USe Zod to validate inputs
   const data = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
@@ -32,6 +33,7 @@ export async function signup(formData: FormData) {
 
   // type-casting here for convenience
   // in practice, you should validate your inputs
+  // TODO: USe Zod to validate inputs
   const data = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
