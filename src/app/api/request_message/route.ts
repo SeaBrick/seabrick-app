@@ -3,7 +3,7 @@ import { generateMessage } from "../utils";
 import { checkAddress } from "@/app/lib/utils";
 // import { checkAddress } from "@/app/lib/utils";
 
-export async function GET(request: NextRequest, response: NextResponse) {
+export async function GET(request: NextRequest) {
   const address = request.nextUrl.searchParams.get("address");
 
   // Not a valid address value
@@ -15,8 +15,4 @@ export async function GET(request: NextRequest, response: NextResponse) {
   }
 
   return NextResponse.json({ message: generateMessage(address) });
-}
-
-export async function POST(request: Request, res: Response) {
-  //
 }
