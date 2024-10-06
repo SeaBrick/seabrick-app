@@ -5,11 +5,12 @@ const nextConfig = {
       return config
     },
     redirects: async () => {
-      return [{
-        source: "/",
-        destination: "/buy",
-        permanent: true
-      }]
+      return []
+      // return [{
+      //   source: "/",
+      //   destination: "/buy",
+      //   permanent: true
+      // }]
     }
   }
 
