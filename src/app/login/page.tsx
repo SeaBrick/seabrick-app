@@ -5,8 +5,10 @@ import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import ConnectButton from "../components/buttons/ConnectButton";
 import Modal from "../components/modals/Modal";
 import Container from "../components/utils/Container";
-import { login, signup } from "./actions";
+import { login, signinWithWallet, signup } from "./actions";
 import { useAuth } from "@/context/authContext";
+
+// TODO: Add captchas
 
 type LoginEmailFormProps = unknown;
 function LoginEmailForm(_props: LoginEmailFormProps) {
@@ -114,6 +116,7 @@ function LoginEmailForm(_props: LoginEmailFormProps) {
 function LoginWalletForm() {
   const { address, isConnected } = useAccount();
   const { signMessageAsync } = useSignMessage();
+  const { refetch } = useAuth();
 
   async function formActionSignIn(formData: FormData): Promise<void> {
     try {
@@ -137,16 +140,8 @@ function LoginWalletForm() {
         // Store signed message in formData
         formData.set("signature", resp);
 
-        // Send the formData to the login endpoint
-        const formResp = await fetch("/api/login", {
-          method: "POST",
-          body: formData,
-        });
-
-        console.log("formREsp: ", formResp);
-
-        const a = await formResp.json();
-        console.log("averL ", a);
+        await signinWithWallet(formData);
+        await refetch();
       } else {
         // Cannot get the message from server to sign in
         throw new Error("Error getting the message to sign");
@@ -158,7 +153,7 @@ function LoginWalletForm() {
 
   return (
     <div className="flex flex-col gap-y-4 items-center w-full max-w-xl">
-      <div>{<ConnectButton />}</div>
+      <ConnectButton />
 
       {isConnected && (
         <form
