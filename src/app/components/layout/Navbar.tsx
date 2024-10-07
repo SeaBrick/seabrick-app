@@ -13,6 +13,7 @@ import {
 } from "@/context/accountContext";
 import { useAuth } from "@/context/authContext";
 import { createClient } from "@/app/lib/supabase/client";
+import ConnectButton from "../buttons/ConnectButton";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -20,7 +21,6 @@ export function Navbar() {
   const { data: contractsData } = useContractContext();
   const { data: accountData, dispatch: dispatchAccount } = useAccountContext();
   const { user } = useAuth();
-  const supabaseClient = createClient();
 
   useEffect(() => {
     async function callGetter(address: Address) {
@@ -73,16 +73,24 @@ export function Navbar() {
 
         {/* TODO: Better UX for account details */}
         {user ? (
-          <button
-            onClick={async () => {
-              const { error } = await supabaseClient.auth.signOut();
-              if (error) {
-                console.log(error);
-              }
-            }}
-          >
-            User: {user.email}
-          </button>
+          <>
+            {user.user_metadata.type == "email" && (
+              <button
+                onClick={async () => {
+                  const { error } = await createClient().auth.signOut();
+                  if (error) {
+                    // TODO: set error
+                    console.log(error);
+                  }
+                }}
+              >
+                Sign out
+              </button>
+            )}
+
+            {/* Disconnect button from w3m */}
+            {user.user_metadata.type == "wallet" && <ConnectButton />}
+          </>
         ) : (
           <Link
             className={`${pathname === "/login" && "text-seabrick-blue"} hover:text-seabrick-blue`}
