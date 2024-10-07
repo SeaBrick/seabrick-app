@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// // eslint-disable-next-line @typescript-eslint/no-require-imports
-// const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-
 import Stripe from "stripe";
 
 const stripe_secret_key = process.env.STRIPE_SECRET_KEY;
@@ -19,8 +16,7 @@ export async function POST(request: NextRequest) {
       ui_mode: "embedded",
       line_items: [
         {
-          //
-          price: "prod_QzJdgRomX9ZQ28",
+          price: "price_1Q7Kzq2KHsUnmKagnzvNoHwL",
           quantity: 1,
         },
       ],
