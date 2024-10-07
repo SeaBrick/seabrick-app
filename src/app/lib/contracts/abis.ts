@@ -239,6 +239,56 @@ export const iMarketAbi = [
     name: "OwnableUnauthorizedAccount",
   },
   { type: "error", inputs: [], name: "PaymentFailed" },
+
+  { type: "error", inputs: [], name: "AlreadyInit" },
+  {
+    type: "error",
+    inputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    name: "InvalidTokenId",
+  },
+  {
+    type: "error",
+    inputs: [
+      { name: "", internalType: "address", type: "address" },
+      { name: "", internalType: "address", type: "address" },
+      { name: "", internalType: "uint256", type: "uint256" },
+    ],
+    name: "NotApproved",
+  },
+  {
+    type: "error",
+    inputs: [
+      { name: "", internalType: "address", type: "address" },
+      { name: "", internalType: "uint256", type: "uint256" },
+      { name: "", internalType: "address", type: "address" },
+    ],
+    name: "NotOwner",
+  },
+  { type: "error", inputs: [], name: "OnlyMinters" },
+  {
+    type: "error",
+    inputs: [{ name: "", internalType: "address", type: "address" }],
+    name: "OwnableInvalidOwner",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "", internalType: "address", type: "address" }],
+    name: "OwnableUnauthorizedAccount",
+  },
+  {
+    type: "error",
+    inputs: [
+      { name: "", internalType: "address", type: "address" },
+      { name: "", internalType: "uint256", type: "uint256" },
+      { name: "", internalType: "bytes4", type: "bytes4" },
+    ],
+    name: "ReceiverRefused",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    name: "TransferToZero",
+  },
   {
     type: "event",
     anonymous: false,
