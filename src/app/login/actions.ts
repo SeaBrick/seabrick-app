@@ -5,6 +5,10 @@ import { redirect } from "next/navigation";
 import { createClient } from "../lib/supabase/server";
 import { Address, Hex } from "viem";
 import { verifySignature } from "../api/utils";
+import type {
+  SignUpWithPasswordCredentials,
+  SignInWithPasswordCredentials,
+} from "@supabase/supabase-js";
 
 export async function login(formData: FormData) {
   const supabase = createClient();
@@ -12,25 +16,23 @@ export async function login(formData: FormData) {
   // type-casting here for convenience
   // in practice, you should validate your inputs
   // TODO: USe Zod to validate inputs
-  const data = {
+  // TODO: Add captchas
+  const data: SignInWithPasswordCredentials = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
+    options: {
+      // captchaToken
+    },
   };
 
-  const { error, data: dataResp } =
-    await supabase.auth.signInWithPassword(data);
+  const { error } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
-    console.log("Login error");
-    if (dataResp) {
-      console.log("data response with error: ", dataResp);
-    }
-    console.log("error: ", error);
+    console.log("Login error: ", error);
     redirect("/error");
   }
 
   revalidatePath("/", "layout");
-
   redirect("/");
 }
 
@@ -40,23 +42,25 @@ export async function signup(formData: FormData) {
   // type-casting here for convenience
   // in practice, you should validate your inputs
   // TODO: USe Zod to validate inputs
-  const data = {
+  // TODO: Add captchas
+  const data: SignUpWithPasswordCredentials = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
+    options: {
+      // captchaToken
+      data: {
+        type: "email",
+      },
+    },
   };
 
-  const { error, data: dataResp } = await supabase.auth.signUp(data);
+  const { error } = await supabase.auth.signUp(data);
 
   if (error) {
-    console.log("Login error");
-    if (dataResp) {
-      console.log("data response with error: ", dataResp);
-    }
-    console.log("error: ", error);
+    console.log("Signup error: ", error);
     redirect("/error");
   }
 
-  console.log("coool xd");
   revalidatePath("/", "layout");
   redirect("/");
 }
@@ -84,8 +88,8 @@ export async function signinWithWallet(formData: FormData) {
 
   //
   let user: {
-    id: any;
-    address: any;
+    id: string;
+    address: string;
   } | null = null;
 
   const { data: userData, error: userError } = await supabase
@@ -154,4 +158,7 @@ export async function signinWithWallet(formData: FormData) {
     console.log(anonError);
     redirect("/error");
   }
+
+  revalidatePath("/", "layout");
+  redirect("/");
 }
