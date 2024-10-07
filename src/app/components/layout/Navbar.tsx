@@ -52,12 +52,6 @@ export function Navbar() {
           >
             Buy
           </Link>
-          <Link
-            className={`${pathname === "/private" && "text-seabrick-blue"}`}
-            href="/private"
-          >
-            Private
-          </Link>
 
           {walletAddress &&
             (accountData.isMinter ||
