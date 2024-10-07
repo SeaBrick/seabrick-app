@@ -27,8 +27,8 @@ export default function RootLayout({
   // const initialState = cookieToInitialState(config, headers().get("cookie"));
   const initialState = cookieToInitialState(config);
   return (
-    <AuthProvider>
-      <AppKitProvider initialState={initialState}>
+    <AppKitProvider initialState={initialState}>
+      <AuthProvider>
         <ContractProvider>
           <AggregatorsProvider>
             <AccountProvider>
@@ -44,7 +44,7 @@ export default function RootLayout({
             </AccountProvider>
           </AggregatorsProvider>
         </ContractProvider>
-      </AppKitProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </AppKitProvider>
   );
 }
