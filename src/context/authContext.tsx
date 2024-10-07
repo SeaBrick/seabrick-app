@@ -34,12 +34,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [supabaseClient.auth]);
 
   useEffect(() => {
-    // Call the function to get the user status
     refetch();
+  }, []);
 
+  useEffect(() => {
     // Use the authListener to listen auth changes
     const { data: authListener } = supabaseClient.auth.onAuthStateChange(
       (event, session) => {
+        console.log("onAuthStateChange.event: ", event);
         setUser(session?.user || null);
       }
     );
@@ -47,7 +49,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => {
       authListener.subscription.unsubscribe();
     };
-  }, [refetch, supabaseClient.auth]);
+  }, [supabaseClient.auth]);
 
   return (
     <AuthContext.Provider value={{ user, refetch }}>
