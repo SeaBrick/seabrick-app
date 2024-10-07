@@ -51,7 +51,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // Use the authListener to listen auth changes
     const { data: authListener } = supabaseClient.auth.onAuthStateChange(
       (event, session) => {
-        console.log("onAuthStateChange.event: ", event, "- session: ", session);
         setUser(session?.user || null);
       }
     );
