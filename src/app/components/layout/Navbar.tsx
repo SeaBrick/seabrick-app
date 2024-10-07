@@ -14,6 +14,7 @@ import {
 import { useAuth } from "@/context/authContext";
 import { createClient } from "@/app/lib/supabase/client";
 import ConnectButton from "../buttons/ConnectButton";
+import { ArrowRightStartOnRectangleIcon } from "@heroicons/react/16/solid";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -76,6 +77,7 @@ export function Navbar() {
           <>
             {user.user_metadata.type == "email" && (
               <button
+                className="bg-red-400 p-2 rounded shadow-md text-white flex gap-x-1 items-center"
                 onClick={async () => {
                   const { error } = await createClient().auth.signOut();
                   if (error) {
@@ -84,7 +86,11 @@ export function Navbar() {
                   }
                 }}
               >
-                Sign out
+                {/* Add little image */}
+                Logout
+                <span>
+                  <ArrowRightStartOnRectangleIcon className="size-5" />
+                </span>
               </button>
             )}
 
