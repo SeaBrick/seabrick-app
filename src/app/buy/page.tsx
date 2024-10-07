@@ -5,6 +5,7 @@ import BuyNFT from "./BuyNFT";
 import PageLoaderSpinner from "../components/spinners/PageLoaderSpinner";
 import { useAuth } from "@/context/authContext";
 import { useRouter } from "next/navigation";
+import BuyWithStripe from "./BuyWithStripe";
 
 export default function BuyPage() {
   const { user } = useAuth();
@@ -20,7 +21,7 @@ export default function BuyPage() {
     <div className="w-1/2 mx-auto">
       <p className="text-3xl font-bold mb-8">Buy Seabrick NFT</p>
 
-      {user.user_metadata.type == "email" && <p>Buy with stripe</p>}
+      {user.user_metadata.type == "email" && <BuyWithStripe />}
 
       {user.user_metadata.type == "wallet" && (
         <Suspense
