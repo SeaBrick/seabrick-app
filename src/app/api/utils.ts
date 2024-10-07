@@ -3,6 +3,7 @@ import { Address, Hex, verifyMessage } from "viem";
 // import { checkAddress } from "../lib/utils";
 // import { NextResponse } from "next/server";
 
+// TODO: Remove from here and use on server only side `"use server"`
 const keyHash = process.env.MESSAGE_HASH_KEY;
 if (!keyHash) {
   throw new Error("Missing MESSAGE_HASH_KEY value");
