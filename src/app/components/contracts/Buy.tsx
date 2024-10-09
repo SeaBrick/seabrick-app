@@ -11,6 +11,7 @@ import SuccessBuyModal from "../modals/SuccessBuyModal";
 import { useEffect, useState } from "react";
 import { RefetchOptions } from "@tanstack/react-query";
 import { useAggregatorsContext } from "@/context/aggregatorsContext";
+import { error } from "console";
 
 interface BuyProps {
   aggregator: Aggregator;
@@ -30,6 +31,8 @@ export default function Buy({ aggregator, refetch }: BuyProps) {
     data: receipt,
     isLoading: isConfirming,
     isSuccess: isConfirmed,
+    isError,
+    error,
   } = useWaitForTransactionReceipt({
     hash,
     confirmations: 4,
@@ -92,6 +95,14 @@ export default function Buy({ aggregator, refetch }: BuyProps) {
           />
         )}
       </form>
+
+      <button
+        onClick={() => {
+          console.log(error);
+        }}
+      >
+        Print
+      </button>
     </div>
   );
 }
