@@ -6,8 +6,8 @@ import {
   processTime,
   timeAgo,
   wrapPromise,
-} from "../../lib/utils";
-import { getLatestBuys } from "@/app/lib/subgraph";
+} from "@/lib/utils";
+import { getLatestBuys } from "@/lib/subgraph";
 import Container from "../utils/Container";
 import Table from "../table/Table";
 import TableHeader from "../table/TableHeader";

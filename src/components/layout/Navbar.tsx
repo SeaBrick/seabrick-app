@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import SeabrickSVG from "../utils/SeabrickSVG";
 import { useAccount } from "wagmi";
 import { useEffect } from "react";
-import { getAccount } from "@/app/lib/subgraph";
+import { getAccount } from "@/lib/subgraph";
 import { Address, getAddress } from "viem";
 import { useContractContext } from "@/context/contractContext";
 import {
@@ -12,7 +12,7 @@ import {
   useAccountContext,
 } from "@/context/accountContext";
 import { useAuth } from "@/context/authContext";
-import { createClient } from "@/app/lib/supabase/client";
+import { createClient } from "@/lib/supabase/client";
 import ConnectButton from "../buttons/ConnectButton";
 import { ArrowRightStartOnRectangleIcon } from "@heroicons/react/16/solid";
 

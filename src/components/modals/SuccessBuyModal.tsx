@@ -4,9 +4,9 @@ import Modal from "./Modal";
 import { CheckCircleIcon } from "@heroicons/react/16/solid";
 import Link from "next/link";
 import { Hash, parseEventLogs, TransactionReceipt } from "viem";
-import { getSingleBuy } from "@/app/lib/subgraph";
+import { getSingleBuy } from "@/lib/subgraph";
 import { useAccount } from "wagmi";
-import { iMarketAbi } from "@/app/lib/contracts/abis";
+import { iMarketAbi } from "@/lib/contracts/abis";
 
 interface SuccessBuyModalProps {
   open: boolean;

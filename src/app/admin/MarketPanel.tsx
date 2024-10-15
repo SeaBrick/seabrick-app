@@ -2,7 +2,7 @@ import { useAggregatorsContext } from "@/context/aggregatorsContext";
 import { useContractContext } from "@/context/contractContext";
 import { formatUnits } from "viem";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
-import { iMarketAbi } from "../lib/contracts/abis";
+import { iMarketAbi } from "@/lib/contracts/abis";
 import SuccessClaimModal from "@/components/modals/SuccessClaimModal";
 import { useEffect, useState } from "react";
 

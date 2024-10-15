@@ -1,5 +1,5 @@
 "use client";
-import { SeabrickMarket, SeabrickNFT } from "@/app/lib/interfaces";
+import { SeabrickMarket, SeabrickNFT } from "@/lib/interfaces";
 import { createContext, useContext, useState } from "react";
 import { zeroAddress } from "viem";
 

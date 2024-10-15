@@ -2,12 +2,12 @@
 import { useEffect, useState } from "react";
 import Container from "@/components/utils/Container";
 import SelectTokens from "@/components/selects/SelectTokens";
-import { Aggregator, ERC20Token } from "@/app/lib/interfaces";
+import { Aggregator, ERC20Token } from "@/lib/interfaces";
 import AggregatorsLoader from "@/components/loaders/AggregatorsLoader";
 import GetFundsModal from "@/components/modals/GetFundsModal";
 import { useAccount, useReadContract } from "wagmi";
 import { formatUnits } from "viem";
-import { aggregatorV3InterfaceAbi, ierc20Abi } from "../lib/contracts/abis";
+import { aggregatorV3InterfaceAbi, ierc20Abi } from "@/lib/contracts/abis";
 import { useContractContext } from "@/context/contractContext";
 import { CheckCircleIcon } from "@heroicons/react/16/solid";
 import ApproveERC20Tokens from "@/components/contracts/ApproveERC20Tokens";

@@ -1,5 +1,5 @@
-import { iMarketAbi } from "@/app/lib/contracts/abis";
-import { Aggregator } from "@/app/lib/interfaces";
+import { iMarketAbi } from "@/lib/contracts/abis";
+import { Aggregator } from "@/lib/interfaces";
 import { useContractContext } from "@/context/contractContext";
 import { getAddress } from "viem";
 import {
