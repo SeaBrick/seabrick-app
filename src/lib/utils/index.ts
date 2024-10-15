@@ -40,7 +40,7 @@ export const addressResumer = (address: string, bytes: number) => {
   if (!isAddress(address)) {
     throw new Error("Not valid address - addressResumer");
   }
-  return sliceString(address, bytes);
+  return sliceHex(address, bytes);
 };
 
 /**
@@ -53,7 +53,7 @@ export const hashResumer = (hash: string, bytes: number) => {
   if (!isHex(hash, { strict: false })) {
     throw new Error("Not valid hash - hashResumer");
   }
-  return sliceString(hash, bytes);
+  return sliceHex(hash, bytes);
 };
 
 export const formatDate = (timestamp: number) => {
@@ -70,7 +70,7 @@ export const formatDate = (timestamp: number) => {
   return `${day.toString()} / ${month.toString()} / ${year.toString()} At ${hour}:${minute}:${seconds}  `;
 };
 
-const sliceString = (hexData: Hex, bytes: number) => {
+const sliceHex = (hexData: Hex, bytes: number) => {
   return (
     slice(hexData, 0, bytes) +
     "..." +
