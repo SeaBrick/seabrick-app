@@ -2,7 +2,7 @@
 import React, { Suspense, useEffect } from "react";
 // import RequireWallet from "@/app/components/utils/RequireWallet";
 import BuyNFT from "./BuyNFT";
-import PageLoaderSpinner from "../components/spinners/PageLoaderSpinner";
+import PageLoaderSpinner from "@/components/spinners/PageLoaderSpinner";
 import { useAuth } from "@/context/authContext";
 import { useRouter } from "next/navigation";
 import BuyWithStripe from "./BuyWithStripe";

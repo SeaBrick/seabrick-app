@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { useAccount, useSignMessage } from "wagmi";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import ConnectButton from "../components/buttons/ConnectButton";
-import Modal from "../components/modals/Modal";
-import Container from "../components/utils/Container";
+import ConnectButton from "@/components/buttons/ConnectButton";
+import Modal from "@/components/modals/Modal";
+import Container from "@/components/utils/Container";
 import { login, signinWithWallet, signup } from "./actions";
 import { useAuth } from "@/context/authContext";
 
