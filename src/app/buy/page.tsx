@@ -13,7 +13,8 @@ export default function BuyPage() {
 
   if (!user) {
     // TODO: Add little modal with message that need to login
-    router.push("/login");
+    // FIXME: Why this cause the issues -> ReferenceError: location is not defined
+    // router.push("/login");
     return;
   }
 
