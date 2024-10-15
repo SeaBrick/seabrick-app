@@ -12,9 +12,7 @@ import {
   useAccountContext,
 } from "@/context/accountContext";
 import { useAuth } from "@/context/authContext";
-import { createClient } from "@/lib/supabase/client";
-import ConnectButton from "../buttons/ConnectButton";
-import { ArrowRightStartOnRectangleIcon } from "@heroicons/react/16/solid";
+import AccountDropdown from "../dropdowns/AccountDropdown";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -68,29 +66,7 @@ export function Navbar() {
 
         {/* TODO: Better UX for account details */}
         {user ? (
-          <>
-            {user.user_metadata.type == "email" && (
-              <button
-                className="bg-red-400 p-2 rounded shadow-md text-white flex gap-x-1 items-center"
-                onClick={async () => {
-                  const { error } = await createClient().auth.signOut();
-                  if (error) {
-                    // TODO: set error
-                    console.log(error);
-                  }
-                }}
-              >
-                {/* Add little image */}
-                Logout
-                <span>
-                  <ArrowRightStartOnRectangleIcon className="size-5" />
-                </span>
-              </button>
-            )}
-
-            {/* Disconnect button from w3m */}
-            {user.user_metadata.type == "wallet" && <ConnectButton />}
-          </>
+          <AccountDropdown />
         ) : (
           <Link
             className={`${pathname === "/login" && "text-seabrick-blue"} hover:text-seabrick-blue`}
