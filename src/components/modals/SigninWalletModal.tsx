@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef } from "react";
 import Container from "../utils/Container";
 import Modal from "./Modal";
 import { Checkbox, Description, Field } from "@headlessui/react";
@@ -9,7 +9,15 @@ import { useFormState } from "react-dom";
 interface SigninWalletModalProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  formAction: (formData: FormData) => Promise<void> | void;
+  formAction: (
+    currentState: {
+      message: string;
+    },
+    formData: FormData
+  ) => Promise<{
+    message: string;
+  }>;
+
   formData: FormData | undefined;
 }
 const SigninWalletModal: React.FC<SigninWalletModalProps> = ({
@@ -19,8 +27,29 @@ const SigninWalletModal: React.FC<SigninWalletModalProps> = ({
   formData,
 }: SigninWalletModalProps) => {
   const [enabled, setEnabled] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
+  const hasRendered = useRef(false);
+
+  const initMessageState = { message: "" };
+  const [messageState, formActionState] = useFormState(
+    formAction,
+    initMessageState
+  );
+
+  useEffect(() => {
+    if (hasRendered.current) {
+      // This will run only on updates, not on the first render
+      setMessage(messageState.message);
+    }
+  }, [messageState]);
+
+  useEffect(() => {
+    hasRendered.current = true;
+  }, []);
 
   async function clickAction(formDataAction: FormData): Promise<void> {
+    setMessage("");
+
     if (formData) {
       const email = formDataAction.get("email")?.toString() as string;
       const emailPromotions = formDataAction
@@ -32,7 +61,7 @@ const SigninWalletModal: React.FC<SigninWalletModalProps> = ({
         formData.set("email-promotions", emailPromotions);
       }
 
-      await formAction(formData);
+      formActionState(formData);
     }
   }
 
@@ -76,6 +105,8 @@ const SigninWalletModal: React.FC<SigninWalletModalProps> = ({
               Link email
             </button>
           </form>
+
+          {message && <p className="text-red-500">{messageState.message}</p>}
         </div>
       </Container>
     </Modal>
