@@ -1,3 +1,4 @@
+"use server";
 import { createHmac } from "crypto";
 import { Address, Hex, verifyMessage } from "viem";
 // import { checkAddress } from "@/lib/utils";
@@ -9,7 +10,7 @@ if (!keyHash) {
   throw new Error("Missing MESSAGE_HASH_KEY value");
 }
 
-export function generateMessage(address: Address): string {
+export async function generateMessage(address: Address): Promise<string> {
   const computedHmac = createHmac("sha256", keyHash!)
     .update(address)
     .digest("hex");
@@ -24,7 +25,7 @@ export async function verifySignature(
   address: Address,
   signature: Hex
 ): Promise<boolean> {
-  const message = generateMessage(address);
+  const message = await generateMessage(address);
 
   return verifyMessage({
     address,

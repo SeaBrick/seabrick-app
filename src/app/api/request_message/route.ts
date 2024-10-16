@@ -14,5 +14,5 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  return NextResponse.json({ message: generateMessage(address) });
+  return NextResponse.json({ message: await generateMessage(address) });
 }
