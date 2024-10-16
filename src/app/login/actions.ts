@@ -65,7 +65,10 @@ export async function signup(formData: FormData) {
   redirect("/");
 }
 
-export async function signUpWithWallet(formData: FormData) {
+export async function signUpWithWallet(
+  currentState: { message: string },
+  formData: FormData
+) {
   // Create supabase client
   const supabase = createClient();
 
@@ -74,7 +77,6 @@ export async function signUpWithWallet(formData: FormData) {
   const address = formData.get("address")?.toString() as string;
   const signature = formData.get("signature")?.toString() as string;
   const email = formData.get("email")?.toString() as string;
-
   // Validating signature
   const isValidSignature = await verifySignature(
     address! as Address,
@@ -84,6 +86,15 @@ export async function signUpWithWallet(formData: FormData) {
   // Return error message if not valid signature
   if (!isValidSignature) {
     return { message: "Not valid signature" };
+  }
+
+  // Validating that email is not already taken
+  const { data: emailIsTaken } = await supabase.rpc("check_email_exists", {
+    email_input: email,
+  });
+
+  if (emailIsTaken) {
+    return { message: "Email already taken2" };
   }
 
   const { error: userError } = await supabase
@@ -101,6 +112,10 @@ export async function signUpWithWallet(formData: FormData) {
       .insert({ address, email });
 
     if (newUserError) {
+      if (newUserError.code === "23505") {
+        return { message: "Email already taken" };
+      }
+
       // The Wallet user could not be created
       console.log(newUserError);
       return {
