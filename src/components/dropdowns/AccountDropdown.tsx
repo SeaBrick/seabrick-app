@@ -69,7 +69,7 @@ export default function AccountDropdown({ num: _num }: AccountDropdownProps) {
           <MenuItem>
             <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-black/10">
               <UserCircleIcon className="size-4" />
-              <Link href="/account/details">Account details</Link>
+              <Link href="/account">Account details</Link>
               <kbd className="ml-auto hidden font-sans text-xs group-data-[focus]:inline">
                 ⌘A
               </kbd>
@@ -78,7 +78,7 @@ export default function AccountDropdown({ num: _num }: AccountDropdownProps) {
           <MenuItem>
             <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-black/10">
               <ListBulletIcon className="size-4" />
-              <Link href="/account/transactions">Transactions</Link>
+              <Link href="/account?tab=transactions">Transactions</Link>
               <kbd className="ml-auto hidden font-sans text-xs group-data-[focus]:inline">
                 ⌘T
               </kbd>
