@@ -5,7 +5,7 @@ import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import ConnectButton from "@/components/buttons/ConnectButton";
 import Modal from "@/components/modals/Modal";
 import Container from "@/components/utils/Container";
-import { login, signinWithWallet, signup } from "./actions";
+import { login, signinWithWallet, signUpWithWallet, signup } from "./actions";
 import { useAuth } from "@/context/authContext";
 import { createClient } from "@/lib/supabase/client";
 import SigninWalletModal from "@/components/modals/SigninWalletModal";
@@ -126,10 +126,7 @@ function LoginWalletForm() {
   const [formDataWallet, setFormDataWallet] = useState<FormData>();
 
   const initState = { message: "" };
-  const initState2 = { message: "" };
-
   const [paveState, paveAction] = useFormState(formActionSignIn, initState);
-  const [paveState2, paveAction2] = useFormState(signinWithWallet, initState2);
 
   useEffect(() => {
     async function isAddressAccount() {
@@ -195,12 +192,14 @@ function LoginWalletForm() {
 
   return (
     <>
-      <SigninWalletModal
-        open={isOpen}
-        setOpen={setIsOpen}
-        formAction={paveAction2}
-        formData={formDataWallet}
-      />
+      {isOpen && (
+        <SigninWalletModal
+          open={isOpen}
+          setOpen={setIsOpen}
+          formAction={signUpWithWallet}
+          formData={formDataWallet}
+        />
+      )}
       <div className="flex flex-col gap-y-4 items-center w-full max-w-xl">
         <ConnectButton />
 
