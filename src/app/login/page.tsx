@@ -125,8 +125,13 @@ function LoginWalletForm() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [formDataWallet, setFormDataWallet] = useState<FormData>();
 
-  const initState = { message: "" };
-  const [paveState, paveAction] = useFormState(formActionSignIn, initState);
+  // TODO: Fix issue that init message state does not reset.
+  // Need to use `useState` as I did on SigninWalletModal
+  const initMessageState = { message: "" };
+  const [messageState, formActionState] = useFormState(
+    formActionSignIn,
+    initMessageState
+  );
 
   useEffect(() => {
     async function isAddressAccount() {
@@ -204,7 +209,10 @@ function LoginWalletForm() {
         <ConnectButton />
 
         {isConnected && (
-          <form className="flex flex-col gap-y-4 w-full" action={paveAction}>
+          <form
+            className="flex flex-col gap-y-4 w-full"
+            action={formActionState}
+          >
             <input
               id="address"
               name="address"
