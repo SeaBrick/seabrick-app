@@ -5,6 +5,7 @@ import { Checkbox, Description, Field } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/16/solid";
 import { useState } from "react";
 import { useFormState } from "react-dom";
+import { useAuth } from "@/context/authContext";
 
 interface SigninWalletModalProps {
   open: boolean;
@@ -26,6 +27,8 @@ const SigninWalletModal: React.FC<SigninWalletModalProps> = ({
   formAction,
   formData,
 }: SigninWalletModalProps) => {
+  const { refetch } = useAuth();
+
   const [enabled, setEnabled] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const hasRendered = useRef(false);
@@ -61,7 +64,9 @@ const SigninWalletModal: React.FC<SigninWalletModalProps> = ({
         formData.set("email-promotions", emailPromotions);
       }
 
-      formActionState(formData);
+      const resp = await formAction(initMessageState, formData);
+      setMessage(resp.message);
+      await refetch();
     }
   }
 
@@ -79,6 +84,7 @@ const SigninWalletModal: React.FC<SigninWalletModalProps> = ({
               id="email"
               name="email"
               type="email"
+              required
               placeholder="Enter your email"
               className="bg-gray-300 py-2 px-4 rounded-md border border-seabrick-green text-gray-800"
             />
@@ -106,7 +112,7 @@ const SigninWalletModal: React.FC<SigninWalletModalProps> = ({
             </button>
           </form>
 
-          {message && <p className="text-red-500">{messageState.message}</p>}
+          {message && <p className="text-red-500">{message}</p>}
         </div>
       </Container>
     </Modal>
