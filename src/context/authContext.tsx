@@ -10,15 +10,31 @@ import {
 import { Session } from "@supabase/supabase-js";
 import { useAccountEffect } from "wagmi";
 
-const AuthContext = createContext<{
-  user: Session["user"] | null;
+type UserType = "wallet" | "email";
+
+interface AuthContextAuthenticated {
+  user: Session["user"];
+  userType: UserType;
   refetch: () => Promise<void>;
-}>({
+}
+
+interface AuthContextUnauthenticated {
+  user: null;
+  userType: null;
+  refetch: () => Promise<void>;
+}
+
+type AuthContextProps = AuthContextAuthenticated | AuthContextUnauthenticated;
+
+const AuthContext = createContext<AuthContextProps>({
   user: null,
+  userType: null,
   refetch: async () => {},
 });
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<Session["user"] | null>(null);
+  const [userType, setUserType] = useState<UserType | null>(null);
   const supabaseClient = createClient();
 
   useAccountEffect({
@@ -31,17 +47,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     },
   });
 
-  //   Refetch to update the user auth context
   const refetch = useCallback(async () => {
-    const fetchUser = async () => {
-      const {
-        data: { session },
-      } = await supabaseClient.auth.getSession();
+    const {
+      data: { session },
+    } = await supabaseClient.auth.getSession();
 
-      setUser(session?.user || null);
-    };
-
-    fetchUser();
+    setUser(session?.user || null);
+    setUserType(session?.user?.user_metadata?.type || null);
   }, [supabaseClient.auth]);
 
   useEffect(() => {
@@ -49,10 +61,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [refetch]);
 
   useEffect(() => {
-    // Use the authListener to listen auth changes
     const { data: authListener } = supabaseClient.auth.onAuthStateChange(
       (event, session) => {
         setUser(session?.user || null);
+        setUserType(session?.user?.user_metadata?.type || null);
       }
     );
 
@@ -61,10 +73,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
   }, [supabaseClient.auth]);
 
+  const contextValue: AuthContextProps =
+    user && userType
+      ? {
+          user,
+          userType,
+          refetch,
+        }
+      : {
+          user: null,
+          userType: null,
+          refetch,
+        };
+
   return (
-    <AuthContext.Provider value={{ user, refetch }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };
 
