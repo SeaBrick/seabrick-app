@@ -81,27 +81,16 @@ export async function signUpWithWallet(formData: FormData) {
     signature! as Hex
   );
 
-  // TODO: Handle errors
-  //   Redirecting an error if no valid signature
+  // Return error message if not valid signature
   if (!isValidSignature) {
-    console.log("not valid signature");
     return { message: "Not valid signature" };
-    // redirect("/error");
   }
 
-  //
-  let user: {
-    id: string;
-    address: string;
-  } | null = null;
-
-  const { data: userData, error: userError } = await supabase
+  const { error: userError } = await supabase
     .from("wallet_users")
-    .select("id, address")
+    .select("id, address, email")
     .eq("address", address)
     .single();
-
-  user = userData;
 
   // The query should be an error since the address should be not present
   // to be able to create an account with it
@@ -113,7 +102,6 @@ export async function signUpWithWallet(formData: FormData) {
 
     if (newUserError) {
       // The Wallet user could not be created
-      console.log(`The wallet "${address}" was not created in wallet_address`);
       console.log(newUserError);
       return {
         message: `The account was not created`,
@@ -122,33 +110,29 @@ export async function signUpWithWallet(formData: FormData) {
 
     const { data: newUserData } = await supabase
       .from("wallet_users")
-      .select("id, address")
+      .select("id, address, email")
       .eq("address", address)
       .single();
 
-    user = newUserData;
-
-    if (!user) {
+    if (!newUserData) {
       return { message: "Account information not obtained" };
     }
 
-    const { error: anonError } = await supabase.auth.signInAnonymously({
+    const { error: signError } = await supabase.auth.signInAnonymously({
       options: {
         // TODO: Add captcha
         data: {
           type: "wallet",
           address,
-          email,
+          email: newUserData.email,
         },
       },
     });
 
-    if (anonError) {
-      // The wallet_user was created but the signIn anon was not succesfull
-      console.log("It was not possible to sign in anonymously");
-      console.log(anonError);
+    if (signError) {
+      console.log(signError);
       return {
-        message: "It was not possible to sign in with the wallet at the moment",
+        message: "It's not possible to sign in with the wallet at the moment",
       };
     }
 
@@ -179,103 +163,42 @@ export async function signinWithWallet(
     signature! as Hex
   );
 
-  // TODO: Handle errors
-  //   Redirecting an error if no valid signature
+  // Return error message if not valid signature
   if (!isValidSignature) {
-    console.log("not valid signature");
     return { message: "Not valid signature" };
-    // redirect("/error");
   }
 
-  //
-  let user: {
-    id: string;
-    address: string;
-  } | null = null;
-
-  const { data: userData, error: userError } = await supabase
+  // Query the user by address
+  const { data: user, error: userError } = await supabase
     .from("wallet_users")
-    .select("id, address")
+    .select("id, address, email")
     .eq("address", address)
     .single();
 
-  user = userData;
-
-  if (userError) {
-    // This user error code means that no response with a value was made
-    // wich means that the wallet_user is not saved on our database
-    // We skip this
-    if (userError.code == "PGRST116") {
-      // Create a new wallet_user with this address
-      const { error: newUserError } = await supabase
-        .from("wallet_users")
-        .insert({ address });
-
-      if (newUserError) {
-        // TODO: handling this error
-        // The Wallet user could not be created (it was not created)
-        console.log(
-          `The wallet "${address}" was not created in wallet_address`
-        );
-        console.log(newUserError);
-        return {
-          message: `The wallet "${address}" was not created in wallet_address`,
-        };
-
-        redirect("/error");
-      }
-
-      const { data: newUserData } = await supabase
-        .from("wallet_users")
-        .select("id, address")
-        .eq("address", address)
-        .single();
-
-      user = newUserData;
-    } else {
-      // TODO: handling this error
-      console.log(`It was not able to retrieve wallet "${address}" info`);
-      console.log(userError);
-      return {
-        message: `It was not able to retrieve wallet "${address}" info`,
-      };
-
-      redirect("/error");
-    }
+  // If not registered, return error message
+  if ((userError && userError.code == "PGRST116") || !user) {
+    console.log(userError);
+    return { message: "No account registered with this wallet address" };
   }
 
-  if (!user) {
-    // TODO: handling this error
-    // The Wallet user could not be created (it was not created)
-    console.log(`Not wallet_user found or creaetd with wallet "${address}"`);
-    return {
-      message: `Not wallet_user found or creaetd with wallet "${address}"`,
-    };
-    redirect("/error");
-  }
-
-  const { error: anonError } = await supabase.auth.signInAnonymously({
+  const { error: signError } = await supabase.auth.signInAnonymously({
     options: {
       // TODO: Add captcha
       data: {
         type: "wallet",
         address,
+        email: user.email,
       },
     },
   });
 
-  if (anonError) {
-    // TODO: handling this error
-    // The wallet_user was created but the signIn anon was not succesfull
-    console.log("It was not possible to sign in anonymously");
-    console.log(anonError);
+  if (signError) {
+    console.log(signError);
     return {
-      message: "It was not possible to sign in anonymously",
+      message: "It's not possible to sign in with the wallet at the moment",
     };
-    redirect("/error");
   }
 
   revalidatePath("/", "layout");
-
   redirect("/");
 }
