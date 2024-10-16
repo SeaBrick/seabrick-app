@@ -15,6 +15,7 @@ import {
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import { UserIcon } from "@heroicons/react/24/solid";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useDisconnect } from "wagmi";
 
@@ -68,7 +69,7 @@ export default function AccountDropdown({ num: _num }: AccountDropdownProps) {
             {/* TODO: Add redirect to page /account/details */}
             <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-black/10">
               <UserCircleIcon className="size-4" />
-              Account details
+              <Link href="/account/details">Account details</Link>
               <kbd className="ml-auto hidden font-sans text-xs group-data-[focus]:inline">
                 ⌘A
               </kbd>
