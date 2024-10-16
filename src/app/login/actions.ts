@@ -81,25 +81,83 @@ export async function signUpWithWallet(formData: FormData) {
     signature! as Hex
   );
 
+  // TODO: Handle errors
   //   Redirecting an error if no valid signature
   if (!isValidSignature) {
     console.log("not valid signature");
-    redirect("/error");
+    return { message: "Not valid signature" };
+    // redirect("/error");
   }
 
-  // Check the existence of an user with address
-  const { data: user, error: userError } = await supabase
+  //
+  let user: {
+    id: string;
+    address: string;
+  } | null = null;
+
+  const { data: userData, error: userError } = await supabase
     .from("wallet_users")
     .select("id, address")
     .eq("address", address)
     .single();
 
+  user = userData;
+
   // The query should be an error since the address should be not present
   // to be able to create an account with it
   if (userError && userError.code == "PGRST116") {
     // Create account with this address since is not already taken
+    const { error: newUserError } = await supabase
+      .from("wallet_users")
+      .insert({ address, email });
+
+    if (newUserError) {
+      // The Wallet user could not be created
+      console.log(`The wallet "${address}" was not created in wallet_address`);
+      console.log(newUserError);
+      return {
+        message: `The account was not created`,
+      };
+    }
+
+    const { data: newUserData } = await supabase
+      .from("wallet_users")
+      .select("id, address")
+      .eq("address", address)
+      .single();
+
+    user = newUserData;
+
+    if (!user) {
+      return { message: "Account information not obtained" };
+    }
+
+    const { error: anonError } = await supabase.auth.signInAnonymously({
+      options: {
+        // TODO: Add captcha
+        data: {
+          type: "wallet",
+          address,
+          email,
+        },
+      },
+    });
+
+    if (anonError) {
+      // The wallet_user was created but the signIn anon was not succesfull
+      console.log("It was not possible to sign in anonymously");
+      console.log(anonError);
+      return {
+        message: "It was not possible to sign in with the wallet at the moment",
+      };
+    }
+
+    revalidatePath("/", "layout");
+    redirect("/");
   } else {
-    // return error
+    return {
+      message: "Wallet address already registered",
+    };
   }
 }
 
