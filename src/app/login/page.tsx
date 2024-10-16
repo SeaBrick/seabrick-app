@@ -7,6 +7,8 @@ import Modal from "@/components/modals/Modal";
 import Container from "@/components/utils/Container";
 import { login, signinWithWallet, signup } from "./actions";
 import { useAuth } from "@/context/authContext";
+import { createClient } from "@/lib/supabase/client";
+import SigninWalletModal from "@/components/modals/SigninWalletModal";
 
 // TODO: Add captchas
 
@@ -118,6 +120,28 @@ function LoginWalletForm() {
   const { signMessageAsync } = useSignMessage();
   const { refetch } = useAuth();
 
+  const [needRegister, setNeedRegister] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [formDataWallet, setFormDataWallet] = useState<FormData>();
+
+  useEffect(() => {
+    async function isAddressAccount() {
+      const { error: userError } = await createClient()
+        .from("wallet_users")
+        .select("address")
+        .eq("address", address)
+        .single();
+
+      if (userError && userError.code == "PGRST116") {
+        setNeedRegister(true);
+      }
+    }
+
+    if (isConnected) {
+      isAddressAccount();
+    }
+  }, [isConnected, address]);
+
   async function formActionSignIn(formData: FormData): Promise<void> {
     try {
       const address = formData.get("address")?.toString();
@@ -140,8 +164,13 @@ function LoginWalletForm() {
         // Store signed message in formData
         formData.set("signature", resp);
 
-        await signinWithWallet(formData);
-        await refetch();
+        if (needRegister) {
+          setIsOpen(true);
+          setFormDataWallet(formData);
+        } else {
+          await signinWithWallet(formData);
+          await refetch();
+        }
       } else {
         // Cannot get the message from server to sign in
         throw new Error("Error getting the message to sign");
@@ -152,32 +181,40 @@ function LoginWalletForm() {
   }
 
   return (
-    <div className="flex flex-col gap-y-4 items-center w-full max-w-xl">
-      <ConnectButton />
+    <>
+      <SigninWalletModal
+        open={isOpen}
+        setOpen={setIsOpen}
+        formAction={signinWithWallet}
+        formData={formDataWallet}
+      />
+      <div className="flex flex-col gap-y-4 items-center w-full max-w-xl">
+        <ConnectButton />
 
-      {isConnected && (
-        <form
-          className="flex flex-col gap-y-4 w-full"
-          action={formActionSignIn}
-        >
-          <input
-            id="address"
-            name="address"
-            type="text"
-            hidden
-            readOnly
-            value={address}
-            className="disabled:cursor-not-allowed"
-          />
-          <button
-            className="bg-seabrick-green p-2 rounded-md text-white"
-            type="submit"
+        {isConnected && (
+          <form
+            className="flex flex-col gap-y-4 w-full"
+            action={formActionSignIn}
           >
-            Sign in
-          </button>
-        </form>
-      )}
-    </div>
+            <input
+              id="address"
+              name="address"
+              type="text"
+              hidden
+              readOnly
+              value={address}
+              className="disabled:cursor-not-allowed"
+            />
+            <button
+              className="bg-seabrick-green p-2 rounded-md text-white"
+              type="submit"
+            >
+              Sign in
+            </button>
+          </form>
+        )}
+      </div>
+    </>
   );
 }
 
