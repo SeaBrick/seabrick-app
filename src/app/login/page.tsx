@@ -9,6 +9,7 @@ import { login, signinWithWallet, signup } from "./actions";
 import { useAuth } from "@/context/authContext";
 import { createClient } from "@/lib/supabase/client";
 import SigninWalletModal from "@/components/modals/SigninWalletModal";
+import { useFormState } from "react-dom";
 
 // TODO: Add captchas
 
@@ -124,6 +125,12 @@ function LoginWalletForm() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [formDataWallet, setFormDataWallet] = useState<FormData>();
 
+  const initState = { message: "" };
+  const initState2 = { message: "" };
+
+  const [paveState, paveAction] = useFormState(formActionSignIn, initState);
+  const [paveState2, paveAction2] = useFormState(signinWithWallet, initState2);
+
   useEffect(() => {
     async function isAddressAccount() {
       const { error: userError } = await createClient()
@@ -142,11 +149,14 @@ function LoginWalletForm() {
     }
   }, [isConnected, address]);
 
-  async function formActionSignIn(formData: FormData): Promise<void> {
+  async function formActionSignIn(
+    currentState: { message: string },
+    formData: FormData
+  ) {
     try {
       const address = formData.get("address")?.toString();
       if (!address) {
-        throw new Error("No address passed or connected to log in");
+        return { message: "No address passed or connected to log in" };
       }
 
       const params = new URLSearchParams({ address });
@@ -168,15 +178,18 @@ function LoginWalletForm() {
           setIsOpen(true);
           setFormDataWallet(formData);
         } else {
-          await signinWithWallet(formData);
+          await signinWithWallet(currentState, formData);
           await refetch();
         }
+
+        return { message: "" };
       } else {
         // Cannot get the message from server to sign in
-        throw new Error("Error getting the message to sign");
+        return { message: "Error getting the message to sign" };
       }
     } catch (error) {
       console.error(error);
+      return { message: "unknown error" };
     }
   }
 
@@ -185,17 +198,14 @@ function LoginWalletForm() {
       <SigninWalletModal
         open={isOpen}
         setOpen={setIsOpen}
-        formAction={signinWithWallet}
+        formAction={paveAction2}
         formData={formDataWallet}
       />
       <div className="flex flex-col gap-y-4 items-center w-full max-w-xl">
         <ConnectButton />
 
         {isConnected && (
-          <form
-            className="flex flex-col gap-y-4 w-full"
-            action={formActionSignIn}
-          >
+          <form className="flex flex-col gap-y-4 w-full" action={paveAction}>
             <input
               id="address"
               name="address"

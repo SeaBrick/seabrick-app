@@ -4,11 +4,12 @@ import Modal from "./Modal";
 import { Checkbox, Description, Field } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/16/solid";
 import { useState } from "react";
+import { useFormState } from "react-dom";
 
 interface SigninWalletModalProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  formAction: (formData: FormData) => Promise<void>;
+  formAction: (formData: FormData) => Promise<void> | void;
   formData: FormData | undefined;
 }
 const SigninWalletModal: React.FC<SigninWalletModalProps> = ({

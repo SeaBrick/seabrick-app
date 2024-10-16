@@ -65,7 +65,48 @@ export async function signup(formData: FormData) {
   redirect("/");
 }
 
-export async function signinWithWallet(formData: FormData) {
+export async function signUpWithWallet(formData: FormData) {
+  // Create supabase client
+  const supabase = createClient();
+
+  // type-casting here for convenience
+  // TODO: USe Zod to validate inputs
+  const address = formData.get("address")?.toString() as string;
+  const signature = formData.get("signature")?.toString() as string;
+  const email = formData.get("email")?.toString() as string;
+
+  // Validating signature
+  const isValidSignature = await verifySignature(
+    address! as Address,
+    signature! as Hex
+  );
+
+  //   Redirecting an error if no valid signature
+  if (!isValidSignature) {
+    console.log("not valid signature");
+    redirect("/error");
+  }
+
+  // Check the existence of an user with address
+  const { data: user, error: userError } = await supabase
+    .from("wallet_users")
+    .select("id, address")
+    .eq("address", address)
+    .single();
+
+  // The query should be an error since the address should be not present
+  // to be able to create an account with it
+  if (userError && userError.code == "PGRST116") {
+    // Create account with this address since is not already taken
+  } else {
+    // return error
+  }
+}
+
+export async function signinWithWallet(
+  currentState: { message: string },
+  formData: FormData
+) {
   // Create supabase client
   const supabase = createClient();
 
@@ -80,10 +121,12 @@ export async function signinWithWallet(formData: FormData) {
     signature! as Hex
   );
 
+  // TODO: Handle errors
   //   Redirecting an error if no valid signature
   if (!isValidSignature) {
     console.log("not valid signature");
-    redirect("/error");
+    return { message: "Not valid signature" };
+    // redirect("/error");
   }
 
   //
@@ -103,6 +146,7 @@ export async function signinWithWallet(formData: FormData) {
   if (userError) {
     // This user error code means that no response with a value was made
     // wich means that the wallet_user is not saved on our database
+    // We skip this
     if (userError.code == "PGRST116") {
       // Create a new wallet_user with this address
       const { error: newUserError } = await supabase
@@ -116,6 +160,10 @@ export async function signinWithWallet(formData: FormData) {
           `The wallet "${address}" was not created in wallet_address`
         );
         console.log(newUserError);
+        return {
+          message: `The wallet "${address}" was not created in wallet_address`,
+        };
+
         redirect("/error");
       }
 
@@ -130,6 +178,10 @@ export async function signinWithWallet(formData: FormData) {
       // TODO: handling this error
       console.log(`It was not able to retrieve wallet "${address}" info`);
       console.log(userError);
+      return {
+        message: `It was not able to retrieve wallet "${address}" info`,
+      };
+
       redirect("/error");
     }
   }
@@ -138,6 +190,9 @@ export async function signinWithWallet(formData: FormData) {
     // TODO: handling this error
     // The Wallet user could not be created (it was not created)
     console.log(`Not wallet_user found or creaetd with wallet "${address}"`);
+    return {
+      message: `Not wallet_user found or creaetd with wallet "${address}"`,
+    };
     redirect("/error");
   }
 
@@ -156,9 +211,13 @@ export async function signinWithWallet(formData: FormData) {
     // The wallet_user was created but the signIn anon was not succesfull
     console.log("It was not possible to sign in anonymously");
     console.log(anonError);
+    return {
+      message: "It was not possible to sign in anonymously",
+    };
     redirect("/error");
   }
 
   revalidatePath("/", "layout");
+
   redirect("/");
 }
