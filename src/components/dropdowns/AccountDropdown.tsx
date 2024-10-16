@@ -13,6 +13,7 @@ import {
 import {
   ArrowRightStartOnRectangleIcon,
   UserCircleIcon,
+  ListBulletIcon,
 } from "@heroicons/react/24/outline";
 import { UserIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
@@ -66,12 +67,20 @@ export default function AccountDropdown({ num: _num }: AccountDropdownProps) {
           </MenuHeading>
           <MenuSeparator className="my-1 h-px bg-black/25" />
           <MenuItem>
-            {/* TODO: Add redirect to page /account/details */}
             <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-black/10">
               <UserCircleIcon className="size-4" />
               <Link href="/account/details">Account details</Link>
               <kbd className="ml-auto hidden font-sans text-xs group-data-[focus]:inline">
                 ⌘A
+              </kbd>
+            </button>
+          </MenuItem>
+          <MenuItem>
+            <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-black/10">
+              <ListBulletIcon className="size-4" />
+              <Link href="/account/transactions">Transactions</Link>
+              <kbd className="ml-auto hidden font-sans text-xs group-data-[focus]:inline">
+                ⌘T
               </kbd>
             </button>
           </MenuItem>
@@ -96,7 +105,7 @@ export default function AccountDropdown({ num: _num }: AccountDropdownProps) {
             <ArrowRightStartOnRectangleIcon className="size-4" />
             {userType == "wallet" ? <>Disconnect</> : <>Sign out</>}
             <kbd className="ml-auto hidden font-sans text-xs group-data-[focus]:inline">
-              ⌘S
+              ⌘D
             </kbd>
           </button>
         </MenuItem>
