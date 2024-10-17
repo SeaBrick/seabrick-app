@@ -9,6 +9,8 @@ import type {
   SignUpWithPasswordCredentials,
   SignInWithPasswordCredentials,
 } from "@supabase/supabase-js";
+import { headers } from "next/headers";
+import { getUrl } from "@/lib/utils";
 
 export async function login(formData: FormData) {
   const supabase = createClient();
@@ -39,6 +41,10 @@ export async function login(formData: FormData) {
 export async function signup(formData: FormData) {
   const supabase = createClient();
 
+  // Get this whole url
+  const fullUrl = headers().get("referer");
+  const redirectUrl = getUrl(fullUrl);
+
   // type-casting here for convenience
   // in practice, you should validate your inputs
   // TODO: USe Zod to validate inputs
@@ -51,6 +57,7 @@ export async function signup(formData: FormData) {
       data: {
         type: "email",
       },
+      emailRedirectTo: redirectUrl,
     },
   };
 

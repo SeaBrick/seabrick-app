@@ -1,6 +1,8 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { getUrl } from "@/lib/utils";
+import { headers } from "next/headers";
 
 export async function changeAccountDetails(
   currentState: { message: string },
@@ -27,10 +29,19 @@ export async function changeAccountDetails(
   }
 
   if (user_type === "email") {
-    const { error: errorUpdate } = await supabase.auth.updateUser({
-      email: data["email"],
-      data,
-    });
+    // Get this whole url
+    const fullUrl = headers().get("referer");
+    const redirectUrl = getUrl(fullUrl);
+
+    const { error: errorUpdate } = await supabase.auth.updateUser(
+      {
+        email: data["email"],
+        data,
+      },
+      {
+        emailRedirectTo: redirectUrl,
+      }
+    );
 
     if (errorUpdate) {
       return { message: "User details were not updated" };

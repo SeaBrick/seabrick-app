@@ -115,3 +115,22 @@ export function checkAddress(
 ): value is Address {
   return value !== null && value !== undefined && isAddress(value);
 }
+
+export function getUrl(refererUrl: string | null) {
+  // This is on the vercel production env.
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return process.env.NEXT_PUBLIC_SITE_URL;
+  }
+
+  // Automatically set by Vercel. (preview deployments)
+  if (process.env.NEXT_PUBLIC_VERCEL_URL) {
+    return process.env.NEXT_PUBLIC_VERCEL_URL;
+  }
+
+  if (refererUrl) {
+    const urlEntity = new URL(refererUrl);
+    return urlEntity.origin + "/";
+  }
+
+  return "http://localhost:3000/";
+}
