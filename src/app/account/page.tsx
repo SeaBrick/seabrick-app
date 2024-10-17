@@ -77,9 +77,27 @@ const AccountDetails: React.FC = () => {
 
   const initMessageState = { message: "" };
   const [messageState, changeDetailsAction] = useFormState(
-    changeAccountDetails,
+    formAction,
     initMessageState
   );
+
+  async function formAction(
+    currentState: {
+      message: string;
+    },
+    data: FormData
+  ) {
+    const resp = await changeAccountDetails(currentState, data);
+
+    if (resp.message === "User details updated") {
+      setOriginalEmail(email);
+      setOriginalName(name);
+      setOriginalAddress(address);
+      setModifying(false);
+    }
+
+    return resp;
+  }
 
   useEffect(() => {
     if (user) {
@@ -124,6 +142,14 @@ const AccountDetails: React.FC = () => {
     setAddress(originalAddress);
   };
 
+  const checkChanges = () => {
+    return (
+      originalEmail === email &&
+      originalName === name &&
+      originalAddress === address
+    );
+  };
+
   return (
     <div>
       {/* <button onClick={() => console.log("pending: ", pending)}>aver</button> */}
@@ -149,6 +175,7 @@ const AccountDetails: React.FC = () => {
               className="disabled:cursor-not-allowed disabled:text-gray-500 disabled:bg-seabrick-blue/10 mt-1 block w-full bg-seabrick-blue/5 border border-gray-700 rounded py-2 px-4 focus:outline-none focus:ring focus:ring-blue-500"
               disabled={!modifying}
               value={email}
+              required
               onChange={emailOnchange}
               name="email"
             />
@@ -163,6 +190,7 @@ const AccountDetails: React.FC = () => {
                 className="disabled:cursor-not-allowed disabled:text-gray-500 disabled:bg-seabrick-blue/10 mt-1 block w-full bg-seabrick-blue/5 border border-gray-700 rounded py-2 px-4 focus:outline-none focus:ring focus:ring-blue-500"
                 // disabled={!modifying}
                 disabled
+                required
                 value={address}
                 onChange={emailOnchange}
                 name="address"
@@ -172,14 +200,7 @@ const AccountDetails: React.FC = () => {
 
           {modifying ? (
             <div className="flex gap-x-4">
-              {/* <Button
-                type="submit"
-                className="inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-500 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white"
-              >
-                Save changes
-              </Button> */}
-
-              <SubmitButton text="Save" />
+              <SubmitButton disable={checkChanges()} text="Save" />
               <Button
                 type="button"
                 onClick={cancelModify}
