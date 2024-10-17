@@ -49,11 +49,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const refetch = useCallback(async () => {
     const {
-      data: { session },
-    } = await supabaseClient.auth.getSession();
+      data: { user },
+    } = await supabaseClient.auth.getUser();
 
-    setUser(session?.user || null);
-    setUserType(session?.user?.user_metadata?.type || null);
+    setUser(user);
+    setUserType(user?.user_metadata?.type || null);
   }, [supabaseClient.auth]);
 
   useEffect(() => {
