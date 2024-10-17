@@ -4,9 +4,11 @@ import React, { useEffect, useState } from "react";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-
+import { useFormState } from "react-dom";
 import { Button } from "@headlessui/react";
 import { Address, zeroAddress } from "viem";
+import { changeAccountDetails } from "./actions";
+import SubmitButton from "@/components/buttons/SubmitButton";
 
 enum TabsIndex {
   DETAILS,
@@ -73,6 +75,12 @@ const AccountDetails: React.FC = () => {
   const [address, setAddress] = useState<Address>(zeroAddress);
   const [originalAddress, setOriginalAddress] = useState<Address>(zeroAddress);
 
+  const initMessageState = { message: "" };
+  const [messageState, changeDetailsAction] = useFormState(
+    changeAccountDetails,
+    initMessageState
+  );
+
   useEffect(() => {
     if (user) {
       setEmail(user.user_metadata.email);
@@ -99,6 +107,7 @@ const AccountDetails: React.FC = () => {
   const cancelModify = () => {
     restoreOriginalValues();
     setModifying(false);
+    messageState.message = "";
   };
 
   const emailOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,8 +126,9 @@ const AccountDetails: React.FC = () => {
 
   return (
     <div>
+      {/* <button onClick={() => console.log("pending: ", pending)}>aver</button> */}
       {user && (
-        <form className="space-y-8">
+        <form className="space-y-8" action={changeDetailsAction}>
           <div>
             <label className="block">
               Name <span className="text-gray-500">(optional)</span>
@@ -144,6 +154,8 @@ const AccountDetails: React.FC = () => {
             />
           </div>
 
+          <input hidden value={userType} name="user_type" />
+
           {userType === "wallet" && (
             <div>
               <label className="block">Wallet address</label>
@@ -160,12 +172,14 @@ const AccountDetails: React.FC = () => {
 
           {modifying ? (
             <div className="flex gap-x-4">
-              <Button
+              {/* <Button
                 type="submit"
                 className="inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-500 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white"
               >
                 Save changes
-              </Button>
+              </Button> */}
+
+              <SubmitButton text="Save" />
               <Button
                 type="button"
                 onClick={cancelModify}
@@ -182,6 +196,10 @@ const AccountDetails: React.FC = () => {
             >
               Modify
             </Button>
+          )}
+
+          {messageState.message && (
+            <p className="text-red-500">{messageState.message}</p>
           )}
         </form>
       )}
