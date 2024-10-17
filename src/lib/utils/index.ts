@@ -129,8 +129,8 @@ export function getUrl(refererUrl: string | null) {
 
   if (refererUrl) {
     const urlEntity = new URL(refererUrl);
-    return urlEntity.origin;
+    return urlEntity.origin + "/";
   }
 
-  return "http://localhost:3000";
+  return "http://localhost:3000/";
 }
