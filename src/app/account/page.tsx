@@ -89,7 +89,7 @@ const AccountDetails: React.FC = () => {
   ) {
     const resp = await changeAccountDetails(currentState, data);
 
-    if (resp.message === "User details updated") {
+    if (resp.message.includes("User details updated")) {
       setOriginalEmail(email);
       setOriginalName(name);
       setOriginalAddress(address);
