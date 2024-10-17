@@ -5,13 +5,15 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
+import { Button } from "@headlessui/react";
+import { Address, zeroAddress } from "viem";
+
 enum TabsIndex {
   DETAILS,
   TRANSACTIONS,
 }
 
 export default function AccountDetailsPage() {
-  const { user } = useAuth();
   const [selectedIndex, setSelectedIndex] = useState<number>(TabsIndex.DETAILS);
 
   const searchParams = useSearchParams();
@@ -46,10 +48,10 @@ export default function AccountDetailsPage() {
           </Tab>
         </TabList>
         <TabPanels className="mt-3">
-          <TabPanel className="rounded-xl bg-seabrick-blue/5 p-3">
+          <TabPanel className="rounded-xl bg-seabrick-blue/5 p-5">
             <AccountDetails />
           </TabPanel>
-          <TabPanel className="rounded-xl bg-seabrick-blue/5 p-3">
+          <TabPanel className="rounded-xl bg-seabrick-blue/5 p-5">
             <AccountTransactions />
           </TabPanel>
         </TabPanels>
@@ -59,9 +61,136 @@ export default function AccountDetailsPage() {
 }
 
 const AccountDetails: React.FC = () => {
-  return <>Account details</>;
+  const { user, userType } = useAuth();
+  const [modifying, setModifying] = useState<boolean>(false);
+
+  const [email, setEmail] = useState<string>("");
+  const [originalEmail, setOriginalEmail] = useState<string>("");
+
+  const [name, setName] = useState<string>("");
+  const [originalName, setOriginalName] = useState<string>("");
+
+  const [address, setAddress] = useState<Address>(zeroAddress);
+  const [originalAddress, setOriginalAddress] = useState<Address>(zeroAddress);
+
+  useEffect(() => {
+    if (user) {
+      setEmail(user.user_metadata.email);
+      setOriginalEmail(user.user_metadata.email);
+
+      if (user.user_metadata.name) {
+        setName(user.user_metadata.name);
+        setOriginalName(user.user_metadata.name);
+      }
+
+      // TODO: Support for 'email' account with linked wallet
+      if (userType == "wallet") {
+        // We can include the wallet
+        setAddress(user.user_metadata.address);
+        setOriginalAddress(user.user_metadata.address);
+      }
+    }
+  }, []);
+
+  const handleModify = () => {
+    setModifying(true);
+  };
+
+  const cancelModify = () => {
+    restoreOriginalValues();
+    setModifying(false);
+  };
+
+  const emailOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const nameOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  };
+
+  const restoreOriginalValues = () => {
+    setEmail(originalEmail);
+    setName(originalName);
+    setAddress(originalAddress);
+  };
+
+  return (
+    <div>
+      {user && (
+        <form className="space-y-8">
+          <div>
+            <label className="block">
+              Name <span className="text-gray-500">(optional)</span>
+            </label>
+            <input
+              className="disabled:cursor-not-allowed disabled:text-gray-500 disabled:bg-seabrick-blue/10 mt-1 block w-full bg-seabrick-blue/5 border border-gray-700 rounded py-2 px-4 focus:outline-none focus:ring focus:ring-blue-500"
+              placeholder="Your name (optional information)"
+              disabled={!modifying}
+              value={name}
+              onChange={nameOnchange}
+              name="name"
+            />
+          </div>
+
+          <div>
+            <label className="block">Email</label>
+            <input
+              className="disabled:cursor-not-allowed disabled:text-gray-500 disabled:bg-seabrick-blue/10 mt-1 block w-full bg-seabrick-blue/5 border border-gray-700 rounded py-2 px-4 focus:outline-none focus:ring focus:ring-blue-500"
+              disabled={!modifying}
+              value={email}
+              onChange={emailOnchange}
+              name="email"
+            />
+          </div>
+
+          {userType === "wallet" && (
+            <div>
+              <label className="block">Wallet address</label>
+              <input
+                className="disabled:cursor-not-allowed disabled:text-gray-500 disabled:bg-seabrick-blue/10 mt-1 block w-full bg-seabrick-blue/5 border border-gray-700 rounded py-2 px-4 focus:outline-none focus:ring focus:ring-blue-500"
+                // disabled={!modifying}
+                disabled
+                value={address}
+                onChange={emailOnchange}
+                name="address"
+              />
+            </div>
+          )}
+
+          {modifying ? (
+            <div className="flex gap-x-4">
+              <Button
+                type="submit"
+                className="inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-500 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white"
+              >
+                Save changes
+              </Button>
+              <Button
+                type="button"
+                onClick={cancelModify}
+                className="inline-flex items-center gap-2 rounded-md bg-red-600 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-red-400 data-[open]:bg-red-400 data-[focus]:outline-1 data-[focus]:outline-white"
+              >
+                Cancel
+              </Button>
+            </div>
+          ) : (
+            <Button
+              type="button"
+              onClick={handleModify}
+              className="inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-500 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white"
+            >
+              Modify
+            </Button>
+          )}
+        </form>
+      )}
+    </div>
+  );
 };
 
 const AccountTransactions: React.FC = () => {
-  return <>Account transactions</>;
+  const { user } = useAuth();
+
+  return <div>{user && <>Account transactions</>}</div>;
 };
