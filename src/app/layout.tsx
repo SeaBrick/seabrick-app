@@ -6,9 +6,9 @@ import { cookieToInitialState } from "wagmi";
 
 import { config } from "@/config";
 import AppKitProvider from "@/context";
-import { Navbar } from "./components/layout/Navbar";
-import SplashScreen from "./components/layout/SplashScreen";
-import { Footer } from "./components/layout/Footer";
+import { Navbar } from "@/components/layout/Navbar";
+import SplashScreen from "@/components/layout/SplashScreen";
+import { Footer } from "@/components/layout/Footer";
 import { ContractProvider } from "@/context/contractContext";
 import { AccountProvider } from "@/context/accountContext";
 import { AggregatorsProvider } from "@/context/aggregatorsContext";

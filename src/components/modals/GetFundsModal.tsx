@@ -1,12 +1,12 @@
 import { Dispatch, SetStateAction } from "react";
 import Container from "../utils/Container";
 import Modal from "./Modal";
-import { ERC20Token } from "@/app/lib/interfaces";
-// import IERC20 from "@/app/lib/contracts/abis/IERC20.json";
+import { ERC20Token } from "@/lib/interfaces";
+// import IERC20 from "@/lib/contracts/abis/IERC20.json";
 import { useAccount, useWriteContract } from "wagmi";
 import { getAddress, parseUnits } from "viem";
-import { addressResumer } from "@/app/lib/utils";
-import { ierc20Abi } from "@/app/lib/contracts/abis";
+import { addressResumer } from "@/lib/utils";
+import { ierc20Abi } from "@/lib/contracts/abis";
 
 interface ModalProps {
   open: boolean;

@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect } from "react";
-import { wrapPromise } from "@/app/lib/utils";
-import { getSeabrickContract, getSeabrickMarket } from "@/app/lib/subgraph";
-import { addresses } from "@/app/lib/contracts";
+import { wrapPromise } from "@/lib/utils";
+import { getSeabrickContract, getSeabrickMarket } from "@/lib/subgraph";
+import { addresses } from "@/lib/contracts";
 import { useContractContext } from "@/context/contractContext";
 
 const getContracts = async () => {

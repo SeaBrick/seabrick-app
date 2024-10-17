@@ -9,6 +9,7 @@ const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""
 );
 
+// TODO: Add the webhook part that will be tracking the email and the NFT mints
 export default function BuyWithStripe() {
   //
   const fetchClientSecret = useCallback(() => {

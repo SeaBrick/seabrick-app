@@ -1,7 +1,7 @@
 "use client";
-import ContractDetail from "./components/contracts/SeabrickNFTDetails";
-import LatestBuys from "./components/contracts/LatestBuys";
-import LatestTransfers from "./components/contracts/LatestTransfers";
+import ContractDetail from "@/components/contracts/SeabrickNFTDetails";
+import LatestBuys from "@/components/contracts/LatestBuys";
+import LatestTransfers from "@/components/contracts/LatestTransfers";
 
 function Home() {
   return (

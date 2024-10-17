@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { verifySignature } from "../utils";
 import { Address, Hex } from "viem";
-import { checkAddress } from "@/app/lib/utils";
+import { checkAddress } from "@/lib/utils";
 
 export async function POST(request: NextRequest) {
   // You can access the FormData here using req.body

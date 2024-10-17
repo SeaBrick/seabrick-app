@@ -1,4 +1,4 @@
-import { Aggregator, ERC20Token } from "@/app/lib/interfaces";
+import { Aggregator, ERC20Token } from "@/lib/interfaces";
 
 interface SelectTokensProps {
   index: number;

@@ -1,6 +1,6 @@
 "use client";
-import { ierc20Abi } from "@/app/lib/contracts/abis";
-import { ERC20Token } from "@/app/lib/interfaces";
+import { ierc20Abi } from "@/lib/contracts/abis";
+import { ERC20Token } from "@/lib/interfaces";
 import { useContractContext } from "@/context/contractContext";
 import { RefetchOptions } from "@tanstack/react-query";
 import { useEffect, useState } from "react";

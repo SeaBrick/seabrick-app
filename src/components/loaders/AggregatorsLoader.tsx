@@ -1,6 +1,6 @@
-import { Aggregator, ERC20Token } from "@/app/lib/interfaces";
-import { getAggregatorsData } from "@/app/lib/subgraph";
-import { wrapPromise } from "@/app/lib/utils";
+import { Aggregator, ERC20Token } from "@/lib/interfaces";
+import { getAggregatorsData } from "@/lib/subgraph";
+import { wrapPromise } from "@/lib/utils";
 import { useEffect } from "react";
 
 interface AggregatorsProps {

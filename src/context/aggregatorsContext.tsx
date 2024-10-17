@@ -1,6 +1,6 @@
 "use client";
-import { Aggregator, ERC20Token } from "@/app/lib/interfaces";
-import { getAggregatorsData, waitForSgIndexed } from "@/app/lib/subgraph";
+import { Aggregator, ERC20Token } from "@/lib/interfaces";
+import { getAggregatorsData, waitForSgIndexed } from "@/lib/subgraph";
 import {
   createContext,
   useCallback,

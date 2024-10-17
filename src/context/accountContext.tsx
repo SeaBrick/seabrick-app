@@ -1,5 +1,5 @@
 "use client";
-import { Account } from "@/app/lib/interfaces";
+import { Account } from "@/lib/interfaces";
 import { createContext, useContext, useState } from "react";
 
 // Types

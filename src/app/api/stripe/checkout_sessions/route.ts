@@ -21,6 +21,10 @@ export async function POST(request: NextRequest) {
         },
       ],
       mode: "payment",
+      consent_collection: {
+        terms_of_service: "required",
+        promotions: "auto",
+      },
       return_url: `${request.headers.get("origin")}/return?session_id={CHECKOUT_SESSION_ID}`,
     });
 

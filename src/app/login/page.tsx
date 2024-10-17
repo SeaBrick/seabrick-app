@@ -2,11 +2,14 @@
 import React, { useEffect, useState } from "react";
 import { useAccount, useSignMessage } from "wagmi";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import ConnectButton from "../components/buttons/ConnectButton";
-import Modal from "../components/modals/Modal";
-import Container from "../components/utils/Container";
-import { login, signinWithWallet, signup } from "./actions";
+import ConnectButton from "@/components/buttons/ConnectButton";
+import Modal from "@/components/modals/Modal";
+import Container from "@/components/utils/Container";
+import { login, signinWithWallet, signUpWithWallet, signup } from "./actions";
 import { useAuth } from "@/context/authContext";
+import { createClient } from "@/lib/supabase/client";
+import SigninWalletModal from "@/components/modals/SigninWalletModal";
+import { useFormState } from "react-dom";
 
 // TODO: Add captchas
 
@@ -118,11 +121,44 @@ function LoginWalletForm() {
   const { signMessageAsync } = useSignMessage();
   const { refetch } = useAuth();
 
-  async function formActionSignIn(formData: FormData): Promise<void> {
+  const [needRegister, setNeedRegister] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [formDataWallet, setFormDataWallet] = useState<FormData>();
+
+  // TODO: Fix issue that init message state does not reset.
+  // Need to use `useState` as I did on SigninWalletModal
+  const initMessageState = { message: "" };
+  const [messageState, formActionState] = useFormState(
+    formActionSignIn,
+    initMessageState
+  );
+
+  useEffect(() => {
+    async function isAddressAccount() {
+      const { error: userError } = await createClient()
+        .from("wallet_users")
+        .select("address")
+        .eq("address", address)
+        .single();
+
+      if (userError && userError.code == "PGRST116") {
+        setNeedRegister(true);
+      }
+    }
+
+    if (isConnected) {
+      isAddressAccount();
+    }
+  }, [isConnected, address]);
+
+  async function formActionSignIn(
+    currentState: { message: string },
+    formData: FormData
+  ) {
     try {
       const address = formData.get("address")?.toString();
       if (!address) {
-        throw new Error("No address passed or connected to log in");
+        return { message: "No address passed or connected to log in" };
       }
 
       const params = new URLSearchParams({ address });
@@ -140,44 +176,62 @@ function LoginWalletForm() {
         // Store signed message in formData
         formData.set("signature", resp);
 
-        await signinWithWallet(formData);
-        await refetch();
+        if (needRegister) {
+          setIsOpen(true);
+          setFormDataWallet(formData);
+        } else {
+          await signinWithWallet(currentState, formData);
+          await refetch();
+        }
+
+        return { message: "" };
       } else {
         // Cannot get the message from server to sign in
-        throw new Error("Error getting the message to sign");
+        return { message: "Error getting the message to sign" };
       }
     } catch (error) {
       console.error(error);
+      return { message: "unknown error" };
     }
   }
 
   return (
-    <div className="flex flex-col gap-y-4 items-center w-full max-w-xl">
-      <ConnectButton />
-
-      {isConnected && (
-        <form
-          className="flex flex-col gap-y-4 w-full"
-          action={formActionSignIn}
-        >
-          <input
-            id="address"
-            name="address"
-            type="text"
-            hidden
-            readOnly
-            value={address}
-            className="disabled:cursor-not-allowed"
-          />
-          <button
-            className="bg-seabrick-green p-2 rounded-md text-white"
-            type="submit"
-          >
-            Sign in
-          </button>
-        </form>
+    <>
+      {isOpen && (
+        <SigninWalletModal
+          open={isOpen}
+          setOpen={setIsOpen}
+          formAction={signUpWithWallet}
+          formData={formDataWallet}
+        />
       )}
-    </div>
+      <div className="flex flex-col gap-y-4 items-center w-full max-w-xl">
+        <ConnectButton />
+
+        {isConnected && (
+          <form
+            className="flex flex-col gap-y-4 w-full"
+            action={formActionState}
+          >
+            <input
+              id="address"
+              name="address"
+              type="text"
+              hidden
+              readOnly
+              value={address}
+              className="disabled:cursor-not-allowed"
+            />
+            <button
+              className="bg-seabrick-green p-2 rounded-md text-white"
+              type="submit"
+            >
+              Sign in
+            </button>
+          </form>
+        )}
+      </div>
+    </>
   );
 }
 

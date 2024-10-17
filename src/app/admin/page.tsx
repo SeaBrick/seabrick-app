@@ -1,12 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import RequireWallet from "../components/utils/RequireWallet";
+import RequireWallet from "@/components/utils/RequireWallet";
 import { useRouter } from "next/navigation";
 import { useAccountContext } from "@/context/accountContext";
 import { useContractContext } from "@/context/contractContext";
 import { useAccount } from "wagmi";
-import PageLoaderSpinner from "../components/spinners/PageLoaderSpinner";
-import Container from "../components/utils/Container";
+import PageLoaderSpinner from "@/components/spinners/PageLoaderSpinner";
+import Container from "@/components/utils/Container";
 import { getAddress } from "viem";
 import MarketPanel from "./MarketPanel";
 import TokenPanel from "./TokenPanel";

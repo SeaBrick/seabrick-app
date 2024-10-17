@@ -6,8 +6,8 @@ import {
   processTime,
   timeAgo,
   wrapPromise,
-} from "../../lib/utils";
-import { getLatestBuys } from "@/app/lib/subgraph";
+} from "@/lib/utils";
+import { getLatestTransfers } from "@/lib/subgraph";
 import Container from "../utils/Container";
 import Table from "../table/Table";
 import TableHeader from "../table/TableHeader";
@@ -15,39 +15,43 @@ import TableBody from "../table/TableBody";
 import TableBodyRow from "../table/TableBodyRow";
 import PageLoaderSpinner from "../spinners/PageLoaderSpinner";
 
-const getLatestBuysInfo = async () => {
-  return await getLatestBuys();
+const getLatestTransfersInfo = async () => {
+  return await getLatestTransfers();
 };
 
-const getData = wrapPromise(getLatestBuysInfo());
+const getData = wrapPromise(getLatestTransfersInfo());
 
-const LatestBuysData: React.FC = () => {
+const LatestTransfersData: React.FC = () => {
   const data = getData.read();
 
   return (
     <Table>
       <TableHeader>
-        <th scope="col">Token ID</th>
-        <th scope="col">Buyer</th>
         <th scope="col">Transaction hash</th>
+        <th scope="col">From</th>
+        <th scope="col">To</th>
         <th scope="col">Time</th>
       </TableHeader>
       <TableBody>
         {data &&
-          data.map((buy, i) => (
+          data.map((transfer, i) => (
             <TableBodyRow key={`id-${i}`}>
-              <td className="text-black">{buy.tokenId}</td>
-              <td title={buy.buyer} className="text-black">
-                {addressResumer(buy.buyer, 3)}
+              <td title={transfer.transactionHash} className="text-black">
+                {hashResumer(transfer.transactionHash, 3)}
               </td>
-              <td title={buy.transactionHash} className="text-black">
-                {hashResumer(buy.transactionHash, 3)}
+              <td title={transfer.from} className="text-black">
+                {addressResumer(transfer.from, 3)}
+              </td>
+              <td title={transfer.to} className="text-black">
+                {addressResumer(transfer.to, 3)}
               </td>
               <td
-                title={processTime(buy.blockTimestamp).toLocaleString("en-US")}
+                title={processTime(transfer.blockTimestamp).toLocaleString(
+                  "en-US"
+                )}
                 className="text-black"
               >
-                {timeAgo(processTime(buy.blockTimestamp))}
+                {timeAgo(processTime(transfer.blockTimestamp))}
               </td>
             </TableBodyRow>
           ))}
@@ -56,7 +60,7 @@ const LatestBuysData: React.FC = () => {
   );
 };
 
-const LatestBuys: React.FC = () => {
+const LatestTransfers: React.FC = () => {
   return (
     <>
       <Suspense
@@ -68,9 +72,9 @@ const LatestBuys: React.FC = () => {
       >
         <Container>
           <div className="px-8 pt-6 pb-8 flex flex-col gap-y-4">
-            <p className="text-2xl font-bold">Latest buys</p>
+            <p className="text-2xl font-bold">Latest transfers</p>
 
-            <LatestBuysData />
+            <LatestTransfersData />
           </div>
         </Container>
       </Suspense>
@@ -78,4 +82,4 @@ const LatestBuys: React.FC = () => {
   );
 };
 
-export default LatestBuys;
+export default LatestTransfers;

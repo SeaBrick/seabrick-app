@@ -40,7 +40,7 @@ export const addressResumer = (address: string, bytes: number) => {
   if (!isAddress(address)) {
     throw new Error("Not valid address - addressResumer");
   }
-  return sliceString(address, bytes);
+  return sliceHex(address, bytes);
 };
 
 /**
@@ -53,7 +53,7 @@ export const hashResumer = (hash: string, bytes: number) => {
   if (!isHex(hash, { strict: false })) {
     throw new Error("Not valid hash - hashResumer");
   }
-  return sliceString(hash, bytes);
+  return sliceHex(hash, bytes);
 };
 
 export const formatDate = (timestamp: number) => {
@@ -70,7 +70,7 @@ export const formatDate = (timestamp: number) => {
   return `${day.toString()} / ${month.toString()} / ${year.toString()} At ${hour}:${minute}:${seconds}  `;
 };
 
-const sliceString = (hexData: Hex, bytes: number) => {
+const sliceHex = (hexData: Hex, bytes: number) => {
   return (
     slice(hexData, 0, bytes) +
     "..." +
@@ -114,4 +114,23 @@ export function checkAddress(
   value: string | undefined | null
 ): value is Address {
   return value !== null && value !== undefined && isAddress(value);
+}
+
+export function getUrl(refererUrl: string | null) {
+  // This is on the vercel production env.
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return process.env.NEXT_PUBLIC_SITE_URL;
+  }
+
+  // Automatically set by Vercel. (preview deployments)
+  if (process.env.NEXT_PUBLIC_VERCEL_URL) {
+    return process.env.NEXT_PUBLIC_VERCEL_URL;
+  }
+
+  if (refererUrl) {
+    const urlEntity = new URL(refererUrl);
+    return urlEntity.origin + "/";
+  }
+
+  return "http://localhost:3000/";
 }
