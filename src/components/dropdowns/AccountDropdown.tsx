@@ -25,21 +25,8 @@ interface AccountDropdownProps {
 }
 
 export default function AccountDropdown({ num: _num }: AccountDropdownProps) {
-  const { user } = useAuth();
-  const [userType, setUserType] = useState<"email" | "wallet">();
+  const { user, userType } = useAuth();
   const { disconnectAsync } = useDisconnect();
-
-  useEffect(() => {
-    if (user) {
-      if (user.user_metadata.type == "email") {
-        setUserType("email");
-      } else {
-        setUserType("wallet");
-      }
-    } else {
-      setUserType(undefined);
-    }
-  }, [user]);
 
   return (
     <Menu>
