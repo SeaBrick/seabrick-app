@@ -10,6 +10,11 @@ if (!keyHash) {
   throw new Error("Missing MESSAGE_HASH_KEY value");
 }
 
+const passwordKey = process.env.SECRET_PASSWORD_KEY;
+if (!keyHash) {
+  throw new Error("Missing SECRET_PASSWORD_KEY value");
+}
+
 export async function generateMessage(
   address: Address,
   nonce: string
@@ -58,4 +63,12 @@ export async function setNonceSession(): Promise<string> {
   });
 
   return nonce;
+}
+
+export async function getUniquePassword(address: Address): Promise<string> {
+  const unique = createHmac("sha256", passwordKey!)
+    .update(address)
+    .digest("hex");
+
+  return unique;
 }

@@ -10,7 +10,11 @@ import type {
 } from "@supabase/supabase-js";
 import { headers } from "next/headers";
 import { getUrl } from "@/lib/utils";
-import { getSession, verifySignature } from "@/lib/utils/session";
+import {
+  getSession,
+  getUniquePassword,
+  verifySignature,
+} from "@/lib/utils/session";
 
 export async function login(formData: FormData) {
   const supabase = createClient();
@@ -108,80 +112,34 @@ export async function signUpWithWallet(
     return { message: "Not valid signature" };
   }
 
-  // Validating that email is not already taken
-  const { data: emailIsTaken } = await supabase.rpc("check_email_exists", {
-    email_input: email,
-  });
+  //////////////////
 
-  if (emailIsTaken) {
-    return { message: "Email already taken2" };
-  }
+  // Get this whole url
+  const fullUrl = headers().get("referer");
+  const redirectUrl = getUrl(fullUrl);
 
-  const { error: userError } = await supabase
-    .from("wallet_users")
-    .select("id, address, email")
-    .eq("address", address)
-    .single();
-
-  // The query should be an error since the address should be not present
-  if (!userError) {
-    return {
-      message: "Wallet address already registered",
-    };
-  }
-
-  // The `PGRST116` is an error for not found matches (that will indicate that the address is not used)
-  // But if the error code is NOT `PGRST116`, then something else happened
-  if (userError.code !== "PGRST116") {
-    console.log(userError);
-    return {
-      message: "Something wrong happened",
-    };
-  }
-
-  // Create account with this address since is not already taken
-  const { error: newUserError } = await supabase
-    .from("wallet_users")
-    .insert({ address, email });
-
-  if (newUserError) {
-    if (newUserError.code === "23505") {
-      return { message: "Email already taken" };
-    }
-
-    // The Wallet user could not be created
-    console.log(newUserError);
-    return {
-      message: `The account was not created`,
-    };
-  }
-
-  const { data: newUserData } = await supabase
-    .from("wallet_users")
-    .select("id, address, email")
-    .eq("address", address)
-    .single();
-
-  if (!newUserData) {
-    return { message: "Account information not obtained" };
-  }
-
-  const { error: signError } = await supabase.auth.signInAnonymously({
+  // type-casting here for convenience
+  // in practice, you should validate your inputs
+  // TODO: USe Zod to validate inputs
+  // TODO: Add captchas
+  const data: SignUpWithPasswordCredentials = {
+    email,
+    password: await getUniquePassword(address as Address),
     options: {
-      // TODO: Add captcha
+      // captchaToken
       data: {
         type: "wallet",
-        address,
-        email: newUserData.email,
+        address: address,
       },
+      emailRedirectTo: redirectUrl,
     },
-  });
+  };
 
-  if (signError) {
-    console.log(signError);
-    return {
-      message: "It's not possible to sign in with the wallet at the moment",
-    };
+  const { error } = await supabase.auth.signUp(data);
+
+  if (error) {
+    console.log("Signup error: ", error);
+    redirect("/error");
   }
 
   revalidatePath("/", "layout");
@@ -217,6 +175,22 @@ export async function signinWithWallet(
   if (!isValidSignature) {
     return { message: "Not valid signature" };
   }
+
+
+
+  // type-casting here for convenience
+  // in practice, you should validate your inputs
+  // TODO: USe Zod to validate inputs
+  // TODO: Add captchas
+  const data: SignInWithPasswordCredentials = {
+    email: formData.get("email") as string,
+    password: formData.get("password") as string,
+    options: {
+      // captchaToken
+    },
+  };
+
+  const { error } = await supabase.auth.signInWithPassword(data);
 
   // Query the user by address
   const { data: user, error: userError } = await supabase
