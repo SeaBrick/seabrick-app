@@ -79,7 +79,7 @@ export async function changeAccountDetails(
 
   return {
     message: userData.email
-      ? "Email updated. Check your email inbox"
+      ? "Email updated. Check your new email inbox"
       : "User details updated",
   };
 }

@@ -101,8 +101,10 @@ const AccountDetails: React.FC = () => {
 
   useEffect(() => {
     if (user) {
-      setEmail(user.user_metadata.email);
-      setOriginalEmail(user.user_metadata.email);
+      if (user.email) {
+        setEmail(user.email);
+        setOriginalEmail(user.email);
+      }
 
       if (user.user_metadata.name) {
         setName(user.user_metadata.name);
