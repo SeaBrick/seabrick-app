@@ -18,6 +18,11 @@ export async function POST(request: NextRequest) {
         {
           price: "price_1Q7Kzq2KHsUnmKagnzvNoHwL",
           quantity: 1,
+          adjustable_quantity: {
+            enabled: true,
+            minimum: 1,
+            maximum: 10,
+          },
         },
       ],
       mode: "payment",
