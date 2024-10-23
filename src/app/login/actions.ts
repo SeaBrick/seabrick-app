@@ -89,11 +89,10 @@ export async function signUpWithWallet(
   const address = formData.get("address")?.toString() as string;
   const signature = formData.get("signature")?.toString() as string;
   const email = formData.get("email")?.toString() as string;
-  const emailPromotions = formData
-    .get("email-promotions")
-    ?.toString() as string;
-
-  console.log("emailPromotions: ", emailPromotions);
+  // // TODO: Find usage to this value
+  // const _emailPromotions = formData
+  //   .get("email-promotions")
+  //   ?.toString() as string;
 
   const nonceSession = await getNonceSession();
 
@@ -201,8 +200,7 @@ export async function signinWithWallet(
     },
   };
 
-  const { data: signInData, error: signInError } =
-    await supabase.auth.signInWithPassword(data);
+  const { error: signInError } = await supabase.auth.signInWithPassword(data);
 
   if (signInError) {
     console.log(signInError);
@@ -211,8 +209,7 @@ export async function signinWithWallet(
     };
   }
 
-  console.log("signInData: ", signInData);
-
+  deleteNonceSession();
   revalidatePath("/", "layout");
   redirect("/");
 }
