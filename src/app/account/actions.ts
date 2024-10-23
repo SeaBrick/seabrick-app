@@ -50,6 +50,11 @@ export async function changeAccountDetails(
   });
 
   if (errorUpdate) {
+    if (errorUpdate.code === "email_exists") {
+      return { message: errorUpdate.message };
+    } else {
+      console.log("Error when updating user details: ", errorUpdate);
+    }
     return { message: "User details were not updated" };
   }
 
