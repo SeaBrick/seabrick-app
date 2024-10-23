@@ -3,6 +3,7 @@ import { type NextRequest } from "next/server";
 
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -47,7 +48,7 @@ export async function GET(request: NextRequest) {
           .update({
             email: verifiedData.user.email,
           })
-          .eq("address", verifiedData.user.user_metadata.address);
+          .eq("user_id", verifiedData.user.id);
 
         if (updateError) {
           // Something happened when updating the wallet user
@@ -58,6 +59,7 @@ export async function GET(request: NextRequest) {
 
     if (!error) {
       // redirect user to specified redirect URL or root of app
+      revalidatePath("/", "layout");
       redirect(next);
     }
   }

@@ -58,8 +58,6 @@ export async function changeAccountDetails(
     return { message: "User details were not updated" };
   }
 
-  // TODO: Change the email on wallet_users table too using the user.id
-
   if (user_type === "wallet") {
     // TODO: Checkers like we are not "updating" the same wallet
     // TODO: Change address disabled at the moment
