@@ -47,11 +47,6 @@ async function fulfillCheckout(sessionId: string) {
   }
 }
 
-export const config = {
-  api: {
-    bodyParser: false, // Disable body parsing so we can access the raw body
-  },
-};
 export async function POST(req: NextRequest) {
   const buf = await req.text();
   const sig = req.headers.get("stripe-signature");
