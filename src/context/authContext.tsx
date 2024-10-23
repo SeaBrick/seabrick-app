@@ -61,6 +61,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [refetch]);
 
   useEffect(() => {
+    // FIXME: User does not logout aftere a reload
     const { data: authListener } = supabaseClient.auth.onAuthStateChange(
       (event, session) => {
         setUser(session?.user || null);
