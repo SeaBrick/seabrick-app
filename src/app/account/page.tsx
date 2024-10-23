@@ -152,7 +152,6 @@ const AccountDetails: React.FC = () => {
 
   return (
     <div>
-      {/* <button onClick={() => console.log("pending: ", pending)}>aver</button> */}
       {user && (
         <form className="space-y-8" action={changeDetailsAction}>
           <div>

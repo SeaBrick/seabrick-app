@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { getUrl } from "@/lib/utils";
+import { UserAttributes } from "@supabase/supabase-js";
 import { headers } from "next/headers";
 
 export async function changeAccountDetails(
@@ -10,91 +11,75 @@ export async function changeAccountDetails(
 ) {
   const supabase = createClient();
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // Maybe this is useless since the middleware already do this
+  if (!user) {
+    return { message: "not logged..." };
+  }
+
   // TODO: USe Zod to validate inputs
   const user_type = formData.get("user_type") as "wallet" | "email";
   const name = formData.get("name") as string;
   const email = formData.get("email") as string;
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // User data to be updated
+  const userData: UserAttributes = {};
 
-  const data: { [key: string]: string } = {
-    name,
-  };
+  // Only update the email if it's different (case no-sensitive)
+  if (user.email?.toLowerCase() !== email.toLowerCase()) {
+    userData.email = email;
+  }
 
-  if (user?.email?.toLowerCase() !== email.toLowerCase()) {
-    // Need to update email
-    data["email"] = email;
+  // Only update name if it's different (case sensitive)
+  if (user.user_metadata.name !== name) {
+    userData.data = {
+      ...userData.data,
+      name,
+    };
+  }
+
+  // Get the whole url
+  const fullUrl = headers().get("referer");
+  const redirectUrl = getUrl(fullUrl);
+
+  const { error: errorUpdate } = await supabase.auth.updateUser(userData, {
+    emailRedirectTo: redirectUrl,
+  });
+
+  if (errorUpdate) {
+    return { message: "User details were not updated" };
   }
 
   // TODO: Change the email on wallet_users table too using the user.id
-  if (user_type === "email") {
-    // Get this whole url
-    const fullUrl = headers().get("referer");
-    const redirectUrl = getUrl(fullUrl);
 
-    const { error: errorUpdate } = await supabase.auth.updateUser(
-      {
-        email: data["email"],
-        data,
-      },
-      {
-        emailRedirectTo: redirectUrl,
-      }
-    );
-
-    if (errorUpdate) {
-      return { message: "User details were not updated" };
+  if (user_type === "wallet") {
+    if (userData.email) {
+      // TODO:
+      // If we have this value, then the user updated his email, and we should update it also on the public.wallet_users table too
+      // Maybe we shiuld add it on the confirm, or maybe as the `updateUser` fn, use a colum with `change_email` column.
+      // Then, after confirm, we remove the `change_email` and we update the `email`
     }
 
-    return {
-      message:
-        "User details updated" +
-        (data["email"] ? ". Check your email to accept the email change" : ""),
-    };
-  } else {
-    console.log("new ==============");
     // TODO: Change address disabled at the moment
+    // TODO: USe Zod to validate inputs
     // const address = formData.get("address") as string;
-
     // TODO: Maybe ask for a wallet sign with the old wallet
+    // Checkers like is not the same wallet, etc
     // Add CHECKERS since after change, if does not have access to the wallet, it will lose the account
-
-    if (user?.user_metadata.email?.toLowerCase() !== email.toLowerCase()) {
-      // Need to update email
-      data["email"] = email;
-    }
-
-    const { error: queryError, data: queryData } = await supabase
-      .from("wallet_users")
-      .select("metadata")
-      .eq("email", user?.user_metadata.email)
-      .single();
-
-    if (queryData) {
-      const metadata = {
-        ...queryData.metadata,
-        ...data,
-      };
-
-      const { error: updateError, data: updateData } = await supabase
-        .from("wallet_users")
-        .update({ email, metadata })
-        .eq("email", user?.user_metadata.email)
-        .single();
-
-      if (updateError) {
-        console.log("Something wrong happened: ", updateError);
-        return { message: "Detail were not updated" };
-      }
-
-      return {
-        message: "User details updated",
-      };
-    }
-
-    console.log("Something wrong happened: ", queryError);
-    return { message: "Something wrong happened" };
+    // Verify the new signature, etc etc
+    // const { error: queryError, data: queryData } = await supabase
+    //   .from("wallet_users")
+    //   .select("metadata")
+    //   .eq("email", user.email)
+    //   .single();
   }
+
+  return {
+    message: userData.email
+      ? "Email updated. Check your email inbox"
+      : "User details updated",
+  };
 }
