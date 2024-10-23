@@ -25,17 +25,34 @@ export async function GET(request: NextRequest) {
       verifiedData.user &&
       verifiedData.user.user_metadata.type === "wallet"
     ) {
-      const { error: insertError } = await supabase
-        .from("wallet_users")
-        .insert({
-          address: verifiedData.user.user_metadata.address,
-          user_id: verifiedData.user.id,
-          email: verifiedData.user.email,
-        });
+      // For a signup
+      if (type === "signup") {
+        const { error: insertError } = await supabase
+          .from("wallet_users")
+          .insert({
+            address: verifiedData.user.user_metadata.address,
+            user_id: verifiedData.user.id,
+            email: verifiedData.user.email,
+          });
 
-      if (insertError) {
-        // Something happened when adding the wallet user
-        console.log("Wallet user insert error: ", insertError);
+        if (insertError) {
+          // Something happened when adding the wallet user
+          console.log("Wallet user insert error: ", insertError);
+        }
+      }
+
+      if (type === "email_change") {
+        const { error: updateError } = await supabase
+          .from("wallet_users")
+          .update({
+            email: verifiedData.user.email,
+          })
+          .eq("address", verifiedData.user.user_metadata.address);
+
+        if (updateError) {
+          // Something happened when updating the wallet user
+          console.log("Wallet user update error: ", updateError);
+        }
       }
     }
 
