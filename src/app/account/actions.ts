@@ -28,6 +28,7 @@ export async function changeAccountDetails(
     data["email"] = email;
   }
 
+  // TODO: Change the email on wallet_users table too using the user.id
   if (user_type === "email") {
     // Get this whole url
     const fullUrl = headers().get("referer");
