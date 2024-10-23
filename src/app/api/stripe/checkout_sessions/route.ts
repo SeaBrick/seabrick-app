@@ -1,3 +1,4 @@
+import { createClient } from "@/lib/supabase/server";
 import { getUrl } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -13,10 +14,27 @@ const stripe = new Stripe(stripe_secret_key);
 export async function POST(request: NextRequest) {
   const fullUrl = request.headers.get("referer");
   const redirectUrl = getUrl(fullUrl);
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const userType = user?.user_metadata?.type;
+
+  // TODO: Support both type of accounts
+  if (userType === "email") {
+    // If it's email, we should use the email at the top of user (user.email)
+  } else {
+    // It's not email, then it's wallet. We sent it to the user?.user_metadata?.email
+    throw new Error("Not support for wallet accounts yet");
+  }
+
   try {
-    //
     const session = await stripe.checkout.sessions.create({
       ui_mode: "embedded",
+      metadata: {
+        ...user?.user_metadata,
+        email: user?.email || "",
+      },
       line_items: [
         {
           price: "price_1Q7Kzq2KHsUnmKagnzvNoHwL",
