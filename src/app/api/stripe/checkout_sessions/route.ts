@@ -1,3 +1,4 @@
+import { getUrl } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 
 import Stripe from "stripe";
@@ -10,6 +11,8 @@ if (!stripe_secret_key) {
 const stripe = new Stripe(stripe_secret_key);
 
 export async function POST(request: NextRequest) {
+  const fullUrl = request.headers.get("referer");
+  const redirectUrl = getUrl(fullUrl);
   try {
     //
     const session = await stripe.checkout.sessions.create({
@@ -30,7 +33,7 @@ export async function POST(request: NextRequest) {
         terms_of_service: "required",
         promotions: "auto",
       },
-      return_url: `${request.headers.get("origin")}/return?session_id={CHECKOUT_SESSION_ID}`,
+      return_url: `${redirectUrl}return?session_id={CHECKOUT_SESSION_ID}`,
     });
 
     return NextResponse.json({ clientSecret: session.client_secret });
