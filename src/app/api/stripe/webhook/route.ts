@@ -28,7 +28,20 @@ async function fulfillCheckout(sessionId: string) {
   // Check the Checkout Session's payment_status property
   // to determine if fulfillment should be peformed
   if (checkoutSession.payment_status !== "unpaid") {
-    // TODO: Perform fulfillment of the line items
+    // We already know it will be a `line_items` with just one item.
+    // So we get the `quantity` bought directly
+    const quantity = checkoutSession.line_items?.data[0].quantity;
+
+    // User metadata from supabase
+    // TODO: Use this data to mint or get data to mint and assign the nfts
+    const userMetadata = checkoutSession.metadata;
+
+    console.log(
+      `Minting... ${quantity} NFTs to this user: ${userMetadata?.email}`
+    );
+
+    // TODO: Perform fulfillment of the line items, like mintint the total amount and saving the ids
+    // to the DB and the vault app address (NOT for the vault for the collected)
     // TODO: Record/save fulfillment status for this
     // Checkout Session
   }
@@ -40,29 +53,14 @@ export const config = {
   },
 };
 export async function POST(req: NextRequest) {
-  // Retrieve the raw body
-  console.log("ENTER POST");
-
-  // const buf = req.body;
   const buf = await req.text();
-
-  console.log("buf: ", buf);
-  // const sig = req.headers.get("stripe-signature");
   const sig = req.headers.get("stripe-signature");
-  // const sig = req.headers["stripe-signature"];
-  console.log("sig: ", sig);
 
-  let event;
+  let event: Stripe.Event | undefined;
 
   if (!sig) {
     return NextResponse.json(
       { error: "Failed to create the session payment - No signature" },
-      { status: 500 }
-    );
-  }
-  if (!buf) {
-    return NextResponse.json(
-      { error: "Failed to create the session payment - No buf" },
       { status: 500 }
     );
   }
@@ -94,20 +92,3 @@ export async function POST(req: NextRequest) {
   // Return a response to acknowledge receipt of the event
   return NextResponse.json({ received: true });
 }
-
-// // Utility function to read the body as a Buffer
-// const buffer = (req: NextRequest) => {
-//   return new Promise<Buffer>((resolve, reject) => {
-//     const chunks: Buffer[] = [];
-
-//     req.on("data", (chunk: Buffer) => {
-//       chunks.push(chunk);
-//     });
-
-//     req.on("end", () => {
-//       resolve(Buffer.concat(chunks));
-//     });
-
-//     req.on("error", reject);
-//   });
-// };
