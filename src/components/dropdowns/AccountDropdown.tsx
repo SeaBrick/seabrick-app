@@ -17,7 +17,6 @@ import {
 } from "@heroicons/react/24/outline";
 import { UserIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { useDisconnect } from "wagmi";
 
 interface AccountDropdownProps {
@@ -25,8 +24,26 @@ interface AccountDropdownProps {
 }
 
 export default function AccountDropdown({ num: _num }: AccountDropdownProps) {
-  const { user, userType } = useAuth();
+  const { user, userType, refetch: authRefetch } = useAuth();
   const { disconnectAsync } = useDisconnect();
+
+  async function signOut() {
+    const { error } = await createClient().auth.signOut();
+    if (error) {
+      // TODO: set error modal
+      console.log(error);
+    }
+  }
+
+  async function onClickSignOut() {
+    if (userType == "wallet") {
+      await disconnectAsync();
+      await signOut();
+      await authRefetch();
+    } else {
+      await signOut();
+    }
+  }
 
   return (
     <Menu>
@@ -76,17 +93,7 @@ export default function AccountDropdown({ num: _num }: AccountDropdownProps) {
         <MenuSeparator className="my-1 h-px bg-black/25" />
         <MenuItem>
           <button
-            onClick={async () => {
-              if (userType == "wallet") {
-                await disconnectAsync();
-              } else {
-                const { error } = await createClient().auth.signOut();
-                if (error) {
-                  // TODO: set error modal
-                  console.log(error);
-                }
-              }
-            }}
+            onClick={onClickSignOut}
             className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-black/10"
           >
             <ArrowRightStartOnRectangleIcon className="size-4" />

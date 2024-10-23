@@ -39,9 +39,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useAccountEffect({
     onDisconnect() {
-      // FIXME: After a reload page, this does not trigger
       async function signOut() {
         await supabaseClient.auth.signOut();
+        await refetch();
       }
       signOut();
     },
@@ -61,7 +61,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [refetch]);
 
   useEffect(() => {
-    // FIXME: User does not logout aftere a reload
     const { data: authListener } = supabaseClient.auth.onAuthStateChange(
       (event, session) => {
         setUser(session?.user || null);
