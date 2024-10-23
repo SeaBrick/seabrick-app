@@ -61,18 +61,11 @@ export async function changeAccountDetails(
   // TODO: Change the email on wallet_users table too using the user.id
 
   if (user_type === "wallet") {
-    if (userData.email) {
-      // TODO:
-      // If we have this value, then the user updated his email, and we should update it also on the public.wallet_users table too
-      // Maybe we shiuld add it on the confirm, or maybe as the `updateUser` fn, use a colum with `change_email` column.
-      // Then, after confirm, we remove the `change_email` and we update the `email`
-    }
-
+    // TODO: Checkers like we are not "updating" the same wallet
     // TODO: Change address disabled at the moment
     // TODO: USe Zod to validate inputs
     // const address = formData.get("address") as string;
     // TODO: Maybe ask for a wallet sign with the old wallet
-    // Checkers like is not the same wallet, etc
     // Add CHECKERS since after change, if does not have access to the wallet, it will lose the account
     // Verify the new signature, etc etc
     // const { error: queryError, data: queryData } = await supabase
