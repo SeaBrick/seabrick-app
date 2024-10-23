@@ -1,7 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { generateMessage } from "../utils";
 import { checkAddress } from "@/lib/utils";
-// import { checkAddress } from "@/lib/utils";
+import { generateMessage, setNonceSession } from "@/lib/utils/session";
 
 export async function GET(request: NextRequest) {
   const address = request.nextUrl.searchParams.get("address");
@@ -14,5 +13,10 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  return NextResponse.json({ message: await generateMessage(address) });
+  // Generate a nonce and save it on the session
+  const nonceGenerated = await setNonceSession();
+
+  return NextResponse.json({
+    message: await generateMessage(address, nonceGenerated),
+  });
 }

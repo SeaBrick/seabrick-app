@@ -4,13 +4,13 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Address, Hex } from "viem";
-import { verifySignature } from "../api/utils";
 import type {
   SignUpWithPasswordCredentials,
   SignInWithPasswordCredentials,
 } from "@supabase/supabase-js";
 import { headers } from "next/headers";
 import { getUrl } from "@/lib/utils";
+import { getSession, verifySignature } from "@/lib/utils/session";
 
 export async function login(formData: FormData) {
   const supabase = createClient();
@@ -90,9 +90,16 @@ export async function signUpWithWallet(
 
   console.log("emailPromotions: ", emailPromotions);
 
+  const nonceSession = await getSession();
+
+  if (!nonceSession) {
+    return { message: "Nonce session not found" };
+  }
+
   // Validating signature
   const isValidSignature = await verifySignature(
     address! as Address,
+    nonceSession,
     signature! as Hex
   );
 
@@ -193,9 +200,16 @@ export async function signinWithWallet(
   const address = formData.get("address")?.toString() as string;
   const signature = formData.get("signature")?.toString() as string;
 
+  const nonceSession = await getSession();
+
+  if (!nonceSession) {
+    return { message: "Nonce session not found" };
+  }
+
   // Validating signature
   const isValidSignature = await verifySignature(
     address! as Address,
+    nonceSession,
     signature! as Hex
   );
 
