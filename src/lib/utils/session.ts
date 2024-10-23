@@ -43,7 +43,7 @@ export async function verifySignature(
   });
 }
 
-export async function getSession(): Promise<string | undefined> {
+export async function getNonceSession(): Promise<string | undefined> {
   const cookieStore = cookies();
   return cookieStore.get(nonceName)?.value;
 }
@@ -63,6 +63,11 @@ export async function setNonceSession(): Promise<string> {
   });
 
   return nonce;
+}
+
+export async function deleteNonceSession(): Promise<void> {
+  const cookieStore = cookies();
+  cookieStore.delete(nonceName);
 }
 
 export async function getUniquePassword(address: Address): Promise<string> {

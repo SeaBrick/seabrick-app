@@ -65,7 +65,10 @@ const SigninWalletModal: React.FC<SigninWalletModalProps> = ({
       }
 
       const resp = await formAction(initMessageState, formData);
-      setMessage(resp.message);
+      if (resp && resp.message) {
+        setMessage(resp.message);
+      }
+
       await refetch();
     }
   }

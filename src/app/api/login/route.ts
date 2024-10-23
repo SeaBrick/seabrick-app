@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { Address, Hex } from "viem";
 import { checkAddress } from "@/lib/utils";
-import { getSession, verifySignature } from "@/lib/utils/session";
+import { getNonceSession, verifySignature } from "@/lib/utils/session";
 
 export async function POST(request: NextRequest) {
   // You can access the FormData here using req.body
@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
   const address = formData.get("address")?.toString();
   const message = formData.get("signature")?.toString(); // This will be sent after signing in your client code
 
-  const nonceSession = await getSession();
+  const nonceSession = await getNonceSession();
 
   if (!nonceSession) {
     return NextResponse.json(

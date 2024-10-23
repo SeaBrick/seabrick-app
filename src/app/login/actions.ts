@@ -11,7 +11,8 @@ import type {
 import { headers } from "next/headers";
 import { getUrl } from "@/lib/utils";
 import {
-  getSession,
+  deleteNonceSession,
+  getNonceSession,
   getUniquePassword,
   verifySignature,
 } from "@/lib/utils/session";
@@ -94,7 +95,7 @@ export async function signUpWithWallet(
 
   console.log("emailPromotions: ", emailPromotions);
 
-  const nonceSession = await getSession();
+  const nonceSession = await getNonceSession();
 
   if (!nonceSession) {
     return { message: "Nonce session not found" };
@@ -142,8 +143,10 @@ export async function signUpWithWallet(
     redirect("/error");
   }
 
+  deleteNonceSession();
   revalidatePath("/", "layout");
-  redirect("/");
+
+  return { message: `Email sent to your linked email. Please confirm it` };
 }
 
 export async function signinWithWallet(
@@ -158,7 +161,7 @@ export async function signinWithWallet(
   const address = formData.get("address")?.toString() as string;
   const signature = formData.get("signature")?.toString() as string;
 
-  const nonceSession = await getSession();
+  const nonceSession = await getNonceSession();
 
   if (!nonceSession) {
     return { message: "Nonce session not found" };
@@ -175,8 +178,6 @@ export async function signinWithWallet(
   if (!isValidSignature) {
     return { message: "Not valid signature" };
   }
-
-
 
   // type-casting here for convenience
   // in practice, you should validate your inputs
