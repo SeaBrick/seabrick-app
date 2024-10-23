@@ -20,12 +20,17 @@ export async function GET(request: NextRequest) {
 
     // Once the user is verfied and we know that is a wallet user type
     // we proceed to add the data to the wallet_users table
-    if (verifiedData && verifiedData.user?.user_metadata.type === "wallet") {
+    if (
+      verifiedData &&
+      verifiedData.user &&
+      verifiedData.user.user_metadata.type === "wallet"
+    ) {
       const { error: insertError } = await supabase
         .from("wallet_users")
         .insert({
-          address: verifiedData.user?.user_metadata.address,
-          user_id: verifiedData.user?.id,
+          address: verifiedData.user.user_metadata.address,
+          user_id: verifiedData.user.id,
+          email: verifiedData.user.email,
         });
 
       if (insertError) {
