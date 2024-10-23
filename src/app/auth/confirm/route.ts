@@ -13,10 +13,26 @@ export async function GET(request: NextRequest) {
   if (token_hash && type) {
     const supabase = createClient();
 
-    const { error } = await supabase.auth.verifyOtp({
+    const { data: verifiedData, error } = await supabase.auth.verifyOtp({
       type,
       token_hash,
     });
+
+    // Once the user is verfied and we know that is a wallet user type
+    // we proceed to add the data to the wallet_users table
+    if (verifiedData && verifiedData.user?.user_metadata.type === "wallet") {
+      const { error: insertError } = await supabase
+        .from("wallet_users")
+        .insert({
+          address: verifiedData.user?.user_metadata.address,
+          user_id: verifiedData.user?.id,
+        });
+
+      if (insertError) {
+        // Something happened when adding the wallet user
+        console.log("Wallet user insert error: ", insertError);
+      }
+    }
 
     if (!error) {
       // redirect user to specified redirect URL or root of app
