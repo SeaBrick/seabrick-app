@@ -113,14 +113,11 @@ export async function signUpWithWallet(
     return { message: "Not valid signature" };
   }
 
-  //////////////////
-
-  // Get this whole url
+  // Get the whole url to generate the redirect url
   const fullUrl = headers().get("referer");
   const redirectUrl = getUrl(fullUrl);
 
   // type-casting here for convenience
-  // in practice, you should validate your inputs
   // TODO: USe Zod to validate inputs
   // TODO: Add captchas
   const data: SignUpWithPasswordCredentials = {
@@ -146,7 +143,7 @@ export async function signUpWithWallet(
   deleteNonceSession();
   revalidatePath("/", "layout");
 
-  return { message: `Email sent to your linked email. Please confirm it` };
+  return { message: `Email sent to your linked email. Ple1ase confirm it` };
 }
 
 export async function signinWithWallet(
