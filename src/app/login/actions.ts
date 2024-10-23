@@ -176,50 +176,42 @@ export async function signinWithWallet(
     return { message: "Not valid signature" };
   }
 
+  const { data: queryData, error: queryError } = await supabase
+    .from("wallet_users")
+    .select("email")
+    .eq("address", address)
+    .single();
+
+  if (queryError || !queryData) {
+    console.log("Query error at sign in wallet: ", queryError);
+    return { message: "Wallet user not found" };
+  }
+
+  const email = queryData.email as string;
+
   // type-casting here for convenience
   // in practice, you should validate your inputs
   // TODO: USe Zod to validate inputs
   // TODO: Add captchas
   const data: SignInWithPasswordCredentials = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
+    email,
+    password: await getUniquePassword(address as Address),
     options: {
       // captchaToken
     },
   };
 
-  const { error } = await supabase.auth.signInWithPassword(data);
+  const { data: signInData, error: signInError } =
+    await supabase.auth.signInWithPassword(data);
 
-  // Query the user by address
-  const { data: user, error: userError } = await supabase
-    .from("wallet_users")
-    .select("id, address, email")
-    .eq("address", address)
-    .single();
-
-  // If not registered, return error message
-  if ((userError && userError.code == "PGRST116") || !user) {
-    console.log(userError);
-    return { message: "No account registered with this wallet address" };
-  }
-
-  const { error: signError } = await supabase.auth.signInAnonymously({
-    options: {
-      // TODO: Add captcha
-      data: {
-        type: "wallet",
-        address,
-        email: user.email,
-      },
-    },
-  });
-
-  if (signError) {
-    console.log(signError);
+  if (signInError) {
+    console.log(signInError);
     return {
       message: "It's not possible to sign in with the wallet at the moment",
     };
   }
+
+  console.log("signInData: ", signInData);
 
   revalidatePath("/", "layout");
   redirect("/");
