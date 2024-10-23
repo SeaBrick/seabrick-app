@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { getUrl } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
+import { redirect } from "next/navigation";
 
 import Stripe from "stripe";
 
@@ -18,22 +19,23 @@ export async function POST(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  const userType = user?.user_metadata?.type;
 
-  // TODO: Support both type of accounts
-  if (userType === "email") {
-    // If it's email, we should use the email at the top of user (user.email)
-  } else {
-    // It's not email, then it's wallet. We sent it to the user?.user_metadata?.email
-    throw new Error("Not support for wallet accounts yet");
+  if (!user) {
+    redirect("/login");
+  }
+
+  if (!user.email) {
+    console.log("ERROR: User does not have an email. It is a total error");
+    redirect("/error");
   }
 
   try {
     const session = await stripe.checkout.sessions.create({
       ui_mode: "embedded",
       metadata: {
-        ...user?.user_metadata,
-        email: user?.email || "",
+        ...user.user_metadata,
+        email: user.email,
+        user_id: user.id,
       },
       line_items: [
         {
@@ -51,7 +53,7 @@ export async function POST(request: NextRequest) {
         terms_of_service: "required",
         promotions: "auto",
       },
-      return_url: `${redirectUrl}return?session_id={CHECKOUT_SESSION_ID}`,
+      return_url: redirectUrl + "return?session_id={CHECKOUT_SESSION_ID}",
     });
 
     return NextResponse.json({ clientSecret: session.client_secret });
