@@ -408,6 +408,7 @@ export const iMarketAbi = [
     inputs: [
       { name: "buyer", internalType: "address", type: "address" },
       { name: "name", internalType: "bytes32", type: "bytes32" },
+      { name: "amount", internalType: "uint8", type: "uint8" },
     ],
     name: "buy",
     outputs: [],
