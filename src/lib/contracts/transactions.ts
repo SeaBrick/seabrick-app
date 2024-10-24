@@ -14,6 +14,7 @@ import {
 import { privateKeyToAccount } from "viem/accounts";
 import { iSeabrickAbi } from "@/lib/contracts/abis";
 import { addresses } from ".";
+import { createClient } from "../supabase/server";
 
 // ERROR if this env is missing
 const wallet_server_key = process.env.WALLET_SERVER_KEY;
@@ -81,17 +82,32 @@ async function getNonceWallet(
   address: Address,
   client: PublicClient
 ): Promise<number> {
-  let nonce = 0;
+  const nonce = await client.getTransactionCount({
+    address,
+    blockTag: "pending",
+  });
 
-  for (let i = 0; i < 5; i++) {
-    const aux = await client.getTransactionCount({
-      address,
-      blockTag: "pending",
-    });
+  const resp = await createClient()
+    .from("wallet_nonces")
+    .select("nonce")
+    .eq("address", address)
+    .single();
 
-    if (aux > nonce) {
-      nonce = aux;
+  if (resp.error) {
+    if (resp.error.code == "PGRST116") {
+      const resp = await createClient().from("wallet_nonces").insert({
+        nonce,
+        address,
+      });
+
+      console.log("Response when adding `wallet_nonces`: ", resp);
     }
+
+    return nonce;
+  }
+
+  if (resp.data.nonce > nonce) {
+    return resp.data.nonce;
   }
 
   return nonce;
@@ -115,10 +131,19 @@ export async function mintSeabrickTokens(toAddress: Address, amount: number) {
     });
     receipt = await client.waitForTransactionReceipt({ hash: txHash });
   } catch (error) {
+    console.log("failed: ", error);
     return false;
   }
 
   if (receipt && receipt.status === "success") {
+    await createClient()
+      .from("wallet_nonces")
+      .update({
+        nonce: nonce + 1,
+        address: walletClient.account.address,
+      })
+      .eq("address", walletClient.account.address);
+
     return true;
   } else {
     return false;
