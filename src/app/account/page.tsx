@@ -118,7 +118,7 @@ const AccountDetails: React.FC = () => {
         setOriginalAddress(user.user_metadata.address);
       }
     }
-  }, []);
+  }, [user, userType]);
 
   const handleModify = () => {
     setModifying(true);
