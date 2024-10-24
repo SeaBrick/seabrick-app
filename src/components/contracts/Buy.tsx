@@ -11,7 +11,6 @@ import SuccessBuyModal from "../modals/SuccessBuyModal";
 import { useEffect, useState } from "react";
 import { RefetchOptions } from "@tanstack/react-query";
 import { useAggregatorsContext } from "@/context/aggregatorsContext";
-import { error } from "console";
 
 interface BuyProps {
   aggregator: Aggregator;
@@ -31,7 +30,6 @@ export default function Buy({ aggregator, refetch }: BuyProps) {
     data: receipt,
     isLoading: isConfirming,
     isSuccess: isConfirmed,
-    isError,
     error,
   } = useWaitForTransactionReceipt({
     hash,
@@ -50,7 +48,7 @@ export default function Buy({ aggregator, refetch }: BuyProps) {
       address: marketAddress,
       abi: iMarketAbi,
       functionName: "buy",
-      args: [buyer, aggregator.name],
+      args: [buyer, aggregator.name, 1],
     });
   }
 
