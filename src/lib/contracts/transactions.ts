@@ -106,11 +106,30 @@ async function getNonceWallet(
     return nonce;
   }
 
-  if (resp.data.nonce > nonce) {
-    return resp.data.nonce;
-  }
+  return Math.max(resp.data.nonce || 0, nonce);
+}
 
-  return nonce;
+export async function increaseNonceWallet(
+  address: Address,
+  prevNonce: number,
+  client: PublicClient = getClient()
+) {
+  // Check nonce only
+  const checkNonce = await getNonceWallet(address, client);
+
+  // Get the higher nonce
+  const higherNonce = Math.max(checkNonce, prevNonce);
+
+  const { error } = await createClient()
+    .from("wallet_nonces")
+    .update({
+      nonce: higherNonce + 1,
+    })
+    .eq("address", address);
+
+  if (error) {
+    console.log("Increase DB nonce error: ", error);
+  }
 }
 
 export async function mintSeabrickTokens(toAddress: Address, amount: number) {
@@ -130,19 +149,14 @@ export async function mintSeabrickTokens(toAddress: Address, amount: number) {
       nonce: nonce,
     });
     receipt = await client.waitForTransactionReceipt({ hash: txHash });
+
   } catch (error) {
     console.log("failed: ", error);
     return false;
   }
 
   if (receipt && receipt.status === "success") {
-    await createClient()
-      .from("wallet_nonces")
-      .update({
-        nonce: nonce + 1,
-        address: walletClient.account.address,
-      })
-      .eq("address", walletClient.account.address);
+    await increaseNonceWallet(walletClient.account.address, nonce, client);
 
     return true;
   } else {

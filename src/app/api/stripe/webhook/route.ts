@@ -1,3 +1,5 @@
+"use server";
+import { mintSeabrickTokens } from "@/lib/contracts/transactions";
 import { NextResponse, NextRequest } from "next/server";
 import Stripe from "stripe";
 
@@ -38,6 +40,11 @@ async function fulfillCheckout(sessionId: string) {
 
     console.log(
       `Minting... ${quantity} NFTs to this user: ${userMetadata?.email}`
+    );
+
+    const isMinted = await mintSeabrickTokens(
+      "0x304152266BD626c6D718ca03385F4498D933D168",
+      quantity ?? 1
     );
 
     // TODO: Perform fulfillment of the line items, like mintint the total amount and saving the ids
