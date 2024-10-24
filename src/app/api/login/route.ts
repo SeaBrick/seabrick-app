@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { verifySignature } from "../utils";
 import { Address, Hex } from "viem";
 import { checkAddress } from "@/lib/utils";
+import { getNonceSession, verifySignature } from "@/lib/utils/session";
 
 export async function POST(request: NextRequest) {
   // You can access the FormData here using req.body
@@ -12,6 +12,15 @@ export async function POST(request: NextRequest) {
   const address = formData.get("address")?.toString();
   const message = formData.get("signature")?.toString(); // This will be sent after signing in your client code
 
+  const nonceSession = await getNonceSession();
+
+  if (!nonceSession) {
+    return NextResponse.json(
+      { error: "Nonce session not found" },
+      { status: 400 }
+    );
+  }
+
   // Not a valid address value
   if (!checkAddress(address)) {
     return NextResponse.json(
@@ -21,6 +30,7 @@ export async function POST(request: NextRequest) {
   }
   const isValidSignature = await verifySignature(
     address! as Address,
+    nonceSession,
     message! as Hex
   );
 

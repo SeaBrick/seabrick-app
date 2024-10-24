@@ -3,6 +3,7 @@ import { type NextRequest } from "next/server";
 
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -13,13 +14,52 @@ export async function GET(request: NextRequest) {
   if (token_hash && type) {
     const supabase = createClient();
 
-    const { error } = await supabase.auth.verifyOtp({
+    const { data: verifiedData, error } = await supabase.auth.verifyOtp({
       type,
       token_hash,
     });
 
+    // Once the user is verfied and we know that is a wallet user type
+    // we proceed to add the data to the wallet_users table
+    if (
+      verifiedData &&
+      verifiedData.user &&
+      verifiedData.user.user_metadata.type === "wallet"
+    ) {
+      // For a signup
+      if (type === "signup") {
+        const { error: insertError } = await supabase
+          .from("wallet_users")
+          .insert({
+            address: verifiedData.user.user_metadata.address,
+            user_id: verifiedData.user.id,
+            email: verifiedData.user.email,
+          });
+
+        if (insertError) {
+          // Something happened when adding the wallet user
+          console.log("Wallet user insert error: ", insertError);
+        }
+      }
+
+      if (type === "email_change") {
+        const { error: updateError } = await supabase
+          .from("wallet_users")
+          .update({
+            email: verifiedData.user.email,
+          })
+          .eq("user_id", verifiedData.user.id);
+
+        if (updateError) {
+          // Something happened when updating the wallet user
+          console.log("Wallet user update error: ", updateError);
+        }
+      }
+    }
+
     if (!error) {
       // redirect user to specified redirect URL or root of app
+      revalidatePath("/", "layout");
       redirect(next);
     }
   }

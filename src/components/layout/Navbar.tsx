@@ -51,7 +51,9 @@ export function Navbar() {
             Buy
           </Link>
 
-          {walletAddress &&
+          {/* FIXME: This NOT only depends on the wallet connect. Also depends on the user role */}
+          {user &&
+            walletAddress &&
             (accountData.isMinter ||
               getAddress(contractsData.market.owner) == walletAddress ||
               getAddress(contractsData.seabrick.owner) == walletAddress) && (
