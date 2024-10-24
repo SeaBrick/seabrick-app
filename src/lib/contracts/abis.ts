@@ -668,6 +668,16 @@ export const iSeabrickAbi = [
   },
   {
     type: "function",
+    inputs: [
+      { name: "to", internalType: "address", type: "address" },
+      { name: "amount", internalType: "uint8", type: "uint8" },
+    ],
+    name: "mintBatch",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     inputs: [],
     name: "name",
     outputs: [{ name: "", internalType: "string", type: "string" }],
