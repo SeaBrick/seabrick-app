@@ -12,13 +12,11 @@ if (!endpointSecret) {
 }
 
 async function fulfillCheckout(sessionId: string) {
+  // Create a supabase client with service role
   const supabaseClient = createClient(true);
 
   // TODO: Make this function safe to run multiple times,
   // even concurrently, with the same session ID
-
-  // TODO: Make sure fulfillment hasn't already been
-  // peformed for this Checkout Session
 
   // Check if the session has already been fulfilled
   const { data: sessionData, error: checkError } = await supabaseClient
@@ -124,11 +122,15 @@ export async function POST(req: NextRequest) {
     // Verify the webhook signature
     event = stripe.webhooks.constructEvent(buf, sig, endpointSecret);
   } catch (err) {
+    // Define the error message
     let message = "";
+
+    // If the error is an instace of Error class, we get the message from there
     if (err instanceof Error) {
       message = err.message;
     } else {
-      console.log("error: ", err);
+      // Otherwise is an Unkwown error. We log it, but do not return it
+      console.error("error: ", err);
       message = "Unkwown error";
     }
     console.error(`Webhook signature verification failed.`, message);
@@ -138,7 +140,6 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Handle the event (e.g., fulfilled Checkout session)
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
     const isFulfilled = await fulfillCheckout(session.id);
