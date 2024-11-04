@@ -65,6 +65,17 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
+    const supabaseClient = createClient();
+
+    const {
+      data: { user },
+    } = await supabaseClient.auth.getUser();
+
+    // If not user logged, redirect to login
+    if (!user) {
+      redirect("/login");
+    }
+
     // Get the URL from request
     const url = new URL(request.url);
 
@@ -82,17 +93,30 @@ export async function GET(request: NextRequest) {
 
     // The checkout session is complete. Payment processing may still be in progress
     if (session.status == "complete") {
-      const supabaseClient = createClient();
+      // Get the session
+      const { error: checkError } = await supabaseClient
+        .from("stripe_checkout_sessions")
+        .select("fulfilled")
+        .eq("session_id", sessionId)
+        .single();
 
-      const {
-        data: { user },
-      } = await supabaseClient.auth.getUser();
+      // `PGRST116` is `The result contains 0 rows` error. Since the table have a unique constraint at session_id,
+      // this means that the entry is not created yet
+      // If created, then do nothing.
+      if (checkError && checkError.code == "PGRST116") {
+        const { error: insertError } = await supabaseClient
+          .from("stripe_checkout_sessions")
+          .insert({
+            session_id: sessionId,
+            user_id: user.id,
+            fulfilled: false,
+          });
 
-      // TODO: Create a `stripe_checkout_sessions` with fulfilled as false
-      console.log("USER: ", user);
-      console.log("=======================");
-      console.log("=======================");
-      console.log("session stripe: ", session);
+        if (insertError) {
+          console.error("It cannot save the stripe session: \n", insertError);
+          redirect("/error");
+        }
+      }
     }
 
     return NextResponse.json({
