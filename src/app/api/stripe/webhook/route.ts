@@ -2,6 +2,7 @@
 import { mintSeabrickTokens } from "@/lib/contracts/transactions";
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse, NextRequest } from "next/server";
+import { isEmpty } from "lodash";
 import Stripe from "stripe";
 
 // TODO: Set your secret key. Remember to switch to your live secret key in production.
@@ -61,7 +62,14 @@ async function fulfillCheckout(sessionId: string) {
     // TODO: Use this data to mint or get data to mint and assign the nfts
     const userMetadata = checkoutSession.metadata;
 
-    // console.log("userMetadata: ", userMetadata);
+    if (
+      userMetadata == null ||
+      isEmpty(userMetadata) ||
+      !userMetadata.user_id
+    ) {
+      console.error("User metadata is empty");
+      throw new Error("Failed to mark session as fulfilled");
+    }
 
     console.log(
       `Minting... ${quantity} NFTs to this user: ${userMetadata?.email}`
@@ -79,7 +87,7 @@ async function fulfillCheckout(sessionId: string) {
         .upsert({
           session_id: sessionId,
           fulfilled: true,
-          user_id: "",
+          user_id: userMetadata.user_id,
         });
 
       if (updateError) {
