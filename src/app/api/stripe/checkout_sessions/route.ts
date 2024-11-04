@@ -13,6 +13,8 @@ if (!stripe_secret_key) {
 const stripe = new Stripe(stripe_secret_key);
 
 export async function POST(request: NextRequest) {
+  console.log("XDDD ==============================================");
+  console.log("XDDD ==============================================");
   const fullUrl = request.headers.get("referer");
   const redirectUrl = getUrl(fullUrl);
   const supabase = createClient();
@@ -25,7 +27,7 @@ export async function POST(request: NextRequest) {
   }
 
   if (!user.email) {
-    console.log("ERROR: User does not have an email. It is a total error");
+    console.error("ERROR: User does not have an email. It is a total error");
     redirect("/error");
   }
 
@@ -78,6 +80,17 @@ export async function GET(request: NextRequest) {
     }
 
     const session = await stripe.checkout.sessions.retrieve(sessionId);
+    console.log("session");
+    console.log(session);
+
+    // The checkout session is complete. Payment processing may still be in progress
+    if (session.status == "complete") {
+      const supabaseClient = createClient();
+
+      const {
+        data: { user },
+      } = await supabaseClient.auth.getUser();
+    }
 
     return NextResponse.json({
       status: session.status,
