@@ -12,11 +12,15 @@ if (!stripe_secret_key) {
   throw new Error("Missing STRIPE_SECRET_KEY value");
 }
 
+const endpointSecret = process.env.STRIPE_WEBHOOK_FULFILLMENT_SECRET ?? "";
+if (!endpointSecret) {
+  throw new Error("Missing STRIPE_WEBHOOK_FULFILLMENT_SECRET value");
+}
+
 const stripe = new Stripe(stripe_secret_key);
-const endpointSecret = "whsec_xuhkLFhktNSMVBm5rN3nFR3lOZWFHQN7";
 
 async function fulfillCheckout(sessionId: string) {
-  const supabaseClient = createClient();
+  const supabaseClient = createClient(true);
 
   // TODO: Make this function safe to run multiple times,
   // even concurrently, with the same session ID
