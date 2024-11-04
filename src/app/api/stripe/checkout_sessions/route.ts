@@ -2,30 +2,25 @@ import { createClient } from "@/lib/supabase/server";
 import { getUrl } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 import { redirect } from "next/navigation";
-
-import Stripe from "stripe";
-
-const stripe_secret_key = process.env.STRIPE_SECRET_KEY;
-if (!stripe_secret_key) {
-  throw new Error("Missing STRIPE_SECRET_KEY value");
-}
-
-const stripe = new Stripe(stripe_secret_key);
+import { stripe } from "@/app/api/stripe";
 
 export async function POST(request: NextRequest) {
-  console.log("XDDD ==============================================");
-  console.log("XDDD ==============================================");
+  // Get the current redirect url
   const fullUrl = request.headers.get("referer");
   const redirectUrl = getUrl(fullUrl);
+
+  // Get the supbase client
   const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // If not user logged, redirect to login
   if (!user) {
     redirect("/login");
   }
 
+  // If the user does not have an email, redirect to error
   if (!user.email) {
     console.error("ERROR: User does not have an email. It is a total error");
     redirect("/error");
@@ -60,7 +55,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ clientSecret: session.client_secret });
   } catch (error) {
-    console.log("error in stripe POST: ", error);
+    console.error("Stripe POST: ", error);
     return NextResponse.json(
       { error: "Failed to create the session payment" },
       { status: 500 }
