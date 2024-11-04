@@ -3,21 +3,13 @@ import { mintSeabrickTokens } from "@/lib/contracts/transactions";
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse, NextRequest } from "next/server";
 import { isEmpty } from "lodash";
-import Stripe from "stripe";
-
-// TODO: Set your secret key. Remember to switch to your live secret key in production.
-// See your keys here: https://dashboard.stripe.com/apikeys
-const stripe_secret_key = process.env.STRIPE_SECRET_KEY;
-if (!stripe_secret_key) {
-  throw new Error("Missing STRIPE_SECRET_KEY value");
-}
+import { stripe } from "@/app/api/stripe";
+import { type Stripe } from "stripe";
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_FULFILLMENT_SECRET ?? "";
 if (!endpointSecret) {
   throw new Error("Missing STRIPE_WEBHOOK_FULFILLMENT_SECRET value");
 }
-
-const stripe = new Stripe(stripe_secret_key);
 
 async function fulfillCheckout(sessionId: string) {
   const supabaseClient = createClient(true);
