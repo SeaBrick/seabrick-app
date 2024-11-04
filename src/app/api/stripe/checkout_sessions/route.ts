@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
 
   // If the user does not have an email, redirect to error
   if (!user.email) {
-    console.error("ERROR: User does not have an email. It is a total error");
+    console.error("User does not have an email. It is a total error");
     redirect("/error");
   }
 
@@ -65,18 +65,20 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
+    // Get the URL from request
     const url = new URL(request.url);
 
-    // Get the session_id from the query parameters
+    // Search the session_id from the query parameters
     const sessionId = url.searchParams.get("session_id");
 
+    // If no session ID, redirect to an error page
     if (!sessionId) {
-      throw new Error("No stripe session ID");
+      console.error("No stripe session ID");
+      redirect("/error");
     }
 
+    // Get the session object from the sessionId
     const session = await stripe.checkout.sessions.retrieve(sessionId);
-    console.log("session");
-    console.log(session);
 
     // The checkout session is complete. Payment processing may still be in progress
     if (session.status == "complete") {
@@ -85,6 +87,12 @@ export async function GET(request: NextRequest) {
       const {
         data: { user },
       } = await supabaseClient.auth.getUser();
+
+      // TODO: Create a `stripe_checkout_sessions` with fulfilled as false
+      console.log("USER: ", user);
+      console.log("=======================");
+      console.log("=======================");
+      console.log("session stripe: ", session);
     }
 
     return NextResponse.json({
@@ -92,7 +100,7 @@ export async function GET(request: NextRequest) {
       customer_email: session.customer_details?.email || "Not found",
     });
   } catch (error) {
-    console.log("error in stripe GET: ", error);
+    console.error("Stripe GET: ", error);
     return NextResponse.json(
       { error: "Failed to get the session payment" },
       { status: 500 }
