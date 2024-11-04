@@ -114,11 +114,10 @@ export async function increaseNonceWallet(
   prevNonce: number,
   client: PublicClient = getClient()
 ) {
-  console.log("Previous nonce: ", prevNonce);
   // Check nonce only
   const checkNonce = await getNonceWallet(address, client);
 
-  // Get the higher nonce: 
+  // Get the higher nonce:
   // - If `checkNonce` and `prevNonce + 1` are equal, all is ok
   // - If `checkNonce` is higher than `prevNonce + 1`, means that some
   //   transaction was not catched
@@ -133,7 +132,7 @@ export async function increaseNonceWallet(
     .eq("address", address);
 
   if (error) {
-    console.log("Increase DB nonce error: ", error);
+    console.error("Increase DB nonce error: ", error);
   }
 }
 
@@ -141,8 +140,6 @@ export async function mintSeabrickTokens(toAddress: Address, amount: number) {
   const client = getClient();
   const walletClient = getWalletServerAccount(client);
   const nonce = await getNonceWallet(walletClient.account.address, client);
-
-  console.log("MINTING - NONCE: ", nonce);
 
   const abi = iSeabrickAbi;
   let receipt: TransactionReceipt | undefined = undefined;
@@ -157,7 +154,7 @@ export async function mintSeabrickTokens(toAddress: Address, amount: number) {
     });
     receipt = await client.waitForTransactionReceipt({ hash: txHash });
   } catch (error) {
-    console.log("failed: ", error);
+    console.error("failed: ", error);
     return false;
   }
 
