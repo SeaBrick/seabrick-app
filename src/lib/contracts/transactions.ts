@@ -114,16 +114,21 @@ export async function increaseNonceWallet(
   prevNonce: number,
   client: PublicClient = getClient()
 ) {
+  console.log("Previous nonce: ", prevNonce);
   // Check nonce only
   const checkNonce = await getNonceWallet(address, client);
 
-  // Get the higher nonce
-  const higherNonce = Math.max(checkNonce, prevNonce);
+  // Get the higher nonce: 
+  // - If `checkNonce` and `prevNonce + 1` are equal, all is ok
+  // - If `checkNonce` is higher than `prevNonce + 1`, means that some
+  //   transaction was not catched
+  // - If `checkNonce` is lower than `prevNonce + 1` means that the RPC url is behind.
+  const higherNonce = Math.max(checkNonce, prevNonce + 1);
 
   const { error } = await createClient()
     .from("wallet_nonces")
     .update({
-      nonce: higherNonce + 1,
+      nonce: higherNonce,
     })
     .eq("address", address);
 
@@ -137,6 +142,8 @@ export async function mintSeabrickTokens(toAddress: Address, amount: number) {
   const walletClient = getWalletServerAccount(client);
   const nonce = await getNonceWallet(walletClient.account.address, client);
 
+  console.log("MINTING - NONCE: ", nonce);
+
   const abi = iSeabrickAbi;
   let receipt: TransactionReceipt | undefined = undefined;
 
@@ -149,7 +156,6 @@ export async function mintSeabrickTokens(toAddress: Address, amount: number) {
       nonce: nonce,
     });
     receipt = await client.waitForTransactionReceipt({ hash: txHash });
-
   } catch (error) {
     console.log("failed: ", error);
     return false;
