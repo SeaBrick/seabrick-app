@@ -95,12 +95,10 @@ async function getNonceWallet(
 
   if (resp.error) {
     if (resp.error.code == "PGRST116") {
-      const resp = await createClient().from("wallet_nonces").insert({
+      await createClient().from("wallet_nonces").insert({
         nonce,
         address,
       });
-
-      console.log("Response when adding `wallet_nonces`: ", resp);
     }
 
     return nonce;
@@ -136,29 +134,38 @@ export async function increaseNonceWallet(
   }
 }
 
-export async function mintSeabrickTokens(toAddress: Address, amount: number) {
+export async function mintSeabrickTokens(amount: number, toAddress?: Address) {
   const client = getClient();
   const walletClient = getWalletServerAccount(client);
   const nonce = await getNonceWallet(walletClient.account.address, client);
 
-  const abi = iSeabrickAbi;
+  // If no `toAddress` defined, we use the minter address
+  if (!toAddress) {
+    toAddress = walletClient.account.address;
+  }
+
   let receipt: TransactionReceipt | undefined = undefined;
 
   try {
+    // We try to mint the tokens using the minter address
     const txHash = await walletClient.writeContract({
       address: addresses.SeabrickNFT,
-      abi: abi,
+      abi: iSeabrickAbi,
       functionName: "mintBatch",
       args: [toAddress, amount],
       nonce: nonce,
     });
+
+    // We wait for the tx receipts
     receipt = await client.waitForTransactionReceipt({ hash: txHash });
   } catch (error) {
-    console.error("failed: ", error);
+    // Tokens were not minted
+    console.error("Failed to mint the tokens: \n", error);
     return false;
   }
 
   if (receipt && receipt.status === "success") {
+    // Increase the nonce wallet on the DB
     await increaseNonceWallet(walletClient.account.address, nonce, client);
 
     return true;
