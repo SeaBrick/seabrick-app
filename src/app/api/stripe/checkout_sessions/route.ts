@@ -111,7 +111,9 @@ export async function GET(request: NextRequest) {
             fulfilled: false,
           });
 
-        if (insertError) {
+        // "23505" code is 'duplicate key value violates unique constraint "stripe_sessions_session_id_key"'
+        // Which means that the session is already added. We don't errorer that
+        if (insertError && insertError.code !== "23505") {
           console.error("It cannot save the stripe session: \n", insertError);
           redirect("/error");
         }
