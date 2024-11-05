@@ -43,7 +43,7 @@ async function fulfillCheckout(
   // Create a supabase client with service role
   const supabaseClient = createClient(true);
 
-  // TODO: Make this function safe to run multiple times,
+  // FIXME: Make this function safe to run multiple times,
   // even concurrently, with the same session ID
 
   // Check if the session has already been fulfilled
@@ -57,10 +57,7 @@ async function fulfillCheckout(
   // this means that the entry is not created yet. Should not happen
   // If we get that error, means that the session is not found (not fulfilled)
   if (checkError && checkError.code != "PGRST116") {
-    // TODO: Not throw, just return something
     console.error("Error checking session status:", checkError.message);
-    // throw new Error("Failed to check session status");
-
     return {
       isMinted: false,
       message: `Session not saved on database. ID: ${sessionId}`,
