@@ -1,10 +1,24 @@
-interface MintedResponse {
+import { Hash } from "viem";
+
+// Fulfillment
+interface MintedFulFillResponse {
   isMinted: true;
 }
-
-interface NotMintedResponse {
+interface NotMintedFulFillResponse {
   isMinted: false;
   message: string;
 }
+export type FulfillCheckoutResp =
+  | MintedFulFillResponse
+  | NotMintedFulFillResponse;
 
-export type FulfillCheckoutResp = MintedResponse | NotMintedResponse;
+// Minter function
+interface MintedResponse {
+  isMinted: true;
+  txHash: Hash;
+}
+interface NotMintedResponse {
+  isMinted: false;
+}
+
+export type MintSeabrickResp = MintedResponse | NotMintedResponse;
