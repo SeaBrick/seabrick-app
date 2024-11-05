@@ -30,3 +30,12 @@ export interface CheckoutSessionResponse {
   user_id: string;
   fulfilled: boolean;
 }
+
+export interface StripeBuysByUserResponse {
+  id: string;
+  amount: number;
+  claimed: boolean;
+  tokens_id: string[];
+  created_at: string;
+  updated_at: string;
+}
