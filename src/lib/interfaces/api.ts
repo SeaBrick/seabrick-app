@@ -16,6 +16,7 @@ export type FulfillCheckoutResp =
 interface MintedResponse {
   isMinted: true;
   txHash: Hash;
+  ids: bigint[];
 }
 interface NotMintedResponse {
   isMinted: false;
