@@ -7,7 +7,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { Session } from "@supabase/supabase-js";
+import { Session, SupabaseClient } from "@supabase/supabase-js";
 import { useAccountEffect } from "wagmi";
 import {
   AuthContextAuthenticated,
@@ -15,7 +15,7 @@ import {
   UserRole,
   UserType,
 } from "@/lib/interfaces/auth";
-import { decodeJWT } from "@/lib/utils";
+import { decodeJWT, getUserRole } from "@/lib/utils/auth";
 
 type AuthContextProps = AuthContextAuthenticated | AuthContextUnauthenticated;
 
@@ -25,17 +25,6 @@ const AuthContext = createContext<AuthContextProps>({
   userRole: null,
   refetch: async () => {},
 });
-
-export async function getUserRole(session?: Session | null) {
-  if (!session) {
-    const { data } = await createClient().auth.getSession();
-    session = data?.session;
-    if (!session) return null;
-  }
-
-  const decodedToken = decodeJWT(session.access_token);
-  return decodedToken.user_role || null;
-}
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<Session["user"] | null>(null);
@@ -58,12 +47,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       data: { user },
     } = await supabaseClient.auth.getUser();
 
-    const userRole = await getUserRole();
+    const userRole = await getUserRole(supabaseClient);
 
     setUser(user);
     setUserType(user?.user_metadata?.type || null);
     setUserRole(userRole);
-  }, [supabaseClient.auth]);
+  }, [supabaseClient]);
 
   useEffect(() => {
     refetch();
