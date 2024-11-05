@@ -9,25 +9,13 @@ import {
 } from "react";
 import { Session } from "@supabase/supabase-js";
 import { useAccountEffect } from "wagmi";
-import { jwtDecode, JwtPayload } from "jwt-decode";
-
-type UserType = "wallet" | "email";
-
-type UserRole = "owner" | "admin" | null;
-
-interface AuthContextAuthenticated {
-  user: Session["user"];
-  userType: UserType;
-  userRole: UserRole;
-  refetch: () => Promise<void>;
-}
-
-interface AuthContextUnauthenticated {
-  user: null;
-  userType: null;
-  userRole: null;
-  refetch: () => Promise<void>;
-}
+import {
+  AuthContextAuthenticated,
+  AuthContextUnauthenticated,
+  UserRole,
+  UserType,
+} from "@/lib/interfaces/auth";
+import { decodeJWT } from "@/lib/utils";
 
 type AuthContextProps = AuthContextAuthenticated | AuthContextUnauthenticated;
 
@@ -37,12 +25,6 @@ const AuthContext = createContext<AuthContextProps>({
   userRole: null,
   refetch: async () => {},
 });
-
-function decodeJWT<T>(
-  accessToken: string
-): JwtPayload & { user_role: UserRole } & T {
-  return jwtDecode(accessToken);
-}
 
 export async function getUserRole(session?: Session | null) {
   if (!session) {

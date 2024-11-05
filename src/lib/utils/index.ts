@@ -1,4 +1,6 @@
+import { jwtDecode, JwtPayload } from "jwt-decode";
 import { Address, Hex, isAddress, isHex, slice } from "viem";
+import { UserRole } from "../interfaces/auth";
 
 export function wrapPromise<T>(promise: Promise<T>) {
   let status: "pending" | "success" | "error" = "pending";
@@ -133,4 +135,11 @@ export function getUrl(refererUrl: string | null) {
   }
 
   return "http://localhost:3000/";
+}
+
+
+export function decodeJWT<T>(
+  accessToken: string
+): JwtPayload & { user_role: UserRole } & T {
+  return jwtDecode(accessToken);
 }
