@@ -61,17 +61,26 @@ async function fulfillCheckout(
   // `PGRST116` is `The result contains 0 rows` error. Since the table have a unique constraint at session_id,
   // this means that the entry is not created yet
   // If we get that error, means that the session is not found (not fulfilled)
-  if (checkError && checkError.code != "PGRST116") {
-    const isAdded = await addCheckoutSession(
-      supabaseClient,
-      sessionId,
-      userMetadata.user_id,
-      false
-    );
+  if (checkError) {
+    if (checkError.code == "PGRST116") {
+      const isAdded = await addCheckoutSession(
+        supabaseClient,
+        sessionId,
+        userMetadata.user_id,
+        false
+      );
 
-    if (isAdded) {
-      const newGetSession = await getCheckoutSession(supabaseClient, sessionId);
-      sessionData = newGetSession.data;
+      if (isAdded) {
+        const newGetSession = await getCheckoutSession(
+          supabaseClient,
+          sessionId
+        );
+        sessionData = newGetSession.data;
+      }
+    }
+    // If the error is other type, something happened
+    else {
+      console.error("Failed to get the session from database: \n", checkError);
     }
   }
 
