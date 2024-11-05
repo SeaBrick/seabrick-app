@@ -116,6 +116,15 @@ export async function POST(request: NextRequest) {
     .insert({ user_id: dataUser.id, role: "admin" });
 
   if (error) {
+    // '23505' is the code for 'duplicate key value unique constraint'
+    if (error.code == "23505") {
+      return NextResponse.json(
+        { error: "Conflict", details: "Admin already added" },
+        { status: 409 }
+      );
+    }
+    console.error("Error adding adming:");
+    console.error(error);
     return NextResponse.json(
       { error: "Internal server error", details: error.message },
       { status: 500 }
