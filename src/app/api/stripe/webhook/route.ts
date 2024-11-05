@@ -3,7 +3,12 @@ import { mintSeabrickTokens } from "@/lib/contracts/transactions";
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse, NextRequest } from "next/server";
 import { isEmpty } from "lodash";
-import { getCheckoutSession, stripe, updateSessionFulfillment } from "@/app/api/stripe";
+import {
+  addCheckoutSession,
+  getCheckoutSession,
+  stripe,
+  updateSessionFulfillment,
+} from "@/app/api/stripe";
 import { type Stripe } from "stripe";
 import { FulfillCheckoutResp } from "@/lib/interfaces/api";
 
@@ -18,20 +23,59 @@ async function fulfillCheckout(
   // Create a supabase client with service role
   const supabaseClient = createClient(true);
 
-  // FIXME: Make this function safe to run multiple times,
-  // even concurrently, with the same session ID
+  // Retrieve the Checkout Session from the API with line_items expanded
+  const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId, {
+    expand: ["line_items"],
+  });
+
+  // We already know it will be a `line_items` with just one item (Seabrick NFT (or NFTs)).
+  // So we get the `quantity` bought directly
+  const quantity = checkoutSession.line_items?.data[0].quantity;
+
+  // User metadata from the User that made the Buy
+  const userMetadata = checkoutSession.metadata;
+
+  if (userMetadata == null || isEmpty(userMetadata) || !userMetadata.user_id) {
+    console.error("No user metadata found for this session: ", sessionId);
+    return {
+      isMinted: false,
+      message: "No user metadata found for this session",
+    };
+  }
+
+  if (!quantity) {
+    console.error("No Seabrick quantity defined for this session: ", sessionId);
+    return {
+      isMinted: false,
+      message: "No Seabrick quantity defined for this session",
+    };
+  }
 
   // Check if the session has already been fulfilled
-  const { data: sessionData, error: checkError } = await getCheckoutSession(
-    supabaseClient,
-    sessionId
-  );
+  const getSessionResp = await getCheckoutSession(supabaseClient, sessionId);
+
+  // Separated assignements
+  const checkError = getSessionResp.error;
+  let sessionData = getSessionResp.data;
 
   // `PGRST116` is `The result contains 0 rows` error. Since the table have a unique constraint at session_id,
-  // this means that the entry is not created yet. Should not happen
+  // this means that the entry is not created yet
   // If we get that error, means that the session is not found (not fulfilled)
   if (checkError && checkError.code != "PGRST116") {
-    console.error("Error checking session status:", checkError.message);
+    const isAdded = await addCheckoutSession(
+      supabaseClient,
+      sessionId,
+      userMetadata.user_id,
+      false
+    );
+
+    if (isAdded) {
+      const newGetSession = await getCheckoutSession(supabaseClient, sessionId);
+      sessionData = newGetSession.data;
+    }
+  }
+
+  if (!sessionData) {
     return {
       isMinted: false,
       message: `Session not saved on database. ID: ${sessionId}`,
@@ -39,49 +83,17 @@ async function fulfillCheckout(
   }
 
   // If the session has already been fulfilled, return early
-  if (sessionData?.fulfilled) {
+  if (sessionData.fulfilled) {
     // We return isMinted as true since it's already fulfilled, which means
     // that the NFTs related to this stripe session were already minted
     console.info("Session already fulfilled. ID: ", sessionId);
     return { isMinted: true };
   }
 
-  // Retrieve the Checkout Session from the API with line_items expanded
-  const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId, {
-    expand: ["line_items"],
-  });
-
   // Check the Checkout Session's payment_status property
   // to determine if fulfillment should be peformed
   if (checkoutSession.payment_status !== "unpaid") {
-    // We already know it will be a `line_items` with just one item.
-    // So we get the `quantity` bought directly
-    const quantity = checkoutSession.line_items?.data[0].quantity;
-
-    // User metadata from the User that made the Buy
-    const userMetadata = checkoutSession.metadata;
-
-    if (
-      userMetadata == null ||
-      isEmpty(userMetadata) ||
-      !userMetadata.user_id
-    ) {
-      console.error("No user metadata found for this session: ", sessionId);
-      return {
-        isMinted: false,
-        message: "No user metadata found for this session",
-      };
-    }
-
-    if (!quantity) {
-      console.error("No quantity defined for this session: ", sessionId);
-      return {
-        isMinted: false,
-        message: "No quantity defined for this session",
-      };
-    }
-
-    // We mark the session as fulfilled before sending the transaction
+    // We mark the session as fulfilled before sending any transaction
     const statusUpdated = await updateSessionFulfillment(
       supabaseClient,
       sessionId,
@@ -109,16 +121,19 @@ async function fulfillCheckout(
         .from("stripe_buys")
         .insert({
           tx_hash: mintResp.txHash,
+          tokens_id: mintResp.ids,
           user_id: userMetadata.user_id,
-          session_id: sessionId,
+          session_id: sessionData.id,
           amount: quantity,
           claimed: false,
         });
 
-      if (!insertError) {
+      if (insertError) {
         console.error(
           "Stripe buy information was not added to the Database. Session ID: ",
-          sessionId
+          sessionId,
+          "\n",
+          insertError
         );
       }
 
@@ -127,6 +142,8 @@ async function fulfillCheckout(
 
     // If not minted
     else {
+      // We change the status on supabase since tokens were not minted,
+      // which means that the session was not fulfilled
       const statusUpdated = await updateSessionFulfillment(
         supabaseClient,
         sessionId,
