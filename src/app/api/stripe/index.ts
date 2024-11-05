@@ -1,3 +1,4 @@
+import { CheckoutSessionResponse } from "@/lib/interfaces/api";
 import { SupabaseClient } from "@supabase/supabase-js";
 import Stripe from "stripe";
 
@@ -19,12 +20,7 @@ export async function getCheckoutSession(
     .from("stripe_checkout_sessions")
     .select("id, session_id, fulfilled, user_id")
     .eq("session_id", sessionId)
-    .single<{
-      id: string;
-      session_id: string;
-      user_id: string;
-      fulfilled: boolean;
-    }>();
+    .single<CheckoutSessionResponse>();
 }
 
 export async function addCheckoutSession(

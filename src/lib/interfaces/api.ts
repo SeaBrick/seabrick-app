@@ -23,3 +23,10 @@ interface NotMintedResponse {
 }
 
 export type MintSeabrickResp = MintedResponse | NotMintedResponse;
+
+export interface CheckoutSessionResponse {
+  id: string;
+  session_id: string;
+  user_id: string;
+  fulfilled: boolean;
+}
