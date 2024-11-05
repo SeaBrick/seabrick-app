@@ -15,7 +15,6 @@ export async function getCheckoutSession(
   supabaseClient: SupabaseClient<any, "public", any>,
   sessionId: string
 ) {
-  console.log(`--------------- Obtaining the session DB of: ${sessionId}`);
   return await supabaseClient
     .from("stripe_checkout_sessions")
     .select("id, session_id, fulfilled, user_id")
@@ -28,13 +27,40 @@ export async function getCheckoutSession(
     }>();
 }
 
+export async function addCheckoutSession(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabaseClient: SupabaseClient<any, "public", any>,
+  sessionId: string,
+  userId: string,
+  fulfilledStatus: boolean = false
+) {
+  const { error: insertError } = await supabaseClient
+    .from("stripe_checkout_sessions")
+    .insert({
+      session_id: sessionId,
+      user_id: userId,
+      fulfilled: fulfilledStatus,
+    });
+
+  // CODE: "23505" is 'duplicate key value violates unique constraint "stripe_sessions_session_id_key"'
+  if (insertError && insertError.code !== "23505") {
+    console.error(
+      `Saving checkout session failed. ID: ${sessionId}\n`,
+      insertError
+    );
+    return false;
+  }
+
+  // session added or already added
+  return true;
+}
+
 export async function updateSessionFulfillment(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   supabaseClient: SupabaseClient<any, "public", any>,
   sessionId: string,
   status: boolean
 ) {
-  console.log(`========== Changing the status (${status}) of: ${sessionId}`);
   const { error: updateError } = await supabaseClient
     .from("stripe_checkout_sessions")
     .update({
