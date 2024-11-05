@@ -179,7 +179,7 @@ export async function mintSeabrickTokens(
       logs: receipt.logs,
     });
 
-    const ids = logs.map((log_) => log_.args.tokenId);
+    const ids = logs.map((log_) => log_.args.tokenId.toString());
 
     return { isMinted: true, txHash: receipt.transactionHash, ids };
   } else {
