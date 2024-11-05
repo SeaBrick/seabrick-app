@@ -8,6 +8,7 @@ import {
   defineChain,
   http,
   isHex,
+  parseEventLogs,
   PublicClient,
   TransactionReceipt,
 } from "viem";
@@ -15,6 +16,7 @@ import { privateKeyToAccount } from "viem/accounts";
 import { iSeabrickAbi } from "@/lib/contracts/abis";
 import { addresses } from ".";
 import { createClient } from "../supabase/server";
+import { MintSeabrickResp } from "../interfaces/api";
 
 // ERROR if this env is missing
 const wallet_server_key = process.env.WALLET_SERVER_KEY;
@@ -95,12 +97,10 @@ async function getNonceWallet(
 
   if (resp.error) {
     if (resp.error.code == "PGRST116") {
-      const resp = await createClient().from("wallet_nonces").insert({
+      await createClient().from("wallet_nonces").insert({
         nonce,
         address,
       });
-
-      console.log("Response when adding `wallet_nonces`: ", resp);
     }
 
     return nonce;
@@ -117,49 +117,72 @@ export async function increaseNonceWallet(
   // Check nonce only
   const checkNonce = await getNonceWallet(address, client);
 
-  // Get the higher nonce
-  const higherNonce = Math.max(checkNonce, prevNonce);
+  // Get the higher nonce:
+  // - If `checkNonce` and `prevNonce + 1` are equal, all is ok
+  // - If `checkNonce` is higher than `prevNonce + 1`, means that some
+  //   transaction was not catched
+  // - If `checkNonce` is lower than `prevNonce + 1` means that the RPC url is behind.
+  const higherNonce = Math.max(checkNonce, prevNonce + 1);
 
   const { error } = await createClient()
     .from("wallet_nonces")
     .update({
-      nonce: higherNonce + 1,
+      nonce: higherNonce,
     })
     .eq("address", address);
 
   if (error) {
-    console.log("Increase DB nonce error: ", error);
+    console.error("Increase DB nonce error: ", error);
   }
 }
 
-export async function mintSeabrickTokens(toAddress: Address, amount: number) {
+export async function mintSeabrickTokens(
+  amount: number,
+  toAddress?: Address
+): Promise<MintSeabrickResp> {
   const client = getClient();
   const walletClient = getWalletServerAccount(client);
   const nonce = await getNonceWallet(walletClient.account.address, client);
 
-  const abi = iSeabrickAbi;
+  // If no `toAddress` defined, we use the minter address
+  if (!toAddress) {
+    toAddress = walletClient.account.address;
+  }
+
   let receipt: TransactionReceipt | undefined = undefined;
 
   try {
+    // We try to mint the tokens using the minter address
     const txHash = await walletClient.writeContract({
       address: addresses.SeabrickNFT,
-      abi: abi,
+      abi: iSeabrickAbi,
       functionName: "mintBatch",
       args: [toAddress, amount],
       nonce: nonce,
     });
-    receipt = await client.waitForTransactionReceipt({ hash: txHash });
 
+    // We wait for the tx receipts
+    receipt = await client.waitForTransactionReceipt({ hash: txHash });
   } catch (error) {
-    console.log("failed: ", error);
-    return false;
+    // Tokens were not minted
+    console.error("Failed to mint the tokens: \n", error);
+    return { isMinted: false };
   }
 
   if (receipt && receipt.status === "success") {
+    // Increase the nonce wallet on the DB
     await increaseNonceWallet(walletClient.account.address, nonce, client);
 
-    return true;
+    const logs = parseEventLogs({
+      abi: iSeabrickAbi,
+      eventName: "Transfer",
+      logs: receipt.logs,
+    });
+
+    const ids = logs.map((log_) => log_.args.tokenId.toString());
+
+    return { isMinted: true, txHash: receipt.transactionHash, ids };
   } else {
-    return false;
+    return { isMinted: false };
   }
 }

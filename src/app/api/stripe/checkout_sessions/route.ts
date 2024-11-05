@@ -2,30 +2,31 @@ import { createClient } from "@/lib/supabase/server";
 import { getUrl } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 import { redirect } from "next/navigation";
-
-import Stripe from "stripe";
-
-const stripe_secret_key = process.env.STRIPE_SECRET_KEY;
-if (!stripe_secret_key) {
-  throw new Error("Missing STRIPE_SECRET_KEY value");
-}
-
-const stripe = new Stripe(stripe_secret_key);
+import {
+  addCheckoutSession,
+  getCheckoutSession,
+  stripe,
+} from "@/app/api/stripe";
 
 export async function POST(request: NextRequest) {
+  // Get the current redirect url
   const fullUrl = request.headers.get("referer");
   const redirectUrl = getUrl(fullUrl);
+
+  // Get the supbase client
   const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // If not user logged, redirect to login
   if (!user) {
     redirect("/login");
   }
 
+  // If the user does not have an email, redirect to error
   if (!user.email) {
-    console.log("ERROR: User does not have an email. It is a total error");
+    console.error("User does not have an email. It is a total error");
     redirect("/error");
   }
 
@@ -58,7 +59,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ clientSecret: session.client_secret });
   } catch (error) {
-    console.log("error in stripe POST: ", error);
+    console.error("Stripe POST: ", error);
     return NextResponse.json(
       { error: "Failed to create the session payment" },
       { status: 500 }
@@ -68,23 +69,63 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const url = new URL(request.url);
+    const supabaseClient = createClient();
 
-    // Get the session_id from the query parameters
-    const sessionId = url.searchParams.get("session_id");
+    const {
+      data: { user },
+    } = await supabaseClient.auth.getUser();
 
-    if (!sessionId) {
-      throw new Error("No stripe session ID");
+    // If not user logged, redirect to login
+    if (!user) {
+      redirect("/login");
     }
 
+    // Get the URL from request
+    const url = new URL(request.url);
+
+    // Search the session_id from the query parameters
+    const sessionId = url.searchParams.get("session_id");
+
+    // If no session ID, redirect to an error page
+    if (!sessionId) {
+      console.error("No stripe session ID");
+      redirect("/error");
+    }
+
+    // Get the session object from the sessionId
     const session = await stripe.checkout.sessions.retrieve(sessionId);
+
+    // The checkout session is complete. Payment processing may still be in progress
+    if (session.status == "complete") {
+      // Get the session
+      const { error: checkError } = await getCheckoutSession(
+        supabaseClient,
+        sessionId
+      );
+
+      // `PGRST116` is `The result contains 0 rows` error. Since the table have a unique constraint at session_id,
+      // this means that the entry is not created yet
+      // If created, then do nothing.
+      if (checkError && checkError.code == "PGRST116") {
+        const isAdded = await addCheckoutSession(
+          supabaseClient,
+          sessionId,
+          user.id,
+          false
+        );
+
+        if (isAdded === false) {
+          redirect("/error");
+        }
+      }
+    }
 
     return NextResponse.json({
       status: session.status,
       customer_email: session.customer_details?.email || "Not found",
     });
   } catch (error) {
-    console.log("error in stripe GET: ", error);
+    console.error("Stripe GET: ", error);
     return NextResponse.json(
       { error: "Failed to get the session payment" },
       { status: 500 }

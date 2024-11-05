@@ -144,6 +144,10 @@ function LoginWalletForm() {
       if (userError && userError.code == "PGRST116") {
         setNeedRegister(true);
       }
+
+      if (!userError) {
+        setNeedRegister(false);
+      }
     }
 
     if (isConnected) {
