@@ -2,7 +2,11 @@ import { createClient } from "@/lib/supabase/server";
 import { getUrl } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 import { redirect } from "next/navigation";
-import { getCheckoutSession, stripe } from "@/app/api/stripe";
+import {
+  addCheckoutSession,
+  getCheckoutSession,
+  stripe,
+} from "@/app/api/stripe";
 
 export async function POST(request: NextRequest) {
   // Get the current redirect url
@@ -103,18 +107,14 @@ export async function GET(request: NextRequest) {
       // this means that the entry is not created yet
       // If created, then do nothing.
       if (checkError && checkError.code == "PGRST116") {
-        const { error: insertError } = await supabaseClient
-          .from("stripe_checkout_sessions")
-          .insert({
-            session_id: sessionId,
-            user_id: user.id,
-            fulfilled: false,
-          });
+        const isAdded = await addCheckoutSession(
+          supabaseClient,
+          sessionId,
+          user.id,
+          false
+        );
 
-        // "23505" code is 'duplicate key value violates unique constraint "stripe_sessions_session_id_key"'
-        // Which means that the session is already added. We don't errorer that
-        if (insertError && insertError.code !== "23505") {
-          console.error("It cannot save the stripe session: \n", insertError);
+        if (isAdded === false) {
           redirect("/error");
         }
       }
