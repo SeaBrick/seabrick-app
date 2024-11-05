@@ -8,6 +8,7 @@ import {
   defineChain,
   http,
   isHex,
+  parseEventLogs,
   PublicClient,
   TransactionReceipt,
 } from "viem";
@@ -172,7 +173,15 @@ export async function mintSeabrickTokens(
     // Increase the nonce wallet on the DB
     await increaseNonceWallet(walletClient.account.address, nonce, client);
 
-    return { isMinted: true, txHash: receipt.transactionHash };
+    const logs = parseEventLogs({
+      abi: iSeabrickAbi,
+      eventName: "Transfer",
+      logs: receipt.logs,
+    });
+
+    const ids = logs.map((log_) => log_.args.tokenId);
+
+    return { isMinted: true, txHash: receipt.transactionHash, ids };
   } else {
     return { isMinted: false };
   }
