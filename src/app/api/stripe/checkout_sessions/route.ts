@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getUrl } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 import { redirect } from "next/navigation";
-import { stripe } from "@/app/api/stripe";
+import { getCheckoutSession, stripe } from "@/app/api/stripe";
 
 export async function POST(request: NextRequest) {
   // Get the current redirect url
@@ -94,11 +94,10 @@ export async function GET(request: NextRequest) {
     // The checkout session is complete. Payment processing may still be in progress
     if (session.status == "complete") {
       // Get the session
-      const { error: checkError } = await supabaseClient
-        .from("stripe_checkout_sessions")
-        .select("fulfilled")
-        .eq("session_id", sessionId)
-        .single();
+      const { error: checkError } = await getCheckoutSession(
+        supabaseClient,
+        sessionId
+      );
 
       // `PGRST116` is `The result contains 0 rows` error. Since the table have a unique constraint at session_id,
       // this means that the entry is not created yet

@@ -3,7 +3,7 @@ import { mintSeabrickTokens } from "@/lib/contracts/transactions";
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse, NextRequest } from "next/server";
 import { isEmpty } from "lodash";
-import { stripe, updateSessionFulfillment } from "@/app/api/stripe";
+import { getCheckoutSession, stripe, updateSessionFulfillment } from "@/app/api/stripe";
 import { type Stripe } from "stripe";
 import { FulfillCheckoutResp } from "@/lib/interfaces/api";
 
@@ -22,11 +22,10 @@ async function fulfillCheckout(
   // even concurrently, with the same session ID
 
   // Check if the session has already been fulfilled
-  const { data: sessionData, error: checkError } = await supabaseClient
-    .from("stripe_checkout_sessions")
-    .select("*")
-    .eq("session_id", sessionId)
-    .single();
+  const { data: sessionData, error: checkError } = await getCheckoutSession(
+    supabaseClient,
+    sessionId
+  );
 
   // `PGRST116` is `The result contains 0 rows` error. Since the table have a unique constraint at session_id,
   // this means that the entry is not created yet. Should not happen

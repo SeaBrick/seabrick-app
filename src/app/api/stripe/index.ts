@@ -10,12 +10,31 @@ if (!stripe_secret_key) {
 
 export const stripe = new Stripe(stripe_secret_key);
 
+export async function getCheckoutSession(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabaseClient: SupabaseClient<any, "public", any>,
+  sessionId: string
+) {
+  console.log(`--------------- Obtaining the session DB of: ${sessionId}`);
+  return await supabaseClient
+    .from("stripe_checkout_sessions")
+    .select("id, session_id, fulfilled, user_id")
+    .eq("session_id", sessionId)
+    .single<{
+      id: string;
+      session_id: string;
+      user_id: string;
+      fulfilled: boolean;
+    }>();
+}
+
 export async function updateSessionFulfillment(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   supabaseClient: SupabaseClient<any, "public", any>,
   sessionId: string,
   status: boolean
 ) {
+  console.log(`========== Changing the status (${status}) of: ${sessionId}`);
   const { error: updateError } = await supabaseClient
     .from("stripe_checkout_sessions")
     .update({
