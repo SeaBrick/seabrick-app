@@ -3,38 +3,13 @@ import { mintSeabrickTokens } from "@/lib/contracts/transactions";
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse, NextRequest } from "next/server";
 import { isEmpty } from "lodash";
-import { stripe } from "@/app/api/stripe";
+import { stripe, updateSessionFulfillment } from "@/app/api/stripe";
 import { type Stripe } from "stripe";
 import { FulfillCheckoutResp } from "@/lib/interfaces/api";
-import { type SupabaseClient } from "@supabase/supabase-js";
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_FULFILLMENT_SECRET ?? "";
 if (!endpointSecret) {
   throw new Error("Missing STRIPE_WEBHOOK_FULFILLMENT_SECRET value");
-}
-
-async function updateSessionFulfillment(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  supabaseClient: SupabaseClient<any, "public", any>,
-  sessionId: string,
-  status: boolean
-) {
-  const { error: updateError } = await supabaseClient
-    .from("stripe_checkout_sessions")
-    .update({
-      fulfilled: status,
-    })
-    .eq("session_id", sessionId);
-
-  if (updateError) {
-    console.error(
-      "Update session checkout fulfilled status failed. ID: ",
-      sessionId
-    );
-    return false;
-  }
-
-  return true;
 }
 
 async function fulfillCheckout(
