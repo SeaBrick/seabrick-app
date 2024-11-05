@@ -124,14 +124,31 @@ async function fulfillCheckout(
     }
 
     // Mint tokens to the our "minter" address, so we can identify them
-    const isMinted = await mintSeabrickTokens(quantity);
+    const mintResp = await mintSeabrickTokens(quantity);
 
-    if (isMinted) {
+    if (mintResp.isMinted === true) {
       // Everything went good, we return that was minted
       // TODO: Perform fulfillment of the line items, like mintint the total amount and saving the ids
       // to the DB and the vault app address (NOT for the vault for the collected)
 
-      return { isMinted };
+      const { error: insertError } = await supabaseClient
+        .from("stripe_buys")
+        .insert({
+          tx_hash: mintResp.txHash,
+          user_id: userMetadata.user_id,
+          session_id: sessionId,
+          amount: quantity,
+          claimed: false,
+        });
+
+      if (!insertError) {
+        console.error(
+          "Stripe buy information was not added to the Database. Session ID: ",
+          sessionId
+        );
+      }
+
+      return { isMinted: true };
     }
 
     // If not minted

@@ -15,6 +15,7 @@ import { privateKeyToAccount } from "viem/accounts";
 import { iSeabrickAbi } from "@/lib/contracts/abis";
 import { addresses } from ".";
 import { createClient } from "../supabase/server";
+import { MintSeabrickResp } from "../interfaces/api";
 
 // ERROR if this env is missing
 const wallet_server_key = process.env.WALLET_SERVER_KEY;
@@ -134,7 +135,10 @@ export async function increaseNonceWallet(
   }
 }
 
-export async function mintSeabrickTokens(amount: number, toAddress?: Address) {
+export async function mintSeabrickTokens(
+  amount: number,
+  toAddress?: Address
+): Promise<MintSeabrickResp> {
   const client = getClient();
   const walletClient = getWalletServerAccount(client);
   const nonce = await getNonceWallet(walletClient.account.address, client);
@@ -161,15 +165,15 @@ export async function mintSeabrickTokens(amount: number, toAddress?: Address) {
   } catch (error) {
     // Tokens were not minted
     console.error("Failed to mint the tokens: \n", error);
-    return false;
+    return { isMinted: false };
   }
 
   if (receipt && receipt.status === "success") {
     // Increase the nonce wallet on the DB
     await increaseNonceWallet(walletClient.account.address, nonce, client);
 
-    return true;
+    return { isMinted: true, txHash: receipt.transactionHash };
   } else {
-    return false;
+    return { isMinted: false };
   }
 }
