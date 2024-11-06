@@ -218,7 +218,7 @@ export async function transferFromVault(
   const walletClient = getWalletServerAccount(client);
   const nonce = await getNonceWallet(walletClient.account.address, client);
 
-  let receipt: TransactionReceipt | undefined = undefined;
+  // let receipt: TransactionReceipt | undefined = undefined;
 
   try {
     // We try to mint the tokens using the minter address
