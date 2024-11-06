@@ -2,6 +2,10 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import { checkAccess } from "../../utils";
+import { checkAddress } from "@/lib/utils";
+
+// TODO: Transfer app and contract
+// The user receiver should have a wallet linked
 
 export async function POST(request: NextRequest) {
   const supabaseClient = createClient();
@@ -58,22 +62,57 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { error } = await supabaseClient.from("user_roles").upsert(
-    [
-      { user_id: dataUser.id, role: "owner" },
-      { user_id: user.id, role: "admin" },
-    ],
-    { ignoreDuplicates: false, onConflict: "user_id" }
-  );
+  const { data: userAddress, error: errorUserAddress } = await supabaseClient
+    .rpc("get_user_address", {
+      user_id: dataUser.id,
+    })
+    .returns<string | null>();
 
-  if (error) {
-    console.error("Transfering ownership failed");
-    console.error(error);
+  if (errorUserAddress) {
+    console.error("Failed to get the User Address");
+    console.error(errorUserAddress);
     return NextResponse.json(
-      { error: "Internal server error", details: error.message },
+      { error: "Internal server error", details: errorUserAddress.message },
       { status: 500 }
     );
   }
+
+  if (!userAddress) {
+    return NextResponse.json(
+      {
+        error: "Bad Request",
+        details: "User do not have a wallet address linked",
+      },
+      { status: 400 }
+    );
+  }
+
+  if (!checkAddress(userAddress)) {
+    return NextResponse.json(
+      {
+        error: "Bad Request",
+        details: "User have a malformed wallet address",
+      },
+      { status: 400 }
+    );
+  }
+
+  // const { error } = await supabaseClient.from("user_roles").upsert(
+  //   [
+  //     { user_id: dataUser.id, role: "owner" },
+  //     { user_id: user.id, role: "admin" },
+  //   ],
+  //   { ignoreDuplicates: false, onConflict: "user_id" }
+  // );
+
+  // if (error) {
+  //   console.error("Transfering ownership failed");
+  //   console.error(error);
+  //   return NextResponse.json(
+  //     { error: "Internal server error", details: error.message },
+  //     { status: 500 }
+  //   );
+  // }
 
   return NextResponse.json({
     message: "ok",
