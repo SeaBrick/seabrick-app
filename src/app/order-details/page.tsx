@@ -3,6 +3,9 @@ import Table from "@/components/table/TableTest"
 export default function OrderDetailsMain() {
   return (
     <>
+      <h2 className="text-black text-3xl font-normal font-['Noto Sans'] text-center mb-8">
+        Order Details
+      </h2>
       <div className="w-3/4 min-w-[200px] box-content p-6 bg-white rounded-[10px] justify-center items-center gap-2.5 flex m-auto flex-col">
         <div className="self-stretch h-auto flex-col justify-start items-start gap-6 flex">
           <div className="self-stretch justify-start items-center gap-4 inline-flex">

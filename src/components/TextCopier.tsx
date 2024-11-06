@@ -1,31 +1,32 @@
-import { copyText } from "@/lib/utils";
-import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
-import React, { useState } from "react";
+"use client"
+import { copyText } from "@/lib/utils"
+import { DocumentDuplicateIcon } from "@heroicons/react/24/outline"
+import React, { useState } from "react"
 
 interface TextCopierProps {
-  text: string;
+  text: string
 }
 
 const TextCopier: React.FC<TextCopierProps> = ({ text }) => {
-  const [hover, setHover] = useState(false);
-  const [textCopy, setTextCopy] = useState(false);
+  const [hover, setHover] = useState(false)
+  const [textCopy, setTextCopy] = useState(false)
   const onHover = () => {
-    setHover(true);
-    setTextCopy(false);
-  };
+    setHover(true)
+    setTextCopy(false)
+  }
 
   const onLeave = () => {
-    setHover(false);
-  };
+    setHover(false)
+  }
   const handleCopyClick = async () => {
-    const copySuccess = await copyText(text);
+    const copySuccess = await copyText(text)
     if (copySuccess) {
-      setTextCopy(true);
+      setTextCopy(true)
     }
-  };
+  }
   return (
     <div
-      className="relative h-5 w-5 cursor-pointer"
+      className="relative h-5 w-5 cursor-pointer ml-[3px] mt-[-3px] opacity-80"
       onClick={handleCopyClick}
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
@@ -44,7 +45,7 @@ const TextCopier: React.FC<TextCopierProps> = ({ text }) => {
         ""
       )}
     </div>
-  );
-};
+  )
+}
 
-export default TextCopier;
+export default TextCopier
