@@ -4,6 +4,13 @@ import { createClient } from "@/lib/supabase/server";
 import { StripeBuysByUserResponse } from "@/lib/interfaces/api";
 
 export async function GET() {
+  // Maybe we can add pagination logic
+  // Limited by `10`,
+  const limit = 10;
+  // Descendng order
+  const ascending = false;
+  // Order by creation
+  const orderBy = "created_at";
   const supabaseClient = createClient();
 
   const {
@@ -21,6 +28,8 @@ export async function GET() {
     .from("stripe_buys")
     .select("id, amount, claimed, tokens_id, created_at, updated_at")
     .eq("user_id", user.id)
+    .order(orderBy, { ascending })
+    .limit(limit)
     .returns<StripeBuysByUserResponse[]>();
 
   if (error) {
