@@ -11,6 +11,9 @@ import { createClient } from "@/lib/supabase/client";
 import SigninWalletModal from "@/components/modals/SigninWalletModal";
 import { useFormState } from "react-dom";
 import Image from "next/image";
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
+import Link from "next/link";
+import SubmitButton from "@/components/buttons/SubmitButton";
 
 // TODO: Add captchas
 
@@ -248,67 +251,103 @@ export default function LoginPage() {
       setHaveWallet(true);
     }
   }, []);
+  
+  enum TabsIndex {
+    EMAIL,
+    WALLET,
+  }
+
+  const [selectedIndex, setSelectedIndex] = useState<number>(TabsIndex.EMAIL);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [password, setPassword] = useState<string>("");
+
+    const togglePasswordVisibility = () => {
+      setShowPassword(!showPassword);
+    };
 
   return (
       <>
-      <div className="w-full h-screen relative bg-[#f6f6f6]">
-         <Image className="w-full h-[414px] left-0 top-1 absolute rounded-bl-[50px] rounded-br-[50px]" src={`/login-bg.png`} alt="banner" width={1920} height={414}/>
-        <div className="h-[531px] p-6 mt-[180px] ml-[50%] relative bg-white rounded-[10px] flex-col justify-start items-center gap-8 inline-flex z-10">
+      <div className="w-full h-[80vh] md:h-screen relative bg-[#f6f6f6] flex justify-center">
+         <Image className="w-full h-[200px] md:h-[414px] left-0 top-1 absolute z-0 rounded-bl-[50px] rounded-br-[50px]" src={`/login-bg.png`} alt="banner" width={1920} height={414}/>
+         
+                <EmailForm />
+                
+                <div className="h-[339px] md:h-[447px] w-[350px] md:w-[606px] mt-[40px] md:mt-[180px] p-6  relative bg-white rounded-[10px] flex-col justify-start items-center gap-8 inline-flex z-10">
           <div className="h-[74px] flex-col justify-center items-center gap-[5px] flex">
               <div className="text-[#333333] text-[15px] font-normal font-['Noto Sans']">Register</div>
-              <div className="text-[#333333] text-4xl font-normal font-['Noto Sans']">Create Account</div>
+              <div className="text-[#333333] text-4xl font-normal font-['Noto Sans']">Log In</div>
           </div>
-          <div className="self-stretch h-[377px] flex-col justify-start items-start gap-4 flex">
-              <div className="self-stretch h-[236px] flex-col justify-start items-start gap-4 flex">
-                  <div className="self-stretch h-[68px] flex-col justify-center items-start gap-2 flex">
-                      <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">Full Name</div>
-                      <div className="self-stretch h-11 px-[15px] py-2.5 bg-[#efeff4]/60 rounded-[5px] border border-[#babcc3]/60 justify-start items-center gap-2.5 inline-flex">
-                          <div className="text-[#8a8a8f] text-sm font-normal font-['Noto Sans']">Enter full name</div>
-                      </div>
-                  </div>
-                  <div className="self-stretch h-[68px] flex-col justify-center items-start gap-2 flex">
-                      <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">Email</div>
-                      <div className="self-stretch h-11 px-[15px] py-2.5 rounded-[5px] border border-[#333333] justify-start items-center gap-2.5 inline-flex">
-                          <div className="text-[#333333] text-sm font-normal font-['Noto Sans']">sebastias.rojasr@gmail.com</div>
-                      </div>
-                  </div>
-                  <div className="self-stretch justify-start items-start gap-4 inline-flex">
-                      <div className="grow shrink basis-0 flex-col justify-center items-start gap-2 inline-flex">
-                          <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">Password</div>
-                          <div className="self-stretch h-11 px-[15px] py-2.5 bg-[#efeff4]/60 rounded-[5px] border border-[#babcc3]/60 justify-between items-center inline-flex">
-                              <div className="text-[#8a8a8f] text-sm font-normal font-['Noto Sans']">********</div>
-                              <div className="w-6 h-6 relative" />
-                          </div>
-                      </div>
-                      <div className="grow shrink basis-0 flex-col justify-center items-start gap-2 inline-flex">
-                          <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">Repeat Password</div>
-                          <div className="self-stretch h-11 px-[15px] py-2.5 bg-[#efeff4]/60 rounded-[5px] border border-[#babcc3]/60 justify-between items-center inline-flex">
-                              <div className="text-[#8a8a8f] text-sm font-normal font-['Noto Sans']">SeabrickTest1234*</div>
-                              <div className="w-6 h-6 relative" />
-                          </div>
-                      </div>
-                  </div>
+          <div className="self-stretch h-[293px] flex-col justify-start items-start gap-4 flex">
+            <div className="self-stretch h-[152px] flex-col justify-start items-start gap-4 flex">
+              <div className="self-stretch h-[68px] flex-col justify-center items-start gap-2 flex">                  
+                  <div className="flex flex-col gap-1 w-full">
+                    <label htmlFor="email" className="text-[#333333] text-xs font-normal font-['Noto Sans']">
+                      Email
+                    </label>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      placeholder="Enter your email"
+                      className="self-stretch h-11 px-[15px] py-2.5 rounded-[5px] border border-[#333333] text-[#333333] text-sm font-normal font-['Noto Sans'] bg-[#efeff4]/60 placeholder-gray-500"
+                      defaultValue=""
+                    />                  
+                </div>
               </div>
-              <div className="self-stretch h-[109px] flex-col justify-start items-center gap-4 flex">
-                  <div className="self-stretch h-[45px] justify-start items-start gap-4 inline-flex">
-                      <div className="grow shrink basis-0 self-stretch p-[17px] bg-[#2069a0] rounded-[5px] justify-center items-center gap-2.5 flex">
-                          <div className="text-right text-white text-sm font-normal font-['Noto Sans']">Create Account</div>
-                      </div>
-                      <div className="grow shrink basis-0 h-[45px] p-[17px] bg-[#333333] rounded-[5px] justify-center items-center gap-2.5 flex">
-                          <div className="text-right text-white text-sm font-normal font-['Noto Sans']">Connect using your Wallet</div>
-                      </div>
+              <div className="self-stretch justify-start items-start gap-4 inline-flex">
+                <div className="flex flex-col gap-1 w-full">
+                  <label htmlFor="password" className="text-[#333333] text-xs font-normal font-['Noto Sans']">
+                    Password
+                  </label>
+                  <div className="relative self-stretch h-11 px-[15px] py-2.5 bg-[#efeff4]/60 rounded-[5px] border border-[#babcc3]/60 flex items-center justify-between">
+                    <input
+                      id="password"
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Enter your password"
+                      className="bg-transparent text-[#8a8a8f] text-sm font-normal font-['Noto Sans'] w-full outline-none"
+                    />
+                    <button
+                      type="button"
+                      onClick={togglePasswordVisibility}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                    >
+                      {showPassword ? (
+                        <EyeSlashIcon className="h-5 w-5 text-[#8a8a8f]" />
+                      ) : (
+                        <EyeIcon className="h-5 w-5 text-[#8a8a8f]" />
+                      )}
+                    </button>
                   </div>
-                  <div className="self-stretch justify-between items-center inline-flex">
-                      <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">Do you already have an account?</div>
-                      <div className="text-[#333333] text-xs font-bold font-['Noto Sans']">Log In</div>
-                  </div>
-                  <div className="self-stretch justify-between items-center inline-flex">
-                      <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">Forgot your password?</div>
-                      <div className="text-[#333333] text-xs font-bold font-['Noto Sans']">Reset Password</div>
-                  </div>
+                </div>
               </div>
-          </div>
+            </div>
+            <div className="self-stretch h-[109px] flex-col justify-start items-center gap-4 flex">
+              <div className="self-stretch h-[45px] justify-start items-start gap-4 inline-flex">
+                <div className="grow shrink basis-0 self-stretch p-[17px] bg-[#2069a0] rounded-[5px] justify-center items-center gap-2.5 flex">
+                  <div className="text-right text-white text-sm font-normal font-['Noto Sans']">Log In</div>
+                </div>
+                <div className="grow shrink basis-0 h-[45px] p-[17px] bg-[#333333] rounded-[5px] justify-center items-center gap-2.5 flex">
+                  <div className="text-right text-white text-sm font-normal font-['Noto Sans']">Connect using your Wallet</div>
+                </div>
+              </div>
+              <div className="self-stretch justify-between items-center inline-flex">
+                <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">Do you want to create an account?</div>
+                <div className="text-[#333333] text-xs font-bold font-['Noto Sans']">Register</div>
+              </div>
+              <div className="self-stretch justify-between items-center inline-flex">
+                <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">Forgot your password?</div>
+                <div className="text-[#333333] text-xs font-bold font-['Noto Sans']">Reset Password</div>
+              </div>
+        </div>
       </div>
+    </div>
+
+      
+              
+        
   </div>
         {/* {!haveWallet && <LoginEmailForm />}
 
@@ -329,3 +368,16 @@ export default function LoginPage() {
       </>
   );
 }
+
+const EmailForm: React.FC = () => {
+  const { user } = useAuth();
+ 
+  
+  return <div>{user && <>Use Email!</>}</div>;
+}
+
+const WalletForm: React.FC = () => {
+  const { user } = useAuth();
+
+  return <div>{user && <>Use Wallet!</>}</div>;
+};
