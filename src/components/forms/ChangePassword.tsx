@@ -43,12 +43,12 @@ const ChangePasswordForm: React.FC = () => {
     <form className=" pb-6 max-w-[978px] w-full mx-auto flex flex-col gap-y-4">
       <h3 className="text-xl font-bold leading-6">Change Password</h3>
       <div className="mb-4">
-        <label className="block text-[#333333] text-xs font-normal  mb-2" htmlFor="current-password">
+        <label className="block text-[#333333] text-xs font-normal mb-2" htmlFor="current-password">
           Current Password
         </label>
         <div className="relative">
           <input
-            className="shadow bg-white appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="mt-1 block w-full bg-seabrick-blue/5 border border-gray-700 rounded py-2 px-4 focus:outline-none focus:ring focus:ring-blue-500"
             id="current-password"
             type={showCurrentPassword ? 'text' : 'password'}
             value={currentPassword}
@@ -64,12 +64,12 @@ const ChangePasswordForm: React.FC = () => {
       </div>
       <div className='flex flex-col md:flex-row gap-4'>
         <div className="mb-4 md:w-1/2">
-          <label className="block text-[#333333] text-xs font-normal  mb-2" htmlFor="new-password">
+          <label className="block text-[#333333] text-xs font-normal mb-2" htmlFor="new-password">
             New Password
           </label>
           <div className="relative">
             <input
-              className="shadow bg-white appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="mt-1 block w-full bg-seabrick-blue/5 border border-gray-700 rounded py-2 px-4 focus:outline-none focus:ring focus:ring-blue-500"
               id="new-password"
               type={showNewPassword ? 'text' : 'password'}
               value={newPassword}
@@ -85,12 +85,12 @@ const ChangePasswordForm: React.FC = () => {
         </div>
 
         <div className="mb-4 md:w-1/2">
-          <label className="block text-[#333333] text-xs font-normal  mb-2" htmlFor="confirm-password">
+          <label className="block text-[#333333] text-xs font-normal mb-2" htmlFor="confirm-password">
             Repeat New Password
           </label>
           <div className="relative">
             <input
-              className="shadow bg-white appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="mt-1 block w-full bg-seabrick-blue/5 border border-gray-700 rounded py-2 px-4 focus:outline-none focus:ring focus:ring-blue-500"
               id="confirm-password"
               type={showConfirmPassword ? 'text' : 'password'}
               value={confirmPassword}

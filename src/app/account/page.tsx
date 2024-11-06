@@ -40,7 +40,7 @@ export default function AccountDetailsPage() {
       <p className="text-md text-center">Account</p>
       <h3 className="text-4xl text-center mb-9">Account Settings</h3>
 
-      <div className=" p-5 bg-white rounded-[10px] flex-col justify-center items-center gap-4 inline-flex">
+      <div className=" p-5 bg-white rounded-[10px] flex-col justify-center items-center gap-4 inline-flex mb-4">
         <div className="self-stretch flex-col justify-start items-start gap-[30px] flex">
             <div className="self-stretch items-center md:justify-start md:items-start gap-[30px] flex flex-col md:flex-row">
                 <div className="w-[90px] h-[90px] relative">
@@ -78,7 +78,7 @@ export default function AccountDetailsPage() {
         </TabPanels>
       </TabGroup>
       */}
-      <div className="p-5">
+      <div className="p-6 bg-white rounded-[10px]">
         <AccountDetails />
       </div>
       
