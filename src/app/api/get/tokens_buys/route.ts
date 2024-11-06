@@ -9,7 +9,7 @@ export async function GET() {
   const limit = 10;
   // Descendng order
   const ascending = false;
-  // Order by creation
+  // Order by created_at
   const orderBy = "created_at";
   const supabaseClient = createClient();
 
@@ -26,7 +26,7 @@ export async function GET() {
 
   const { data, error } = await supabaseClient
     .from("stripe_buys")
-    .select("id, amount, claimed, tokens_id, created_at, updated_at")
+    .select("id, claimed, token_id, created_at, updated_at")
     .eq("user_id", user.id)
     .order(orderBy, { ascending })
     .limit(limit)
@@ -39,19 +39,8 @@ export async function GET() {
     );
   }
 
-  const flattenedResponse = data.flatMap((item) =>
-    item.tokens_id.map((tokenId) => ({
-      // Use each token ID as the new item ID
-      id: tokenId,
-      buyEntityId: item.id,
-      claimed: item.claimed,
-      created_at: item.created_at,
-      updated_at: item.updated_at,
-    }))
-  );
-
   return NextResponse.json({
-    data: flattenedResponse,
-    length: flattenedResponse.length,
+    data: data,
+    length: data.length,
   });
 }

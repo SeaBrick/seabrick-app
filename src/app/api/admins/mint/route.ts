@@ -93,30 +93,35 @@ export async function POST(request: NextRequest) {
   }
 
   if (saveAsBuys) {
-    // Save them as buys
-    const { error: insertError } = await supabaseClient
-      .from("stripe_buys")
-      .insert({
+    const dataInsert = mintResp.ids.map((id_) => {
+      return {
         tx_hash: mintResp.txHash,
-        tokens_id: mintResp.ids,
+        token_id: id_,
         user_id: dataUser.id,
         // No attached to a session stripe
         session_id: null,
-        amount: amount,
         claimed: false,
-      });
+      };
+    });
+
+    // Save them as buys
+    const { error: insertError } = await supabaseClient
+      .from("stripe_buys")
+      .insert(dataInsert);
 
     if (insertError) {
       console.error(
         "Failed to save the minted tokens in Database. IDs: ",
         JSON.stringify(mintResp.ids)
       );
-      console.error(insertError)
+      console.error(insertError);
 
       return NextResponse.json(
         {
           error: "Internal server error",
-          details: "Tokens were not saved in database. IDs: " + JSON.stringify(mintResp.ids),
+          details:
+            "Tokens were not saved in database. IDs: " +
+            JSON.stringify(mintResp.ids),
         },
         { status: 500 }
       );
