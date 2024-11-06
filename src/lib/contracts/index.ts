@@ -1,6 +1,11 @@
 import { Address } from "viem";
 
-export const addresses: { SeabrickNFT: Address; SeabrickMarket: Address } = {
-  SeabrickNFT: "0x056b74b11c59b64cc532eed4bce181b3ad5412e0",
-  SeabrickMarket: "0x35288e3c7dbb0a422dc6e71765617c2af0b10ad2",
+export const addresses: {
+  SeabrickNFT: Address;
+  SeabrickMarket: Address;
+  Ownership: Address;
+} = {
+  SeabrickNFT: "0x4556ac854f186a58d4c01ceaed787fdf58efbfc7",
+  SeabrickMarket: "0x18d200c927af860ba8be2585ea95b7cc0f392d83",
+  Ownership: "0x1b49e167cae35256d901ffd1acafba4248908f93",
 };

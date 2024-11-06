@@ -33,9 +33,8 @@ export interface CheckoutSessionResponse {
 
 export interface StripeBuysByUserResponse {
   id: string;
-  amount: number;
   claimed: boolean;
-  tokens_id: string[];
+  token_id: string;
   created_at: string;
   updated_at: string;
 }
