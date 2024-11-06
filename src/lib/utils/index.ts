@@ -124,7 +124,7 @@ export function getUrl(refererUrl: string | null) {
 
   // Automatically set by Vercel. (preview deployments)
   if (process.env.NEXT_PUBLIC_VERCEL_URL) {
-    return process.env.NEXT_PUBLIC_VERCEL_URL;
+    return process.env.NEXT_PUBLIC_VERCEL_URL + "/";
   }
 
   if (refererUrl) {
