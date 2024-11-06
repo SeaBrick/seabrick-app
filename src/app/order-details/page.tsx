@@ -1,12 +1,14 @@
 import Image from "next/image"
 import Table from "@/components/table/TableTest"
+import { useRouter } from "next/router"
 export default function OrderDetailsMain() {
+  const router = useRouter()
   return (
     <>
       <h2 className="text-black text-3xl font-normal font-['Noto Sans'] text-center mb-8">
         Order Details
       </h2>
-      <div className="w-3/4 min-w-[200px] box-content p-6 bg-white rounded-[10px] justify-center items-center gap-2.5 flex m-auto flex-col">
+      <div className="w-3/4 min-w-[200px] max-w-[978px] box-content p-6 bg-white rounded-[10px] justify-center items-center gap-2.5 flex m-auto flex-col mb-4">
         <div className="self-stretch h-auto flex-col justify-start items-start gap-6 flex">
           <div className="self-stretch justify-start items-center gap-4 inline-flex">
             <Image
@@ -56,6 +58,16 @@ export default function OrderDetailsMain() {
             },
           ]}
         />
+      </div>
+      <div className="h-[45px] justify-end items-end gap-4 flex m-auto w-[80vw]">
+        <button className="self-stretch p-[17px] bg-[#333333] rounded-[5px] justify-start items-center gap-2.5 flex">
+          <div
+            className="text-right text-white text-sm font-normal font-['Noto Sans']"
+            onClick={() => router.back()}
+          >
+            Go Back
+          </div>
+        </button>
       </div>
     </>
   )
