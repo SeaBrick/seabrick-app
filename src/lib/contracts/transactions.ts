@@ -16,7 +16,7 @@ import { privateKeyToAccount } from "viem/accounts";
 import { iSeabrickAbi, iMarketAbi } from "@/lib/contracts/abis";
 import { addresses } from ".";
 import { createClient } from "../supabase/server";
-import { MintSeabrickResp } from "../interfaces/api";
+import { MintSeabrickResp, TransferSeabrickResp } from "../interfaces/api";
 
 // ERROR if this env is missing
 const wallet_server_key = process.env.WALLET_SERVER_KEY;
@@ -169,10 +169,14 @@ export async function mintSeabrickTokens(
     return { isMinted: false };
   }
 
-  if (receipt && receipt.status === "success") {
+  // if we have a receipt, we sent the transaction
+  // Even if it was reverted or no, the nonce is increased
+  if (receipt) {
     // Increase the nonce wallet on the DB
     await increaseNonceWallet(walletClient.account.address, nonce, client);
+  }
 
+  if (receipt && receipt.status === "success") {
     const logs = parseEventLogs({
       abi: iSeabrickAbi,
       eventName: "Transfer",
@@ -211,31 +215,43 @@ export async function getContractsOwner(): Promise<Address> {
 }
 
 export async function transferFromVault(
-  tokenId: string,
+  tokenIds: bigint[],
   toAddress: Address
-): Promise<any> {
+): Promise<TransferSeabrickResp> {
   const client = getClient();
   const walletClient = getWalletServerAccount(client);
   const nonce = await getNonceWallet(walletClient.account.address, client);
 
-  // let receipt: TransactionReceipt | undefined = undefined;
+  let receipt: TransactionReceipt | undefined = undefined;
 
   try {
-    // We try to mint the tokens using the minter address
-    // const txHash = await walletClient.writeContract({
-    //   address: addresses.SeabrickNFT,
-    //   abi: iSeabrickAbi,
-    //   functionName: "safeTransferFrom",
-    //   args: [toAddress, amount],
-    //   nonce: nonce,
-    // });
+    // We transfer the tokens from the vault client address
+    const txHash = await walletClient.writeContract({
+      address: addresses.SeabrickNFT,
+      abi: iSeabrickAbi,
+      functionName: "transferBatch",
+      args: [walletClient.account.address, toAddress, tokenIds],
+      nonce: nonce,
+    });
+
     // We wait for the tx receipts
-    // receipt = await client.waitForTransactionReceipt({ hash: txHash });
+    receipt = await client.waitForTransactionReceipt({ hash: txHash });
   } catch (error) {
     // Tokens were not minted
-    console.error("Failed to mint the tokens: \n", error);
-    return { isMinted: false };
+    console.error("Failed to transfer the tokens: \n", error);
+    return { isTransfer: false };
   }
 
-  return { isMinted: true };
+  // if we have a receipt, we sent the transaction
+  // Even if it was reverted or no, the nonce is increased
+  if (receipt) {
+    // Increase the nonce wallet on the DB
+    await increaseNonceWallet(walletClient.account.address, nonce, client);
+  }
+
+  if (receipt && receipt.status === "success") {
+    return { isTransfer: true, txHash: receipt.transactionHash };
+  } else {
+    return { isTransfer: false };
+  }
 }
