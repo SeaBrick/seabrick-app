@@ -95,5 +95,5 @@ export async function PATCH(request: NextRequest) {
   }
 
   // TODO: Transfer batch based on the ids
-  const a = data;
+  // const a = data;
 }
