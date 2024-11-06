@@ -26,9 +26,12 @@ export default function SeabrickNFTCard() {
                       </div>
                     </div>
                     <div className="w-[35px] h-[35px] relative">
-                      <button className="w-[35px] h-[35px] left-0 top-0 absolute rounded-full border border-[#9b9a9b]/60 flex justify-center items-center hover:bg-slate-50 active:bg-slate-200">
+                      <a
+                        href="/" // TODO: Add url to nft on market
+                        className="w-[35px] h-[35px] left-0 top-0 absolute rounded-full border border-[#9b9a9b]/60 flex justify-center items-center hover:bg-slate-50 active:bg-slate-200"
+                      >
                         <ArrowUpRightIcon className="size-[0.7rem]" />
-                      </button>
+                      </a>
                     </div>
                   </div>
                 </div>
