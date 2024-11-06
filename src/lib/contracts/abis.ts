@@ -226,21 +226,28 @@ export const ierc20Abi = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const iMarketAbi = [
+  { type: "error", inputs: [], name: "AlreadyInit" },
   { type: "error", inputs: [], name: "ClaimFailed" },
-  { type: "error", inputs: [], name: "MismatchAggregators" },
   {
     type: "error",
     inputs: [{ name: "", internalType: "address", type: "address" }],
-    name: "OwnableInvalidOwner",
+    name: "InvalidOwnership",
   },
+  { type: "error", inputs: [], name: "MismatchAggregators" },
   {
     type: "error",
     inputs: [{ name: "", internalType: "address", type: "address" }],
     name: "OwnableUnauthorizedAccount",
   },
   { type: "error", inputs: [], name: "PaymentFailed" },
+  { type: "error", inputs: [], name: "ZeroPrice" },
 
-  { type: "error", inputs: [], name: "AlreadyInit" },
+  {
+    type: "error",
+    inputs: [{ name: "", internalType: "address", type: "address" }],
+    name: "OwnableInvalidOwner",
+  },
+
   {
     type: "error",
     inputs: [{ name: "", internalType: "uint256", type: "uint256" }],
@@ -265,25 +272,6 @@ export const iMarketAbi = [
     name: "NotOwner",
   },
   { type: "error", inputs: [], name: "OnlyMinters" },
-  {
-    type: "error",
-    inputs: [{ name: "", internalType: "address", type: "address" }],
-    name: "OwnableInvalidOwner",
-  },
-  {
-    type: "error",
-    inputs: [{ name: "", internalType: "address", type: "address" }],
-    name: "OwnableUnauthorizedAccount",
-  },
-  {
-    type: "error",
-    inputs: [
-      { name: "", internalType: "address", type: "address" },
-      { name: "", internalType: "uint256", type: "uint256" },
-      { name: "", internalType: "bytes4", type: "bytes4" },
-    ],
-    name: "ReceiverRefused",
-  },
   {
     type: "error",
     inputs: [{ name: "", internalType: "uint256", type: "uint256" }],
@@ -416,6 +404,13 @@ export const iMarketAbi = [
   },
   {
     type: "function",
+    inputs: [{ name: "new_address", internalType: "address", type: "address" }],
+    name: "changeOwnershipContract",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     inputs: [{ name: "name", internalType: "bytes32", type: "bytes32" }],
     name: "claim",
     outputs: [],
@@ -424,6 +419,7 @@ export const iMarketAbi = [
   {
     type: "function",
     inputs: [
+      { name: "ownershipContract", internalType: "address", type: "address" },
       { name: "price", internalType: "uint256", type: "uint256" },
       { name: "nftToken", internalType: "address", type: "address" },
       { name: "names", internalType: "bytes32[]", type: "bytes32[]" },
@@ -437,30 +433,9 @@ export const iMarketAbi = [
   {
     type: "function",
     inputs: [],
-    name: "onlyOwner",
-    outputs: [],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [],
     name: "owner",
     outputs: [{ name: "", internalType: "address", type: "address" }],
     stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [],
-    name: "renounceOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    inputs: [{ name: "newOwner", internalType: "address", type: "address" }],
-    name: "transferOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
   },
 ] as const;
 
@@ -470,6 +445,11 @@ export const iMarketAbi = [
 
 export const iSeabrickAbi = [
   { type: "error", inputs: [], name: "AlreadyInit" },
+  {
+    type: "error",
+    inputs: [{ name: "", internalType: "address", type: "address" }],
+    name: "InvalidOwnership",
+  },
   {
     type: "error",
     inputs: [{ name: "", internalType: "uint256", type: "uint256" }],
@@ -497,26 +477,17 @@ export const iSeabrickAbi = [
   {
     type: "error",
     inputs: [{ name: "", internalType: "address", type: "address" }],
-    name: "OwnableInvalidOwner",
-  },
-  {
-    type: "error",
-    inputs: [{ name: "", internalType: "address", type: "address" }],
     name: "OwnableUnauthorizedAccount",
-  },
-  {
-    type: "error",
-    inputs: [
-      { name: "", internalType: "address", type: "address" },
-      { name: "", internalType: "uint256", type: "uint256" },
-      { name: "", internalType: "bytes4", type: "bytes4" },
-    ],
-    name: "ReceiverRefused",
   },
   {
     type: "error",
     inputs: [{ name: "", internalType: "uint256", type: "uint256" }],
     name: "TransferToZero",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "", internalType: "address", type: "address" }],
+    name: "OwnableInvalidOwner",
   },
   {
     type: "event",
@@ -615,7 +586,7 @@ export const iSeabrickAbi = [
     type: "function",
     inputs: [
       { name: "approved", internalType: "address", type: "address" },
-      { name: "tokenId", internalType: "uint256", type: "uint256" },
+      { name: "token_id", internalType: "uint256", type: "uint256" },
     ],
     name: "approve",
     outputs: [],
@@ -637,14 +608,23 @@ export const iSeabrickAbi = [
   },
   {
     type: "function",
-    inputs: [{ name: "tokenId", internalType: "uint256", type: "uint256" }],
+    inputs: [{ name: "new_address", internalType: "address", type: "address" }],
+    name: "changeOwnershipContract",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "token_id", internalType: "uint256", type: "uint256" }],
     name: "getApproved",
     outputs: [{ name: "", internalType: "address", type: "address" }],
     stateMutability: "nonpayable",
   },
   {
     type: "function",
-    inputs: [{ name: "owner", internalType: "address", type: "address" }],
+    inputs: [
+      { name: "ownershipContract", internalType: "address", type: "address" },
+    ],
     name: "initialization",
     outputs: [],
     stateMutability: "nonpayable",
@@ -686,53 +666,16 @@ export const iSeabrickAbi = [
   {
     type: "function",
     inputs: [],
-    name: "onlyOwner",
-    outputs: [],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [],
     name: "owner",
     outputs: [{ name: "", internalType: "address", type: "address" }],
     stateMutability: "view",
   },
   {
     type: "function",
-    inputs: [{ name: "tokenId", internalType: "uint256", type: "uint256" }],
+    inputs: [{ name: "token_id", internalType: "uint256", type: "uint256" }],
     name: "ownerOf",
     outputs: [{ name: "", internalType: "address", type: "address" }],
     stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [],
-    name: "renounceOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    inputs: [
-      { name: "from", internalType: "address", type: "address" },
-      { name: "to", internalType: "address", type: "address" },
-      { name: "tokenId", internalType: "uint256", type: "uint256" },
-    ],
-    name: "safeTransferFrom",
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    inputs: [
-      { name: "from", internalType: "address", type: "address" },
-      { name: "to", internalType: "address", type: "address" },
-      { name: "tokenId", internalType: "uint256", type: "uint256" },
-      { name: "data", internalType: "bytes", type: "bytes" },
-    ],
-    name: "safeTransferFrom",
-    outputs: [],
-    stateMutability: "nonpayable",
   },
   {
     type: "function",
@@ -770,7 +713,7 @@ export const iSeabrickAbi = [
   },
   {
     type: "function",
-    inputs: [{ name: "tokenId", internalType: "uint256", type: "uint256" }],
+    inputs: [{ name: "token_id", internalType: "uint256", type: "uint256" }],
     name: "tokenURI",
     outputs: [{ name: "", internalType: "string", type: "string" }],
     stateMutability: "view",
@@ -787,15 +730,77 @@ export const iSeabrickAbi = [
     inputs: [
       { name: "from", internalType: "address", type: "address" },
       { name: "to", internalType: "address", type: "address" },
-      { name: "tokenId", internalType: "uint256", type: "uint256" },
+      { name: "token_ids", internalType: "uint256[]", type: "uint256[]" },
     ],
-    name: "transferFrom",
+    name: "transferBatch",
     outputs: [],
     stateMutability: "nonpayable",
   },
   {
     type: "function",
-    inputs: [{ name: "newOwner", internalType: "address", type: "address" }],
+    inputs: [
+      { name: "from", internalType: "address", type: "address" },
+      { name: "to", internalType: "address", type: "address" },
+      { name: "token_id", internalType: "uint256", type: "uint256" },
+    ],
+    name: "transferFrom",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+] as const;
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// IOwnership
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const iOwnershipAbi = [
+  { type: "error", inputs: [], name: "AlreadyInit" },
+  {
+    type: "error",
+    inputs: [{ name: "", internalType: "address", type: "address" }],
+    name: "OwnershipInvalidOwner",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "", internalType: "address", type: "address" }],
+    name: "OwnershipUnauthorizedAccount",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "previousOwner",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "newOwner",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+    ],
+    name: "OwnershipTransferred",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "owner", internalType: "address", type: "address" }],
+    name: "initialization",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "owner",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "new_owner", internalType: "address", type: "address" }],
     name: "transferOwnership",
     outputs: [],
     stateMutability: "nonpayable",
