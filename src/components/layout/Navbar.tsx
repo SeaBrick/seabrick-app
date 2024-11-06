@@ -1,42 +1,42 @@
-"use client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import SeabrickSVG from "../utils/SeabrickSVG";
-import { useAccount } from "wagmi";
-import { useEffect } from "react";
-import { getAccount } from "@/lib/subgraph";
-import { Address, getAddress } from "viem";
-import { useContractContext } from "@/context/contractContext";
+"use client"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import SeabrickSVG from "../utils/SeabrickSVG"
+import { useAccount } from "wagmi"
+import { useEffect } from "react"
+import { getAccount } from "@/lib/subgraph"
+import { Address, getAddress } from "viem"
+import { useContractContext } from "@/context/contractContext"
 import {
   accountInitialState,
   useAccountContext,
-} from "@/context/accountContext";
-import { useAuth } from "@/context/authContext";
-import AccountDropdown from "../dropdowns/AccountDropdown";
+} from "@/context/accountContext"
+import { useAuth } from "@/context/authContext"
+import AccountDropdown from "../dropdowns/AccountDropdown"
 
 export function Navbar() {
-  const pathname = usePathname();
-  const { address: walletAddress } = useAccount();
-  const { data: contractsData } = useContractContext();
-  const { data: accountData, dispatch: dispatchAccount } = useAccountContext();
-  const { user } = useAuth();
+  const pathname = usePathname()
+  const { address: walletAddress } = useAccount()
+  const { data: contractsData } = useContractContext()
+  const { data: accountData, dispatch: dispatchAccount } = useAccountContext()
+  const { user } = useAuth()
 
   useEffect(() => {
     async function callGetter(address: Address) {
-      const account = await getAccount(address);
+      const account = await getAccount(address)
       if (account) {
-        dispatchAccount(account);
+        dispatchAccount(account)
       }
     }
 
     // Check wallet address is defined to be call
     if (walletAddress) {
-      callGetter(walletAddress);
+      callGetter(walletAddress)
     } else {
       // Or just put initial state otherwise
-      dispatchAccount(accountInitialState);
+      dispatchAccount(accountInitialState)
     }
-  }, [dispatchAccount, walletAddress]);
+  }, [dispatchAccount, walletAddress])
 
   return (
     <header className="z-10 h-24 shadow mb-8">
@@ -50,6 +50,7 @@ export function Navbar() {
           >
             Buy
           </Link>
+          <Link href="/test">Test</Link>
 
           {/* FIXME: This NOT only depends on the wallet connect. Also depends on the user role */}
           {user &&
@@ -79,5 +80,5 @@ export function Navbar() {
         )}
       </div>
     </header>
-  );
+  )
 }
