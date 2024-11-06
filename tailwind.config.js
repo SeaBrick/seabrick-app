@@ -11,7 +11,20 @@ module.exports = {
     extend: {
       colors: {
         "seabrick-blue": "#005493",
-        "seabrick-green": "#52b09f"
+        "seabrick-green": "#52b09f",
+        "text-gray":"#333;"
+      },
+      boxShadow:{
+        '2md':'0px 4px 5px 0px rgba(0, 0, 0, 0.05);'        
+      },
+      borderRadius: {
+        'banner': '0px 0px 50px 50px',
+      },
+      width: {
+        'banner': '1920px',
+      },
+      height: {
+        'banner': '414px',
       }
     },
   },
