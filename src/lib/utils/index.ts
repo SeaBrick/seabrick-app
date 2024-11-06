@@ -134,3 +134,26 @@ export function getUrl(refererUrl: string | null) {
 
   return "http://localhost:3000/";
 }
+
+export const copyText = async (text: string): Promise<boolean> => {
+  try {
+    if (navigator.clipboard) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } else {
+      // NOTE: This is a fallback for browsers that doesn't support
+      // the Clipboard API like localhost or HTTP sites (not HTTPS)
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      return true;
+    }
+  } catch (error) {
+    console.error("Failed to copy:", error);
+    return false;
+  }
+};
