@@ -1,6 +1,7 @@
+"use client"
 import Image from "next/image"
 import Table from "@/components/table/TableTest"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 export default function OrderDetailsMain() {
   const router = useRouter()
   return (
