@@ -3,7 +3,7 @@
 @tailwind utilities;
 /* modificar */
 :root {
-  background-color: red;
+  background-color: #f6f6f6;
   color: rgba(0, 0, 0, 0.87);
   color-scheme: light dark;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
