@@ -187,7 +187,6 @@ export async function mintSeabrickTokens(
   }
 }
 
-
 // TODO: Changes when new ownership logic for contracts
 export async function getContractsOwner(): Promise<Address> {
   const client = getClient();
@@ -209,4 +208,32 @@ export async function getContractsOwner(): Promise<Address> {
   }
 
   return address1;
+}
+
+export async function transferFromVault(
+  tokenId: string,
+  toAddress: Address
+): Promise<any> {
+  const client = getClient();
+  const walletClient = getWalletServerAccount(client);
+  const nonce = await getNonceWallet(walletClient.account.address, client);
+
+  let receipt: TransactionReceipt | undefined = undefined;
+
+  try {
+    // We try to mint the tokens using the minter address
+    // const txHash = await walletClient.writeContract({
+    //   address: addresses.SeabrickNFT,
+    //   abi: iSeabrickAbi,
+    //   functionName: "safeTransferFrom",
+    //   args: [toAddress, amount],
+    //   nonce: nonce,
+    // });
+    // We wait for the tx receipts
+    // receipt = await client.waitForTransactionReceipt({ hash: txHash });
+  } catch (error) {
+    // Tokens were not minted
+    console.error("Failed to mint the tokens: \n", error);
+    return { isMinted: false };
+  }
 }
