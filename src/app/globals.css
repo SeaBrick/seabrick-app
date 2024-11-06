@@ -1,9 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+/* modificar */
 :root {
-  background-color: #ffffff;
+  background-color: red;
   color: rgba(0, 0, 0, 0.87);
   color-scheme: light dark;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;

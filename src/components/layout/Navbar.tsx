@@ -39,7 +39,7 @@ export function Navbar() {
   }, [dispatchAccount, walletAddress])
 
   return (
-    <header className="z-10 h-24 shadow mb-8">
+    <header className="z-10 h-24 shadow mb-8 bg-white">
       <div className="flex h-full items-center justify-between w-3/5 mx-auto">
         <SeabrickSVG />
 
