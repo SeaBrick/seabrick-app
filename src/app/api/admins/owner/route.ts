@@ -3,10 +3,12 @@ import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import { checkAccess } from "../../utils";
 import { checkAddress } from "@/lib/utils";
+import { getContractsOwner } from "@/lib/contracts/transactions";
+import { Address } from "viem";
 
-// TODO: Transfer app and contract
-// The user receiver should have a wallet linked
-
+// TODO: Make the change on the contracts. Instead of two transactions
+// for each contract, maube just deploy one contract that manages
+// the ownership address.
 export async function POST(request: NextRequest) {
   const supabaseClient = createClient();
 
@@ -97,22 +99,51 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // const { error } = await supabaseClient.from("user_roles").upsert(
-  //   [
-  //     { user_id: dataUser.id, role: "owner" },
-  //     { user_id: user.id, role: "admin" },
-  //   ],
-  //   { ignoreDuplicates: false, onConflict: "user_id" }
-  // );
+  let ownerAddress: Address;
 
-  // if (error) {
-  //   console.error("Transfering ownership failed");
-  //   console.error(error);
-  //   return NextResponse.json(
-  //     { error: "Internal server error", details: error.message },
-  //     { status: 500 }
-  //   );
-  // }
+  try {
+    ownerAddress = await getContractsOwner();
+  } catch (error) {
+    let message = "Failed to get contracts owner address";
+    console.error("Failed to get contracts owner address");
+
+    if (error instanceof Error) {
+      message = error.message;
+    } else {
+      console.error(error);
+    }
+    return NextResponse.json(
+      { error: "Internal server error", details: message },
+      { status: 500 }
+    );
+  }
+
+  if (ownerAddress !== userAddress) {
+    return NextResponse.json(
+      {
+        error: "Bad Request",
+        details: "User wallet address is not the owner of the contracts",
+      },
+      { status: 400 }
+    );
+  }
+
+  const { error } = await supabaseClient.from("user_roles").upsert(
+    [
+      { user_id: dataUser.id, role: "owner" },
+      { user_id: user.id, role: "admin" },
+    ],
+    { ignoreDuplicates: false, onConflict: "user_id" }
+  );
+
+  if (error) {
+    console.error("Transfering ownership failed");
+    console.error(error);
+    return NextResponse.json(
+      { error: "Internal server error", details: error.message },
+      { status: 500 }
+    );
+  }
 
   return NextResponse.json({
     message: "ok",
