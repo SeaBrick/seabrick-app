@@ -3,12 +3,14 @@ import { useAuth } from "@/context/authContext";
 import React, { useEffect, useState } from "react";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import Link from "next/link";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useFormState } from "react-dom";
 import { Button } from "@headlessui/react";
 import { Address, zeroAddress } from "viem";
 import { changeAccountDetails } from "./actions";
 import SubmitButton from "@/components/buttons/SubmitButton";
+import ChangePasswordForm from "@/components/forms/ChangePassword";
 
 enum TabsIndex {
   DETAILS,
@@ -32,10 +34,27 @@ export default function AccountDetailsPage() {
     }
   }, [tab]);
 
+  
   return (
-    <div className="w-1/2 mx-auto">
-      <p className="text-3xl font-bold mb-8">Account</p>
+    <div className="max-w-[978px] w-full mx-auto">
+      <p className="text-md text-center">Account</p>
+      <h3 className="text-4xl text-center mb-9">Account Settings</h3>
 
+      <div className=" p-5 bg-white rounded-[10px] flex-col justify-center items-center gap-4 inline-flex">
+        <div className="self-stretch flex-col justify-start items-start gap-[30px] flex">
+            <div className="self-stretch items-center md:justify-start md:items-start gap-[30px] flex flex-col md:flex-row">
+                <div className="w-[90px] h-[90px] relative">
+                    <img className="w-[90px] h-[90px] left-0 top-0 absolute rounded-full" src="https://plus.unsplash.com/premium_photo-1683910767532-3a25b821f7ae" width={90} height={90} alt="img-user"/>
+                </div>
+                <div className="grow shrink basis-0 flex-col justify-start items-center md:items-start gap-2 inline-flex">
+                    <h3 className="text-[#49414d] text-xl font-bold font-['Noto Sans'] leading-normal">Sebastian Rojas</h3>
+                    <p className="self-stretch text-[#8a8a8f] text-sm font-normal font-['Noto Sans'] text-center md:text-start">Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora ab nesciunt nam, soluta reiciendis enim ullam cupiditate pariatur magni repellat et iste vel expedita laudantium perferendis culpa atque? Adipisci, distinctio?                 
+                    </p>
+                </div>
+            </div>
+        </div>
+      </div>
+      {/* Tabs 
       <TabGroup selectedIndex={selectedIndex} onChange={setSelectedIndex}>
         <TabList className="flex gap-4">
           <Tab className="rounded-full py-1 px-3 focus:outline-none data-[selected]:bg-seabrick-blue/10 data-[hover]:bg-seabrick-blue/5 data-[selected]:data-[hover]:bg-seabrick-blue/10 data-[focus]:outline-1 data-[focus]:outline-white">
@@ -58,6 +77,11 @@ export default function AccountDetailsPage() {
           </TabPanel>
         </TabPanels>
       </TabGroup>
+      */}
+      <div className="p-5">
+        <AccountDetails />
+      </div>
+      
     </div>
   );
 }
@@ -153,35 +177,37 @@ const AccountDetails: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="">
       {user && (
-        <form className="space-y-8" action={changeDetailsAction}>
-          <div>
-            <label className="block">
-              Name <span className="text-gray-500">(optional)</span>
-            </label>
-            <input
-              className="disabled:cursor-not-allowed disabled:text-gray-500 disabled:bg-seabrick-blue/10 mt-1 block w-full bg-seabrick-blue/5 border border-gray-700 rounded py-2 px-4 focus:outline-none focus:ring focus:ring-blue-500"
-              placeholder="Your name (optional information)"
-              disabled={!modifying}
-              value={name}
-              onChange={nameOnchange}
-              name="name"
-            />
-          </div>
+        <form className="flex flex-col gap-y-4" action={changeDetailsAction}>
+          <h3 className="text-xl font-bold leading-6">Personal Information</h3>
+          <div className="flex flex-col md:flex-row md:items-center gap-4 justify-between">
+            <div className="md:w-1/2">
+              <label className="block text-[#333333] text-xs font-normal ">
+                Full Name 
+              </label>
+              <input
+                className="disabled:cursor-not-allowed disabled:text-gray-500 disabled:bg-seabrick-blue/10 mt-1 block w-full bg-seabrick-blue/5 border border-gray-700 rounded py-2 px-4 focus:outline-none focus:ring focus:ring-blue-500"
+                placeholder="Your name (optional information)"
+                disabled={!modifying}
+                value={name}
+                onChange={nameOnchange}
+                name="name"
+              />
+            </div>
 
-          <div>
-            <label className="block">Email</label>
-            <input
-              className="disabled:cursor-not-allowed disabled:text-gray-500 disabled:bg-seabrick-blue/10 mt-1 block w-full bg-seabrick-blue/5 border border-gray-700 rounded py-2 px-4 focus:outline-none focus:ring focus:ring-blue-500"
-              disabled={!modifying}
-              value={email}
-              required
-              onChange={emailOnchange}
-              name="email"
-            />
+            <div className="md:w-1/2">
+              <label className="block text-[#333333] text-xs font-normal ">Email</label>
+              <input
+                className="disabled:cursor-not-allowed disabled:text-gray-500 disabled:bg-seabrick-blue/10 mt-1 block w-full bg-seabrick-blue/5 border border-gray-700 rounded py-2 px-4 focus:outline-none focus:ring focus:ring-blue-500"
+                disabled={!modifying}
+                value={email}
+                required
+                onChange={emailOnchange}
+                name="email"
+              />
+            </div>
           </div>
-
           <input hidden value={userType} name="user_type" />
 
           {userType === "wallet" && (
@@ -200,7 +226,7 @@ const AccountDetails: React.FC = () => {
           )}
 
           {modifying ? (
-            <div className="flex gap-x-4">
+            <div className="flex gap-x-4 justify-end">
               <SubmitButton disable={checkChanges()} text="Save" />
               <Button
                 type="button"
@@ -211,20 +237,26 @@ const AccountDetails: React.FC = () => {
               </Button>
             </div>
           ) : (
-            <Button
-              type="button"
-              onClick={handleModify}
-              className="inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-500 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white"
-            >
-              Modify
-            </Button>
+            <div className="flex gap-x-4 justify-end">
+              <Button
+                type="button"
+                onClick={handleModify}
+                className="inline-flex items-center gap-2 rounded-md bg-[#2069a0] py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-500 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white w-fit "
+              >
+                Modify
+              </Button>
+            </div>
           )}
 
           {messageState.message && (
             <p className="text-red-500">{messageState.message}</p>
           )}
         </form>
+        
       )}
+      <hr className="my-6" />
+
+      <ChangePasswordForm/>
     </div>
   );
 };
