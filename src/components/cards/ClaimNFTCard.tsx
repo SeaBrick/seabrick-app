@@ -4,7 +4,7 @@ import Modal from "../modals/Modal"
 
 export default function ClaimNFTCard() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [showClaimModal, setShowClaimModal] = useState(true)
+  const [showClaimModal, setShowClaimModal] = useState(false)
   const handleOpenModalClaim = (open: boolean) => {
     setShowClaimModal(open)
   }
