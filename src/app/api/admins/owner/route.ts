@@ -1,30 +1,18 @@
 "use server";
 import { createClient } from "@/lib/supabase/server";
-import { getUserRole } from "@/lib/utils/auth";
 import { NextRequest, NextResponse } from "next/server";
+import { checkAccess } from "../../utils";
 
 export async function POST(request: NextRequest) {
   const supabaseClient = createClient();
 
-  const {
-    data: { user },
-  } = await supabaseClient.auth.getUser();
+  const checkAccessResp = await checkAccess(supabaseClient, "owner");
 
-  if (!user) {
-    return NextResponse.json(
-      { error: "Unauthorized", details: "No user logged" },
-      { status: 401 }
-    );
+  if (!checkAccessResp.haveAccess) {
+    return checkAccessResp.nextResponse;
   }
 
-  const userRole = await getUserRole(supabaseClient);
-
-  if (userRole !== "owner") {
-    return NextResponse.json(
-      { error: "Unauthorized", details: "No access" },
-      { status: 401 }
-    );
-  }
+  const user = checkAccessResp.user;
 
   let email: string;
 

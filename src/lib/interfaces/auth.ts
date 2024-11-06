@@ -1,4 +1,5 @@
-import type { Session } from "@supabase/supabase-js";
+import type { Session, User } from "@supabase/supabase-js";
+import { type NextResponse } from "next/server";
 export type UserType = "wallet" | "email";
 
 export type UserRole = "owner" | "admin" | null;
@@ -16,3 +17,18 @@ export interface AuthContextUnauthenticated {
   userRole: null;
   refetch: () => Promise<void>;
 }
+
+interface HaveAccessResp {
+  haveAccess: true;
+  user: User;
+}
+
+interface NoAccessResp {
+  haveAccess: false;
+  nextResponse: NextResponse<{
+    error: string;
+    details: string;
+  }>;
+}
+
+export type CheckAccessResponse = HaveAccessResp | NoAccessResp;
