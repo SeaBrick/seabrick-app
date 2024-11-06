@@ -236,4 +236,6 @@ export async function transferFromVault(
     console.error("Failed to mint the tokens: \n", error);
     return { isMinted: false };
   }
+
+  return { isMinted: true };
 }
