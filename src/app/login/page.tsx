@@ -282,17 +282,15 @@ export default function LoginPage() {
       return;
     }
 
-    // TODO: SHould use the return of the login to show different message
     const resp = await login(formData);
 
     if (resp && resp.error) {
-      if (resp.error == "invalid_credentials") {
-        //
-      }
-      // newErrors
+      newErrors.message = resp.error;
+      setErrors(newErrors);
+      return;
     }
-    console.log(resp);
-    //
+
+    // Refetch the user
     await authRefetch();
   }
 
