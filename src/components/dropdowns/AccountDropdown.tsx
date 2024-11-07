@@ -17,6 +17,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { UserIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useDisconnect } from "wagmi";
 
 interface AccountDropdownProps {
@@ -26,12 +27,15 @@ interface AccountDropdownProps {
 export default function AccountDropdown({ num: _num }: AccountDropdownProps) {
   const { user, userType, refetch: authRefetch } = useAuth();
   const { disconnectAsync } = useDisconnect();
+  const router = useRouter();
 
   async function signOut() {
     const { error } = await createClient().auth.signOut();
     if (error) {
       // TODO: set error modal
       console.log(error);
+    } else {
+      router.push("/");
     }
   }
 
