@@ -373,14 +373,16 @@ export default function LoginPage() {
                     Log In
                   </span>
                 </button>
-                <button
-                  type="submit"
-                  className="grow shrink basis-0 h-[45px] p-[17px] bg-[#333333] rounded-[5px] justify-center items-center gap-2.5 flex"
-                >
-                  <span className="text-right text-white text-sm font-normal font-['Noto Sans']">
-                    Connect using your Wallet
-                  </span>
-                </button>
+                {haveWallet && (
+                  <button
+                    type="button"
+                    className="grow shrink basis-0 h-[45px] p-[17px] bg-[#333333] rounded-[5px] justify-center items-center gap-2.5 flex"
+                  >
+                    <span className="text-right text-white text-sm font-normal font-['Noto Sans']">
+                      Connect using your Wallet
+                    </span>
+                  </button>
+                )}
               </div>
               <div className="self-stretch justify-between items-center inline-flex">
                 <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">
