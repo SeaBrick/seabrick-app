@@ -6,7 +6,7 @@ import Link from "next/link";
 function SeabrickSVG() {
   return (
     <Link href="/">
-      <Image src="/seabrick.svg" width={250} height={45} alt="Seabrick" />
+      <Image src="./seabrick.svg" width={293.02} height={29} alt="Seabrick" />
     </Link>
   );
 }
