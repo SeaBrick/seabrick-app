@@ -2,7 +2,6 @@
 import { useFormStatus } from "react-dom";
 
 interface SubmitButtonProps {
-  children?: React.ReactNode;
   label: string;
   loadingLabel?: string;
   disable?: boolean;
