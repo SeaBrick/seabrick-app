@@ -230,16 +230,16 @@ export default function Dashboard() {
               <div className="justify-start items-center gap-2 inline-flex">
                 {isAdmin ? (
                   <div className="justify-start items-center gap-2 flex">
-                    <button className="p-2 bg-[#2069a0] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-xs font-normal font-['Noto Sans']">
+                    <button className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-xs font-normal font-['Noto Sans']">
                       Mint New Tokens
                     </button>
                   </div>
                 ) : (
                   <div className="flex flex-start w-full gap-2">
-                    <button className="p-2 bg-[#333333] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-xs font-normal font-['Noto Sans']">
+                    <button className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-xs font-normal font-['Noto Sans']">
                       Claim!
                     </button>
-                    <button className="p-2 bg-[#2069a0] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-xs font-normal font-['Noto Sans']">
+                    <button className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-xs font-normal font-['Noto Sans']">
                       Buy
                     </button>
                   </div>
@@ -298,15 +298,15 @@ export default function Dashboard() {
               <div className="lg:w-[50%] w-full min-h-[10rem] gap-2 flex flex-col">
                 {isAdmin ? (
                   <div className="bg-white w-full h-full rounded-[10px] gap-3 p-4 flex flex-col justify-between">
-                    <button className="p-2 bg-[#333333] text-[white] rounded-[5px] text-left">
+                    <button className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-left">
                       <ArrowsRightLeftIcon className="size-[1.25rem] inline mx-2 mt-[-3px]" />
                       Transfer Ownership
                     </button>
-                    <button className="p-2 bg-[#333333] text-[white] rounded-[5px] text-left">
+                    <button className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-left">
                       <UserIcon className="size-[1.25rem] inline mx-2 mt-[-3px]" />
                       Admins
                     </button>
-                    <button className="p-2 bg-[#2069a0] text-[white] rounded-[5px] text-left">
+                    <button className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] text-[white] rounded-[5px] text-left">
                       <CurrencyDollarIcon className="size-[1.25rem] inline mx-2 mt-[-3px]" />
                       Claim Earnings
                     </button>
