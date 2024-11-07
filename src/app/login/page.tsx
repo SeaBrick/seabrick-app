@@ -14,6 +14,7 @@ import Image from "next/image";
 import Link from "next/link";
 import SubmitButton from "@/components/buttons/SubmitButton";
 import { isEmpty } from "lodash";
+import LoginWallet from "@/components/auth/LoginWallet";
 
 // TODO: Add captchas
 function LoginWalletForm() {
@@ -145,6 +146,7 @@ interface Errors {
 
 export default function LoginPage() {
   const [haveWallet, setHaveWallet] = useState<boolean>(false);
+  const [loginWallet, setLoginWallet] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -191,6 +193,8 @@ export default function LoginPage() {
 
   return (
     <>
+      <LoginWallet open={loginWallet} setOpen={setLoginWallet} />
+
       <div className="w-full h-[80vh] md:h-screen relative bg-[#f6f6f6] flex justify-center">
         <Image
           className="w-full h-[200px] md:h-[414px] left-0 top-1 absolute z-0 rounded-bl-[50px] rounded-br-[50px]"
@@ -274,6 +278,7 @@ export default function LoginPage() {
 
                 {haveWallet && (
                   <button
+                    onClick={() => setLoginWallet(true)}
                     type="button"
                     className="grow shrink basis-0 h-[45px] p-[17px] bg-[#333333] rounded-[5px] justify-center items-center gap-2.5 flex disabled:cursor-not-allowed disabled:bg-gray-400"
                   >
