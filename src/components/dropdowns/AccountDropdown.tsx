@@ -17,6 +17,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { UserIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useDisconnect } from "wagmi";
 
 interface AccountDropdownProps {
@@ -26,6 +27,7 @@ interface AccountDropdownProps {
 export default function AccountDropdown({ num: _num }: AccountDropdownProps) {
   const { user, userType, refetch: authRefetch } = useAuth();
   const { disconnectAsync } = useDisconnect();
+  const router = useRouter();
 
   async function signOut() {
     const { error } = await createClient().auth.signOut();
@@ -33,16 +35,16 @@ export default function AccountDropdown({ num: _num }: AccountDropdownProps) {
       // TODO: set error modal
       console.log(error);
     }
+
+    router.push("/");
+    await authRefetch();
   }
 
   async function onClickSignOut() {
     if (userType == "wallet") {
       await disconnectAsync();
-      await signOut();
-      await authRefetch();
-    } else {
-      await signOut();
     }
+    await signOut();
   }
 
   return (
