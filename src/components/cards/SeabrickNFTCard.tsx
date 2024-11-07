@@ -1,6 +1,5 @@
 import Image from "next/image"
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline"
-import { truncateString } from "../table/TableTest"
 
 export default function SeabrickNFTCard() {
   return (
@@ -16,8 +15,8 @@ export default function SeabrickNFTCard() {
               alt="nft-image"
             ></Image>
             <div className="w-full flex-col justify-between items-start inline-flex">
-              <div className=" flex-col justify-between items-center flex w-full">
-                <div className=" flex-col justify-start items-start gap-6 flex w-full">
+              <div className=" flex-col justify-between items-center flex w-full pb-2">
+                <div className=" flex-col justify-start items-stretch gap-6 flex w-full">
                   <div className=" justify-between items-start inline-flex">
                     <div className="flex-col justify-start items-start gap-3.5 inline-flex">
                       <div className=" justify-start items-end gap-2 inline-flex">
@@ -50,7 +49,7 @@ export default function SeabrickNFTCard() {
                   <div className="text-black text-xs font-normal font-['Noto Sans']">
                     Address
                   </div>
-                  <div className="text-[#8a8a8f] text-xs font-normal font-['Noto Sans']">
+                  <div className="text-[#8a8a8f] text-xs font-normal font-['Noto Sans'] [overflow-wrap:anywhere] ml-2">
                     0x056b74b11c59b64cc532eed4bce181b3ad5412e0
                   </div>
                 </div>

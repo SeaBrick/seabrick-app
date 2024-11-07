@@ -121,9 +121,9 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-        <div className="w-full gap-3 flex">
+        <div className="w-full gap-3 flex md:flex-row flex-col">
           {/* left side */}
-          <div className="w-1/4 p-6 bg-white rounded-[10px] justify-start items-center gap-2.5 flex flex-col">
+          <div className=" w-full md:w-1/3 lg:w-1/4 p-6 bg-white rounded-[10px] justify-start items-center gap-2.5 flex flex-col">
             <div className="flex-col justify-start items-start gap-3 inline-flex w-full mb-4">
               {/* top with texts */}
               <div className="self-stretch flex-col justify-between items-start inline-flex">
@@ -185,19 +185,19 @@ export default function Dashboard() {
             </div>
           </div>
           {/* right side */}
-          <div className="w-3/4 flex gap-3 flex-col">
+          <div className=" w-full md:w-2/3 lg:w-3/4 flex gap-3 flex-col">
             {/* cards div  */}
-            <div className="flex w-full gap-3">
-              <div className="w-[50%]">
+            <div className="flex w-full gap-3 lg:flex-row flex-col">
+              <div className="lg:w-[50%] w-full">
                 <SeabrickNFTCard />
               </div>
-              <div className="w-[50%]">
+              <div className="lg:w-[50%] w-full min-h-[10rem]">
                 <ClaimNFTCard />
               </div>
             </div>
             {/* tables div */}
-            <div className="flex w-full h-full gap-3 min-w-fit">
-              <div className="bg-white rounded-[10px] h-full  w-[50%]">
+            <div className="flex w-full h-full gap-3 min-w-fit flex-col xl:flex-row">
+              <div className="bg-white rounded-[10px] h-full w-full  xl:w-[50%]">
                 <div className="px-6 h-[4.5rem] mb-[-1rem] justify-between items-center flex">
                   <div className="text-black text-[17px] font-normal">
                     Latest Buys
@@ -217,7 +217,7 @@ export default function Dashboard() {
                   />
                 </div>
               </div>
-              <div className="bg-white rounded-[10px] h-full w-[50%]">
+              <div className="bg-white rounded-[10px] h-full  w-full  xl:w-[50%]">
                 <div className="px-6 h-[4.5rem] mb-[-1rem] justify-between items-center flex">
                   <div className="text-black text-[17px] font-normal">
                     Latest Buys
