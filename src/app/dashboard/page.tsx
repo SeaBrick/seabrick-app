@@ -123,7 +123,7 @@ export default function Dashboard() {
         </div>
         <div className="w-full gap-3 flex">
           {/* left side */}
-          <div className="w-1/3 p-6 bg-white rounded-[10px] justify-start items-center gap-2.5 flex flex-col">
+          <div className="w-[22.5%] p-6 bg-white rounded-[10px] justify-start items-center gap-2.5 flex flex-col">
             <div className="flex-col justify-start items-start gap-3 inline-flex w-full mb-4">
               {/* top with texts */}
               <div className="self-stretch flex-col justify-between items-start inline-flex">
@@ -133,7 +133,7 @@ export default function Dashboard() {
                   </div>
                 </div>
                 <div className="self-stretch justify-start items-end gap-2.5 inline-flex">
-                  <div className="text-[#333333] text-2xl font-normal font-['Noto Sans']">
+                  <div className="text-[#333333] text-xl font-normal font-['Noto Sans']">
                     {totalSupply} Seabrick NFTs
                   </div>
                 </div>
@@ -141,7 +141,7 @@ export default function Dashboard() {
               {/* bottom with button */}
               <div className="justify-start items-center gap-2 inline-flex">
                 <div className="justify-start items-center gap-2 flex">
-                  <button className="p-2 bg-[#2069a0] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-sm font-normal font-['Noto Sans']">
+                  <button className="p-2 bg-[#2069a0] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-xs font-normal font-['Noto Sans']">
                     Mint New Tokens
                   </button>
                 </div>
@@ -185,18 +185,18 @@ export default function Dashboard() {
             </div>
           </div>
           {/* right side */}
-          <div className="w-2/3 flex gap-3">
+          <div className="w-9/12 flex gap-3">
             {/* cards div  flex w-full gap-3*/}
             <div className="flex h-full flex-col gap-3">
               <SeabrickNFTCard />
-              <div className="bg-white rounded-[10px]">
+              <div className="bg-white rounded-[10px] h-full">
                 <div className="px-6 h-[4.5rem] mb-[-1rem] justify-between items-center flex">
                   <div className="text-black text-[17px] font-normal">
                     Latest Buys
                   </div>
                   <a
                     href="/" // TODO: Add url to lastes??
-                    className="w-[35px] h-[35px] rounded-full border border-[#9b9a9b]/60 flex justify-center items-center hover:bg-slate-50 active:bg-slate-200"
+                    className="w-[30px] h-[30px] rounded-full border border-[#9b9a9b]/60 flex justify-center items-center hover:bg-slate-50 active:bg-slate-200"
                   >
                     <ArrowUpRightIcon className="size-[0.7rem]" />
                   </a>
@@ -207,16 +207,16 @@ export default function Dashboard() {
               </div>
             </div>
             {/* tables div  flex w-full h-full gap-3 min-w-fit */}
-            <div className="flex h-full flex-col">
+            <div className="flex h-full flex-col gap-3">
               <ClaimNFTCard />
-              <div className="bg-white rounded-[10px]">
+              <div className="bg-white rounded-[10px] h-full">
                 <div className="px-6 h-[4.5rem] mb-[-1rem] justify-between items-center flex">
                   <div className="text-black text-[17px] font-normal">
                     Latest Buys
                   </div>
                   <a
                     href="/" // TODO: Add url to lastes??
-                    className="w-[35px] h-[35px] rounded-full border border-[#9b9a9b]/60 flex justify-center items-center hover:bg-slate-50 active:bg-slate-200"
+                    className="w-[30px] h-[30px] rounded-full border border-[#9b9a9b]/60 flex justify-center items-center hover:bg-slate-50 active:bg-slate-200"
                   >
                     <ArrowUpRightIcon className="size-[0.7rem]" />
                   </a>

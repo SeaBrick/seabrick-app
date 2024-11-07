@@ -29,7 +29,7 @@ function Table({
           <tr className="w-full table-row">
             {columns.map((column) => (
               <th
-                className="text-black w-full text-justify text-xs font-normal font-['Noto Sans'] table-cell p-4"
+                className="text-black w-full text-justify text-[0.6rem]  font-normal font-['Noto Sans'] table-cell p-4"
                 key={column.key}
               >
                 {column.label}
@@ -37,7 +37,7 @@ function Table({
             ))}
           </tr>
         </thead>
-        <tbody className="w-full px-6 pt-[17px] gap-4 min-w-fit">
+        <tbody className="w-full px-6 pt-[14px] gap-4 min-w-fit">
           {data.map((row) => (
             <tr
               className="w-full table-row border-b-[1px] border-[#efeff4]"
@@ -58,7 +58,7 @@ function Table({
                 }
                 return (
                   <td
-                    className="text-black w-full text-justify text-xs font-normal font-['Noto Sans'] table-cell p-4 inline-flex"
+                    className="text-black w-full text-justify text-[0.6rem] font-normal font-['Noto Sans'] table-cell p-3 inline-flex"
                     key={column.key}
                   >
                     <div className="inline-flex">
