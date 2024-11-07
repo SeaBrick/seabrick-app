@@ -271,7 +271,9 @@ export default function LoginPage() {
 
     if (!email) {
       newErrors.message = "Email is required";
-    } else if (!password) newErrors.message = "Password is required";
+    } else if (!password) {
+      newErrors.message = "Password is required";
+    }
 
     // if errors is NOT empty, somethins is missing. We do not try to login
     // Maube use a tostify here?
