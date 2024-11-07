@@ -8,6 +8,9 @@ import Table from "@/components/table/TableTest"
 import {
   ArrowUpRightIcon,
   ChevronDownIcon,
+  CurrencyDollarIcon,
+  ArrowsRightLeftIcon,
+  UserIcon,
   // Cog6ToothIcon,
   // ArrowsUpDownIcon,
   // ArrowLeftEndOnRectangleIcon,
@@ -60,7 +63,6 @@ export default function Dashboard() {
   const thisMontQuantity = isAdmin ? 10 : 300
   //
   const differenceQuantity = thisMontQuantity - lastMontQuantity
-  const showingTableOptions = "test"
 
   const columnDataTest = [
     { key: "hash", label: "TX Hash" },
@@ -294,7 +296,24 @@ export default function Dashboard() {
                 <SeabrickNFTCard />
               </div>
               <div className="lg:w-[50%] w-full min-h-[10rem] gap-2 flex flex-col">
-                <ClaimNFTCard />
+                {isAdmin ? (
+                  <div className="bg-white w-full h-full rounded-[10px] gap-3 p-4 flex flex-col justify-between">
+                    <button className="p-2 bg-[#333333] text-[white] rounded-[5px] text-left">
+                      <ArrowsRightLeftIcon className="size-[1.25rem] inline mx-2 mt-[-3px]" />
+                      Transfer Ownership
+                    </button>
+                    <button className="p-2 bg-[#333333] text-[white] rounded-[5px] text-left">
+                      <UserIcon className="size-[1.25rem] inline mx-2 mt-[-3px]" />
+                      Admins
+                    </button>
+                    <button className="p-2 bg-[#2069a0] text-[white] rounded-[5px] text-left">
+                      <CurrencyDollarIcon className="size-[1.25rem] inline mx-2 mt-[-3px]" />
+                      Claim Earnings
+                    </button>
+                  </div>
+                ) : (
+                  <ClaimNFTCard />
+                )}
               </div>
             </div>
             {/* tables div */}
