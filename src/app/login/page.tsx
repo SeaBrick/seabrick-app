@@ -387,23 +387,26 @@ export default function LoginPage() {
                 <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">
                   Do you want to create an account?
                 </div>
-                <button
-                  type="button"
+                <Link
+                  href="/register"
+                  prefetch={true}
                   className="text-[#333333] text-xs font-bold font-['Noto Sans']"
                 >
                   Register
-                </button>
+                </Link>
               </div>
               <div className="self-stretch justify-between items-center inline-flex">
                 <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">
                   Forgot your password?
                 </div>
-                <button
-                  type="button"
+
+                <Link
+                  href="/reset-password"
+                  prefetch={true}
                   className="text-[#333333] text-xs font-bold font-['Noto Sans']"
                 >
                   Reset Password
-                </button>
+                </Link>
               </div>
             </div>
           </div>
