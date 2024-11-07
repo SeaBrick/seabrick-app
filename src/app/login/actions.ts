@@ -16,17 +16,30 @@ import {
   getUniquePassword,
   verifySignature,
 } from "@/lib/utils/session";
+import { userLoginSchema } from "@/lib/zod";
 
 export async function login(formData: FormData) {
   const supabase = createClient();
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  // TODO: USe Zod to validate inputs
+  // Validate the incoming data
+  const {
+    data: validationData,
+    success: validationSuccess,
+    error: validationError,
+  } = userLoginSchema.safeParse({
+    email: formData.get("email"),
+    password: formData.get("password"),
+  });
+
+  if (!validationSuccess) {
+    // Just return the first error encountered
+    return { error: validationError.errors[0].message };
+  }
+
   // TODO: Add captchas
   const data: SignInWithPasswordCredentials = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
+    email: validationData.email,
+    password: validationData.password,
     options: {
       // captchaToken
     },
@@ -36,8 +49,13 @@ export async function login(formData: FormData) {
 
   // TODO: Should return something to know if was success or no
   if (error) {
-    console.error("Login error: ", error);
-    return { error: error.code };
+    if (error.code != "invalid_credentials") {
+      // Print to debug in other scenarios
+      console.error("Login error: ", error);
+      return { error: "Internal server error" };
+    }
+
+    return { error: "Invalid credentials" };
   }
 
   revalidatePath("/", "layout");
