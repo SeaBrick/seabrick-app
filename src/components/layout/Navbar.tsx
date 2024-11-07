@@ -39,18 +39,20 @@ export function Navbar() {
   }, [dispatchAccount, walletAddress])
 
   return (
-    <header className="z-10 h-24 shadow bg-white">
-      <div className="flex h-full items-center justify-between w-3/5 mx-auto">
-        <SeabrickSVG />
 
-        <div className="ml-60 flex gap-x-10 hover:direct-children:text-seabrick-blue mr-5">
+    <header className="z-10 w-full h-[70px] py-0 px-[30px] mb-1 flex justify-between items-center shrink-0 bg-white shadow-2md">
+      <div className="flex h-[70px] max-w-[1920px] items-center justify-between w-full mx-auto shrink-0">
+        <div className="flex h-[70px] items-center justify-between w-6/12 mx-auto shrink-0">
+          <SeabrickSVG />
+        </div>
+
+        <div className="flex h-[70px] w-6/12 justify-end items-center gap-8 hover:direct-children:text-seabrick-blue ">
           <Link
-            className={`${pathname === "/buy" && "text-seabrick-blue"}`}
+            className={`${pathname === "/buy" && "text-text-gray"}`}
             href="/buy"
           >
-            Buy
-          </Link>
-          <Link href="/test">Test</Link>
+            Register
+          </Link>          
 
           {/* FIXME: This NOT only depends on the wallet connect. Also depends on the user role */}
           {user &&
@@ -65,19 +67,19 @@ export function Navbar() {
                 Admin
               </Link>
             )}
-        </div>
 
-        {/* TODO: Better UX for account details */}
-        {user ? (
-          <AccountDropdown />
-        ) : (
-          <Link
-            className={`${pathname === "/login" && "text-seabrick-blue"} hover:text-seabrick-blue`}
+          {/* TODO: Better UX for account details */}
+          {user ? (
+            <AccountDropdown />
+          ) : (
+            <Link
+            className={`${pathname === "/login" && "text-text-gray"} hover:text-seabrick-blue`}
             href="/login"
-          >
-            Log in
-          </Link>
-        )}
+            >
+              Log in
+            </Link>
+          )}
+        </div>
       </div>
     </header>
   )

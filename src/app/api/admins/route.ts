@@ -42,8 +42,6 @@ export async function POST(request: NextRequest) {
   let email: string;
 
   try {
-    // Log request headers and method to confirm it's a POST with JSON content-type
-
     const body = await request.json();
     if (!body.email) {
       throw new Error("Not email in the request body");
