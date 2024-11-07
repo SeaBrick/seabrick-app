@@ -227,7 +227,7 @@ const AccountDetails: React.FC = () => {
 
           {modifying ? (
             <div className="flex gap-x-4 justify-end">
-              <SubmitButton disable={checkChanges()} text="Save" />
+              <SubmitButton disable={checkChanges()} label="Save" />
               <Button
                 type="button"
                 onClick={cancelModify}
