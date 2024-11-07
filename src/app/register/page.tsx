@@ -80,7 +80,7 @@ export default function RegisterPage() {
         <div className="w-full h-[80vh] md:h-screen relative bg-[#f6f6f6] flex justify-center">
             <Image className="w-full h-[200px] md:h-[414px] left-0 top-1 absolute z-0 rounded-bl-[50px] rounded-br-[50px]" src={`/login-bg.png`} alt="banner" width={1920} height={414}/>
             <TabGroup selectedIndex={selectedIndex} onChange={setSelectedIndex} className="z-10">
-                <TabList className="flex gap-4">
+                <TabList className="flex gap-4 mt-32">
                     <Tab className="rounded-full py-1 px-3 focus:outline-none data-[selected]:bg-seabrick-blue/10 data-[hover]:bg-seabrick-blue/5 data-[selected]:data-[hover]:bg-seabrick-blue/10 data-[focus]:outline-1 data-[focus]:outline-white">
                         <Link prefetch={true} href="/register">
                         Register with Email
@@ -92,7 +92,7 @@ export default function RegisterPage() {
                         </Link>
                     </Tab>
                 </TabList>
-                <TabPanels className="mt-3">
+                <TabPanels className="">
                     <TabPanel className="rounded-xl bg-seabrick-blue/5 p-5">
                         <RegisterEmailForm />
                     </TabPanel>
