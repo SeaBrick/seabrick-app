@@ -35,8 +35,10 @@ const RegisterEmailForm: React.FC = () => {
     e.preventDefault();
     const newErrors: Errors = {};
 
-    if (!email) newErrors.message = "Email is required";
-    if (!password) newErrors.message = "Password is required";
+    if (!email){ newErrors.message = "Email is required";        
+    }else if (!password){ newErrors.message = "Password is required";
+    }// else if (password1 === password2) newErrors.message ="Both Passwords doesn't match"    @NaneezX idk como lo tengas en el Forms aqui tienes la validacion adalpta los datos 
+    
 
     setErrors(newErrors);
 
@@ -53,14 +55,11 @@ const RegisterEmailForm: React.FC = () => {
     }
 
 
-    return (
-
-        <div className="w-full h-[80vh] md:h-screen relative bg-[#f6f6f6] flex justify-center">
-            <Image className="w-full h-[200px] md:h-[414px] left-0 top-1 absolute z-0 rounded-bl-[50px] rounded-br-[50px]" src={`/login-bg.png`} alt="banner" width={1920} height={414}/>
-            <form  className="h-[531px] p-6 relative bg-white rounded-[10px] flex-col justify-start items-center gap-8 inline-flex">
+    return (            
+            <form  className="w-[606px] h-min p-6 relative bg-white rounded-[10px] flex-col justify-start items-center gap-8 inline-flex">
                 <div className="h-[74px] flex-col justify-center items-center gap-[5px] flex">
                     <div className="text-[#333333] text-[15px] font-normal font-['Noto Sans']">Register</div>
-                    <div className="text-[#333333] text-4xl font-normal font-['Noto Sans']">Create Account mail</div>
+                    <div className="text-[#333333] text-4xl font-normal font-['Noto Sans']">Create Account</div>
                 </div>
                 <div className="self-stretch h-[377px] flex-col justify-start items-start gap-4 flex">
                     <div className="self-stretch h-[236px] flex-col justify-start items-start gap-4 flex">
@@ -85,18 +84,18 @@ const RegisterEmailForm: React.FC = () => {
                             />
                         </div>
                         <div className="self-stretch justify-start items-start gap-4 inline-flex">
-                            <div className="grow shrink basis-0 flex-col justify-center items-start gap-2 inline-flex">
+                            <div className="grow shrink basis-0 flex-col justify-center items-start gap-2 inline-flex relative">
                                 <label htmlFor="password" className="text-[#333333] text-xs font-normal font-['Noto Sans']">Password</label>
                                 <input
                                 id="password"
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 placeholder="********"
                                 className="self-stretch h-11 px-[15px] py-2.5 bg-[#efeff4]/60 rounded-[5px] border border-[#babcc3]/60 text-[#8a8a8f] text-sm font-normal font-['Noto Sans']"
                                 />
                                 <button
                                 type="button"
                                 onClick={togglePasswordVisibility}
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                                className="absolute right-3 top-1/2"
                                 >
                                 {showPassword ? (
                                     <EyeSlashIcon className="h-5 w-5 text-[#8a8a8f]" />
@@ -105,18 +104,18 @@ const RegisterEmailForm: React.FC = () => {
                                 )}
                                 </button>
                             </div>
-                            <div className="grow shrink basis-0 flex-col justify-center items-start gap-2 inline-flex">
+                            <div className="grow shrink basis-0 flex-col justify-center items-start gap-2 inline-flex relative">
                                 <label htmlFor="repeatPassword" className="text-[#333333] text-xs font-normal font-['Noto Sans']">Repeat Password</label>
                                 <input
                                 id="repeatPassword"
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 placeholder="********"
                                 className="self-stretch h-11 px-[15px] py-2.5 bg-[#efeff4]/60 rounded-[5px] border border-[#babcc3]/60 text-[#8a8a8f] text-sm font-normal font-['Noto Sans']"
                                 />
                                 <button
                                 type="button"
                                 onClick={togglePasswordVisibility}
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                                className="absolute right-3 top-1/2"
                                 >
                                 {showPassword ? (
                                     <EyeSlashIcon className="h-5 w-5 text-[#8a8a8f]" />
@@ -131,10 +130,7 @@ const RegisterEmailForm: React.FC = () => {
                         <div className="self-stretch h-[45px] justify-start items-start gap-4 inline-flex">
                             <button className="grow shrink basis-0 self-stretch p-[17px] bg-[#2069a0] rounded-[5px] justify-center items-center gap-2.5 flex">
                                 <span className="text-right text-white text-sm font-normal font-['Noto Sans']">Create Account</span>
-                            </button>
-                            <button className="grow shrink basis-0 h-[45px] p-[17px] bg-[#333333] rounded-[5px] justify-center items-center gap-2.5 flex">
-                                <span className="text-right text-white text-sm font-normal font-['Noto Sans']">Connect using your Wallet</span>
-                            </button>
+                            </button>                            
                         </div>
                         <div className="self-stretch justify-between items-center inline-flex">
                             <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">Do you already have an account?</div>
@@ -146,9 +142,7 @@ const RegisterEmailForm: React.FC = () => {
                         </div>
                     </div>
                 </div>
-            </form>           
-        </div>
-
+            </form>  
     );
 };
 

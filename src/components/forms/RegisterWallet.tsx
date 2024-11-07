@@ -11,25 +11,22 @@ import { Button } from "@headlessui/react";
 import { Address, zeroAddress } from "viem";
 import SubmitButton from "@/components/buttons/SubmitButton";
 
+interface Errors {
+    message?: string;
+    
+}
 
 const RegisterWalletForm: React.FC = () => {
 
   const [haveWallet, setHaveWallet] = useState<boolean>(false);
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>("");  
   const [errors, setErrors] = useState<Errors>({});
 
   useEffect(() => {
     if (window.ethereum) {
       setHaveWallet(true);
     }
-  }, []);
-  
-  
-  const togglePasswordVisibility = () => {
-      setShowPassword(!showPassword);
-    };
+  }, []); 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,16 +37,12 @@ const RegisterWalletForm: React.FC = () => {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      console.log("Form submitted:", { email, password });
+      console.log("Form submitted:", { email});
       // Aquí puedes enviar el formulario o hacer una llamada a la API
     }
   };
 
 
-    interface Errors {
-        message?: string;
-        
-    }
 
 
     return (        

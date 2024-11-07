@@ -81,12 +81,12 @@ export default function RegisterPage() {
             <Image className="w-full h-[200px] md:h-[414px] left-0 top-1 absolute z-0 rounded-bl-[50px] rounded-br-[50px]" src={`/login-bg.png`} alt="banner" width={1920} height={414}/>
             <TabGroup selectedIndex={selectedIndex} onChange={setSelectedIndex} className="z-10">
                 <TabList className="flex gap-4 mt-32">
-                    <Tab className="rounded-full py-1 px-3 focus:outline-none data-[selected]:bg-seabrick-blue/10 data-[hover]:bg-seabrick-blue/5 data-[selected]:data-[hover]:bg-seabrick-blue/10 data-[focus]:outline-1 data-[focus]:outline-white">
+                    <Tab className={`rounded-full py-1 px-3 bg-white hover:bg-gray-200 active:bg-gray-400 ${selectedIndex == TabsIndex.EMAIL ? "outline outline-2 outline-offset-2" : "" }`}>
                         <Link prefetch={true} href="/register">
                         Register with Email
                         </Link>
                     </Tab>
-                    <Tab className="rounded-full py-1 px-3 focus:outline-none data-[selected]:bg-seabrick-blue/10 data-[hover]:bg-seabrick-blue/5 data-[selected]:data-[hover]:bg-seabrick-blue/10 data-[focus]:outline-1 data-[focus]:outline-white">
+                    <Tab className={`rounded-full py-1 px-3 bg-white hover:bg-gray-200 active:bg-gray-400 ${selectedIndex == TabsIndex.WALLET ? "outline outline-2 outline-offset-2" : "" }`}>
                         <Link prefetch={true} href="/register?tab=wallet">
                         Register with Wallet
                         </Link>
