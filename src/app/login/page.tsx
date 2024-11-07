@@ -260,11 +260,10 @@ export default function LoginPage() {
       setHaveWallet(true);
     }
   }, []);
-  
-  
+
   const togglePasswordVisibility = () => {
-      setShowPassword(!showPassword);
-    };
+    setShowPassword(!showPassword);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -281,38 +280,56 @@ export default function LoginPage() {
     }
   };
 
-
   return (
-  <>
+    <>
       <div className="w-full h-[80vh] md:h-screen relative bg-[#f6f6f6] flex justify-center">
-        <Image className="w-full h-[200px] md:h-[414px] left-0 top-1 absolute z-0 rounded-bl-[50px] rounded-br-[50px]" src={`/login-bg.png`} alt="banner" width={1920} height={414}/>                
-        <form onSubmit={handleSubmit} className="h-[339px] md:h-[447px] w-[350px] md:w-[606px] mt-[40px] md:mt-[180px] p-6 relative bg-white rounded-[10px] flex-col justify-start items-center gap-8 inline-flex z-10">
+        <Image
+          className="w-full h-[200px] md:h-[414px] left-0 top-1 absolute z-0 rounded-bl-[50px] rounded-br-[50px]"
+          src={`/login-bg.png`}
+          alt="banner"
+          width={1920}
+          height={414}
+        />
+        <form
+          onSubmit={handleSubmit}
+          className="h-[339px] md:h-[447px] w-[350px] md:w-[606px] mt-[40px] md:mt-[180px] p-6 relative bg-white rounded-[10px] flex-col justify-start items-center gap-8 inline-flex z-10"
+        >
           <div className="h-[74px] flex-col justify-center items-center gap-[5px] flex">
-            <div className="text-[#333333] text-[15px] font-normal font-['Noto Sans']">Register</div>
-              <div className="text-[#333333] text-4xl font-normal font-['Noto Sans']">Log In</div>
+            <div className="text-[#333333] text-[15px] font-normal font-['Noto Sans']">
+              Register
+            </div>
+            <div className="text-[#333333] text-4xl font-normal font-['Noto Sans']">
+              Log In
+            </div>
           </div>
-          
-            <div className="self-stretch h-[293px] flex-col justify-start items-start gap-4 flex">
-              <div className="self-stretch h-[152px] flex-col justify-start items-start gap-4 flex">
-                <div className="self-stretch h-[68px] flex-col justify-center items-start gap-2 flex">                        
-                  <div className="flex flex-col gap-1 w-full">
-                    <label htmlFor="email" className="text-[#333333] text-xs font-normal font-['Noto Sans']">
-                      Email
-                    </label>
-                    <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Enter your email"
-                      className="self-stretch h-11 px-[15px] py-2.5 rounded-[5px] border border-[#333333] text-[#333333] text-sm font-normal font-['Noto Sans'] bg-[#efeff4]/60 placeholder-gray-500"
-                    />                  
-                  </div>
+
+          <div className="self-stretch h-[293px] flex-col justify-start items-start gap-4 flex">
+            <div className="self-stretch h-[152px] flex-col justify-start items-start gap-4 flex">
+              <div className="self-stretch h-[68px] flex-col justify-center items-start gap-2 flex">
+                <div className="flex flex-col gap-1 w-full">
+                  <label
+                    htmlFor="email"
+                    className="text-[#333333] text-xs font-normal font-['Noto Sans']"
+                  >
+                    Email
+                  </label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    className="self-stretch h-11 px-[15px] py-2.5 rounded-[5px] border border-[#333333] text-[#333333] text-sm font-normal font-['Noto Sans'] bg-[#efeff4]/60 placeholder-gray-500"
+                  />
                 </div>
+              </div>
               <div className="self-stretch justify-start items-start gap-4 inline-flex">
                 <div className="flex flex-col gap-1 w-full">
-                  <label htmlFor="password" className="text-[#333333] text-xs font-normal font-['Noto Sans']">
+                  <label
+                    htmlFor="password"
+                    className="text-[#333333] text-xs font-normal font-['Noto Sans']"
+                  >
                     Password
                   </label>
                   <div className="relative self-stretch h-11 px-[15px] py-2.5 bg-[#efeff4]/60 rounded-[5px] border border-[#babcc3]/60 flex items-center justify-between">
@@ -337,36 +354,64 @@ export default function LoginPage() {
                       )}
                     </button>
                   </div>
-                  {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
-                </div>       
+                  {errors.password && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.password}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
-          
+
             <div className="self-stretch h-[109px] flex-col justify-start items-center gap-4 flex">
               <div className="self-stretch h-[45px] justify-start items-start gap-4 inline-flex">
-                <button type="submit" className="grow shrink basis-0 self-stretch p-[17px] bg-[#2069a0] rounded-[5px] justify-center items-center gap-2.5 flex">
-                  <span className="text-right text-white text-sm font-normal font-['Noto Sans']">Log In</span>
-                </button>                
-                <button type="submit" className="grow shrink basis-0 h-[45px] p-[17px] bg-[#333333] rounded-[5px] justify-center items-center gap-2.5 flex">
-                  <span className="text-right text-white text-sm font-normal font-['Noto Sans']">Connect using your Wallet</span>
+                <button
+                  type="submit"
+                  className="grow shrink basis-0 self-stretch p-[17px] bg-[#2069a0] rounded-[5px] justify-center items-center gap-2.5 flex"
+                >
+                  <span className="text-right text-white text-sm font-normal font-['Noto Sans']">
+                    Log In
+                  </span>
+                </button>
+                <button
+                  type="submit"
+                  className="grow shrink basis-0 h-[45px] p-[17px] bg-[#333333] rounded-[5px] justify-center items-center gap-2.5 flex"
+                >
+                  <span className="text-right text-white text-sm font-normal font-['Noto Sans']">
+                    Connect using your Wallet
+                  </span>
                 </button>
               </div>
               <div className="self-stretch justify-between items-center inline-flex">
-                <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">Do you want to create an account?</div>
-                <button type="button" className="text-[#333333] text-xs font-bold font-['Noto Sans']">Register</button>
-              </div>
-                <div className="self-stretch justify-between items-center inline-flex">
-                  <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">Forgot your password?</div>
-                  <button type="button" className="text-[#333333] text-xs font-bold font-['Noto Sans']">Reset Password</button>
+                <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">
+                  Do you want to create an account?
                 </div>
+                <button
+                  type="button"
+                  className="text-[#333333] text-xs font-bold font-['Noto Sans']"
+                >
+                  Register
+                </button>
               </div>
-            </div>          
+              <div className="self-stretch justify-between items-center inline-flex">
+                <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">
+                  Forgot your password?
+                </div>
+                <button
+                  type="button"
+                  className="text-[#333333] text-xs font-bold font-['Noto Sans']"
+                >
+                  Reset Password
+                </button>
+              </div>
+            </div>
+          </div>
         </form>
       </div>
-  </>
-      );
-    }
-        /* {!haveWallet && <LoginEmailForm />}
+    </>
+  );
+}
+/* {!haveWallet && <LoginEmailForm />}
 
         {haveWallet && (
           <div className="divide-y-2 space-y-6 max-w-xl w-full">
@@ -385,10 +430,9 @@ export default function LoginPage() {
 
 const EmailForm: React.FC = () => {
   const { user } = useAuth();
- 
-  
+
   return <div>{user && <>Use Email!</>}</div>;
-}
+};
 
 const WalletForm: React.FC = () => {
   const { user } = useAuth();
