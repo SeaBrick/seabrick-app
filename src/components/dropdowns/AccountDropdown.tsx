@@ -34,19 +34,17 @@ export default function AccountDropdown({ num: _num }: AccountDropdownProps) {
     if (error) {
       // TODO: set error modal
       console.log(error);
-    } else {
-      router.push("/");
     }
+
+    router.push("/");
+    await authRefetch();
   }
 
   async function onClickSignOut() {
     if (userType == "wallet") {
       await disconnectAsync();
-      await signOut();
-      await authRefetch();
-    } else {
-      await signOut();
     }
+    await signOut();
   }
 
   return (
