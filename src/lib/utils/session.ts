@@ -2,7 +2,7 @@
 import { cookies } from "next/headers";
 import { v4 as uuidv4 } from "uuid";
 import { createHmac } from "crypto";
-import { Address, Hex, verifyMessage } from "viem";
+import { Address, getAddress, Hex, verifyMessage } from "viem";
 
 const nonceName = "nonce-session-seabrick";
 const keyHash = process.env.MESSAGE_HASH_KEY;
@@ -72,7 +72,7 @@ export async function deleteNonceSession(): Promise<void> {
 
 export async function getUniquePassword(address: Address): Promise<string> {
   const unique = createHmac("sha256", passwordKey!)
-    .update(address)
+    .update(getAddress(address))
     .digest("hex");
 
   return unique;

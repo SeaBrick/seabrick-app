@@ -24,6 +24,16 @@ interface NotMintedResponse {
 
 export type MintSeabrickResp = MintedResponse | NotMintedResponse;
 
+interface TransferResponse {
+  isTransfer: true;
+  txHash: Hash;
+}
+interface NoTransferResponse {
+  isTransfer: false;
+}
+
+export type TransferSeabrickResp = TransferResponse | NoTransferResponse;
+
 export interface CheckoutSessionResponse {
   id: string;
   session_id: string;
