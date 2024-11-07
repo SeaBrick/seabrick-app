@@ -10,7 +10,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "seabrick-blue": "#005493",
+        "seabrick-blue": "#2069a0",
         "seabrick-green": "#52b09f",
         "text-gray":"#333;"
       },
