@@ -2,8 +2,13 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { checkAddress } from "@/lib/utils";
-import { getUniquePassword } from "@/lib/utils/session";
+import {
+  getNonceSession,
+  getUniquePassword,
+  verifySignature,
+} from "@/lib/utils/session";
 import { NextRequest, NextResponse } from "next/server";
+import { Hex, isHex } from "viem";
 
 export async function POST(request: NextRequest) {
   const supabaseClient = createClient();
@@ -20,6 +25,7 @@ export async function POST(request: NextRequest) {
   }
 
   let walletAddress: string;
+  let signature: Hex;
 
   try {
     const body = await request.json();
@@ -27,7 +33,12 @@ export async function POST(request: NextRequest) {
       throw new Error("Not wallet address in the request body");
     }
 
+    if (!body.signature || !isHex(body.signature)) {
+      throw new Error("Not valid signature");
+    }
+
     walletAddress = body.walletAddress;
+    signature = body.signature;
   } catch (error) {
     console.error(error);
     return NextResponse.json(
@@ -63,7 +74,34 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // TODO: Verify signature
+  // Validating signature
+  const nonceSession = await getNonceSession();
+
+  if (!nonceSession) {
+    return NextResponse.json(
+      {
+        error: "Bad Request",
+        details: "Not nonce session to verify signature",
+      },
+      { status: 400 }
+    );
+  }
+
+  const isValidSignature = await verifySignature(
+    walletAddress,
+    nonceSession,
+    signature
+  );
+
+  if (!isValidSignature) {
+    return NextResponse.json(
+      {
+        error: "Bad Request",
+        details: "Not valid signature",
+      },
+      { status: 400 }
+    );
+  }
 
   // Since the signature was verified, we link the address to the user
   // We update the password right away so the user can log in with this wallet
