@@ -5,7 +5,7 @@ import AdminTable from "@/components/table/AdminTable";
 const App: React.FC = () => {
   return (
     <div>
-      <div className="flex flex-col items-center justify-center mb-10">
+      <div className="flex flex-col items-center justify-center mb-10 mt-8">
         <span className="text-center text-[#666666] text-[17px] font-normal font-['Noto Sans']">Account</span>
         <h1 className="text-center text-black text-4xl font-normal">Admins</h1>
       </div>
