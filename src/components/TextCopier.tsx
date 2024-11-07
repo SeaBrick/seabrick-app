@@ -26,7 +26,7 @@ const TextCopier: React.FC<TextCopierProps> = ({ text }) => {
   }
   return (
     <div
-      className="relative h-5 w-5 cursor-pointer ml-[3px] mt-[-3px] opacity-80"
+      className="relative h-[1.05rem] w-[1.05rem] cursor-pointer ml-[3px] mt-[-3px] opacity-80"
       onClick={handleCopyClick}
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
