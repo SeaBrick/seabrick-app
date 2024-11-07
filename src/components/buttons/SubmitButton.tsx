@@ -1,21 +1,32 @@
+"use client";
 import { useFormStatus } from "react-dom";
 
 interface SubmitButtonProps {
-  text?: string;
-  disable: boolean;
+  children?: React.ReactNode;
+  label: string;
+  loadingLabel?: string;
+  disable?: boolean;
+  buttonClass?: string;
 }
-export default function SubmitButton({ text, disable }: SubmitButtonProps) {
+export default function SubmitButton(props: SubmitButtonProps) {
+  const {
+    label,
+    loadingLabel,
+    disable,
+    buttonClass = "grow shrink basis-0 self-stretch bg-seabrick-blue rounded-[5px] justify-center items-center gap-2.5 hover:bg-seabrick-blue/80",
+  } = props;
+  const sharedButtonClass =
+    "disabled:cursor-not-allowed disabled:bg-gray-400 text-center text-white text-sm font-normal font-['Noto Sans']";
   const { pending } = useFormStatus();
 
   return (
     <button
       type="submit"
-      aria-disabled={pending}
       disabled={pending || disable}
-      title={pending || disable ? "No changes to save" : undefined}
-      className="inline-flex items-center gap-2 disabled:bg-gray-500 disabled:cursor-not-allowed rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none  hover:bg-gray-500"
+      title={pending || disable ? "Not allowed" : undefined}
+      className={`${sharedButtonClass} ${buttonClass}`}
     >
-      {pending ? "Loading..." : text || "Submit"}
+      {pending ? (loadingLabel ?? "Loading...") : label}
     </button>
   );
 }
