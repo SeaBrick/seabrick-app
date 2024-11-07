@@ -39,7 +39,7 @@ export default function UserTransactionHistory({
                       ${d.amount}
                     </div>
                     <div className="self-stretch justify-end items-start gap-1.5 inline-flex">
-                      <div className="text-right text-[#333333] text-[0.65rem] font-normal font-['Noto Sans'] inline-flex">
+                      <div className="text-right text-[#333333] text-[0.65rem] font-normal font-['Noto Sans'] inline-flex items-center">
                         to {truncateString(d.hash)} <TextCopier text={d.hash} />
                       </div>
                     </div>
