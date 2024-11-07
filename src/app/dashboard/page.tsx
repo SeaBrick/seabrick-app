@@ -318,7 +318,7 @@ export default function Dashboard() {
             </div>
             {/* tables div */}
             <div className="flex w-full h-full gap-3 min-w-fit flex-col xl:flex-row">
-              <div className="bg-white rounded-[10px] h-full w-full">
+              <div className="bg-white rounded-[10px] h-full w-full p-3">
                 <div className="px-6 h-[4.5rem] mb-[-1rem] justify-between items-center flex">
                   <div
                     className="text-black text-[17px] font-normal relative  hover:cursor-pointer"
