@@ -205,7 +205,7 @@ export default function LoginPage() {
         >
           <div className="h-[74px] flex-col justify-center items-center gap-[5px] flex">
             <div className="text-[#333333] text-[15px] font-normal font-['Noto Sans']">
-              Register
+              Authentication
             </div>
             <div className="text-[#333333] text-4xl font-normal font-['Noto Sans']">
               Log In
