@@ -1,26 +1,27 @@
 import Image from "next/image"
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline"
+import { truncateString } from "../table/TableTest"
 
 export default function SeabrickNFTCard() {
   return (
     <>
-      <div className="h-[215px] p-6 bg-white rounded-[10px] justify-start items-start gap-8 inline-flex">
-        <div className="grow shrink basis-0 self-stretch justify-between items-start flex">
-          <div className="w-[32rem] self-stretch justify-start items-center gap-4 flex">
+      <div className="p-5 bg-white rounded-[10px] justify-start items-start gap-6 inline-flex w-full h-full">
+        <div className="grow shrink basis-0 justify-between items-start flex">
+          <div className="w-full justify-start items-center gap-3 flex">
             <Image
               className="w-30"
-              width={140}
-              height={100}
+              width={100}
+              height={75}
               src={`/brick.png`}
               alt="nft-image"
             ></Image>
-            <div className="grow shrink basis-0 self-stretch flex-col justify-between items-start inline-flex">
-              <div className="self-stretch flex-col justify-between items-center flex">
-                <div className="self-stretch h-[35px] flex-col justify-start items-start gap-6 flex">
-                  <div className="self-stretch justify-between items-start inline-flex">
-                    <div className="w-[332px] flex-col justify-start items-start gap-3.5 inline-flex">
-                      <div className="self-stretch justify-start items-end gap-2 inline-flex">
-                        <div className="text-[#333333] text-3xl font-normal font-['Noto Sans']">
+            <div className="w-full flex-col justify-between items-start inline-flex">
+              <div className=" flex-col justify-between items-center flex w-full">
+                <div className=" flex-col justify-start items-start gap-6 flex w-full">
+                  <div className=" justify-between items-start inline-flex">
+                    <div className="flex-col justify-start items-start gap-3.5 inline-flex">
+                      <div className=" justify-start items-end gap-2 inline-flex">
+                        <div className="text-[#333333] text-2xl font-normal font-['Noto Sans']">
                           Seabrick NFT
                         </div>
                       </div>
@@ -36,7 +37,7 @@ export default function SeabrickNFTCard() {
                   </div>
                 </div>
               </div>
-              <div className="self-stretch h-[94px] flex-col justify-start items-start gap-1.5 flex">
+              <div className="self-stretch flex-col justify-start items-start gap-1.5 flex">
                 <div className="self-stretch justify-between items-center inline-flex">
                   <div className="text-black text-xs font-normal font-['Noto Sans']">
                     Symbol

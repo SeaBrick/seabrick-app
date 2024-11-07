@@ -123,7 +123,7 @@ export default function Dashboard() {
         </div>
         <div className="w-full gap-3 flex">
           {/* left side */}
-          <div className="w-[22.5%] p-6 bg-white rounded-[10px] justify-start items-center gap-2.5 flex flex-col">
+          <div className="w-1/4 p-6 bg-white rounded-[10px] justify-start items-center gap-2.5 flex flex-col">
             <div className="flex-col justify-start items-start gap-3 inline-flex w-full mb-4">
               {/* top with texts */}
               <div className="self-stretch flex-col justify-between items-start inline-flex">
@@ -185,31 +185,19 @@ export default function Dashboard() {
             </div>
           </div>
           {/* right side */}
-          <div className="w-9/12 flex gap-3">
-            {/* cards div  flex w-full gap-3*/}
-            <div className="flex h-full flex-col gap-3">
-              <SeabrickNFTCard />
-              <div className="bg-white rounded-[10px] h-full">
-                <div className="px-6 h-[4.5rem] mb-[-1rem] justify-between items-center flex">
-                  <div className="text-black text-[17px] font-normal">
-                    Latest Buys
-                  </div>
-                  <a
-                    href="/" // TODO: Add url to lastes??
-                    className="w-[30px] h-[30px] rounded-full border border-[#9b9a9b]/60 flex justify-center items-center hover:bg-slate-50 active:bg-slate-200"
-                  >
-                    <ArrowUpRightIcon className="size-[0.7rem]" />
-                  </a>
-                </div>
-                <div className="h-fit bg-[#efeff4] mt-3">
-                  <Table columns={columnDataTest} data={bodyDataTest} />
-                </div>
+          <div className="w-3/4 flex gap-3 flex-col">
+            {/* cards div  */}
+            <div className="flex w-full gap-3">
+              <div className="w-[50%]">
+                <SeabrickNFTCard />
+              </div>
+              <div className="w-[50%]">
+                <ClaimNFTCard />
               </div>
             </div>
-            {/* tables div  flex w-full h-full gap-3 min-w-fit */}
-            <div className="flex h-full flex-col gap-3">
-              <ClaimNFTCard />
-              <div className="bg-white rounded-[10px] h-full">
+            {/* tables div */}
+            <div className="flex w-full h-full gap-3 min-w-fit">
+              <div className="bg-white rounded-[10px] h-full  w-[50%]">
                 <div className="px-6 h-[4.5rem] mb-[-1rem] justify-between items-center flex">
                   <div className="text-black text-[17px] font-normal">
                     Latest Buys
@@ -222,7 +210,31 @@ export default function Dashboard() {
                   </a>
                 </div>
                 <div className="h-fit bg-[#efeff4] mt-3">
-                  <Table columns={columnDataTest} data={bodyDataTest} />
+                  <Table
+                    columns={columnDataTest}
+                    data={bodyDataTest}
+                    fontSize="0.6rem"
+                  />
+                </div>
+              </div>
+              <div className="bg-white rounded-[10px] h-full w-[50%]">
+                <div className="px-6 h-[4.5rem] mb-[-1rem] justify-between items-center flex">
+                  <div className="text-black text-[17px] font-normal">
+                    Latest Buys
+                  </div>
+                  <a
+                    href="/" // TODO: Add url to lastes??
+                    className="w-[30px] h-[30px] rounded-full border border-[#9b9a9b]/60 flex justify-center items-center hover:bg-slate-50 active:bg-slate-200"
+                  >
+                    <ArrowUpRightIcon className="size-[0.7rem]" />
+                  </a>
+                </div>
+                <div className="h-fit bg-[#efeff4] mt-3">
+                  <Table
+                    columns={columnDataTest}
+                    data={bodyDataTest}
+                    fontSize="0.6rem"
+                  />
                 </div>
               </div>
             </div>

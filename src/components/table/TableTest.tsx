@@ -17,19 +17,21 @@ export function truncateString(str: string) {
 function Table({
   columns,
   data,
+  fontSize = "sm",
 }: {
   columns: TableColumn[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: { [s: string]: any }[]
+  fontSize?: string
 }) {
   return (
     <div className="overflow-auto w-full rounded-t-[10px]">
-      <table className="w-full min-w-[500px] bg-white gap-2.5 table-fixed">
+      <table className="w-full min-w-[450px] bg-white gap-2.5 table-fixed">
         <thead className="w-full bg-[#efeff4] gap-5">
           <tr className="w-full table-row">
             {columns.map((column) => (
               <th
-                className="text-black w-full text-justify text-[0.6rem]  font-normal font-['Noto Sans'] table-cell p-4"
+                className={`text-black w-full text-justify text-[${fontSize}]  font-normal font-['Noto Sans'] table-cell p-3`}
                 key={column.key}
               >
                 {column.label}
@@ -58,7 +60,7 @@ function Table({
                 }
                 return (
                   <td
-                    className="text-black w-full text-justify text-[0.6rem] font-normal font-['Noto Sans'] table-cell p-3 inline-flex"
+                    className={`text-black w-full text-justify text-[${fontSize}] font-normal font-['Noto Sans'] table-cell p-3 inline-flex`}
                     key={column.key}
                   >
                     <div className="inline-flex">
