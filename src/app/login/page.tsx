@@ -14,6 +14,7 @@ import Image from "next/image";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import Link from "next/link";
 import SubmitButton from "@/components/buttons/SubmitButton";
+import { isEmpty } from "lodash";
 
 // TODO: Add captchas
 
@@ -253,7 +254,9 @@ export default function LoginPage() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors>({});
+  const { refetch: authRefetch } = useAuth();
 
   useEffect(() => {
     if (window.ethereum) {
@@ -265,20 +268,21 @@ export default function LoginPage() {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  async function loginFormAction(formData: FormData) {
     const newErrors: Errors = {};
-
     if (!email) newErrors.email = "Email is required";
     if (!password) newErrors.password = "Password is required";
 
-    setErrors(newErrors);
-
-    if (Object.keys(newErrors).length === 0) {
-      console.log("Form submitted:", { email, password });
-      // Aquí puedes enviar el formulario o hacer una llamada a la API
+    // if errors is NOT empty, somethins is missin. We do not try to login
+    if (!isEmpty(newErrors)) {
+      setErrors(newErrors);
+      return;
     }
-  };
+
+    // TODO: SHould use the return of the login to show different message
+    await login(formData);
+    await authRefetch();
+  }
 
   return (
     <>
@@ -291,7 +295,7 @@ export default function LoginPage() {
           height={414}
         />
         <form
-          onSubmit={handleSubmit}
+          action={loginFormAction}
           className="h-[339px] md:h-[447px] w-[350px] md:w-[606px] mt-[40px] md:mt-[180px] p-6 relative bg-white rounded-[10px] flex-col justify-start items-center gap-8 inline-flex z-10"
         >
           <div className="h-[74px] flex-col justify-center items-center gap-[5px] flex">
@@ -365,18 +369,12 @@ export default function LoginPage() {
 
             <div className="self-stretch h-[109px] flex-col justify-start items-center gap-4 flex">
               <div className="self-stretch h-[45px] justify-start items-start gap-4 inline-flex">
-                <button
-                  type="submit"
-                  className="grow shrink basis-0 self-stretch p-[17px] bg-[#2069a0] rounded-[5px] justify-center items-center gap-2.5 flex"
-                >
-                  <span className="text-right text-white text-sm font-normal font-['Noto Sans']">
-                    Log In
-                  </span>
-                </button>
+                <SubmitButton label="Log In" loadingLabel="Login..." />
+
                 {haveWallet && (
                   <button
                     type="button"
-                    className="grow shrink basis-0 h-[45px] p-[17px] bg-[#333333] rounded-[5px] justify-center items-center gap-2.5 flex"
+                    className="grow shrink basis-0 h-[45px] p-[17px] bg-[#333333] rounded-[5px] justify-center items-center gap-2.5 flex disabled:cursor-not-allowed disabled:bg-gray-400"
                   >
                     <span className="text-right text-white text-sm font-normal font-['Noto Sans']">
                       Connect using your Wallet
@@ -384,6 +382,7 @@ export default function LoginPage() {
                   </button>
                 )}
               </div>
+
               <div className="self-stretch justify-between items-center inline-flex">
                 <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">
                   Do you want to create an account?
