@@ -4,6 +4,8 @@ import SeabrickNFTCard from "@/components/cards/SeabrickNFTCard"
 import UserTransactionHistory, {
   UserTransactionHistoryData,
 } from "@/components/cards/UserTransactionsHistory"
+import ClaimTokens from "@/components/forms/ClaimTokens"
+import Modal from "@/components/modals/Modal"
 import Table from "@/components/table/TableTest"
 import {
   ArrowUpRightIcon,
@@ -21,6 +23,7 @@ export default function Dashboard() {
   // use state y toda esa paja
   const [isCardVisible, setIsCardVisible] = useState(false)
   const [dataOnDisplay, setDataOnDisplay] = useState("Transfers")
+  const [isClaimTokenVisible, setClaimTokenVisible] = useState(false)
   //
   const testDataMap: UserTransactionHistoryData[] = [
     {
@@ -178,6 +181,12 @@ export default function Dashboard() {
   })
   return (
     <>
+      <Modal open={isClaimTokenVisible} setOpen={setClaimTokenVisible}>
+        <ClaimTokens
+          open={isClaimTokenVisible}
+          setOpen={setClaimTokenVisible}
+        />
+      </Modal>
       <div className="w-full px-3">
         <div className="w-full justify-start items-center gap-2 inline-flex mb-4">
           {isAdmin ? (
@@ -306,7 +315,10 @@ export default function Dashboard() {
                       <UserIcon className="size-[1.25rem] inline mx-2 mt-[-3px]" />
                       Admins
                     </button>
-                    <button className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] text-[white] rounded-[5px] text-left">
+                    <button
+                      className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] text-[white] rounded-[5px] text-left"
+                      onClick={() => setClaimTokenVisible(true)}
+                    >
                       <CurrencyDollarIcon className="size-[1.25rem] inline mx-2 mt-[-3px]" />
                       Claim Earnings
                     </button>
