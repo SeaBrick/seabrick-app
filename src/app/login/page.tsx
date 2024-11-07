@@ -344,20 +344,20 @@ export default function LoginPage() {
           
             <div className="self-stretch h-[109px] flex-col justify-start items-center gap-4 flex">
               <div className="self-stretch h-[45px] justify-start items-start gap-4 inline-flex">
-                <button className="grow shrink basis-0 self-stretch p-[17px] bg-[#2069a0] rounded-[5px] justify-center items-center gap-2.5 flex">
+                <button type="submit" className="grow shrink basis-0 self-stretch p-[17px] bg-[#2069a0] rounded-[5px] justify-center items-center gap-2.5 flex">
                   <span className="text-right text-white text-sm font-normal font-['Noto Sans']">Log In</span>
                 </button>                
-                <button className="grow shrink basis-0 h-[45px] p-[17px] bg-[#333333] rounded-[5px] justify-center items-center gap-2.5 flex">
+                <button type="submit" className="grow shrink basis-0 h-[45px] p-[17px] bg-[#333333] rounded-[5px] justify-center items-center gap-2.5 flex">
                   <span className="text-right text-white text-sm font-normal font-['Noto Sans']">Connect using your Wallet</span>
                 </button>
               </div>
               <div className="self-stretch justify-between items-center inline-flex">
                 <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">Do you want to create an account?</div>
-                <button className="text-[#333333] text-xs font-bold font-['Noto Sans']">Register</button>
+                <button type="button" className="text-[#333333] text-xs font-bold font-['Noto Sans']">Register</button>
               </div>
                 <div className="self-stretch justify-between items-center inline-flex">
                   <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">Forgot your password?</div>
-                  <button className="text-[#333333] text-xs font-bold font-['Noto Sans']">Reset Password</button>
+                  <button type="button" className="text-[#333333] text-xs font-bold font-['Noto Sans']">Reset Password</button>
                 </div>
               </div>
             </div>          
