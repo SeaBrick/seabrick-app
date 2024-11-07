@@ -41,7 +41,7 @@ export function Navbar() {
   return (
 
     <header className="z-10 w-full h-[70px] py-0 px-[30px] mb-1 flex justify-between items-center shrink-0 bg-white shadow-2md">
-      <div className="flex h-[70px] items-center justify-between w-full mx-auto shrink-0">
+      <div className="flex h-[70px] max-w-[1920px] items-center justify-between w-full mx-auto shrink-0">
         <div className="flex h-[70px] items-center justify-between w-6/12 mx-auto shrink-0">
           <SeabrickSVG />
         </div>
