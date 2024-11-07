@@ -37,7 +37,7 @@ export async function login(formData: FormData) {
   // TODO: Should return something to know if was success or no
   if (error) {
     console.error("Login error: ", error);
-    redirect("/error");
+    return { error: error.code };
   }
 
   revalidatePath("/", "layout");
