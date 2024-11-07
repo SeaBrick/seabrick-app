@@ -244,8 +244,7 @@ function LoginWalletForm() {
 }
 
 interface Errors {
-  email?: string;
-  password?: string;
+  message?: string
 }
 
 export default function LoginPage() {
@@ -269,9 +268,10 @@ export default function LoginPage() {
 
   async function loginFormAction(formData: FormData) {
     const newErrors: Errors = {};
-    if (!email) newErrors.email = "Email is required";
-    if (!password) newErrors.password = "Password is required";
-
+    
+    if (!email){ newErrors.message = "Email is required";
+    }else if (!password) newErrors.message = "Password is required";
+    
     // if errors is NOT empty, somethins is missing. We do not try to login
     // Maube use a tostify here?
     if (!isEmpty(newErrors)) {
@@ -358,11 +358,7 @@ export default function LoginPage() {
                       )}
                     </button>
                   </div>
-                  {errors.password && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.password}
-                    </p>
-                  )}
+                  <p className="text-red-500 text-xs" >{errors.message}</p>
                 </div>
               </div>
             </div>
