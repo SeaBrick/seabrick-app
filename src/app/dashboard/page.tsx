@@ -4,7 +4,7 @@ import SeabrickNFTCard from "@/components/cards/SeabrickNFTCard"
 import UserTransactionHistory, {
   UserTransactionHistoryData,
 } from "@/components/cards/UserTransactionsHistory"
-import ClaimTokens from "@/components/forms/ClaimTokens"
+import ClaimTokens from "@/components/cards/ClaimTokens"
 import Modal from "@/components/modals/Modal"
 import Table from "@/components/table/TableTest"
 import {
@@ -53,7 +53,7 @@ export default function Dashboard() {
       amount: 208,
     },
   ]
-  const isAdmin = true
+  const isAdmin = false
   const loggedUserName = "Sebastian Rojas"
   const userName = loggedUserName
 
@@ -181,9 +181,13 @@ export default function Dashboard() {
   })
   return (
     <>
-      <Modal open={isClaimTokensOpen} setOpen={setClaimTokensOpen}>
-        <ClaimTokens open={isClaimTokensOpen} setOpen={setClaimTokensOpen} />
-      </Modal>
+      {isAdmin ? (
+        <Modal open={isClaimTokensOpen} setOpen={setClaimTokensOpen}>
+          <ClaimTokens open={isClaimTokensOpen} setOpen={setClaimTokensOpen} />
+        </Modal>
+      ) : (
+        ""
+      )}
       <div className="w-full px-3">
         <div className="w-full justify-start items-center gap-2 inline-flex mb-4">
           {isAdmin ? (

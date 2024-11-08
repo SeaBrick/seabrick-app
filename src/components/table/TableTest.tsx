@@ -1,4 +1,4 @@
-interface TableColumn {
+export interface TableColumn {
   key: string
   label: string
 }
@@ -17,7 +17,7 @@ export function truncateString(str: string) {
 function Table({
   columns,
   data,
-  fontSize = "sm",
+  fontSize = "0.75rem",
 }: {
   columns: TableColumn[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
