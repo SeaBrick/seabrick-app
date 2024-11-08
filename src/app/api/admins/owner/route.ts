@@ -62,20 +62,24 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { data: userAddress, error: errorUserAddress } = await supabaseClient
-    .rpc("get_user_address", {
-      user_id: dataUser.id,
-    })
-    .returns<string | null>();
+  // Query from `wallet_users`
+  const { data: queryData, error: queryError } = await supabaseClient
+    .from("wallet_users")
+    .select("address")
+    .eq("user_id", dataUser.id)
+    .single<{ address: string }>();
 
-  if (errorUserAddress) {
+  if (queryError) {
     console.error("Failed to get the User Address");
-    console.error(errorUserAddress);
+    console.error(queryError);
     return NextResponse.json(
-      { error: "Internal server error", details: errorUserAddress.message },
+      { error: "Internal server error", details: queryError.message },
       { status: 500 }
     );
   }
+
+  // Assign it to better readability
+  const userAddress = queryData.address;
 
   if (!userAddress) {
     return NextResponse.json(
