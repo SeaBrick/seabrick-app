@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/client";
 import type { Errors } from "@/lib/interfaces";
 import { loginWithWallet } from "@/app/login/actions";
 import { RpcRequestError, UserRejectedRequestError } from "viem";
+import Link from "next/link";
 
 // should be using modal
 // should open the modal and ask to connect wallet if not connected
@@ -108,6 +109,7 @@ const LoginWallet: React.FC<LoginWallet> = ({ open, setOpen }: LoginWallet) => {
           console.error(userError);
         }
         setIsRegistered(false);
+        showError("Wallet not registered");
       }
 
       if (!userError) {
@@ -124,7 +126,7 @@ const LoginWallet: React.FC<LoginWallet> = ({ open, setOpen }: LoginWallet) => {
 
   return (
     <Modal open={open} setOpen={setOpen}>
-      <div className="h-72 w-96 md:w-[550px] p-6 relative bg-white rounded-[10px] flex-col justify-start items-center gap-8 inline-flex z-10">
+      <div className="h-80 w-96 md:w-[550px] p-6 relative bg-white rounded-[10px] flex-col justify-start items-center gap-8 inline-flex z-10">
         <div className="h-[74px] flex-col justify-center items-center gap-[5px] flex">
           <div className="text-[#333333] text-[15px] font-normal font-['Noto Sans']">
             Wallet authentication
@@ -157,6 +159,15 @@ const LoginWallet: React.FC<LoginWallet> = ({ open, setOpen }: LoginWallet) => {
             />
           </form>
           <p className="text-red-500 text-xs">{errors.message}</p>
+          <div className="self-stretch justify-between items-center inline-flex w-3/4 mx-auto text-center">
+            <Link
+              href="/register?tab=wallet"
+              prefetch={true}
+              className="text-[#333333] text-sm font-bold font-['Noto Sans'] text-center mx-auto"
+            >
+              Create an account
+            </Link>
+          </div>
         </div>
       </div>
     </Modal>
