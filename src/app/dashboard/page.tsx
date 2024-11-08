@@ -11,7 +11,6 @@ import {
   ArrowUpRightIcon,
   ChevronDownIcon,
   CurrencyDollarIcon,
-  ArrowsRightLeftIcon,
   UserIcon,
   // Cog6ToothIcon,
   // ArrowsUpDownIcon,
@@ -19,6 +18,7 @@ import {
 } from "@heroicons/react/24/outline"
 import Image from "next/image"
 import { useState } from "react"
+import ModalTransferOwnership from "@/components/modals/ModalTransferOwnership"
 export default function Dashboard() {
   // use state y toda esa paja
   const [isCardVisible, setIsCardVisible] = useState(false)
@@ -308,10 +308,7 @@ export default function Dashboard() {
               <div className="lg:w-[50%] w-full min-h-[10rem] gap-2 flex flex-col">
                 {isAdmin ? (
                   <div className="bg-white w-full h-full rounded-[10px] gap-3 p-4 flex flex-col justify-between">
-                    <button className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-left">
-                      <ArrowsRightLeftIcon className="size-[1.25rem] inline mx-2 mt-[-3px]" />
-                      Transfer Ownership
-                    </button>
+                    <ModalTransferOwnership/>
                     <button className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-left">
                       <UserIcon className="size-[1.25rem] inline mx-2 mt-[-3px]" />
                       Admins
