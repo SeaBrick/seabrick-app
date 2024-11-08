@@ -1,6 +1,40 @@
 import React, { useState } from 'react';
+import { useAuth } from "@/context/authContext";
+import { isEmpty } from "lodash";
+
+interface Errors {
+    message?: string
+}
 
 const ResetPasswordForm: React.FC = () => {
+
+const [email, setEmail] = useState<string>("");
+const { refetch: authRefetch } = useAuth();
+const [errors, setErrors] = useState<Errors>({});
+
+
+async function loginFormAction(formData: FormData) {
+    const newErrors: Errors = {};
+    
+    if (!email) newErrors.message = "Email is required";
+    
+
+    if (!isEmpty(newErrors)) {
+        setErrors(newErrors);
+        return;
+    }
+
+    
+    await authRefetch();
+  }
+
+  const handleSendLink = () => {
+    if (!email) {
+      setErrors((prevErrors) => ({ ...prevErrors, email: "Email is required" }));
+      return;
+    }
+}
+
 
 
     return(
@@ -18,18 +52,31 @@ const ResetPasswordForm: React.FC = () => {
                 className="text-[#333333] text-xs font-normal font-['Noto Sans']"
                 >
                     Email
-                </label>
-                <div className="self-stretch h-11 px-[15px] py-2.5 bg-[#efeff4]/60 rounded-[5px] border border-[#babcc3]/60 justify-start items-center gap-2.5 inline-flex">
-                    <div className="text-[#8a8a8f] text-sm font-normal font-['Noto Sans']">Enter your email</div>
-                </div>
+                </label>                
+                <input
+                id="email"
+                name="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="self-stretch h-11 px-[15px] py-2.5 bg-[#efeff4]/60 rounded-[5px] border border-[#babcc3]/60 text-[#8a8a8f] text-sm font-normal font-['Noto Sans'] placeholder-gray-500"
+                />                
             </div>
             <div className="self-stretch h-[45px] flex-col justify-start items-center gap-4 flex">
                 <div className="self-stretch justify-start items-center gap-2 inline-flex">
                     <div className="grow shrink basis-0 h-[45px] justify-start items-center gap-2 flex">
-                        <div className="grow shrink basis-0 h-[45px] p-[17px] bg-[#2069a0] rounded-[5px] justify-center items-center gap-2.5 flex">
-                            <div className="text-right text-white text-sm font-normal font-['Noto Sans']">Send Link</div>
-                        </div>
+                    <button
+                    type="button"
+                    onClick={handleSendLink}
+                    className="grow shrink basis-0 h-[45px] p-[17px] bg-[#2069a0] rounded-[5px] justify-center items-center gap-2.5 flex"
+                    >
+                        <span className="text-right text-white text-sm font-normal font-['Noto Sans']">
+                            Send Link
+                        </span>
+                    </button>
                     </div>
+                    <p className="text-red-500 text-xs" >{errors.message}</p>
                 </div>
             </div>
         </div>
