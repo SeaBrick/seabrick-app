@@ -1,15 +1,17 @@
 "use client";
-import { useAuth } from "@/context/authContext";
+import { UserRejectedRequestError } from "viem";
 import { useAccount, useSignMessage } from "wagmi";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/context/authContext";
+import { createClient } from "@/lib/supabase/client";
+import { loginWithWallet } from "@/app/login/actions";
 import Modal from "@/components/modals/Modal";
-import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import ConnectButton from "@/components/buttons/ConnectButton";
 import SubmitButton from "@/components/buttons/SubmitButton";
-import { createClient } from "@/lib/supabase/client";
-import type { Errors } from "@/lib/interfaces";
-import { loginWithWallet } from "@/app/login/actions";
-import { UserRejectedRequestError } from "viem";
 import Link from "next/link";
+
+import type { Dispatch, SetStateAction } from "react";
+import type { Errors } from "@/lib/interfaces";
 
 interface LoginWallet {
   open: boolean;
