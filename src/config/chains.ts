@@ -1,5 +1,5 @@
 import { type Chain, http } from "viem";
-import { arbitrumSepolia } from "wagmi/chains";
+import { arbitrum, arbitrumSepolia } from "wagmi/chains";
 
 // TODO: Use this to generate the chains and transports correctly.
 // `appChains` should just one length, like [arbitrumSepolia] or [arbitrum]
@@ -11,15 +11,23 @@ const chainEnv = process.env.NEXT_PUBLIC_CHAIN?.toLowerCase();
 export const definedChain: "arbitrum" | "testnet" =
   chainEnv === "arbitrum" || chainEnv === "testnet" ? chainEnv : "testnet";
 
-export const appChains: [Chain, ...Chain[]] = [arbitrumSepolia];
+export const appChains: [Chain, ...Chain[]] =
+  definedChain == "arbitrum" ? [arbitrum] : [arbitrumSepolia];
 
-// RPC URL for each chain
-// Example: `https://eth-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID}`
-export const appTransports = {
-  // If we have an env `ARBITRUM_SEPOLIA_RPC_URL`, we use it. Otherwise, we use the defaul
+const arbitrumTransport = {
+  [arbitrum.id]: http(
+    process.env.ARBITRUM_RPC_URL ?? arbitrum.rpcUrls.default.http[0]
+  ),
+};
+
+const arbitrumSepoliaTransport = {
   [arbitrumSepolia.id]: http(
     process.env.ARBITRUM_SEPOLIA_RPC_URL ??
       arbitrumSepolia.rpcUrls.default.http[0]
   ),
 };
-    
+
+// RPC URL for each chain
+// Example: `https://eth-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID}`
+export const appTransports =
+  definedChain == "arbitrum" ? arbitrumTransport : arbitrumSepoliaTransport;
