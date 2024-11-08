@@ -110,17 +110,44 @@ export async function loginWithWallet(formData: FormData) {
 
   const { data: queryData, error: queryError } = await supabase
     .from("wallet_users")
-    .select("email")
+    .select("user_id")
     .eq("address", address.toLowerCase())
-    .single<{ email: string }>();
+    .single<{ user_id: string }>();
 
   if (queryError || !queryData) {
     console.log("Query error at sign in wallet: ", queryError);
     return { error: "User not found" };
   }
 
+  const { data: userData, error: userError } = await createClient(
+    true
+  ).auth.admin.getUserById(queryData.user_id);
+
+  if (userError) {
+    console.log("Query error at sign in wallet: ", queryError);
+    return { error: "User not found" };
+  }
+
+  const {
+    user: { email, user_metadata },
+  } = userData;
+
+  // If user type is not a user wallet, the user is trying to log with wallet
+  // instead of his email/password
+  if (user_metadata.type !== "wallet") {
+    return { error: "You should login with your email" };
+  }
+
+  if (!email) {
+    console.log(
+      "Big error, the user user do not have an email. ID: ",
+      queryData.user_id
+    );
+    return { error: "Internal server error" };
+  }
+
   const loginResp = await loginInternal(supabase, {
-    email: queryData.email,
+    email: email,
     password: await getUniquePassword(address),
   });
 
@@ -215,7 +242,6 @@ export async function signUpWithWallet(
       // captchaToken
       data: {
         type: "wallet",
-        address: address,
       },
       emailRedirectTo: redirectUrl,
     },
