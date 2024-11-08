@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import { ModalDone } from "./ModalDone"
 import XMarkIcon from "@heroicons/react/24/outline/XMarkIcon"
 export function ModalConfirm({
@@ -29,16 +29,13 @@ export function ModalConfirm({
 }) {
   const [isOpenDone, setOpenDone] = useState(false)
   const [isSelfOpen, setSelfOpen] = useState(true)
-  useEffect(() => {
-    console.log(isSelfOpen)
-  })
   const handleConfirm = () => {
     onConfirm(true)
     setSelfOpen(false)
     setOpenDone(true)
   }
   const handleCancel = () => {
-    setSelfOpen(false)
+    setSelfOpen(true)
     openBack(true)
   }
   return (
@@ -46,7 +43,7 @@ export function ModalConfirm({
       {isOpenDone && (
         <ModalDone title={doneTitle} message={doneMessage} action={closeAll} />
       )}
-      {open && (
+      {isSelfOpen && (
         <div className="bg-white rounded-[10px] h-fit min-h-fit max-h-[70vh]  w-[40vw] min-w-[450px] p-6 gap-6 flex flex-col">
           <div className="flex gap-2 justify-between">
             <div className="flex flex-col text-left gap-2">
@@ -60,7 +57,7 @@ export function ModalConfirm({
             <div className="">
               <button
                 className="w-[35px] h-[35px] rounded-full border border-[#9b9a9b]/60 flex justify-center items-center hover:bg-slate-50 active:bg-slate-200"
-                onClick={() => closeAll(false)}
+                onClick={() => onCancel(false)}
               >
                 <XMarkIcon className="size-[1rem]" />
               </button>

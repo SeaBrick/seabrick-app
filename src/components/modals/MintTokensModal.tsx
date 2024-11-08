@@ -25,6 +25,11 @@ export function MintTokensModal({
     console.log("Confirm")
   }
 
+  const handleBack = () => {
+    setSelfOpen(true)
+    setConfirmOpen(false)
+  }
+
   const handleConfirm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const validationError = validateEmail(email)
@@ -57,12 +62,12 @@ export function MintTokensModal({
           confirmMessage={"Yes, I want to mint it"}
           doneMessage={`Your succesfuly minted ${quantity} tokens to ${email}`}
           doneTitle={"Tokens Minted"}
-          onCancel={printCancel}
+          onCancel={handleCancel}
           onConfirm={printConfirm}
           open={isConfirmOpen}
           setOpen={setConfirmOpen}
           closeAll={setOpen}
-          openBack={setSelfOpen}
+          openBack={handleBack}
         />
       )}
       {isSelfOpen && (
