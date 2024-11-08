@@ -148,7 +148,7 @@ export default function LoginPage() {
                       )}
                     </button>
                   </div>
-                  <p className="text-red-500 text-xs">{errors.message}</p>
+                  <p className="text-red-500 text-sm">{errors.message}</p>
                 </div>
               </div>
             </div>

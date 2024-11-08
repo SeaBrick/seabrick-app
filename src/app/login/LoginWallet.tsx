@@ -149,7 +149,7 @@ const LoginWallet: React.FC<LoginWallet> = ({ open, setOpen }: LoginWallet) => {
               buttonClass="w-1/2 h-[45px]"
             />
           </form>
-          <p className="text-red-500 text-xs">{errors.message}</p>
+          <p className="text-red-500 text-sm">{errors.message}</p>
           <div className="self-stretch justify-between items-center inline-flex w-3/4 mx-auto text-center">
             <Link
               href="/register?tab=wallet"
