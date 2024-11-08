@@ -1,11 +1,10 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import ResetPasswordForm from "@/components/forms/ResetPassword";
+import NewPasswordForm from "@/components/forms/NewPassword";
 
 
-
-export default function ResetPasswordPage() {
+export default function NewPasswordPage() {
   return( 
     <div className="w-full h-[80vh] md:h-screen relative bg-[#f6f6f6] flex justify-center">
         <Image
@@ -15,8 +14,9 @@ export default function ResetPasswordPage() {
           width={1920}
           height={414}
         />
-        <div className="flex flex-col z-10">          
-          <ResetPasswordForm/>  
+        <div className="flex flex-col z-10">        
+                    
+          <NewPasswordForm/>
         </div>
     </div>
     );
