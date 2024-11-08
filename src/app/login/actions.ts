@@ -3,14 +3,14 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { Address, Hex, isHex } from "viem";
+import { Address, Hex } from "viem";
 import type {
   SignUpWithPasswordCredentials,
   SignInWithPasswordCredentials,
   SupabaseClient,
 } from "@supabase/supabase-js";
 import { headers } from "next/headers";
-import { checkAddress, getUrl } from "@/lib/utils";
+import { getUrl } from "@/lib/utils";
 import {
   deleteNonceSession,
   getNonceSession,
@@ -20,7 +20,7 @@ import {
 import { userLoginSchema, userLoginWalletSchema } from "@/lib/zod";
 
 async function loginInternal(
-  supabaseClient: SupabaseClient<any, "public", any>,
+  supabaseClient: SupabaseClient<never, "public", never>,
   data: SignInWithPasswordCredentials
 ) {
   const { error } = await supabaseClient.auth.signInWithPassword(data);
