@@ -3,5 +3,5 @@
 import { ConnectKitButton } from "connectkit";
 
 export default function ConnectButton() {
-  return <ConnectKitButton />;
+  return <ConnectKitButton theme="midnight" />;
 }
