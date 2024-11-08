@@ -1,5 +1,6 @@
 import { XCircleIcon } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
+import SubmitButton from '../buttons/SubmitButton';
 
 interface ModalProps {
   isOpen: boolean;
@@ -64,14 +65,14 @@ const ModalEmail: React.FC<ModalEmailProps> = ({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <XCircleIcon className='h-9 w-9 text-[#9b9b9b] hover:text-[#333] duration-300 hover:cursor-pointer absolute top-6 right-6' onClick={onClose}/>
+      <XCircleIcon className='h-9 w-9 text-[#9b9b9b] hover:text-text-gray duration-300 hover:cursor-pointer absolute top-6 right-6' onClick={onClose}/>
       <form onSubmit={handleConfirm} className='flex flex-col gap-y-4 w-full'>
         <div className="flex flex-col items-start gap-y-4 w-[40rem]">
-          <h3 className="text-[#333] text-4xl ">Add Admin</h3>
+          <h3 className="text-text-gray text-4xl ">Add Admin</h3>
           <p className="text-gray-800 text-start">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Non maxime sapiente aspernatur nostrum! Eos voluptatum saepe rem quod, similique ducimus obcaecati aliquid, ipsa incidunt debitis harum est corrupti modi sequi!</p>
         </div>
         <div className='flex flex-col gap-y-4 w-full'>
-          <label htmlFor="email" className="text-[#333] text-sm font-normal font-['Noto Sans'] text-start">
+          <label htmlFor="email" className="text-text-gray text-sm font-normal font-['Noto Sans'] text-start">
             Email
           </label>
           <input
@@ -87,13 +88,13 @@ const ModalEmail: React.FC<ModalEmailProps> = ({
         <div className="mt-4 flex justify-end gap-4">
           <button
             onClick={onClose}
-            className="text-[#333] text-sm p-[17px] bg-[#efeff4] rounded-[5px]"
+            className="text-text-gray text-sm p-[17px] bg-[#efeff4] hover:bg-[#ccccd1] rounded-[5px]"
           >
             Cancel
           </button>
           <button
             type='submit'
-            className="text-white text-sm p-[17px] bg-[#333333] rounded-[5px]"
+            className="text-white text-sm p-[17px] bg-text-gray hover:bg-text-gray/90 rounded-[5px]"
           >
             Confirm
           </button>
@@ -126,26 +127,27 @@ const ModalConfirmation: React.FC<ModalConfirmationProps> = ({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <XCircleIcon className='h-9 w-9 text-[#9b9b9b] hover:text-[#333] duration-300 hover:cursor-pointer absolute top-6 right-6' onClick={onClose}/>
+      <XCircleIcon className='h-9 w-9 text-[#9b9b9b] hover:text-text-gray duration-300 hover:cursor-pointer absolute top-6 right-6' onClick={onClose}/>
       <form onSubmit={handleSubmit} className='flex flex-col gap-y-4 w-full'>
         <div className="flex flex-col items-start gap-y-4 w-[40rem]">
-          <h3 className="text-[#333] text-4xl ">Confirm your Action</h3>
+          <h3 className="text-text-gray text-4xl ">Confirm your Action</h3>
           <p className="text-[#8A8A8F] text-sm">Are you sure you want to transfer your contract ownership to <b>{email}</b></p>
         </div>
         <div className="flex justify-end gap-4 w-full mt-4">
           <button
             type="button"
             onClick={onBack}
-            className="text-[#333] text-sm p-[17px] bg-[#efeff4] rounded-[5px]"
+            className="text-text-gray text-sm p-[17px] bg-[#efeff4] hover:bg-[#ccccd1] rounded-[5px]"
           >
             No, I want to go back
           </button>
-          <button
-            type="submit"
-            className="text-white text-sm p-[17px] bg-[#333333] rounded-[5px]"
-          >
-            Yes, I want to transfer the contract ownership
-          </button>
+
+          <SubmitButton
+              label="Yes, I want to transfer the contract ownership"
+              loadingLabel="Login..."
+              buttonClass="text-white text-sm p-[17px] bg-text-gray hover:bg-text-gray/90 rounded-[5px] max-w-fit"
+            />
+
         </div>
       </form>
     </Modal>
@@ -163,14 +165,14 @@ const ModalSuccess: React.FC<ModalSuccessProps> = ({
 }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <XCircleIcon className='h-9 w-9 text-[#9b9b9b] hover:text-[#333] duration-300 hover:cursor-pointer absolute top-6 right-6' onClick={onClose}/>
+      <XCircleIcon className='h-9 w-9 text-[#9b9b9b] hover:text-text-gray duration-300 hover:cursor-pointer absolute top-6 right-6' onClick={onClose}/>
       <div className="flex flex-col gap-y-4 w-[40rem]">
-        <h3 className="text-[#333] text-4xl ">Confirmed</h3>
+        <h3 className="text-text-gray text-4xl ">Confirmed</h3>
         <p className="text-[#8A8A8F] text-sm">Your contract ownership was succesfuly transferred to 12bPP5EcMM6NtYvFESdGdJ34trTVN4Cr7T</p>
         <div className="flex justify-end gap-4 w-full mt-4">
           <button
             onClick={onClose}
-            className="text-white text-sm p-[17px] bg-[#333333] rounded-[5px]"
+            className="text-white text-sm p-[17px] bg-text-gray hover:bg-text-gray/90 rounded-[5px]"
           >
             Done
           </button>
@@ -210,7 +212,7 @@ const App: React.FC = () => {
 
   return (
     <div>
-      <button className="text-white text-xs font-normal font-['Noto Sans'] p-[17px] bg-[#333] hover:bg-[#222] rounded-[5px]" onClick={() => setShowEmailModal(true)}>
+      <button className="text-white text-xs font-normal font-['Noto Sans'] p-[17px] bg-text-gray hover:bg-text-gray/90 hover:bg-[#222] rounded-[5px]" onClick={() => setShowEmailModal(true)}>
         Add Admins
       </button>
 

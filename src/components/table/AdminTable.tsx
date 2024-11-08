@@ -1,8 +1,12 @@
 
 "use client";
+import { useState } from "react";
 import Modal from "@/components/modals/Modal-add";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import TextCopier from "../TextCopier"
+import ModalDelete from "../modals/Modal"
+import Container from "../utils/Container";
+import SubmitButton from "../buttons/SubmitButton";
 
 
 
@@ -20,7 +24,11 @@ function truncateString(str: string) {
 }
 
 function AdminTable ({ columns, data }: { columns: TableColumn[]; data: any[] }) {
-
+  const [open, setOpen] = useState(false);
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setOpen(false);
+  };
   return (
     <div className="w-full max-w-[978px] p-6 bg-white rounded-[10px] flex-col justify-start items-center gap-4 flex mx-auto">
       <div className="flex justify-between items-center w-full">
@@ -32,7 +40,7 @@ function AdminTable ({ columns, data }: { columns: TableColumn[]; data: any[] })
           <tr className=" h-12 px-6 py-4 bg-[#efeff4] items-start gap-5 flex">
             {columns.map((column) => (
               <th
-                className="text-[#333333] max-w-[173px] lg:max-w-[243px] w-full text-xs font-normal font-['Noto Sans'] text-start"
+                className="text-text-gray max-w-[173px] lg:max-w-[243px] w-full text-xs font-normal font-['Noto Sans'] text-start"
                 key={column.key}
               >
                 {column.label}
@@ -67,7 +75,7 @@ function AdminTable ({ columns, data }: { columns: TableColumn[]; data: any[] })
                 
               })}
               <td >
-                <button className="text-[#333] text-xs font-normal font-['Noto Sans'] h-[30px] px-4 py-[17px] bg-[#333333] rounded-[5px] justify-start items-center flex gap-1.5">
+                <button className="text-[#333] text-xs font-normal font-['Noto Sans'] h-[30px] px-4 py-[17px] bg-text-gray rounded-[5px] justify-start items-center flex gap-1.5 hover:bg-text-gray/90" onClick={() => setOpen(true)}>
                   <TrashIcon className="h-4 w-4 text-white"/>
                   <span className="text-white text-xs font-normal font-['Noto Sans']">Delete</span>
                 </button>
@@ -76,6 +84,27 @@ function AdminTable ({ columns, data }: { columns: TableColumn[]; data: any[] })
         ))}
         </tbody>
       </table>
+      <ModalDelete open={open} setOpen={setOpen}>
+        <Container>
+          <form onSubmit={handleSubmit} className="flex flex-col items-start gap-y-4 w-[40rem] p-6">
+            <h3 className="text-text-gray text-4xl ">Delete</h3>
+            <p className="text-[#8A8A8F] text-sm">Are you sure you want to delete this Admin?</p>
+            <div className="flex justify-end gap-4 w-full mt-4">
+              <button
+                onClick={() => setOpen(false)}
+                className="text-text-gray text-sm p-[17px] bg-[#efeff4] hover:bg-[#ccccd1] rounded-[5px]"
+              >
+                Cancel
+              </button>
+              <SubmitButton
+              label="Delete"
+              loadingLabel="Login..."
+              buttonClass="text-white text-sm p-[17px] bg-text-gray hover:bg-text-gray/90 rounded-[5px] max-w-fit"
+              />
+            </div>
+          </form>
+        </Container>
+      </ModalDelete>
     </div>
   );
 }

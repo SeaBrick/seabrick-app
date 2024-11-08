@@ -1,8 +1,6 @@
 import AdminTable from "@/components/table/AdminTable";
 
 
-
-
 const App: React.FC = () => {
   return (
     <div>
