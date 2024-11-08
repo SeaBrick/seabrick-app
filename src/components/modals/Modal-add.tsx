@@ -89,6 +89,7 @@ const ModalEmail: React.FC<ModalEmailProps> = ({
           <button
             onClick={onClose}
             className="text-text-gray text-sm p-[17px] bg-[#efeff4] hover:bg-[#ccccd1] rounded-[5px]"
+            type='button'
           >
             Cancel
           </button>
