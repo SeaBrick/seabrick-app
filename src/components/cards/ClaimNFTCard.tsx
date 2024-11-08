@@ -1,6 +1,7 @@
 "use client"
 import { useState } from "react"
 import Modal from "../modals/Modal"
+import ClaimNFT from "./ClaimNFT"
 
 export default function ClaimNFTCard() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -11,7 +12,7 @@ export default function ClaimNFTCard() {
   return (
     <>
       <Modal open={showClaimModal} setOpen={setShowClaimModal}>
-        xd
+        <ClaimNFT open={showClaimModal} setOpen={setShowClaimModal} />
       </Modal>
       <div className="h-full w-full p-3 bg-gradient-to-b from-[#52b09f] to-[#005391] rounded-[10px] flex-col justify-between items-start inline-flex overflow-hidden">
         <div className="h-[] flex-col justify-start items-start gap-2 flex mb-[5px]">
