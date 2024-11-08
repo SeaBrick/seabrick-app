@@ -334,15 +334,3 @@ export default function LoginPage() {
             </div>
           </div>
         )} */
-
-const EmailForm: React.FC = () => {
-  const { user } = useAuth();
-
-  return <div>{user && <>Use Email!</>}</div>;
-};
-
-const WalletForm: React.FC = () => {
-  const { user } = useAuth();
-
-  return <div>{user && <>Use Wallet!</>}</div>;
-};
