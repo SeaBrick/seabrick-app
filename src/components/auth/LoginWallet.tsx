@@ -6,6 +6,9 @@ import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import ConnectButton from "../buttons/ConnectButton";
 import SubmitButton from "../buttons/SubmitButton";
 import { createClient } from "@/lib/supabase/client";
+import type { Errors } from "@/lib/interfaces";
+import { loginWithWallet } from "@/app/login/actions";
+import { RpcRequestError, UserRejectedRequestError } from "viem";
 
 // should be using modal
 // should open the modal and ask to connect wallet if not connected
@@ -26,9 +29,72 @@ interface LoginWallet {
 const LoginWallet: React.FC<LoginWallet> = ({ open, setOpen }: LoginWallet) => {
   const { address, isConnected } = useAccount();
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
+  const [errors, setErrors] = useState<Errors>({});
 
   const { signMessageAsync } = useSignMessage();
-  const { refetch } = useAuth();
+  const { refetch: authRefetch } = useAuth();
+
+  async function loginWalletFormAction(formData: FormData) {
+    const newErrors: Errors = {};
+
+    const address = formData.get("address")?.toString();
+    if (!address) {
+      newErrors.message = "No address to log in";
+      setErrors(newErrors);
+      return;
+    }
+
+    const params = new URLSearchParams({ address });
+    const response = await fetch(`/api/request_message?${params}`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      newErrors.message = "Failed to generate message to sign";
+      return;
+    }
+
+    // Since the response is ok, we safely get the message
+    const messageGenerated = (await response.json()).message;
+
+    try {
+      // Ask the user to sign the message
+      const messageSigned = await signMessageAsync({
+        message: messageGenerated,
+      });
+
+      // Store signed message in formData
+      formData.set("signature", messageSigned);
+    } catch (error) {
+      // If some error happened, we cancel the submission
+      let errorMessage = "Unknown error found";
+
+      if (error instanceof UserRejectedRequestError) {
+        errorMessage = "User rejected the request";
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      } else {
+        console.log(error);
+      }
+
+      newErrors.message = errorMessage;
+      return;
+    }
+
+    // Send to the action
+    const resp = await loginWithWallet(formData);
+
+    if (resp && resp.error) {
+      console.log("ressss");
+      console.log(resp);
+      newErrors.message = resp.error;
+      setErrors(newErrors);
+      return;
+    }
+
+    // Refetch the user
+    await authRefetch();
+  }
 
   useEffect(() => {
     async function isAddressAccount() {
@@ -37,8 +103,6 @@ const LoginWallet: React.FC<LoginWallet> = ({ open, setOpen }: LoginWallet) => {
         .select("address")
         .eq("address", address?.toLowerCase())
         .single();
-
-      console.log(userError);
 
       if (userError) {
         if (userError.code != "PGRST116") {
@@ -54,9 +118,7 @@ const LoginWallet: React.FC<LoginWallet> = ({ open, setOpen }: LoginWallet) => {
 
     if (isConnected && address) {
       isAddressAccount();
-    }
-
-    if (!isConnected) {
+    } else {
       setIsRegistered(false);
     }
   }, [isConnected, address]);
@@ -75,15 +137,7 @@ const LoginWallet: React.FC<LoginWallet> = ({ open, setOpen }: LoginWallet) => {
 
         <ConnectButton />
 
-        <form
-          className="w-full h-full"
-          action={async () => {
-            const delay = (ms: number) =>
-              new Promise((res) => setTimeout(res, ms));
-
-            await delay(5000);
-          }}
-        >
+        <form className="w-full h-full" action={loginWalletFormAction}>
           <input
             id="address"
             name="address"
