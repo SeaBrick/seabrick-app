@@ -9,16 +9,31 @@ import SubmitButton from "@/components/buttons/SubmitButton";
 import { isEmpty } from "lodash";
 import LoginWallet from "@/components/auth/LoginWallet";
 import { Errors } from "@/lib/interfaces";
+import { useSearchParams } from "next/navigation";
+import { TabsUserIndex } from "@/lib/utils/enums";
 
 // TODO: Add captchas
 export default function LoginPage() {
+  const { refetch: authRefetch } = useAuth();
   const [haveWallet, setHaveWallet] = useState<boolean>(false);
   const [loginWallet, setLoginWallet] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors>({});
-  const { refetch: authRefetch } = useAuth();
+
+  const searchParams = useSearchParams();
+  const tab = searchParams.get("tab");
+
+  useEffect(() => {
+    switch (tab) {
+      case "wallet":
+        setLoginWallet(true);
+        break;
+      default:
+        break;
+    }
+  }, [tab]);
 
   useEffect(() => {
     if (window.ethereum) {
