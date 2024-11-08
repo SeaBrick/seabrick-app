@@ -18,6 +18,7 @@ export default function ResetPasswordPage() {
           height={414}
         />
         <div className="flex flex-col z-10">
+          
           <ResetPasswordForm/>
           <CheckEmail/>
           <NewPasswordForm/>

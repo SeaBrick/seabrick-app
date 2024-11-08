@@ -30,7 +30,7 @@ async function loginFormAction(formData: FormData) {
 
   const handleSendLink = () => {
     if (!email) {
-      setErrors((prevErrors) => ({ ...prevErrors, email: "Email is required" }));
+      setErrors((newErrors) => ({ ...newErrors, email: "Email is required" }));
       return;
     }
 }
