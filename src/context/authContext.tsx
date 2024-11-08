@@ -7,9 +7,9 @@ import {
   useEffect,
   useState,
 } from "react";
-import { Session, SupabaseClient } from "@supabase/supabase-js";
+import { Session } from "@supabase/supabase-js";
 import { useAccountEffect } from "wagmi";
-import {
+import type {
   AuthContextAuthenticated,
   AuthContextUnauthenticated,
   UserRole,

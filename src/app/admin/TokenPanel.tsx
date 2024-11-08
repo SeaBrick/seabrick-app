@@ -1,3 +1,4 @@
+"use client";
 import { useContractContext } from "@/context/contractContext";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { iSeabrickAbi } from "@/lib/contracts/abis";

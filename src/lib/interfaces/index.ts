@@ -1,4 +1,8 @@
-import { Address, Hex } from "viem";
+import type { Address, Hex } from "viem";
+
+export interface Errors {
+  message?: string;
+}
 
 export interface Aggregator {
   id: string;

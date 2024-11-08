@@ -9,7 +9,7 @@ export function decodeJWT<T>(
 }
 
 export async function getUserRole(
-  supabaseClient: SupabaseClient<any, "public", any>
+  supabaseClient: SupabaseClient<never, "public", never>
 ) {
   const { data } = await supabaseClient.auth.getSession();
   const session = data?.session;

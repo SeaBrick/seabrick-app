@@ -1,22 +1,24 @@
 "use server";
 
 import {
-  Address,
   createPublicClient,
   createWalletClient,
   custom,
-  defineChain,
   http,
   isHex,
   parseEventLogs,
-  PublicClient,
-  TransactionReceipt,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { iSeabrickAbi, iMarketAbi } from "@/lib/contracts/abis";
+import { iSeabrickAbi, iOwnershipAbi } from "@/lib/contracts/abis";
 import { addresses } from ".";
 import { createClient } from "../supabase/server";
-import { MintSeabrickResp, TransferSeabrickResp } from "../interfaces/api";
+import { appChains } from "@/config/chains";
+
+import type { Address, PublicClient, TransactionReceipt } from "viem";
+import type {
+  MintSeabrickResp,
+  TransferSeabrickResp,
+} from "@/lib/interfaces/api";
 
 // ERROR if this env is missing
 const wallet_server_key = process.env.WALLET_SERVER_KEY;
@@ -24,40 +26,10 @@ if (!wallet_server_key) {
   throw new Error("Missing WALLET_SERVER_KEY value");
 }
 
-// Defining arbitrum sepolia with custom rpc url
-const arbitrumSepolia = defineChain({
-  id: 421_614,
-  name: "Arbitrum Sepolia",
-  nativeCurrency: {
-    name: "Arbitrum Sepolia Ether",
-    symbol: "ETH",
-    decimals: 18,
-  },
-  rpcUrls: {
-    default: {
-      http: [process.env.ARBITRUM_SEPOLIA_RPC_URL!],
-    },
-  },
-  blockExplorers: {
-    default: {
-      name: "Arbiscan",
-      url: "https://sepolia.arbiscan.io",
-      apiUrl: "https://api-sepolia.arbiscan.io/api",
-    },
-  },
-  contracts: {
-    multicall3: {
-      address: "0xca11bde05977b3631167028862be2a173976ca11",
-      blockCreated: 81930,
-    },
-  },
-  testnet: true,
-});
-
 function getClient() {
   // Create an HTTP client for the desired chain
   return createPublicClient({
-    chain: arbitrumSepolia, // Use your desired chain, like mainnet or testnet
+    chain: appChains[0],
     transport: http(),
   });
 }
@@ -75,7 +47,7 @@ function getWalletServerAccount(client: PublicClient) {
 
   return createWalletClient({
     account,
-    chain: arbitrumSepolia,
+    chain: appChains[0],
     transport: custom(client),
   });
 }
@@ -195,23 +167,13 @@ export async function mintSeabrickTokens(
 export async function getContractsOwner(): Promise<Address> {
   const client = getClient();
 
-  const address1 = await client.readContract({
-    address: addresses.SeabrickNFT,
-    abi: iSeabrickAbi,
+  const ownerAddress = await client.readContract({
+    address: addresses.Ownership,
+    abi: iOwnershipAbi,
     functionName: "owner",
   });
 
-  const address2 = await client.readContract({
-    address: addresses.SeabrickMarket,
-    abi: iMarketAbi,
-    functionName: "owner",
-  });
-
-  if (address1.toLocaleLowerCase() !== address2.toLowerCase()) {
-    throw new Error("Mismatch owner between contracts");
-  }
-
-  return address1;
+  return ownerAddress;
 }
 
 export async function transferFromVault(

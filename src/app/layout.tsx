@@ -1,33 +1,26 @@
-import "./globals.css"
-import type { Metadata } from "next"
-// import { headers } from "next/headers";
-
-import { cookieToInitialState } from "wagmi"
-
-import { config } from "@/config"
-import AppKitProvider from "@/context"
-import { Navbar } from "@/components/layout/Navbar"
-import SplashScreen from "@/components/layout/SplashScreen"
-import { Footer } from "@/components/layout/Footer"
-import { ContractProvider } from "@/context/contractContext"
-import { AccountProvider } from "@/context/accountContext"
-import { AggregatorsProvider } from "@/context/aggregatorsContext"
-import { AuthProvider } from "@/context/authContext"
+import "./globals.css";
+import type { Metadata } from "next";
+import { Navbar } from "@/components/layout/Navbar";
+import SplashScreen from "@/components/layout/SplashScreen";
+import { Footer } from "@/components/layout/Footer";
+import { ContractProvider } from "@/context/contractContext";
+import { AccountProvider } from "@/context/accountContext";
+import { AggregatorsProvider } from "@/context/aggregatorsContext";
+import { AuthProvider } from "@/context/authContext";
+import { Web3Provider } from "@/config/Web3Provider";
 
 export const metadata: Metadata = {
-  title: "Seabrick Demo App",
-  description: "Seabrick Web Demo app",
-}
+  title: "Seabrick App",
+  description: "Seabrick Web app",
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
-  // const initialState = cookieToInitialState(config, headers().get("cookie"));
-  const initialState = cookieToInitialState(config)
   return (
-    <AppKitProvider initialState={initialState}>
+    <Web3Provider>
       <AuthProvider>
         <ContractProvider>
           <AggregatorsProvider>
@@ -45,6 +38,6 @@ export default function RootLayout({
           </AggregatorsProvider>
         </ContractProvider>
       </AuthProvider>
-    </AppKitProvider>
-  )
+    </Web3Provider>
+  );
 }

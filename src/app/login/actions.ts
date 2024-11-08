@@ -7,6 +7,7 @@ import { Address, Hex } from "viem";
 import type {
   SignUpWithPasswordCredentials,
   SignInWithPasswordCredentials,
+  SupabaseClient,
 } from "@supabase/supabase-js";
 import { headers } from "next/headers";
 import { getUrl } from "@/lib/utils";
@@ -16,30 +17,146 @@ import {
   getUniquePassword,
   verifySignature,
 } from "@/lib/utils/session";
+import { userLoginSchema, userLoginWalletSchema } from "@/lib/zod";
+
+async function loginInternal(
+  supabaseClient: SupabaseClient<never, "public", never>,
+  data: SignInWithPasswordCredentials
+) {
+  const { error } = await supabaseClient.auth.signInWithPassword(data);
+
+  if (error) {
+    if (error.code != "invalid_credentials") {
+      // Print to debug in other scenarios
+      console.error("Login error: ", error);
+      return { error: "Internal server error" };
+    }
+
+    return { error: "Invalid credentials" };
+  }
+}
 
 export async function login(formData: FormData) {
   const supabase = createClient();
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  // TODO: USe Zod to validate inputs
-  // TODO: Add captchas
-  const data: SignInWithPasswordCredentials = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
-    options: {
-      // captchaToken
-    },
-  };
+  // Validate the incoming data
+  const {
+    data: validationData,
+    success: validationSuccess,
+    error: validationError,
+  } = userLoginSchema.safeParse({
+    email: formData.get("email"),
+    password: formData.get("password"),
+  });
 
-  const { error } = await supabase.auth.signInWithPassword(data);
-
-  // TODO: Should return something to know if was success or no
-  if (error) {
-    console.error("Login error: ", error);
-    redirect("/error");
+  if (!validationSuccess) {
+    // Just return the first error encountered
+    return { error: validationError.errors[0].message };
   }
 
+  const loginResp = await loginInternal(supabase, {
+    email: validationData.email,
+    password: validationData.password,
+  });
+
+  // If we got response from loginInternal, an error happened
+  if (loginResp) {
+    return loginResp;
+  }
+
+  revalidatePath("/", "layout");
+  redirect("/");
+}
+
+export async function loginWithWallet(formData: FormData) {
+  // Create supabase client
+  const supabase = createClient();
+
+  // Validate the incoming data
+  const {
+    data: validationData,
+    success: validationSuccess,
+    error: validationError,
+  } = userLoginWalletSchema.safeParse({
+    address: formData.get("address"),
+    signature: formData.get("signature"),
+  });
+
+  if (!validationSuccess) {
+    // Just return the first error encountered
+    return { error: validationError.errors[0].message };
+  }
+
+  // Deconstruct the values for better readability
+  const { address, signature } = validationData;
+
+  // Get the nonce session
+  const nonceSession = await getNonceSession();
+  if (!nonceSession) {
+    return { error: "Nonce session not found" };
+  }
+
+  // Validating signature
+  const isValidSignature = await verifySignature(
+    address,
+    nonceSession,
+    signature
+  );
+
+  // Return error message if not valid signature
+  if (!isValidSignature) {
+    return { error: "Not valid signature" };
+  }
+
+  const { data: queryData, error: queryError } = await supabase
+    .from("wallet_users")
+    .select("user_id")
+    .eq("address", address.toLowerCase())
+    .single<{ user_id: string }>();
+
+  if (queryError || !queryData) {
+    console.log("Query error at sign in wallet: ", queryError);
+    return { error: "User not found" };
+  }
+
+  const { data: userData, error: userError } = await createClient(
+    true
+  ).auth.admin.getUserById(queryData.user_id);
+
+  if (userError) {
+    console.log("Query error at sign in wallet: ", queryError);
+    return { error: "User not found" };
+  }
+
+  const {
+    user: { email, user_metadata },
+  } = userData;
+
+  // If user type is not a user wallet, the user is trying to log with wallet
+  // instead of his email/password
+  if (user_metadata.type !== "wallet") {
+    return { error: "You should login with your email" };
+  }
+
+  if (!email) {
+    console.log(
+      "Big error, the user user do not have an email. ID: ",
+      queryData.user_id
+    );
+    return { error: "Internal server error" };
+  }
+
+  const loginResp = await loginInternal(supabase, {
+    email: email,
+    password: await getUniquePassword(address),
+  });
+
+  // If we got response from loginInternal, an error happened
+  if (loginResp) {
+    return loginResp;
+  }
+
+  deleteNonceSession();
   revalidatePath("/", "layout");
   redirect("/");
 }
@@ -54,7 +171,6 @@ export async function signup(formData: FormData) {
   // type-casting here for convenience
   // in practice, you should validate your inputs
   // TODO: USe Zod to validate inputs
-  // TODO: Add captchas
   const data: SignUpWithPasswordCredentials = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
@@ -119,7 +235,6 @@ export async function signUpWithWallet(
 
   // type-casting here for convenience
   // TODO: USe Zod to validate inputs
-  // TODO: Add captchas
   const data: SignUpWithPasswordCredentials = {
     email,
     password: await getUniquePassword(address as Address),
@@ -127,7 +242,6 @@ export async function signUpWithWallet(
       // captchaToken
       data: {
         type: "wallet",
-        address: address,
       },
       emailRedirectTo: redirectUrl,
     },
@@ -144,73 +258,4 @@ export async function signUpWithWallet(
   revalidatePath("/", "layout");
 
   return { message: `Email sent to your linked email. Ple1ase confirm it` };
-}
-
-export async function signinWithWallet(
-  currentState: { message: string },
-  formData: FormData
-) {
-  // Create supabase client
-  const supabase = createClient();
-
-  // type-casting here for convenience
-  // TODO: USe Zod to validate inputs
-  const address = formData.get("address")?.toString() as string;
-  const signature = formData.get("signature")?.toString() as string;
-
-  const nonceSession = await getNonceSession();
-
-  if (!nonceSession) {
-    return { message: "Nonce session not found" };
-  }
-
-  // Validating signature
-  const isValidSignature = await verifySignature(
-    address! as Address,
-    nonceSession,
-    signature! as Hex
-  );
-
-  // Return error message if not valid signature
-  if (!isValidSignature) {
-    return { message: "Not valid signature" };
-  }
-
-  const { data: queryData, error: queryError } = await supabase
-    .from("wallet_users")
-    .select("email")
-    .eq("address", address)
-    .single();
-
-  if (queryError || !queryData) {
-    console.log("Query error at sign in wallet: ", queryError);
-    return { message: "Wallet user not found" };
-  }
-
-  const email = queryData.email as string;
-
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  // TODO: USe Zod to validate inputs
-  // TODO: Add captchas
-  const data: SignInWithPasswordCredentials = {
-    email,
-    password: await getUniquePassword(address as Address),
-    options: {
-      // captchaToken
-    },
-  };
-
-  const { error: signInError } = await supabase.auth.signInWithPassword(data);
-
-  if (signInError) {
-    console.log(signInError);
-    return {
-      message: "It's not possible to sign in with the wallet at the moment",
-    };
-  }
-
-  deleteNonceSession();
-  revalidatePath("/", "layout");
-  redirect("/");
 }

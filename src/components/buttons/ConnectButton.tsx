@@ -1,4 +1,7 @@
 "use client";
+
+import { ConnectKitButton } from "connectkit";
+
 export default function ConnectButton() {
-  return <w3m-button />;
+  return <ConnectKitButton theme="midnight" />;
 }
