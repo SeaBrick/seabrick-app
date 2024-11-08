@@ -2,6 +2,7 @@ import AdminTable from "@/components/table/AdminTable";
 
 
 
+
 const App: React.FC = () => {
   return (
     <div>
@@ -9,7 +10,6 @@ const App: React.FC = () => {
         <span className="text-center text-[#666666] text-[17px] font-normal font-['Noto Sans']">Account</span>
         <h1 className="text-center text-black text-4xl font-normal">Admins</h1>
       </div>
-
       <AdminTable columns={[
             { key: "email", label: "Email" },
             { key: "address", label: "Address" },
@@ -19,7 +19,7 @@ const App: React.FC = () => {
             {
               "id": 1,
               "email": "admin1@example.com",
-              "address": "0x06383...ee629cfb",
+              "address": "0x06383sdgsdgsdgdsgjhfgkhukytrgggfdgdfgffdfgee629cfb",
               "date": "10/08/24 00:23:15"
             },
             {

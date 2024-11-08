@@ -1,6 +1,9 @@
 
+"use client";
+import Modal from "@/components/modals/Modal-add";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import TextCopier from "../TextCopier"
+
 
 
 interface TableColumn {
@@ -17,15 +20,14 @@ function truncateString(str: string) {
 }
 
 function AdminTable ({ columns, data }: { columns: TableColumn[]; data: any[] }) {
+
   return (
     <div className="w-full max-w-[978px] p-6 bg-white rounded-[10px] flex-col justify-start items-center gap-4 flex mx-auto">
       <div className="flex justify-between items-center w-full">
         <h3 className="text-[#49414d] text-xl font-bold">Admin List</h3>
-        <button className="text-white text-xs font-normal font-['Noto Sans'] p-[17px] bg-[#333] hover:bg-[#222] rounded-[5px] ">
-          Add Admins
-        </button>
+        <Modal />
       </div>
-      <table className="flex-col justify-start items-start gap-4 flex w-full">
+      <table className="flex-col justify-start items-start gap-4 flex w-full overflow-x-auto">
         <thead className='w-full '>
           <tr className=" h-12 px-6 py-4 bg-[#efeff4] items-start gap-5 flex">
             {columns.map((column) => (
