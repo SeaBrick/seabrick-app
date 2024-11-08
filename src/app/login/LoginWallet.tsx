@@ -115,6 +115,13 @@ const LoginWallet: React.FC<LoginWallet> = ({ open, setOpen }: LoginWallet) => {
     }
   }, [isConnected, address]);
 
+  useEffect(() => {
+    // Modal closed, we clean the errors
+    if (!open) {
+      showError({});
+    }
+  }, [open]);
+
   return (
     <Modal open={open} setOpen={setOpen}>
       <div className="h-80 w-96 md:w-[550px] p-6 relative bg-white rounded-[10px] flex-col justify-start items-center gap-8 inline-flex z-10">
