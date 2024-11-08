@@ -15,6 +15,7 @@ import Link from "next/link";
 import SubmitButton from "@/components/buttons/SubmitButton";
 import { isEmpty } from "lodash";
 import LoginWallet from "@/components/auth/LoginWallet";
+import { Errors } from "@/lib/interfaces";
 
 // TODO: Add captchas
 function LoginWalletForm() {
@@ -138,10 +139,6 @@ function LoginWalletForm() {
       </div>
     </>
   );
-}
-
-interface Errors {
-  message?: string;
 }
 
 export default function LoginPage() {
