@@ -40,7 +40,8 @@ const ModalEmail: React.FC<ModalEmailProps> = ({
 }) => {
   const [email, setEmail] = useState('');
 
-  const handleConfirm = () => {
+  const handleConfirm = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     onConfirm(email);
     onClose();
   };
@@ -48,38 +49,41 @@ const ModalEmail: React.FC<ModalEmailProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <XCircleIcon className='h-9 w-9 text-[#9b9b9b] hover:text-[#333] duration-300 hover:cursor-pointer absolute top-6 right-6' onClick={onClose}/>
-      <div className="flex flex-col items-start gap-y-4 w-[40rem]">
-        <h3 className="text-[#333] text-4xl ">Add Admin</h3>
-        <p className="text-gray-800 text-start">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Non maxime sapiente aspernatur nostrum! Eos voluptatum saepe rem quod, similique ducimus obcaecati aliquid, ipsa incidunt debitis harum est corrupti modi sequi!</p>
-      </div>
-      <div className='flex flex-col gap-y-4 w-full'>
-        <label htmlFor="email" className="text-[#333] text-sm font-normal font-['Noto Sans'] text-start">
-          Email
-        </label>
-        <input
-          name="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          type="email"
-          placeholder="Enter Email"
-          className="bg-gray-300 w-full py-2 px-4 rounded-md border border-[#8a8a8f] text-gray-800"
-        />
-      </div>
+      <form onSubmit={handleConfirm} className='flex flex-col gap-y-4 w-full'>
+        <div className="flex flex-col items-start gap-y-4 w-[40rem]">
+          <h3 className="text-[#333] text-4xl ">Add Admin</h3>
+          <p className="text-gray-800 text-start">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Non maxime sapiente aspernatur nostrum! Eos voluptatum saepe rem quod, similique ducimus obcaecati aliquid, ipsa incidunt debitis harum est corrupti modi sequi!</p>
+        </div>
+        <div className='flex flex-col gap-y-4 w-full'>
+          <label htmlFor="email" className="text-[#333] text-sm font-normal font-['Noto Sans'] text-start">
+            Email
+          </label>
+          <input
+            name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            type="email"
+            placeholder="Enter Email"
+            className="bg-gray-300 w-full py-2 px-4 rounded-md border border-[#8a8a8f] text-gray-800"
+            required
+          />
+        </div>
 
-      <div className="mt-4 flex justify-end gap-4">
-        <button
-          onClick={onClose}
-          className="text-[#333] text-sm p-[17px] bg-[#efeff4] rounded-[5px]"
-        >
-          Cancel
-        </button>
-        <button
-          onClick={handleConfirm}
-          className="text-white text-sm p-[17px] bg-[#333333] rounded-[5px]"
-        >
-          Confirm
-        </button>
-      </div>
+        <div className="mt-4 flex justify-end gap-4">
+          <button
+            onClick={onClose}
+            className="text-[#333] text-sm p-[17px] bg-[#efeff4] rounded-[5px]"
+          >
+            Cancel
+          </button>
+          <button
+            type='submit'
+            className="text-white text-sm p-[17px] bg-[#333333] rounded-[5px]"
+          >
+            Confirm
+          </button>
+        </div>
+      </form>
     </Modal>
   );
 };
