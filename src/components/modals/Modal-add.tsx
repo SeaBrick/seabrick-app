@@ -39,9 +39,25 @@ const ModalEmail: React.FC<ModalEmailProps> = ({
   onConfirm,
 }) => {
   const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email) || email.length <= 5) {
+      return 'Please enter a valid address*';
+    }
+    
+    return ''; 
+  };
 
   const handleConfirm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const validationError = validateEmail(email);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+    setError(''); 
     onConfirm(email);
     onClose();
   };
@@ -62,11 +78,10 @@ const ModalEmail: React.FC<ModalEmailProps> = ({
             name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            type="email"
             placeholder="Enter Email"
             className="bg-gray-300 w-full py-2 px-4 rounded-md border border-[#8a8a8f] text-gray-800"
-            required
           />
+          {error && <p className="text-[#ff0019] text-xs font-normal font-['Noto Sans']">{error}</p>} {/* error message */}
         </div>
 
         <div className="mt-4 flex justify-end gap-4">
