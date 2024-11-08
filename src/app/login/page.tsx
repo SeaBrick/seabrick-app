@@ -277,7 +277,7 @@ export default function LoginPage() {
                   <button
                     onClick={() => setLoginWallet(true)}
                     type="button"
-                    className="grow shrink basis-0 h-[45px] p-[17px] bg-[#333333] rounded-[5px] justify-center items-center gap-2.5 flex disabled:cursor-not-allowed disabled:bg-gray-400"
+                    className="grow shrink basis-0 h-[45px] p-[17px] bg-[#333333] hover:bg-[#333333]/80 rounded-[5px] justify-center items-center gap-2.5 flex disabled:cursor-not-allowed disabled:bg-gray-400"
                   >
                     <span className="text-right text-white text-sm font-normal font-['Noto Sans']">
                       Connect using your Wallet
