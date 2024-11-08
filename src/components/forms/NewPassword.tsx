@@ -46,7 +46,6 @@ const NewPasswordForm: React.FC = () => {
                                     <EyeIcon className="h-5 w-5 text-[#8a8a8f]" />
                                 )}
                                 </button>
-                                <div className="w-6 h-6 relative" />
                             </div>
                         </div>
                         <div className="self-stretch h-[68px] flex-col justify-center items-start gap-2 flex">
@@ -74,7 +73,6 @@ const NewPasswordForm: React.FC = () => {
                                     <EyeIcon className="h-5 w-5 text-[#8a8a8f]" />
                                 )}
                                 </button>
-                                <div className="w-6 h-6 relative" />
                             </div>
                         </div>
                     </div>
