@@ -34,13 +34,15 @@ const LoginWallet: React.FC<LoginWallet> = ({ open, setOpen }: LoginWallet) => {
   const { signMessageAsync } = useSignMessage();
   const { refetch: authRefetch } = useAuth();
 
-  async function loginWalletFormAction(formData: FormData) {
-    const newErrors: Errors = {};
+  function showError(value: string | Errors) {
+    // If value is string, we create te object
+    setErrors(typeof value == "string" ? { message: value } : value);
+  }
 
+  async function loginWalletFormAction(formData: FormData) {
     const address = formData.get("address")?.toString();
     if (!address) {
-      newErrors.message = "No address to log in";
-      setErrors(newErrors);
+      showError("No address to log in");
       return;
     }
 
@@ -50,7 +52,7 @@ const LoginWallet: React.FC<LoginWallet> = ({ open, setOpen }: LoginWallet) => {
     });
 
     if (!response.ok) {
-      newErrors.message = "Failed to generate message to sign";
+      showError("Failed to generate message to sign");
       return;
     }
 
@@ -77,7 +79,7 @@ const LoginWallet: React.FC<LoginWallet> = ({ open, setOpen }: LoginWallet) => {
         console.log(error);
       }
 
-      newErrors.message = errorMessage;
+      showError(errorMessage);
       return;
     }
 
@@ -85,10 +87,7 @@ const LoginWallet: React.FC<LoginWallet> = ({ open, setOpen }: LoginWallet) => {
     const resp = await loginWithWallet(formData);
 
     if (resp && resp.error) {
-      console.log("ressss");
-      console.log(resp);
-      newErrors.message = resp.error;
-      setErrors(newErrors);
+      showError(resp.error);
       return;
     }
 
@@ -125,7 +124,7 @@ const LoginWallet: React.FC<LoginWallet> = ({ open, setOpen }: LoginWallet) => {
 
   return (
     <Modal open={open} setOpen={setOpen}>
-      <div className="h-[339px] md:h-[447px] w-[370px] md:w-[636px] mt-[40px] md:mt-[180px] p-6 relative bg-white rounded-[10px] flex-col justify-start items-center gap-8 inline-flex z-10">
+      <div className="h-72 w-96 md:w-[550px] p-6 relative bg-white rounded-[10px] flex-col justify-start items-center gap-8 inline-flex z-10">
         <div className="h-[74px] flex-col justify-center items-center gap-[5px] flex">
           <div className="text-[#333333] text-[15px] font-normal font-['Noto Sans']">
             Wallet authentication
@@ -137,25 +136,28 @@ const LoginWallet: React.FC<LoginWallet> = ({ open, setOpen }: LoginWallet) => {
 
         <ConnectButton />
 
-        <form className="w-full h-full" action={loginWalletFormAction}>
-          <input
-            id="address"
-            name="address"
-            type="text"
-            hidden
-            readOnly
-            value={address ?? ""}
-            className="disabled:cursor-not-allowed"
-          />
+        <div className="w-full flex flex-col gap-y-3">
+          <form action={loginWalletFormAction}>
+            <input
+              id="address"
+              name="address"
+              type="text"
+              hidden
+              readOnly
+              value={address ?? ""}
+              className="disabled:cursor-not-allowed"
+            />
 
-          <SubmitButton
-            label="Sign"
-            loadingLabel="Login..."
-            disable={!isRegistered}
-            disabledTitle="Wallet not connected"
-            buttonClass="w-1/2 h-[45px]"
-          />
-        </form>
+            <SubmitButton
+              label="Sign"
+              loadingLabel="Login..."
+              disable={!isRegistered}
+              disabledTitle="Wallet not connected"
+              buttonClass="w-1/2 h-[45px]"
+            />
+          </form>
+          <p className="text-red-500 text-xs">{errors.message}</p>
+        </div>
       </div>
     </Modal>
   );
