@@ -68,6 +68,72 @@ export async function login(formData: FormData) {
   redirect("/");
 }
 
+export async function loginWithWallet(formData: FormData) {
+  // Create supabase client
+  const supabase = createClient();
+
+  // Validate the incoming data
+  const {
+    data: validationData,
+    success: validationSuccess,
+    error: validationError,
+  } = userLoginWalletSchema.safeParse({
+    address: formData.get("address"),
+    signature: formData.get("signature"),
+  });
+
+  if (!validationSuccess) {
+    // Just return the first error encountered
+    return { error: validationError.errors[0].message };
+  }
+
+  // Deconstruct the values for better readability
+  const { address, signature } = validationData;
+
+  // Get the nonce session
+  const nonceSession = await getNonceSession();
+  if (!nonceSession) {
+    return { error: "Nonce session not found" };
+  }
+
+  // Validating signature
+  const isValidSignature = await verifySignature(
+    address,
+    nonceSession,
+    signature
+  );
+
+  // Return error message if not valid signature
+  if (!isValidSignature) {
+    return { error: "Not valid signature" };
+  }
+
+  const { data: queryData, error: queryError } = await supabase
+    .from("wallet_users")
+    .select("email")
+    .eq("address", address)
+    .single<{ email: string }>();
+
+  if (queryError || !queryData) {
+    console.log("Query error at sign in wallet: ", queryError);
+    return { error: "User not found" };
+  }
+
+  const loginResp = await loginInternal(supabase, {
+    email: queryData.email,
+    password: await getUniquePassword(address),
+  });
+
+  // If we got response from loginInternal, an error happened
+  if (loginResp) {
+    return loginResp;
+  }
+
+  deleteNonceSession();
+  revalidatePath("/", "layout");
+  redirect("/");
+}
+
 export async function signup(formData: FormData) {
   const supabase = createClient();
 
@@ -166,70 +232,4 @@ export async function signUpWithWallet(
   revalidatePath("/", "layout");
 
   return { message: `Email sent to your linked email. Ple1ase confirm it` };
-}
-
-export async function loginWithWallet(formData: FormData) {
-  // Create supabase client
-  const supabase = createClient();
-
-  // Validate the incoming data
-  const {
-    data: validationData,
-    success: validationSuccess,
-    error: validationError,
-  } = userLoginWalletSchema.safeParse({
-    address: formData.get("address"),
-    signature: formData.get("signature"),
-  });
-
-  if (!validationSuccess) {
-    // Just return the first error encountered
-    return { error: validationError.errors[0].message };
-  }
-
-  // Deconstruct the values for better readability
-  const { address, signature } = validationData;
-
-  // Get the nonce session
-  const nonceSession = await getNonceSession();
-  if (!nonceSession) {
-    return { error: "Nonce session not found" };
-  }
-
-  // Validating signature
-  const isValidSignature = await verifySignature(
-    address,
-    nonceSession,
-    signature
-  );
-
-  // Return error message if not valid signature
-  if (!isValidSignature) {
-    return { error: "Not valid signature" };
-  }
-
-  const { data: queryData, error: queryError } = await supabase
-    .from("wallet_users")
-    .select("email")
-    .eq("address", address)
-    .single<{ email: string }>();
-
-  if (queryError || !queryData) {
-    console.log("Query error at sign in wallet: ", queryError);
-    return { error: "User not found" };
-  }
-
-  const loginResp = await loginInternal(supabase, {
-    email: queryData.email,
-    password: await getUniquePassword(address),
-  });
-
-  // If we got response from loginInternal, an error happened
-  if (loginResp) {
-    return loginResp;
-  }
-
-  deleteNonceSession();
-  revalidatePath("/", "layout");
-  redirect("/");
 }
