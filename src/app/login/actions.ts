@@ -111,7 +111,7 @@ export async function loginWithWallet(formData: FormData) {
   const { data: queryData, error: queryError } = await supabase
     .from("wallet_users")
     .select("email")
-    .eq("address", address)
+    .eq("address", address.toLowerCase())
     .single<{ email: string }>();
 
   if (queryError || !queryData) {
