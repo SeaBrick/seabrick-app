@@ -25,7 +25,7 @@ const config = createConfig(
 
     // Optional App Info
     appDescription: "Seabrick App for a new world",
-    appUrl: window.location.href,
+    appUrl: typeof window !== "undefined" ? window.location.href : undefined,
     appIcon: "https://family.co/logo.png",
   })
 );
