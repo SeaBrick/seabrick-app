@@ -19,11 +19,13 @@ import {
 } from "@heroicons/react/24/outline"
 import Image from "next/image"
 import { useState } from "react"
+import { MintTokensModal } from "@/components/modals/MintTokensModal"
 export default function Dashboard() {
   // use state y toda esa paja
   const [isCardVisible, setIsCardVisible] = useState(false)
   const [dataOnDisplay, setDataOnDisplay] = useState("Transfers")
   const [isClaimTokensOpen, setClaimTokensOpen] = useState(false)
+  const [isMintTokensOpen, setMintTokensOpen] = useState(false)
   //
   const testDataMap: UserTransactionHistoryData[] = [
     {
@@ -53,7 +55,7 @@ export default function Dashboard() {
       amount: 208,
     },
   ]
-  const isAdmin = false
+  const isAdmin = true
   const loggedUserName = "Sebastian Rojas"
   const userName = loggedUserName
 
@@ -182,9 +184,20 @@ export default function Dashboard() {
   return (
     <>
       {isAdmin ? (
-        <Modal open={isClaimTokensOpen} setOpen={setClaimTokensOpen}>
-          <ClaimTokens open={isClaimTokensOpen} setOpen={setClaimTokensOpen} />
-        </Modal>
+        <>
+          <Modal open={isClaimTokensOpen} setOpen={setClaimTokensOpen}>
+            <ClaimTokens
+              open={isClaimTokensOpen}
+              setOpen={setClaimTokensOpen}
+            />
+          </Modal>
+          <Modal open={isMintTokensOpen} setOpen={setMintTokensOpen}>
+            <MintTokensModal
+              open={isMintTokensOpen}
+              setOpen={setMintTokensOpen}
+            />
+          </Modal>
+        </>
       ) : (
         ""
       )}
@@ -240,7 +253,10 @@ export default function Dashboard() {
               <div className="justify-start items-center gap-2 inline-flex">
                 {isAdmin ? (
                   <div className="justify-start items-center gap-2 flex">
-                    <button className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-xs font-normal font-['Noto Sans']">
+                    <button
+                      className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-xs font-normal font-['Noto Sans']"
+                      onClick={() => setMintTokensOpen(true)}
+                    >
                       Mint New Tokens
                     </button>
                   </div>
