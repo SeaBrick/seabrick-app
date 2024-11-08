@@ -5,6 +5,7 @@ import SubmitButton from '../buttons/SubmitButton';
 const NewPasswordForm: React.FC = () => {
 
   const [password, setPassword] = useState<string>("");
+  const [passwordRepeat, setPasswordRepeat] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const togglePasswordVisibility = () => {
@@ -57,8 +58,8 @@ const NewPasswordForm: React.FC = () => {
                                 id="password"
                                 name="password"
                                 type={showPassword ? "text" : "password"}
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                value={passwordRepeat}
+                                onChange={(e) => setPasswordRepeat(e.target.value)}
                                 placeholder="Enter your password"
                                 className="bg-transparent text-[#8a8a8f] text-sm font-normal font-['Noto Sans'] w-full outline-none"
                                 />
