@@ -63,19 +63,29 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { data: userAddress } = await supabaseClient
-    .rpc("get_user_address", {
-      user_id: dataUser.id,
-    })
-    .returns<string | null>();
+  const { data: queryData, error: queryError } = await supabaseClient
+    .from("wallet_users")
+    .select("address")
+    .eq("user_id", dataUser.id)
+    .single<{ address: string }>();
 
   // Mint resp
   let mintResp: MintSeabrickResp;
   let saveAsBuys = false;
 
-  if (userAddress && checkAddress(userAddress)) {
+  if (queryData && queryData.address) {
+    if (!checkAddress(queryData.address)) {
+      return NextResponse.json(
+        {
+          error: "Internal server error",
+          details: "Invalid address linked to user",
+        },
+        { status: 500 }
+      );
+    }
+
     // Mint directly to wallet
-    mintResp = await mintSeabrickTokens(amount, userAddress);
+    mintResp = await mintSeabrickTokens(amount, queryData.address);
   } else {
     // Mint to vaul wallet and save it as buys not claimed
     mintResp = await mintSeabrickTokens(amount);

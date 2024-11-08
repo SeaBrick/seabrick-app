@@ -5,24 +5,20 @@ interface SubmitButtonProps {
   label: string;
   loadingLabel?: string;
   disable?: boolean;
+  disabledTitle?: string;
   buttonClass?: string;
 }
 export default function SubmitButton(props: SubmitButtonProps) {
-  const {
-    label,
-    loadingLabel,
-    disable,
-    buttonClass = "grow shrink basis-0 self-stretch bg-seabrick-blue rounded-[5px] justify-center items-center gap-2.5 hover:bg-seabrick-blue/80",
-  } = props;
+  const { label, loadingLabel, disable, disabledTitle, buttonClass } = props;
   const sharedButtonClass =
-    "disabled:cursor-not-allowed disabled:bg-gray-400 text-center text-white text-sm font-normal font-['Noto Sans']";
+    "grow shrink basis-0 self-stretch bg-seabrick-blue rounded-[5px] justify-center items-center gap-2.5 hover:bg-seabrick-blue/80 disabled:cursor-not-allowed disabled:bg-gray-400 text-center text-white text-sm font-normal font-['Noto Sans']";
   const { pending } = useFormStatus();
 
   return (
     <button
       type="submit"
       disabled={pending || disable}
-      title={pending || disable ? "Not allowed" : undefined}
+      title={pending || disable ? (disabledTitle ?? "Not allowed") : undefined}
       className={`${sharedButtonClass} ${buttonClass}`}
     >
       {pending ? (loadingLabel ?? "Loading...") : label}

@@ -1,3 +1,4 @@
+"use client";
 import { iMarketAbi } from "@/lib/contracts/abis";
 import { Aggregator } from "@/lib/interfaces";
 import { useContractContext } from "@/context/contractContext";

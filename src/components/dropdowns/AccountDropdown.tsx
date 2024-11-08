@@ -1,3 +1,4 @@
+"use client";
 import { useAuth } from "@/context/authContext";
 import { createClient } from "@/lib/supabase/client";
 import { addressResumer } from "@/lib/utils";
