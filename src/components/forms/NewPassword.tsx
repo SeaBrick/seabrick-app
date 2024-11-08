@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import SubmitButton from '../buttons/SubmitButton';
 
 const NewPasswordForm: React.FC = () => {
 
@@ -24,7 +25,7 @@ const NewPasswordForm: React.FC = () => {
                             <label className="text-[#333333] text-xs font-normal font-['Noto Sans']">
                                 New Password
                             </label>
-                            <div className="self-stretch h-11 px-[15px] py-2.5 bg-white rounded-[5px] border border-[#323232] justify-between items-center inline-flex">
+                            <div className="self-stretch h-11 px-[15px] py-2.5 bg-white rounded-[5px] border border-[#323232] justify-between items-center inline-flex relative">
                                 <input
                                 id="password"
                                 name="password"
@@ -52,7 +53,7 @@ const NewPasswordForm: React.FC = () => {
                             <label className="text-[#333333] text-xs font-normal font-['Noto Sans']">
                                 Repeat Password
                             </label>
-                            <div className="self-stretch h-11 px-[15px] py-2.5 bg-[#efeff4]/60 rounded-[5px] border border-[#babcc3]/60 justify-between items-center inline-flex">
+                            <div className="self-stretch h-11 px-[15px] py-2.5 bg-[#efeff4]/60 rounded-[5px] border border-[#babcc3]/60 justify-between items-center inline-flex relative">
                                 <input
                                 id="password"
                                 name="password"
@@ -81,9 +82,8 @@ const NewPasswordForm: React.FC = () => {
                 <div className="self-stretch h-[45px] flex-col justify-start items-center gap-4 flex">
                     <div className="self-stretch justify-start items-center gap-2 inline-flex">
                         <div className="grow shrink basis-0 h-[45px] justify-start items-center gap-2 flex">
-                            <button className="grow shrink basis-0 h-[45px] p-[17px] bg-[#2069a0] rounded-[5px] justify-center items-center gap-2.5 flex">
-                                <span className="text-right text-white text-sm font-normal font-['Noto Sans']">Save new Password</span>
-                            </button>
+                            <SubmitButton buttonClass="grow shrink basis-0 h-[45px] p-[17px] bg-[#2069a0] rounded-[5px] justify-center items-center gap-2.5 flex" label='Save new Password'>                                
+                            </SubmitButton>
                         </div>
                     </div>
                 </div>
