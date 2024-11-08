@@ -1,3 +1,4 @@
+"use client";
 import { useAggregatorsContext } from "@/context/aggregatorsContext";
 import { useContractContext } from "@/context/contractContext";
 import { formatUnits } from "viem";

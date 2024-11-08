@@ -1,3 +1,4 @@
+"use client";
 import { Dispatch, SetStateAction, useEffect, useRef } from "react";
 import Container from "../utils/Container";
 import Modal from "./Modal";
