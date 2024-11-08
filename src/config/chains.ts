@@ -1,8 +1,9 @@
-// import { mainnet, sepolia } from "wagmi/chains";
 import { http } from "viem";
 import { arbitrumSepolia } from "wagmi/chains";
 
-// TODO: Use this to generate the chains and transports correctly
+// TODO: Use this to generate the chains and transports correctly.
+// `appChains` should just one length, like [arbitrumSepolia] or [arbitrum]
+// `appTransports` should have just one key. Like [arbitrumSepolia.id] or [arbitrum.id]
 export const definedChain = process.env.NEXT_PUBLIC_CHAIN ?? "testnet";
 
 export const appChains = [arbitrumSepolia];
@@ -16,3 +17,5 @@ export const appTransports = {
       arbitrumSepolia.rpcUrls.default.http[0]
   ),
 };
+
+
