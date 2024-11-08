@@ -9,7 +9,7 @@ import {
   parseEventLogs,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { iSeabrickAbi, iMarketAbi } from "@/lib/contracts/abis";
+import { iSeabrickAbi, iOwnershipAbi } from "@/lib/contracts/abis";
 import { addresses } from ".";
 import { createClient } from "../supabase/server";
 import { appChains } from "@/config/chains";
@@ -167,23 +167,13 @@ export async function mintSeabrickTokens(
 export async function getContractsOwner(): Promise<Address> {
   const client = getClient();
 
-  const address1 = await client.readContract({
-    address: addresses.SeabrickNFT,
-    abi: iSeabrickAbi,
+  const ownerAddress = await client.readContract({
+    address: addresses.Ownership,
+    abi: iOwnershipAbi,
     functionName: "owner",
   });
 
-  const address2 = await client.readContract({
-    address: addresses.SeabrickMarket,
-    abi: iMarketAbi,
-    functionName: "owner",
-  });
-
-  if (address1.toLocaleLowerCase() !== address2.toLowerCase()) {
-    throw new Error("Mismatch owner between contracts");
-  }
-
-  return address1;
+  return ownerAddress;
 }
 
 export async function transferFromVault(
