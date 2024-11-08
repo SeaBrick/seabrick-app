@@ -1,14 +1,14 @@
 "use client";
 import { useAuth } from "@/context/authContext";
 import { useAccount, useSignMessage } from "wagmi";
-import Modal from "../modals/Modal";
+import Modal from "@/components/modals/Modal";
 import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
-import ConnectButton from "../buttons/ConnectButton";
-import SubmitButton from "../buttons/SubmitButton";
+import ConnectButton from "@/components/buttons/ConnectButton";
+import SubmitButton from "@/components/buttons/SubmitButton";
 import { createClient } from "@/lib/supabase/client";
 import type { Errors } from "@/lib/interfaces";
 import { loginWithWallet } from "@/app/login/actions";
-import { RpcRequestError, UserRejectedRequestError } from "viem";
+import { UserRejectedRequestError } from "viem";
 import Link from "next/link";
 
 interface LoginWallet {
