@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import RegisterEmailForm from "@/components/forms/RegisterEmail";
 import RegisterWalletForm from "@/components/forms/RegisterWallet";
+import { AtSymbolIcon } from "@heroicons/react/24/outline";
 
 enum TabsIndex {
   EMAIL,
@@ -47,15 +48,30 @@ export default function RegisterPage() {
           <Tab
             className={`rounded-t-xl py-2 px-3 outline-none ${selectedIndex == TabsIndex.EMAIL ? "bg-white" : "bg-gray-200 hover:bg-gray-300 shadow-inner"}`}
           >
-            <Link prefetch={true} href="/register">
-              Register with Email
+            <Link
+              prefetch={true}
+              className="flex items-center gap-x-1"
+              href="/register"
+            >
+              <AtSymbolIcon className="size-4" />
+              <span>Register with Email</span>
             </Link>
           </Tab>
           <Tab
             className={`rounded-t-xl py-2 px-3 outline-none ${selectedIndex == TabsIndex.WALLET ? "bg-white" : "bg-gray-200 hover:bg-gray-300 shadow-inner"}`}
           >
-            <Link prefetch={true} href="/register?tab=wallet">
-              Register with Wallet
+            <Link
+              prefetch={true}
+              className="flex items-center gap-x-1"
+              href="/register?tab=wallet"
+            >
+              <Image
+                src={`/wallet-icon.svg`}
+                alt="user-image"
+                height={16}
+                width={16}
+              />
+              <span>Register with Wallet</span>
             </Link>
           </Tab>
         </TabList>
