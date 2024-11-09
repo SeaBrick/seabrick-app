@@ -15,6 +15,7 @@ import { isEmpty } from "lodash";
 import { z } from "zod";
 
 const RegisterEmailForm: React.FC = () => {
+  const [fullName, setFullName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [repeatedPassword, setRepeatedPassword] = useState<string>("");
@@ -44,6 +45,11 @@ const RegisterEmailForm: React.FC = () => {
     const timeout = setTimeout(callback, 500); // Adjust debounce delay as needed
 
     setDebounceTimeout(timeout);
+  };
+
+  const onChangeFullName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFullName(e.target.value);
+    debounceValidation(() => validateFullname(e.target.value));
   };
 
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,6 +89,7 @@ const RegisterEmailForm: React.FC = () => {
   const validateEmail = (newEmail: string) => {
     if (isEmpty(newEmail)) {
       showError({});
+      setIsSubmitDisabled(true);
       return;
     }
 
@@ -95,6 +102,15 @@ const RegisterEmailForm: React.FC = () => {
     } else {
       // Just return the first error encountered
       showError(validationError.errors[0].message);
+      setIsSubmitDisabled(true);
+    }
+  };
+
+  const validateFullname = (newName: string) => {
+    if (isEmpty(newName)) {
+      setIsSubmitDisabled(true);
+    } else {
+      setIsSubmitDisabled(false);
     }
   };
 
@@ -138,6 +154,8 @@ const RegisterEmailForm: React.FC = () => {
             <input
               id="fullName"
               type="text"
+              value={fullName}
+              onChange={onChangeFullName}
               placeholder="Enter full name"
               className="self-stretch h-11 px-[15px] py-2.5 bg-[#efeff4]/60 rounded-[5px] border border-[#babcc3]/60 text-[#8a8a8f] text-sm font-normal font-['Noto Sans']"
             />
