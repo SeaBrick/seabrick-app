@@ -6,8 +6,8 @@ interface CheckEmailProps {
 
 const CheckEmail: React.FC<CheckEmailProps> = ({ email, text }) => {
   return (
-    <div className="w-[606px] h-[399px] p-6 bg-white rounded-[10px] flex-col justify-start items-center gap-8 inline-flex z-10 mt-[180px]">
-      <div className="self-stretch h-[223px] flex-col justify-start items-center gap-4 flex">
+    <div className="w-[606px] h-fit p-6 bg-white rounded-[10px] flex-col justify-start items-center gap-8 inline-flex z-10 mt-[180px]">
+      <div className="self-stretch h-fit flex-col justify-start items-center gap-4 flex">
         <div className="h-[74px] flex-col justify-center items-center gap-[5px] flex">
           <div className="text-[#333333] text-[15px] font-normal font-['Noto Sans']">
             Account
