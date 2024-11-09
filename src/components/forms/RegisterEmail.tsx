@@ -98,6 +98,8 @@ const RegisterEmailForm: React.FC = () => {
       setErrors(newErrors);
       return;
     }
+
+    setOpenModal(true);
   };
 
   return (
