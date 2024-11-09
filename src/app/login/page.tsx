@@ -202,19 +202,3 @@ export default function LoginPage() {
     </>
   );
 }
-/* {!haveWallet && <LoginEmailForm />}
-
-        {haveWallet && (
-          <div className="divide-y-2 space-y-6 max-w-xl w-full">
-            <div className="flex flex-col gap-y-4 items-center">
-              <p className="text-gray-800">Use your wallet to sign in</p>
-
-              <LoginWalletForm />
-            </div>
-            <div className="pt-4 flex flex-col gap-y-4 items-center">
-              <p className="text-gray-800">Or use your email</p>
-
-              <LoginEmailForm />
-            </div>
-          </div>
-        )} */

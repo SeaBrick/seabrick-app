@@ -1,56 +1,19 @@
 "use client";
-import { useAuth } from "@/context/authContext";
 import React, { useEffect, useState } from "react";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { useFormState } from "react-dom";
-import { Button } from "@headlessui/react";
-import { Address, zeroAddress } from "viem";
-import SubmitButton from "@/components/buttons/SubmitButton";
 import RegisterEmailForm from "@/components/forms/RegisterEmail";
 import RegisterWalletForm from "@/components/forms/RegisterWallet";
-import type { Errors } from "@/lib/interfaces";
 
 enum TabsIndex {
   EMAIL,
   WALLET,
 }
 
+// TODO: Add captchas
 export default function RegisterPage() {
-  const [haveWallet, setHaveWallet] = useState<boolean>(false);
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [errors, setErrors] = useState<Errors>({});
-
-  useEffect(() => {
-    if (window.ethereum) {
-      setHaveWallet(true);
-    }
-  }, []);
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newErrors: Errors = {};
-
-    if (!email) newErrors.message = "Email is required";
-    if (!password) newErrors.message = "Password is required";
-
-    setErrors(newErrors);
-
-    if (Object.keys(newErrors).length === 0) {
-      console.log("Form submitted:", { email, password });
-      // Aquí puedes enviar el formulario o hacer una llamada a la API
-    }
-  };
-
   const [selectedIndex, setSelectedIndex] = useState<number>(TabsIndex.EMAIL);
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab");
