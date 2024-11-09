@@ -3,13 +3,13 @@ import { useEffect, useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { login } from "./actions";
 import { useAuth } from "@/context/authContext";
-import Image from "next/image";
 import Link from "next/link";
 import SubmitButton from "@/components/buttons/SubmitButton";
 import { isEmpty } from "lodash";
 import LoginWallet from "./LoginWallet";
 import { useSearchParams } from "next/navigation";
 import type { Errors } from "@/lib/interfaces";
+import { LoginBanner } from "@/components/layout/LoginBanner";
 
 // TODO: Add captchas
 export default function LoginPage() {
@@ -75,15 +75,8 @@ export default function LoginPage() {
   return (
     <>
       <LoginWallet open={loginWallet} setOpen={setLoginWallet} />
-
-      <div className="w-full h-[80vh] md:h-screen relative bg-[#f6f6f6] flex justify-center">
-        <Image
-          className="w-full h-[200px] md:h-[414px] left-0 top-1 absolute z-0 rounded-bl-[50px] rounded-br-[50px]"
-          src={`/login-bg.webp`}
-          alt="banner"
-          width={1920}
-          height={414}
-        />
+      <LoginBanner/>
+      <div className="flex justify-center">        
         <form
           action={loginFormAction}
           className="h-[339px] md:h-[447px] w-[350px] md:w-[606px] mt-[40px] md:mt-[180px] p-6 relative bg-white rounded-[10px] flex-col justify-start items-center gap-8 inline-flex z-10"
