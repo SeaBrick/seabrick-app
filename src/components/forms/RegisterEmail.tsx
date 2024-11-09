@@ -1,22 +1,16 @@
 "use client";
 import { useAuth } from "@/context/authContext";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
-import Link from "next/link";
-import Image from "next/image";
-import { useSearchParams } from "next/navigation";
-import { useFormState } from "react-dom";
-import { Button } from "@headlessui/react";
-import { Address, zeroAddress } from "viem";
 import SubmitButton from "@/components/buttons/SubmitButton";
 import { Errors } from "@/lib/interfaces";
 import { isEmpty } from "lodash";
-import { z } from "zod";
-import { error } from "console";
-import { UserAuthSchema } from "@/lib/zod";
+import { UserAuthRegisterSchema } from "@/lib/zod";
+import { signup } from "@/app/register/actions";
 
+// TODO: Missing redirect to "Check inbox view" or show a message. Discuss.
 const RegisterEmailForm: React.FC = () => {
+  const { refetch: authRefetch } = useAuth();
   const [fullName, setFullName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -26,9 +20,6 @@ const RegisterEmailForm: React.FC = () => {
     useState<boolean>(false);
   const [errors, setErrors] = useState<Errors>({});
   const [isSubmitDisabled, setIsSubmitDisabled] = useState<boolean>(true);
-  const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(
-    null
-  );
 
   function showError(value: string | Errors) {
     setErrors(typeof value === "string" ? { message: value } : value);
@@ -78,22 +69,35 @@ const RegisterEmailForm: React.FC = () => {
     }
   };
 
-  const handleFormAction = () => {
+  const handleFormAction = async (formData: FormData) => {
     const newErrors: Errors = {};
 
-    const {
-      data: validationData,
-      success: validationSuccess,
-      error: validationError,
-    } = UserAuthSchema.safeParse({ email, password });
+    const { success: validationSuccess, error: validationError } =
+      UserAuthRegisterSchema.safeParse({
+        email: formData.get("email"),
+        password: formData.get("password"),
+        fullName: formData.get("fullName"),
+      });
 
     if (!validationSuccess) {
+      console.log(validationError);
       // Just return the first error encountered
       showError(validationError.errors[0].message);
       return;
     }
 
-    // send validationData
+    showError("");
+
+    const resp = await signup(formData);
+
+    if (resp && resp.error) {
+      newErrors.message = resp.error;
+      setErrors(newErrors);
+      return;
+    }
+
+    // Refetch the user
+    await authRefetch();
   };
 
   return (
@@ -120,6 +124,7 @@ const RegisterEmailForm: React.FC = () => {
             </label>
             <input
               id="fullName"
+              name="fullName"
               type="text"
               value={fullName}
               onChange={onChangeFullName}
@@ -136,6 +141,7 @@ const RegisterEmailForm: React.FC = () => {
             </label>
             <input
               id="email"
+              name="email"
               type="email"
               value={email}
               onChange={onChangeEmail}
@@ -153,6 +159,7 @@ const RegisterEmailForm: React.FC = () => {
               </label>
               <input
                 id="password"
+                name="password"
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={onChangePassword}
