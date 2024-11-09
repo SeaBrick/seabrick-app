@@ -5,6 +5,7 @@ import SubmitButton from "../buttons/SubmitButton"
 interface ModalProps {
   isOpen: boolean
   onClose: () => void
+  action?: (s: string | number) => void
   children: React.ReactNode
 }
 
@@ -206,7 +207,7 @@ const ModalSuccess: React.FC<ModalSuccessProps> = ({ isOpen, onClose }) => {
   )
 }
 
-const App: React.FC = () => {
+const App: React.FC<{ action: (email: string) => void }> = ({ action }) => {
   const [showEmailModal, setShowEmailModal] = useState(false)
   const [showConfirmationModal, setShowConfirmationModal] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
@@ -227,9 +228,9 @@ const App: React.FC = () => {
     setShowEmailModal(true)
   }
 
-  const handleConfirmation = (confirmedEmail: string) => {
+  const handleConfirmation = async (confirmedEmail: string) => {
     console.log("Confirmed email:", confirmedEmail)
-    // Aquí puedes agregar la lógica para enviar el correo electrónico
+    action(email)
     setShowConfirmationModal(false)
     setShowSuccessModal(true) // Mostrar modal de éxito
   }
