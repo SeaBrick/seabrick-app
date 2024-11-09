@@ -1,6 +1,5 @@
 import XMarkIcon from "@heroicons/react/24/outline/XMarkIcon"
 import { Dispatch, ReactNode, SetStateAction } from "react"
-
 export default function ClaimModal({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   open,

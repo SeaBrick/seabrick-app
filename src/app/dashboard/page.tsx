@@ -19,11 +19,12 @@ import {
 import Image from "next/image"
 import { useState } from "react"
 import ModalTransferOwnership from "@/components/modals/ModalTransferOwnership"
+import { MintTokensModal } from "@/components/modals/MintTokensModal"
 export default function Dashboard() {
-  // use state y toda esa paja
   const [isCardVisible, setIsCardVisible] = useState(false)
   const [dataOnDisplay, setDataOnDisplay] = useState("Transfers")
   const [isClaimTokensOpen, setClaimTokensOpen] = useState(false)
+  const [isMintTokensOpen, setMintTokensOpen] = useState(false)
   //
   const testDataMap: UserTransactionHistoryData[] = [
     {
@@ -182,9 +183,20 @@ export default function Dashboard() {
   return (
     <>
       {isAdmin ? (
-        <Modal open={isClaimTokensOpen} setOpen={setClaimTokensOpen}>
-          <ClaimTokens open={isClaimTokensOpen} setOpen={setClaimTokensOpen} />
-        </Modal>
+        <>
+          <Modal open={isClaimTokensOpen} setOpen={setClaimTokensOpen}>
+            <ClaimTokens
+              open={isClaimTokensOpen}
+              setOpen={setClaimTokensOpen}
+            />
+          </Modal>
+          <Modal open={isMintTokensOpen} setOpen={setMintTokensOpen}>
+            <MintTokensModal
+              open={isMintTokensOpen}
+              setOpen={setMintTokensOpen}
+            />
+          </Modal>
+        </>
       ) : (
         ""
       )}
@@ -240,7 +252,10 @@ export default function Dashboard() {
               <div className="justify-start items-center gap-2 inline-flex">
                 {isAdmin ? (
                   <div className="justify-start items-center gap-2 flex">
-                    <button className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-xs font-normal font-['Noto Sans']">
+                    <button
+                      className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-xs font-normal font-['Noto Sans']"
+                      onClick={() => setMintTokensOpen(true)}
+                    >
                       Mint New Tokens
                     </button>
                   </div>
@@ -308,7 +323,7 @@ export default function Dashboard() {
               <div className="lg:w-[50%] w-full min-h-[10rem] gap-2 flex flex-col">
                 {isAdmin ? (
                   <div className="bg-white w-full h-full rounded-[10px] gap-3 p-4 flex flex-col justify-between">
-                    <ModalTransferOwnership/>
+                    <ModalTransferOwnership />
                     <button className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-left">
                       <UserIcon className="size-[1.25rem] inline mx-2 mt-[-3px]" />
                       Admins
