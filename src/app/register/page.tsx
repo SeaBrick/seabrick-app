@@ -69,7 +69,7 @@ export default function RegisterPage() {
   return (
     <div className="w-full h-[80vh] md:h-screen relative bg-[#f6f6f6] flex justify-center">
       <Image
-        className="w-full h-[200px] md:h-[414px] left-0 top-1 absolute z-0 rounded-bl-[50px] rounded-br-[50px]"
+        className="w-full h-[200px] md:h-[414px] left-0 top-1 absolute z-0 rounded-bl-[rounded-tl-none50px] rounded-br-[50px]"
         src={`/login-bg.png`}
         alt="banner"
         width={1920}
@@ -82,14 +82,14 @@ export default function RegisterPage() {
       >
         <TabList className="flex gap-4 mt-32 px-5">
           <Tab
-            className={`rounded-t-xl py-2 px-3 bg-white hover:bg-gray-200 active:bg-gray-400 ${selectedIndex == TabsIndex.EMAIL && "outline outline-2 outline-offset-2"}`}
+            className={`rounded-t-xl py-2 px-3 ${selectedIndex == TabsIndex.EMAIL ? "bg-white" : "bg-gray-200 hover:bg-gray-300 shadow-inner"}`}
           >
             <Link prefetch={true} href="/register">
               Register with Email
             </Link>
           </Tab>
           <Tab
-            className={`rounded-t-xl py-2 px-3 bg-white hover:bg-gray-200 active:bg-gray-400 ${selectedIndex == TabsIndex.WALLET && "outline outline-2 outline-offset-2"}`}
+            className={`rounded-t-xl py-2 px-3 ${selectedIndex == TabsIndex.WALLET ? "bg-white" : "bg-gray-200 hover:bg-gray-300 shadow-inner"}`}
           >
             <Link prefetch={true} href="/register?tab=wallet">
               Register with Wallet
