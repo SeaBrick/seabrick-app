@@ -17,7 +17,7 @@ import {
   getUniquePassword,
   verifySignature,
 } from "@/lib/utils/session";
-import { userLoginSchema, userLoginWalletSchema } from "@/lib/zod";
+import { UserAuthSchema, userLoginWalletSchema } from "@/lib/zod";
 
 export async function signup(formData: FormData) {
   const supabase = createClient();

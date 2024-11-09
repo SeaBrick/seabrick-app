@@ -13,7 +13,7 @@ import {
   getUniquePassword,
   verifySignature,
 } from "@/lib/utils/session";
-import { userLoginSchema, userLoginWalletSchema } from "@/lib/zod";
+import { UserAuthSchema, userLoginWalletSchema } from "@/lib/zod";
 
 async function loginInternal(
   supabaseClient: SupabaseClient<never, "public", never>,
@@ -40,7 +40,7 @@ export async function login(formData: FormData) {
     data: validationData,
     success: validationSuccess,
     error: validationError,
-  } = userLoginSchema.safeParse({
+  } = UserAuthSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
   });
