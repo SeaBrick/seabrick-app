@@ -8,8 +8,11 @@ import { UserAuthRegisterSchema } from "@/lib/zod";
 import { signup } from "@/app/register/actions";
 import Modal from "../modals/Modal";
 import CheckEmail from "../auth/CheckEmail";
+import { useRouter } from "next/navigation";
 
 const RegisterEmailForm: React.FC = () => {
+  const router = useRouter();
+
   const [fullName, setFullName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -19,7 +22,7 @@ const RegisterEmailForm: React.FC = () => {
     useState<boolean>(false);
   const [errors, setErrors] = useState<Errors>({});
   const [isSubmitDisabled, setIsSubmitDisabled] = useState<boolean>(true);
-  const [openModal, setOpenModal] = useState<boolean>(true);
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   function showError(value: string | Errors) {
     setErrors(typeof value === "string" ? { message: value } : value);
@@ -99,7 +102,13 @@ const RegisterEmailForm: React.FC = () => {
 
   return (
     <>
-      <Modal open={openModal} setOpen={setOpenModal}>
+      <Modal
+        open={openModal}
+        setOpen={(value) => {
+          setOpenModal(value);
+          router.push("/login");
+        }}
+      >
         <CheckEmail
           email={email}
           text="We sent you an confirm email to your account"
