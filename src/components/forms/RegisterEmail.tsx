@@ -13,6 +13,8 @@ import SubmitButton from "@/components/buttons/SubmitButton";
 import { Errors } from "@/lib/interfaces";
 import { isEmpty } from "lodash";
 import { z } from "zod";
+import { error } from "console";
+import { UserAuthSchema } from "@/lib/zod";
 
 const RegisterEmailForm: React.FC = () => {
   const [fullName, setFullName] = useState<string>("");
@@ -39,22 +41,12 @@ const RegisterEmailForm: React.FC = () => {
     setShowRepeatedPassword(!showRepeatedPassword);
   };
 
-  const debounceValidation = (callback: () => void) => {
-    if (debounceTimeout) clearTimeout(debounceTimeout);
-
-    const timeout = setTimeout(callback, 500); // Adjust debounce delay as needed
-
-    setDebounceTimeout(timeout);
-  };
-
   const onChangeFullName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFullName(e.target.value);
-    debounceValidation(() => validateFullname(e.target.value));
   };
 
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
-    debounceValidation(() => validateEmail(e.target.value));
   };
 
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,7 +56,7 @@ const RegisterEmailForm: React.FC = () => {
 
   const onChangeRepeatedPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRepeatedPassword(e.target.value);
-    debounceValidation(() => validatePasswords(e.target.value, password));
+    validatePasswords(e.target.value, password);
   };
 
   const validatePasswords = (
@@ -86,54 +78,29 @@ const RegisterEmailForm: React.FC = () => {
     }
   };
 
-  const validateEmail = (newEmail: string) => {
-    if (isEmpty(newEmail)) {
-      showError({});
-      setIsSubmitDisabled(true);
+  const handleFormAction = () => {
+    const newErrors: Errors = {};
+
+    const {
+      data: validationData,
+      success: validationSuccess,
+      error: validationError,
+    } = UserAuthSchema.safeParse({ email, password });
+
+    if (!validationSuccess) {
+      // Just return the first error encountered
+      showError(validationError.errors[0].message);
       return;
     }
 
-    const emailSchema = z.string().email("Invalid email address");
-    const { success: validationSuccess, error: validationError } =
-      emailSchema.safeParse(newEmail);
-
-    if (validationSuccess) {
-      showError({});
-    } else {
-      // Just return the first error encountered
-      showError(validationError.errors[0].message);
-      setIsSubmitDisabled(true);
-    }
-  };
-
-  const validateFullname = (newName: string) => {
-    if (isEmpty(newName)) {
-      setIsSubmitDisabled(true);
-    } else {
-      setIsSubmitDisabled(false);
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newErrors: Errors = {};
-
-    if (!email) {
-      newErrors.message = "Email is required";
-    } else if (!password) {
-      newErrors.message = "Password is required";
-    } // else if (password1 === password2) newErrors.message ="Both Passwords doesn't match"    @NaneezX idk como lo tengas en el Forms aqui tienes la validacion adalpta los datos
-
-    setErrors(newErrors);
-
-    if (Object.keys(newErrors).length === 0) {
-      console.log("Form submitted:", { email, password });
-      // Aquí puedes enviar el formulario o hacer una llamada a la API
-    }
+    // send validationData
   };
 
   return (
-    <form className="w-[606px] h-min p-6 relative bg-white rounded-[10px] rounded-tl-none flex-col justify-start items-center gap-8 inline-flex">
+    <form
+      action={handleFormAction}
+      className="w-[606px] h-min p-6 relative bg-white rounded-[10px] rounded-tl-none flex-col justify-start items-center gap-8 inline-flex"
+    >
       <div className="h-[74px] flex-col justify-center items-center gap-[5px] flex">
         <div className="text-[#333333] text-[15px] font-normal font-['Noto Sans']">
           Register
@@ -238,11 +205,11 @@ const RegisterEmailForm: React.FC = () => {
         </div>
         <div className="self-stretch h-[109px] flex-col justify-start items-center gap-4 flex">
           <div className="self-stretch h-[45px] justify-start items-start gap-4 inline-flex">
-            <button className="grow shrink basis-0 self-stretch p-[17px] bg-[#2069a0] rounded-[5px] justify-center items-center gap-2.5 flex">
-              <span className="text-right text-white text-sm font-normal font-['Noto Sans']">
-                Create Account
-              </span>
-            </button>
+            <SubmitButton
+              disable={isSubmitDisabled}
+              label="Create Account"
+              loadingLabel="Creating..."
+            />
           </div>
           <div className="self-stretch justify-between items-center inline-flex">
             <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">
