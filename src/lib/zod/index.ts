@@ -2,8 +2,8 @@ import { isAddress, isHex } from "viem";
 import { z } from "zod";
 
 export const userLoginSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "aaaa"),
+  email: z.string().min(1, "Email is required").email("Invalid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters long"),
 });
 
 export const userLoginWalletSchema = z.object({
@@ -12,6 +12,6 @@ export const userLoginWalletSchema = z.object({
 });
 
 export const userRegisterSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.string().min(1, "Email is required").email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters long"),
 });
