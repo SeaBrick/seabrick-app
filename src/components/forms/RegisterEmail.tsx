@@ -18,6 +18,8 @@ const RegisterEmailForm: React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const [repeatedPassword, setRepeatedPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showRepeatedPassword, setShowRepeatedPassword] =
+    useState<boolean>(false);
   const [errors, setErrors] = useState<Errors>({});
   const [isSubmitDisabled, setIsSubmitDisabled] = useState<boolean>(true);
   const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(
@@ -30,6 +32,9 @@ const RegisterEmailForm: React.FC = () => {
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+  const toggleRepeatedPasswordVisibility = () => {
+    setShowRepeatedPassword(!showRepeatedPassword);
   };
 
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -159,7 +164,7 @@ const RegisterEmailForm: React.FC = () => {
               </label>
               <input
                 id="repeatedPassword"
-                type={showPassword ? "text" : "password"}
+                type={showRepeatedPassword ? "text" : "password"}
                 value={repeatedPassword}
                 onChange={onChangeRepeatedPassword}
                 placeholder="********"
@@ -167,11 +172,11 @@ const RegisterEmailForm: React.FC = () => {
               />
               <button
                 type="button"
-                onClick={togglePasswordVisibility}
+                onClick={toggleRepeatedPasswordVisibility}
                 className="absolute right-3 top-1/2"
                 tabIndex={-1}
               >
-                {showPassword ? (
+                {showRepeatedPassword ? (
                   <EyeSlashIcon className="h-5 w-5 text-[#8a8a8f]" />
                 ) : (
                   <EyeIcon className="h-5 w-5 text-[#8a8a8f]" />
