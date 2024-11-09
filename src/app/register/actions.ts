@@ -4,10 +4,11 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Address, Hex } from "viem";
-import type {
-  SignUpWithPasswordCredentials,
-  SignInWithPasswordCredentials,
-  SupabaseClient,
+import {
+  type SignUpWithPasswordCredentials,
+  type SupabaseClient,
+  isAuthApiError,
+  isAuthError,
 } from "@supabase/supabase-js";
 import { headers } from "next/headers";
 import { getUrl } from "@/lib/utils";
@@ -17,35 +18,71 @@ import {
   getUniquePassword,
   verifySignature,
 } from "@/lib/utils/session";
-import { UserAuthSchema, userLoginWalletSchema } from "@/lib/zod";
+import {
+  UserAuthRegisterSchema,
+  UserAuthSchema,
+  userLoginWalletSchema,
+} from "@/lib/zod";
 
-export async function signup(formData: FormData) {
-  const supabase = createClient();
-
+async function registerInternal(
+  supabaseClient: SupabaseClient<never, "public", never>,
+  data: SignUpWithPasswordCredentials
+) {
   // Get this whole url
   const fullUrl = headers().get("referer");
   const redirectUrl = getUrl(fullUrl);
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  // TODO: USe Zod to validate inputs
+  // Add the redirect url
+  if ("email" in data) {
+    if (!data.options) data.options = {};
+    data.options.emailRedirectTo = redirectUrl;
+  }
+
+  const { error } = await supabaseClient.auth.signUp(data);
+
+  if (error) {
+    console.error("Register error: ", error);
+    return { error: error.message };
+  }
+}
+
+export async function signup(formData: FormData) {
+  const supabase = createClient();
+
+  // Validate the incoming data
+  const {
+    data: validationData,
+    success: validationSuccess,
+    error: validationError,
+  } = UserAuthRegisterSchema.safeParse({
+    email: formData.get("email"),
+    password: formData.get("password"),
+    fullName: formData.get("fullName"),
+  });
+
+  if (!validationSuccess) {
+    // Just return the first error encountered
+    return { error: validationError.errors[0].message };
+  }
+
+  // Create the data object
   const data: SignUpWithPasswordCredentials = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
+    email: validationData.email,
+    password: validationData.password,
     options: {
-      // captchaToken
       data: {
         type: "email",
+        name: validationData.fullName,
       },
-      emailRedirectTo: redirectUrl,
     },
   };
 
-  const { error } = await supabase.auth.signUp(data);
+  // Call the register
+  const registerResp = await registerInternal(supabase, data);
 
-  if (error) {
-    console.log("Signup error: ", error);
-    redirect("/error");
+  // If we got response from registerInternal, an error happened
+  if (registerResp) {
+    return registerResp;
   }
 
   revalidatePath("/", "layout");
