@@ -1,42 +1,42 @@
-"use client"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import SeabrickSVG from "../utils/SeabrickSVG"
-import { useAccount } from "wagmi"
-import { useEffect } from "react"
-import { getAccount } from "@/lib/subgraph"
-import { Address, getAddress } from "viem"
-import { useContractContext } from "@/context/contractContext"
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import SeabrickSVG from "../utils/SeabrickSVG";
+import { useAccount } from "wagmi";
+import { useEffect } from "react";
+import { getAccount } from "@/lib/subgraph";
+import { Address, getAddress } from "viem";
+import { useContractContext } from "@/context/contractContext";
 import {
   accountInitialState,
   useAccountContext,
-} from "@/context/accountContext"
-import { useAuth } from "@/context/authContext"
-import AccountDropdown from "../dropdowns/AccountDropdown"
+} from "@/context/accountContext";
+import { useAuth } from "@/context/authContext";
+import AccountDropdown from "../dropdowns/AccountDropdown";
 
 export function Navbar() {
-  const pathname = usePathname()
-  const { address: walletAddress } = useAccount()
-  const { data: contractsData } = useContractContext()
-  const { data: accountData, dispatch: dispatchAccount } = useAccountContext()
-  const { user } = useAuth()
+  const pathname = usePathname();
+  const { address: walletAddress } = useAccount();
+  const { data: contractsData } = useContractContext();
+  const { data: accountData, dispatch: dispatchAccount } = useAccountContext();
+  const { user } = useAuth();
 
   useEffect(() => {
     async function callGetter(address: Address) {
-      const account = await getAccount(address)
+      const account = await getAccount(address);
       if (account) {
-        dispatchAccount(account)
+        dispatchAccount(account);
       }
     }
 
     // Check wallet address is defined to be call
     if (walletAddress) {
-      callGetter(walletAddress)
+      callGetter(walletAddress);
     } else {
       // Or just put initial state otherwise
-      dispatchAccount(accountInitialState)
+      dispatchAccount(accountInitialState);
     }
-  }, [dispatchAccount, walletAddress])
+  }, [dispatchAccount, walletAddress]);
 
   return (
     <header className="z-10 w-full h-[70px] py-0 px-[30px] mb-1 flex justify-between items-center shrink-0 bg-white shadow-2md">
@@ -47,8 +47,8 @@ export function Navbar() {
 
         <div className="flex h-[70px] w-6/12 justify-end items-center gap-8 hover:direct-children:text-seabrick-blue ">
           <Link
-            className={`${pathname === "/buy" && "text-text-gray"}`}
-            href="/buy"
+            className={`${pathname === "/register" && "text-text-gray"}`}
+            href="/register"
           >
             Register
           </Link>
@@ -81,5 +81,5 @@ export function Navbar() {
         </div>
       </div>
     </header>
-  )
+  );
 }
