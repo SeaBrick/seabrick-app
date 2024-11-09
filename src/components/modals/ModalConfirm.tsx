@@ -3,6 +3,7 @@ import { ModalDone } from "./ModalDone"
 import XMarkIcon from "@heroicons/react/24/outline/XMarkIcon"
 export function ModalConfirm({
   title,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   open,
   description,
   cancelMessage,
