@@ -46,12 +46,6 @@ export function Navbar() {
         </div>
 
         <div className="flex h-[70px] w-6/12 justify-end items-center gap-8 hover:direct-children:text-seabrick-blue ">
-          <Link
-            className={`${pathname === "/buy" && "text-text-gray"}`}
-            href="/buy"
-          >
-            Register
-          </Link>
 
           {/* FIXME: This NOT only depends on the wallet connect. Also depends on the user role */}
           {user &&
@@ -67,16 +61,24 @@ export function Navbar() {
               </Link>
             )}
 
+          
           {/* TODO: Better UX for account details */}
           {user ? (
             <AccountDropdown />
-          ) : (
+          ) : (<>
+            <Link
+            className={`${pathname === "/buy" && "text-text-gray"}`}
+            href="/buy"
+          >
+            Register
+          </Link>
             <Link
               className={`${pathname === "/login" && "text-text-gray"} hover:text-seabrick-blue`}
               href="/login"
             >
               Log in
             </Link>
+          </>
           )}
         </div>
       </div>
