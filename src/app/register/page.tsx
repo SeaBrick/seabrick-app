@@ -82,14 +82,14 @@ export default function RegisterPage() {
       >
         <TabList className="flex gap-4 mt-32 px-5">
           <Tab
-            className={`rounded-t-xl py-2 px-3 ${selectedIndex == TabsIndex.EMAIL ? "bg-white" : "bg-gray-200 hover:bg-gray-300 shadow-inner"}`}
+            className={`rounded-t-xl py-2 px-3 outline-none ${selectedIndex == TabsIndex.EMAIL ? "bg-white" : "bg-gray-200 hover:bg-gray-300 shadow-inner"}`}
           >
             <Link prefetch={true} href="/register">
               Register with Email
             </Link>
           </Tab>
           <Tab
-            className={`rounded-t-xl py-2 px-3 ${selectedIndex == TabsIndex.WALLET ? "bg-white" : "bg-gray-200 hover:bg-gray-300 shadow-inner"}`}
+            className={`rounded-t-xl py-2 px-3 outline-none ${selectedIndex == TabsIndex.WALLET ? "bg-white" : "bg-gray-200 hover:bg-gray-300 shadow-inner"}`}
           >
             <Link prefetch={true} href="/register?tab=wallet">
               Register with Wallet
