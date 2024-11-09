@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, ReactNode, SetStateAction, useState } from "react"
 import { ModalDone } from "./ModalDone"
 import XMarkIcon from "@heroicons/react/24/outline/XMarkIcon"
 export function ModalConfirm({
@@ -16,10 +16,10 @@ export function ModalConfirm({
 }: {
   title: string
   open: boolean
-  description: string
+  description: ReactNode
   cancelMessage: string
   confirmMessage: string
-  doneMessage: string
+  doneMessage: ReactNode
   doneTitle: string
   onConfirm: Dispatch<SetStateAction<boolean>>
   onCancel: Dispatch<SetStateAction<boolean>>

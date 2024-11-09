@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, ReactNode, SetStateAction } from "react"
 import XMarkIcon from "@heroicons/react/24/outline/XMarkIcon"
 
 export function ModalDone({
@@ -7,7 +7,7 @@ export function ModalDone({
   action,
 }: {
   title: string
-  message: string
+  message: ReactNode
   action: Dispatch<SetStateAction<boolean>>
 }) {
   const handleAction = () => {

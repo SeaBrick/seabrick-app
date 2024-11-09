@@ -30,7 +30,7 @@ export function MintTokensModal({
     setConfirmOpen(false)
   }
 
-  const handleConfirm = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const validationError = validateEmail(email)
     if (validationError) {
@@ -57,10 +57,20 @@ export function MintTokensModal({
       {isConfirmOpen && (
         <ModalConfirm
           title={"Confirm Your Action"}
-          description={`Are you sure you want to mint ${quantity} tokens to ${email}?`}
+          description={
+            <p>
+              Are you sure you want to mint <strong>{quantity}</strong> tokens
+              to <strong>{email}</strong>
+            </p>
+          }
           cancelMessage={"No, I want to go back"}
           confirmMessage={"Yes, I want to mint it"}
-          doneMessage={`Your succesfuly minted ${quantity} tokens to ${email}`}
+          doneMessage={
+            <p>
+              Your succesfuly minted <strong>{quantity}</strong> tokens to{" "}
+              <strong>{email}</strong>
+            </p>
+          }
           doneTitle={"Tokens Minted"}
           onCancel={handleCancel}
           onConfirm={printConfirm}
@@ -92,7 +102,7 @@ export function MintTokensModal({
               </button>
             </div>
           </div>
-          <form onSubmit={handleConfirm} className="flex flex-col gap-6">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
             <div className="flex gap-2">
               <div className="grow shrink">
                 <div className="text-[#333333] text-xs font-normal font-['Noto Sans'] text-start">
