@@ -12,10 +12,10 @@ export async function GET() {
     return checkAccessResp.nextResponse;
   }
 
-  const { data, error } = await supabaseClient
-    .from("user_roles")
-    .select("id, user_id")
-    .eq("role", "admin");
+  // Gettin all the admins with role "admin"
+  const { data, error } = await supabaseClient.rpc("get_admin_user_details", {
+    role_name: "admin",
+  });
 
   if (error) {
     return NextResponse.json(
