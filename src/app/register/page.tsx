@@ -12,10 +12,7 @@ import { Address, zeroAddress } from "viem";
 import SubmitButton from "@/components/buttons/SubmitButton";
 import RegisterEmailForm from "@/components/forms/RegisterEmail";
 import RegisterWalletForm from "@/components/forms/RegisterWallet";
-
-interface Errors {
-  message?: string;
-}
+import type { Errors } from "@/lib/interfaces";
 
 enum TabsIndex {
   EMAIL,
@@ -83,27 +80,27 @@ export default function RegisterPage() {
         onChange={setSelectedIndex}
         className="z-10"
       >
-        <TabList className="flex gap-4 mt-32">
+        <TabList className="flex gap-4 mt-32 px-5">
           <Tab
-            className={`rounded-full py-1 px-3 bg-white hover:bg-gray-200 active:bg-gray-400 ${selectedIndex == TabsIndex.EMAIL ? "outline outline-2 outline-offset-2" : ""}`}
+            className={`rounded-t-xl py-2 px-3 bg-white hover:bg-gray-200 active:bg-gray-400 ${selectedIndex == TabsIndex.EMAIL && "outline outline-2 outline-offset-2"}`}
           >
             <Link prefetch={true} href="/register">
               Register with Email
             </Link>
           </Tab>
           <Tab
-            className={`rounded-full py-1 px-3 bg-white hover:bg-gray-200 active:bg-gray-400 ${selectedIndex == TabsIndex.WALLET ? "outline outline-2 outline-offset-2" : ""}`}
+            className={`rounded-t-xl py-2 px-3 bg-white hover:bg-gray-200 active:bg-gray-400 ${selectedIndex == TabsIndex.WALLET && "outline outline-2 outline-offset-2"}`}
           >
             <Link prefetch={true} href="/register?tab=wallet">
               Register with Wallet
             </Link>
           </Tab>
         </TabList>
-        <TabPanels className="">
-          <TabPanel className="rounded-xl bg-seabrick-blue/5 p-5">
+        <TabPanels className="px-5">
+          <TabPanel className="-5">
             <RegisterEmailForm />
           </TabPanel>
-          <TabPanel className="rounded-xl bg-seabrick-blue/5 p-5">
+          <TabPanel className="-5">
             <RegisterWalletForm />
           </TabPanel>
         </TabPanels>
