@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import Link from "next/link";
+interface CheckEmailProps {
+  email: string;
+}
 
-const CheckEmail: React.FC = () => {
+const CheckEmail: React.FC<CheckEmailProps> = ({ email }) => {
   return (
     <div className="w-[606px] h-[399px] p-6 bg-white rounded-[10px] flex-col justify-start items-center gap-8 inline-flex z-10 mt-[180px]">
       <div className="self-stretch h-[223px] flex-col justify-start items-center gap-4 flex">
@@ -31,19 +34,19 @@ const CheckEmail: React.FC = () => {
               Email sent to{" "}
             </span>
             <span className="text-[#333333] text-sm font-bold font-['Noto Sans']">
-              sebastians.rojasr@gmail.com
+              {email}
             </span>
           </div>
         </div>
-        <div className="self-stretch h-[45px] flex-col justify-start items-center gap-4 flex">
-          <div className="self-stretch justify-start items-center gap-2 inline-flex">
-            <div className="grow shrink basis-0 h-[45px] justify-start items-center gap-2 flex">
-              <div className="grow shrink basis-0 h-[45px] p-[17px] bg-[#2069a0] rounded-[5px] justify-center items-center gap-2.5 flex">
-                <div className="text-right text-white text-sm font-normal font-['Noto Sans']">
-                  Ok
-                </div>
-              </div>
-            </div>
+        <div className="self-stretch h-[45px] flex-col justify-start items-center gap-4 flex mt-2">
+          <div className="">
+            <Link
+              href="/login"
+              prefetch={true}
+              className="grow py-3 px-16 shrink basis-0 self-stretch bg-seabrick-blue rounded-[5px] justify-center items-center gap-2.5 hover:bg-seabrick-blue/80 disabled:cursor-not-allowed disabled:bg-gray-400 text-center text-white text-sm font-normal font-['Noto Sans']"
+            >
+              Ok
+            </Link>
           </div>
         </div>
       </div>
