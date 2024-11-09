@@ -12,6 +12,7 @@ import { Address, zeroAddress } from "viem";
 import SubmitButton from "@/components/buttons/SubmitButton";
 import { Errors } from "@/lib/interfaces";
 import { isEmpty } from "lodash";
+import { z } from "zod";
 
 const RegisterEmailForm: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -37,6 +38,19 @@ const RegisterEmailForm: React.FC = () => {
     setShowRepeatedPassword(!showRepeatedPassword);
   };
 
+  const debounceValidation = (callback: () => void) => {
+    if (debounceTimeout) clearTimeout(debounceTimeout);
+
+    const timeout = setTimeout(callback, 500); // Adjust debounce delay as needed
+
+    setDebounceTimeout(timeout);
+  };
+
+  const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    debounceValidation(() => validateEmail(e.target.value));
+  };
+
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
     validatePasswords(e.target.value, repeatedPassword);
@@ -44,7 +58,7 @@ const RegisterEmailForm: React.FC = () => {
 
   const onChangeRepeatedPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRepeatedPassword(e.target.value);
-    validatePasswords(e.target.value, password);
+    debounceValidation(() => validatePasswords(e.target.value, password));
   };
 
   const validatePasswords = (
@@ -63,6 +77,24 @@ const RegisterEmailForm: React.FC = () => {
       // Enable submit if passwords match and are not empty
       showError({});
       setIsSubmitDisabled(false);
+    }
+  };
+
+  const validateEmail = (newEmail: string) => {
+    if (isEmpty(newEmail)) {
+      showError({});
+      return;
+    }
+
+    const emailSchema = z.string().email("Invalid email address");
+    const { success: validationSuccess, error: validationError } =
+      emailSchema.safeParse(newEmail);
+
+    if (validationSuccess) {
+      showError({});
+    } else {
+      // Just return the first error encountered
+      showError(validationError.errors[0].message);
     }
   };
 
@@ -121,7 +153,7 @@ const RegisterEmailForm: React.FC = () => {
               id="email"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={onChangeEmail}
               placeholder="Enter your email"
               className="self-stretch h-11 px-[15px] py-2.5 rounded-[5px] border border-[#333333] text-[#333333] text-sm font-normal font-['Noto Sans'] bg-[#efeff4]/60"
             />
