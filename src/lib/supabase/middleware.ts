@@ -1,5 +1,15 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { getUserRole } from "../utils/auth";
+
+const publicPaths = ["/login", "/register", "/reset-password", "/auth", "/api"];
+const loggedDisallowedPaths = [
+  "/login",
+  "/register",
+  "/reset-password",
+  "/auth",
+];
+const onlyAdminPaths = ["/admin", "/admin-list"];
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -37,22 +47,38 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (
-    !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/register") &&
-    !request.nextUrl.pathname.startsWith("/reset-password") &&
-    !request.nextUrl.pathname.startsWith("/auth") &&
-    // !request.nextUrl.pathname.startsWith("/buy") &&
-    !request.nextUrl.pathname.startsWith("/api")
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
+  // Check if the current path is in the list of public paths
+  const isPublicPath = publicPaths.some((path) =>
+    request.nextUrl.pathname.startsWith(path)
+  );
+
+  // Redirect unauthenticated users to the login page if they're trying to access a protected path
+  if (!user && !isPublicPath) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 
-  if (user && request.nextUrl.pathname.startsWith("/login")) {
+  // Check if the current path is in disallowed when an user is logged
+  const isLoggedDisallowed = loggedDisallowedPaths.some((path) =>
+    request.nextUrl.pathname.startsWith(path)
+  );
+
+  // Redirect  authenticated users to the home page if they're trying to access a authentication path
+  if (user && isLoggedDisallowed) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/";
+    return NextResponse.redirect(url);
+  }
+
+  // Check if the current path is only for admins
+  const isOnlyAdmin = onlyAdminPaths.some((path) =>
+    request.nextUrl.pathname.startsWith(path)
+  );
+  const userRole = await getUserRole(supabase);
+
+  // Redirect unauthorized users to the home page if they're trying to access an only admin path
+  if (!userRole && isOnlyAdmin) {
     const url = request.nextUrl.clone();
     url.pathname = "/";
     return NextResponse.redirect(url);
