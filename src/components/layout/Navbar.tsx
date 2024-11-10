@@ -46,7 +46,6 @@ export function Navbar() {
         </div>
 
         <div className="flex h-[70px] w-6/12 justify-end items-center gap-8 hover:direct-children:text-seabrick-blue ">
-          {/* FIXME: This NOT only depends on the wallet connect. Also depends on the user role */}
           {(user && userRole == "admin") ||
             (userRole == "owner" && (
               <Link
