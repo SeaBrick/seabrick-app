@@ -1,3 +1,5 @@
+import { toast } from "react-toastify"
+
 const baseEndpoint = new URL('http://localhost:3000/api/admins')
 
 export interface AdminInterface {
@@ -13,11 +15,15 @@ export async function getAdmins() {
         const response = await fetch(baseEndpoint, {
             method: 'GET'
         })
+        if (response.status >= 300) {
+            throw new Error(`${response.status} - ${response.statusText}`)
+        }
         const data = await response.json()
         console.log(data)
-        return ({...data})
+        return ({ ...data })
     } catch (error) {
-        console.log(error)
+        toast.error((error as { message: string }).message)
+
     }
 
 }
@@ -33,11 +39,15 @@ export async function addAdmin(email: string) {
                 'Content-Type': 'application/json'
             },
         })
+
+        if (response.status >= 300) {
+            throw new Error(`${response.status} - ${response.statusText}`)
+        }
         const data = response.json()
         console.log(data)
         return (data)
     } catch (error) {
-        console.log(error)
+        toast.error((error as { message: string }).message)
     }
 
 }
@@ -47,6 +57,9 @@ export async function removeAdmin(id: string) {
         const response = await fetch(baseEndpoint + `?id=${id}`, {
             method: 'DELETE'
         })
+        if (response.status >= 300) {
+            throw new Error(`${response.status} - ${response.statusText}`)
+        }
         const data = await response.json()
         console.log(data)
         return (data)

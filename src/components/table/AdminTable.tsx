@@ -70,18 +70,14 @@ function AdminTable({
               {columns.map((column) => {
                 let enableCopier = false
                 let valueText = ""
-                if (
-                  (column.key === "email" || column.key == "address") &&
-                  row[column.key]
-                ) {
+                let showText = row[column.key as keyof AdminInterface]
+                if (column.key == "address" && row[column.key]) {
                   enableCopier = true
                   valueText = row[column.key]!
-                  row[column.key] = truncateString(row[column.key]!)
+                  showText = truncateString(row[column.key]!)
                 }
                 if (column.key === "created_at") {
-                  row[column.key] = new Date(
-                    row[column.key]
-                  ).toLocaleDateString()
+                  showText = new Date(row[column.key]).toLocaleDateString()
                 }
                 return (
                   <td
@@ -89,7 +85,7 @@ function AdminTable({
                     key={column.key}
                   >
                     <div className="inline-flex">
-                      {row[column.key as keyof AdminInterface] ?? "No data"}
+                      {showText ?? "No data"}
                       {enableCopier ? <TextCopier text={valueText} /> : ""}
                     </div>
                   </td>

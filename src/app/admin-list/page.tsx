@@ -5,13 +5,17 @@ import { addAdmin, AdminInterface, getAdmins, removeAdmin } from "./requests"
 
 const App: React.FC = () => {
   const [adminList, setAdminList] = useState<AdminInterface[]>([])
+
+  //
   useEffect(() => {
     fetchData()
-  }, [adminList])
+  }, [])
+  //
   const fetchData = async () => {
     const result = await getAdmins()
     setAdminList(result.data)
   }
+  //
   async function handleDeletion(id: string) {
     await removeAdmin(id)
     await fetchData()
