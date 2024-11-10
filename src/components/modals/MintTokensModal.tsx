@@ -33,7 +33,6 @@ export function MintTokensModal({
       console.log(error)
       handleBack()
     }
-    console.log("Confirm")
   }
 
   const handleBack = () => {

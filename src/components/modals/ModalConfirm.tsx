@@ -53,7 +53,7 @@ export function ModalConfirm({
             </div>
           </div>
 
-          <div className="flex justify-end gap-3">
+          <form className="flex justify-end gap-3" onSubmit={handleConfirm}>
             <button
               className="text-[#333333] text-xs font-normal font-['Noto Sans'] bg-[#efeff4] hover:bg-[#d9d9d9] active:bg-[#cccccc] rounded-[5px] p-3"
               onClick={handleCancel}
@@ -62,11 +62,11 @@ export function ModalConfirm({
             </button>
             <button
               className="text-white text-xs font-normal font-['Noto Sans'] bg-[#333333] hover:bg-[#555555] active:bg-[#222222] rounded-[5px] p-3"
-              onClick={handleConfirm}
+              type="submit"
             >
               {confirmMessage}
             </button>
-          </div>
+          </form>
         </div>
       )}
     </>
