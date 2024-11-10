@@ -23,7 +23,7 @@ export async function mintTokens(address: string, amount: number) {
             },
         })
 
-        if (response.status >= 300) {
+        if (!response.ok) {
             throw new Error(`${response.status} - ${response.statusText}`)
         }
         const data = response.json()

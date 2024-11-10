@@ -56,7 +56,7 @@ export default function Dashboard() {
       amount: 208,
     },
   ]
-  const isAdmin = false
+  const isAdmin = true
   const loggedUserName = "Sebastian Rojas"
   const userName = loggedUserName
 
