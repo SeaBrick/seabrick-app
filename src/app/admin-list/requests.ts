@@ -1,6 +1,6 @@
 import { toast } from "react-toastify"
 
-const baseEndpoint = new URL('http://localhost:3000/api/admins')
+const baseEndpoint = "/api/admins"
 
 export interface AdminInterface {
     user_id: string,
