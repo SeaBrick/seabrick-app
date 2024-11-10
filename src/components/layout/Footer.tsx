@@ -89,7 +89,7 @@ export function Footer() {
             </div>
           </footer>
         </div>
-        <div className="flex align-middle gap-x-3 text-white hover:text-[#ddd]">
+        <div className="flex items-center gap-x-3 text-white hover:text-[#ddd]">
           <a href="#">Lorem</a>
           <a href="#">Lorem</a>
           <a href="#">Lorem</a>
