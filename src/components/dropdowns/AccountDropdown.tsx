@@ -26,7 +26,7 @@ interface AccountDropdownProps {
 }
 
 export default function AccountDropdown({ num: _num }: AccountDropdownProps) {
-  const { user, userType, refetch: authRefetch } = useAuth();
+  const { user, userType, userAddress, refetch: authRefetch } = useAuth();
   const { disconnectAsync } = useDisconnect();
   const router = useRouter();
 
@@ -65,7 +65,11 @@ export default function AccountDropdown({ num: _num }: AccountDropdownProps) {
             {user && (
               <>
                 {userType == "wallet" ? (
-                  <>{addressResumer(user.user_metadata.address, 3)}</>
+                  <>
+                    {userAddress
+                      ? addressResumer(userAddress, 3)
+                      : user.user_metadata.email}
+                  </>
                 ) : (
                   <>{user.user_metadata.email}</>
                 )}
