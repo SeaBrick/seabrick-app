@@ -1,14 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { Address, Hex } from "viem";
-import {
-  type SignUpWithPasswordCredentials,
-  type SupabaseClient,
-  isAuthApiError,
-  isAuthError,
+import type {
+  SignUpWithPasswordCredentials,
+  SupabaseClient,
 } from "@supabase/supabase-js";
 import { headers } from "next/headers";
 import { getUrl } from "@/lib/utils";
@@ -18,11 +14,7 @@ import {
   getUniquePassword,
   verifySignature,
 } from "@/lib/utils/session";
-import {
-  UserAuthRegisterSchema,
-  UserAuthSchema,
-  userLoginWalletSchema,
-} from "@/lib/zod";
+import { UserAuthRegisterSchema, UserRegisterWalletSchema } from "@/lib/zod";
 
 async function registerInternal(
   supabaseClient: SupabaseClient<never, "public", never>,
@@ -65,6 +57,23 @@ export async function signup(formData: FormData) {
     return { error: validationError.errors[0].message };
   }
 
+  const { data: dataUser, error: errorUser } = await createClient(true)
+    .rpc("get_user_id_by_email", {
+      email: validationData.email,
+    })
+    .returns<{ id: string }[]>();
+
+  // We handle this as not email found
+  if (dataUser && dataUser.length > 0) {
+    return { error: "Email already taken" };
+  }
+
+  if (errorUser) {
+    console.error("Error obtaining the User by email");
+    console.error(errorUser);
+    return { error: "Server internal error" };
+  }
+
   // Create the data object
   const data: SignUpWithPasswordCredentials = {
     email: validationData.email,
@@ -88,68 +97,95 @@ export async function signup(formData: FormData) {
   revalidatePath("/", "layout");
 }
 
-export async function signUpWithWallet(
-  currentState: { message: string },
-  formData: FormData
-) {
+export async function signUpWithWallet(formData: FormData) {
   // Create supabase client
   const supabase = createClient();
 
-  // type-casting here for convenience
-  // TODO: USe Zod to validate inputs
-  const address = formData.get("address")?.toString() as string;
-  const signature = formData.get("signature")?.toString() as string;
-  const email = formData.get("email")?.toString() as string;
-  // // TODO: Find usage to this value
-  // const _emailPromotions = formData
-  //   .get("email-promotions")
-  //   ?.toString() as string;
-
   const nonceSession = await getNonceSession();
-
   if (!nonceSession) {
-    return { message: "Nonce session not found" };
+    return { error: "Nonce session not found" };
+  }
+
+  // Validate the incoming data
+  const {
+    data: validationData,
+    success: validationSuccess,
+    error: validationError,
+  } = UserRegisterWalletSchema.safeParse({
+    email: formData.get("email"),
+    address: formData.get("address"),
+    signature: formData.get("signature"),
+  });
+
+  if (!validationSuccess) {
+    // Just return the first error encountered
+    return { error: validationError.errors[0].message };
+  }
+
+  // Deconstruct for convenience
+  const { address, signature, email } = validationData;
+
+  const { data: dataUser, error: errorUser } = await createClient(true)
+    .rpc("get_user_id_by_email", {
+      email: email,
+    })
+    .returns<{ id: string }[]>();
+
+  // We handle this as not email found
+  if (dataUser && dataUser.length > 0) {
+    return { error: "Email already taken" };
+  }
+
+  if (errorUser) {
+    console.error("Error obtaining the User by email");
+    console.error(errorUser);
+    return { error: "Server internal error" };
+  }
+
+  const { error: walletUserError } = await createClient()
+    .from("wallet_users")
+    .select("address")
+    .eq("address", address?.toLowerCase())
+    .single();
+
+  if (
+    !walletUserError ||
+    (walletUserError && walletUserError.code != "PGRST116")
+  ) {
+    return { error: "Wallet address already linked" };
   }
 
   // Validating signature
   const isValidSignature = await verifySignature(
-    address! as Address,
+    address,
     nonceSession,
-    signature! as Hex
+    signature
   );
 
   // Return error message if not valid signature
   if (!isValidSignature) {
-    return { message: "Not valid signature" };
+    return { error: "Not valid signature" };
   }
 
-  // Get the whole url to generate the redirect url
-  const fullUrl = headers().get("referer");
-  const redirectUrl = getUrl(fullUrl);
-
-  // type-casting here for convenience
-  // TODO: USe Zod to validate inputs
   const data: SignUpWithPasswordCredentials = {
     email,
-    password: await getUniquePassword(address as Address),
+    password: await getUniquePassword(address),
     options: {
-      // captchaToken
       data: {
         type: "wallet",
       },
-      emailRedirectTo: redirectUrl,
     },
   };
 
-  const { error } = await supabase.auth.signUp(data);
-
-  if (error) {
-    console.log("Signup error: ", error);
-    redirect("/error");
+  // Call the register
+  const registerResp = await registerInternal(supabase, data);
+  console.error("registerResp");
+  console.error(registerResp);
+  // If we got response from registerInternal, an error happened
+  if (registerResp) {
+    return registerResp;
   }
 
   deleteNonceSession();
   revalidatePath("/", "layout");
-
-  return { message: `Email sent to your linked email. Ple1ase confirm it` };
 }
