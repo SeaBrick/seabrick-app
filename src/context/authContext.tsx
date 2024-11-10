@@ -16,6 +16,7 @@ import type {
   UserType,
 } from "@/lib/interfaces/auth";
 import { decodeJWT, getUserRole } from "@/lib/utils/auth";
+import { getAddress, type Address } from "viem";
 
 type AuthContextProps = AuthContextAuthenticated | AuthContextUnauthenticated;
 
@@ -23,6 +24,7 @@ const AuthContext = createContext<AuthContextProps>({
   user: null,
   userType: null,
   userRole: null,
+  userAddress: null,
   refetch: async () => {},
 });
 
@@ -30,7 +32,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<Session["user"] | null>(null);
   const [userType, setUserType] = useState<UserType | null>(null);
   const [userRole, setUserRole] = useState<UserRole>(null);
+  const [userAddress, setUserAddress] = useState<Address | null>(null);
   const supabaseClient = createClient();
+
+  async function getUserData() {
+    if (user) {
+      const { data, error } = await supabaseClient
+        .from("wallet_users")
+        .select("address")
+        .eq("user_id", user.id)
+        .single<{ address: string }>();
+
+      if (error) {
+        setUserAddress(null);
+        return;
+      }
+
+      setUserAddress(getAddress(data.address));
+    }
+  }
 
   useAccountEffect({
     onDisconnect() {
@@ -48,6 +68,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } = await supabaseClient.auth.getUser();
 
     const userRole = await getUserRole(supabaseClient);
+    await getUserData();
 
     setUser(user);
     setUserType(user?.user_metadata?.type || null);
@@ -82,12 +103,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           user,
           userType,
           userRole,
+          userAddress,
           refetch,
         }
       : {
           user: null,
           userType: null,
           userRole: null,
+          userAddress: null,
           refetch,
         };
 

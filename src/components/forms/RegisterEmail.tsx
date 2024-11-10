@@ -9,6 +9,7 @@ import { signup } from "@/app/register/actions";
 import Modal from "../modals/Modal";
 import CheckEmail from "../auth/CheckEmail";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const RegisterEmailForm: React.FC = () => {
   const router = useRouter();
@@ -237,17 +238,25 @@ const RegisterEmailForm: React.FC = () => {
               <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">
                 Do you already have an account?
               </div>
-              <button className="text-[#333333] text-xs font-bold font-['Noto Sans']">
-                Log In
-              </button>
+              <Link
+                href="/login"
+                prefetch={true}
+                className="text-[#333333] text-xs font-bold font-['Noto Sans']"
+              >
+                Login
+              </Link>
             </div>
             <div className="self-stretch justify-between items-center inline-flex">
-              <button className="text-[#333333] text-xs font-normal font-['Noto Sans']">
+              <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">
                 Forgot your password?
-              </button>
-              <button className="text-[#333333] text-xs font-bold font-['Noto Sans']">
-                Reset Password
-              </button>
+              </div>
+              <Link
+                href="/reset-password"
+                prefetch={true}
+                className="text-[#333333] text-xs font-bold font-['Noto Sans']"
+              >
+                Reset password
+              </Link>
             </div>
           </div>
         </div>

@@ -20,3 +20,10 @@ export const userLoginWalletSchema = z.object({
   address: z.string().refine((value) => isAddress(value), "No valid address"),
   signature: z.string().refine((value) => isHex(value), "No valid signature"),
 });
+
+/**
+ * Schema for Register with email
+ */
+export const UserRegisterWalletSchema = userLoginWalletSchema.extend(
+  UserAuthSchema.omit({ password: true }).shape
+);

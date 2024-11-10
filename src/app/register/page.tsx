@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,7 +8,6 @@ import RegisterEmailForm from "@/components/forms/RegisterEmail";
 import RegisterWalletForm from "@/components/forms/RegisterWallet";
 import { AtSymbolIcon } from "@heroicons/react/24/outline";
 import { LoginBanner } from "@/components/layout/LoginBanner";
-
 
 enum TabsIndex {
   EMAIL,
@@ -33,8 +32,8 @@ export default function RegisterPage() {
   }, [tab]);
 
   return (
-    <>    
-      <LoginBanner/> 
+    <>
+      <LoginBanner />
       <div className="flex justify-center">
         <TabGroup
           selectedIndex={selectedIndex}
@@ -48,7 +47,7 @@ export default function RegisterPage() {
               <Link
                 prefetch={true}
                 className="flex items-center gap-x-1"
-                href="/register"
+                href="/register?tab=email"
               >
                 <AtSymbolIcon className="size-4" />
                 <span>Register with Email</span>
