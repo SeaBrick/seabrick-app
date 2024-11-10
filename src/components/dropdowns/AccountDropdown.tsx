@@ -1,6 +1,5 @@
 "use client";
 import { useAuth } from "@/context/authContext";
-import { createClient } from "@/lib/supabase/client";
 import { addressResumer } from "@/lib/utils";
 import {
   Menu,
@@ -18,33 +17,15 @@ import {
 } from "@heroicons/react/24/outline";
 import { UserIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useDisconnect } from "wagmi";
 
 interface AccountDropdownProps {
   num?: number;
 }
 
 export default function AccountDropdown({ num: _num }: AccountDropdownProps) {
-  const { user, userType, userAddress, refetch: authRefetch } = useAuth();
-  const { disconnectAsync } = useDisconnect();
-  const router = useRouter();
-
-  async function signOut() {
-    const { error } = await createClient().auth.signOut();
-    if (error) {
-      // TODO: set error modal
-      console.log(error);
-    }
-
-    router.push("/");
-    await authRefetch();
-  }
+  const { user, userType, userAddress, signOut } = useAuth();
 
   async function onClickSignOut() {
-    if (userType == "wallet") {
-      await disconnectAsync();
-    }
     await signOut();
   }
 
