@@ -40,14 +40,15 @@ function Table({
           </tr>
         </thead>
         <tbody className="w-full px-6 pt-[14px] gap-4 min-w-fit">
-          {data.map((row) => (
+          {data.map((row, j) => (
             <tr
               className="w-full table-row border-b-[1px] border-[#efeff4]"
-              key={row.id}
+              key={j}
             >
-              {columns.map((column) => {
+              {columns.map((column, i) => {
                 let enableCopier = false
                 let valueText = ""
+                let showText = row[column.key]
                 if (
                   column.key === "hash" ||
                   column.key == "address" ||
@@ -56,15 +57,17 @@ function Table({
                 ) {
                   enableCopier = true
                   valueText = row[column.key]
-                  row[column.key] = truncateString(row[column.key])
+                  console.log("After", row[column.key])
+                  showText = truncateString(row[column.key])
+                  console.log("Before", row[column.key], valueText)
                 }
                 return (
                   <td
                     className={`text-black w-full text-justify text-[${fontSize}] font-normal font-['Noto Sans'] table-cell p-3 inline-flex`}
-                    key={column.key}
+                    key={`${j}-${i}`}
                   >
                     <div className="inline-flex">
-                      {row[column.key]}
+                      {showText}
                       {enableCopier ? <TextCopier text={valueText} /> : ""}
                     </div>
                   </td>
