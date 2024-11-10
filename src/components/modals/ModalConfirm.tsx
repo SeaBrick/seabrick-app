@@ -1,5 +1,4 @@
 import { Dispatch, ReactNode, SetStateAction, useState } from "react"
-import { ModalDone } from "./ModalDone"
 import XMarkIcon from "@heroicons/react/24/outline/XMarkIcon"
 export function ModalConfirm({
   title,
@@ -8,10 +7,7 @@ export function ModalConfirm({
   description,
   cancelMessage,
   confirmMessage,
-  doneMessage,
-  doneTitle,
   onConfirm,
-  onCancel,
   closeAll,
   openBack,
 }: {
@@ -20,20 +16,15 @@ export function ModalConfirm({
   description: ReactNode
   cancelMessage: string
   confirmMessage: string
-  doneMessage: ReactNode
-  doneTitle: string
   onConfirm: Dispatch<SetStateAction<boolean>>
-  onCancel: Dispatch<SetStateAction<boolean>>
   setOpen: Dispatch<SetStateAction<boolean>>
   closeAll: Dispatch<SetStateAction<boolean>>
   openBack: Dispatch<SetStateAction<boolean>>
 }) {
-  const [isOpenDone, setOpenDone] = useState(false)
   const [isSelfOpen, setSelfOpen] = useState(true)
-  const handleConfirm = () => {
-    onConfirm(true)
+  const handleConfirm = async () => {
+    await onConfirm(true)
     setSelfOpen(false)
-    setOpenDone(true)
   }
   const handleCancel = () => {
     setSelfOpen(true)
@@ -41,9 +32,6 @@ export function ModalConfirm({
   }
   return (
     <>
-      {isOpenDone && (
-        <ModalDone title={doneTitle} message={doneMessage} action={closeAll} />
-      )}
       {isSelfOpen && (
         <div className="bg-white rounded-[10px] h-fit min-h-fit max-h-[70vh]  w-[40vw] min-w-[450px] p-6 gap-6 flex flex-col">
           <div className="flex gap-2 justify-between">
@@ -58,7 +46,7 @@ export function ModalConfirm({
             <div className="">
               <button
                 className="w-[35px] h-[35px] rounded-full border border-[#9b9a9b]/60 flex justify-center items-center hover:bg-slate-50 active:bg-slate-200"
-                onClick={() => onCancel(false)}
+                onClick={() => closeAll(false)}
               >
                 <XMarkIcon className="size-[1rem]" />
               </button>

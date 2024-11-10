@@ -2,6 +2,8 @@ import XMarkIcon from "@heroicons/react/24/outline/XMarkIcon"
 import { Dispatch, SetStateAction, useState } from "react"
 import { ModalConfirm } from "./ModalConfirm"
 import { validateEmail } from "./Modal-add"
+import { ModalDone } from "./ModalDone"
+import { mintTokens } from "@/app/dashboard/requests"
 
 export function MintTokensModal({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -13,7 +15,9 @@ export function MintTokensModal({
 }) {
   const [isConfirmOpen, setConfirmOpen] = useState(false)
   const [isSelfOpen, setSelfOpen] = useState(true)
-  const [email, setEmail] = useState("")
+  const [isOpenDone, setOpenDone] = useState(false)
+
+  const [address, setAddress] = useState("")
   const [error, setError] = useState("")
   const [quantity, setQuantity] = useState(0)
 
@@ -21,7 +25,14 @@ export function MintTokensModal({
     console.log("Cancel")
     setOpen(false)
   }
-  const printConfirm = () => {
+  const handleConfirm = async () => {
+    try {
+      await mintTokens(address, quantity)
+      setOpenDone(true)
+    } catch (error) {
+      console.log(error)
+      handleBack()
+    }
     console.log("Confirm")
   }
 
@@ -32,8 +43,9 @@ export function MintTokensModal({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const validationError = validateEmail(email)
-    if (validationError) {
+    const validationError = validateEmail(address)
+    const validateWalletAddress = false
+    if (validationError && validateWalletAddress) {
       setError(validationError)
       return
     }
@@ -54,27 +66,31 @@ export function MintTokensModal({
 
   return (
     <>
+      {isOpenDone && (
+        <ModalDone
+          title={"Tokens Minted"}
+          message={
+            <p>
+              Your succesfuly minted <strong>{quantity}</strong> tokens to{" "}
+              <strong>{address}</strong>
+            </p>
+          }
+          action={setOpen}
+        />
+      )}
       {isConfirmOpen && (
         <ModalConfirm
           title={"Confirm Your Action"}
           description={
             <p>
               Are you sure you want to mint <strong>{quantity}</strong> tokens
-              to <strong>{email}</strong>
+              to <strong>{address}</strong>
             </p>
           }
           cancelMessage={"No, I want to go back"}
           confirmMessage={"Yes, I want to mint it"}
-          doneMessage={
-            <p>
-              Your succesfuly minted <strong>{quantity}</strong> tokens to{" "}
-              <strong>{email}</strong>
-            </p>
-          }
-          doneTitle={"Tokens Minted"}
-          onCancel={handleCancel}
-          onConfirm={printConfirm}
           open={isConfirmOpen}
+          onConfirm={handleConfirm}
           setOpen={setConfirmOpen}
           closeAll={setOpen}
           openBack={handleBack}
@@ -110,9 +126,9 @@ export function MintTokensModal({
                 </div>
                 <div className="">
                   <input
-                    name="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    name="address"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
                     placeholder="Enter Email"
                     className="bg-[#efeff4]/60 w-full py-2 px-4 rounded-md border border-[#babcc3]/60 text-[#8a8a8f] text-xs"
                   />
