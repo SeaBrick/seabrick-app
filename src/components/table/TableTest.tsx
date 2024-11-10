@@ -57,9 +57,7 @@ function Table({
                 ) {
                   enableCopier = true
                   valueText = row[column.key]
-                  console.log("After", row[column.key])
                   showText = truncateString(row[column.key])
-                  console.log("Before", row[column.key], valueText)
                 }
                 return (
                   <td

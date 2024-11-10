@@ -15,7 +15,7 @@ export async function getAdmins() {
         const response = await fetch(baseEndpoint, {
             method: 'GET'
         })
-        if (response.status >= 300) {
+        if (!response.ok) {
             throw new Error(`${response.status} - ${response.statusText}`)
         }
         const data = await response.json()
@@ -40,7 +40,7 @@ export async function addAdmin(email: string) {
             },
         })
 
-        if (response.status >= 300) {
+        if (!response.ok) {
             throw new Error(`${response.status} - ${response.statusText}`)
         }
         const data = response.json()
@@ -57,7 +57,7 @@ export async function removeAdmin(id: string) {
         const response = await fetch(baseEndpoint + `?id=${id}`, {
             method: 'DELETE'
         })
-        if (response.status >= 300) {
+        if (!response.ok) {
             throw new Error(`${response.status} - ${response.statusText}`)
         }
         const data = await response.json()

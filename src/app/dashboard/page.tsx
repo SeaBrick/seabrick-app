@@ -20,11 +20,13 @@ import Image from "next/image"
 import { useState } from "react"
 import ModalTransferOwnership from "@/components/modals/ModalTransferOwnership"
 import { MintTokensModal } from "@/components/modals/MintTokensModal"
+import { useRouter } from "next/navigation"
 export default function Dashboard() {
   const [isCardVisible, setIsCardVisible] = useState(false)
   const [dataOnDisplay, setDataOnDisplay] = useState("Transfers")
   const [isClaimTokensOpen, setClaimTokensOpen] = useState(false)
   const [isMintTokensOpen, setMintTokensOpen] = useState(false)
+  const router = useRouter()
   //
   const testDataMap: UserTransactionHistoryData[] = [
     {
@@ -324,7 +326,12 @@ export default function Dashboard() {
                 {isAdmin ? (
                   <div className="bg-white w-full h-full rounded-[10px] gap-3 p-4 flex flex-col justify-between">
                     <ModalTransferOwnership />
-                    <button className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-left">
+                    <button
+                      className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-left"
+                      onClick={() => {
+                        router.push("/admin-list")
+                      }}
+                    >
                       <UserIcon className="size-[1.25rem] inline mx-2 mt-[-3px]" />
                       Admins
                     </button>
