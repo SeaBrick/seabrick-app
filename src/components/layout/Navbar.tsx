@@ -19,7 +19,7 @@ export function Navbar() {
   const { address: walletAddress } = useAccount();
   const { data: contractsData } = useContractContext();
   const { data: accountData, dispatch: dispatchAccount } = useAccountContext();
-  const { user } = useAuth();
+  const { user, userRole } = useAuth();
 
   useEffect(() => {
     async function callGetter(address: Address) {
@@ -46,39 +46,35 @@ export function Navbar() {
         </div>
 
         <div className="flex h-[70px] w-6/12 justify-end items-center gap-8 hover:direct-children:text-seabrick-blue ">
-
           {/* FIXME: This NOT only depends on the wallet connect. Also depends on the user role */}
-          {user &&
-            walletAddress &&
-            (accountData.isMinter ||
-              getAddress(contractsData.market.owner) == walletAddress ||
-              getAddress(contractsData.seabrick.owner) == walletAddress) && (
+          {(user && userRole == "admin") ||
+            (userRole == "owner" && (
               <Link
                 className={`${pathname === "/admin" && "text-seabrick-blue"}`}
                 href="/admin"
               >
                 Admin
               </Link>
-            )}
+            ))}
 
-          
           {/* TODO: Better UX for account details */}
           {user ? (
             <AccountDropdown />
-          ) : (<>
-            <Link
-            className={`${pathname === "/register" && "text-text-gray"}`}
-            href="/register"
-          >
-            Register
-          </Link>
-            <Link
-              className={`${pathname === "/login" && "text-text-gray"} hover:text-seabrick-blue`}
-              href="/login"
-            >
-              Log in
-            </Link>
-          </>
+          ) : (
+            <>
+              <Link
+                className={`${pathname === "/register" && "text-text-gray"}`}
+                href="/register"
+              >
+                Register
+              </Link>
+              <Link
+                className={`${pathname === "/login" && "text-text-gray"} hover:text-seabrick-blue`}
+                href="/login"
+              >
+                Log in
+              </Link>
+            </>
           )}
         </div>
       </div>
