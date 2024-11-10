@@ -25,11 +25,8 @@ export default function RegisterPage() {
       case "wallet":
         setSelectedIndex(TabsIndex.WALLET);
         break;
-      case "email":
-        setSelectedIndex(TabsIndex.EMAIL);
-        break;
       default:
-        setSelectedIndex(TabsIndex.WALLET);
+        setSelectedIndex(TabsIndex.EMAIL);
         break;
     }
   }, [tab]);
