@@ -40,55 +40,61 @@ function FooterSVG(details: {
 
 export function Footer() {
   return (
-    <div className="bg-seabrick-blue min-h-[334px] mt-8">
-      <div className="w-1/2 mx-auto h-max">
-        <div className="min-h-[272px] p-10 flex flex-col gap-y-[30px]">
-          <div>
-            <figure>
-              <Image
-                loading="lazy"
-                decoding="async"
-                width="307"
-                height="54"
-                src="https://expokit.net/seabrick/wp-content/uploads/2023/12/seabrick-logo-white.svg"
-                alt=""
-                className="w-[220px]"
-              />
-            </figure>
-          </div>
-          <div>
-            <ul className="flex gap-x-4 text-seabrick-blue direct-children:bg-white direct-children:rounded-full direct-children:p-1">
-              <li>
-                <FooterSVG path={SVGPaths.Instagram} />
-              </li>
+    <div className="bg-seabrick-blue mt-8 flex justify-center">
+      <div className="w-full max-w-[1920px] px-[40px] flex flex-row justify-between">
+        <div className="w-fit h-max">
+          <div className="py-4 flex flex-col items-start gap-y-[10px]">
+            <div>
+              <figure>
+                <Image
+                  loading="lazy"
+                  decoding="async"
+                  width="307"
+                  height="54"
+                  src="https://expokit.net/seabrick/wp-content/uploads/2023/12/seabrick-logo-white.svg"
+                  alt=""
+                  className="w-[220px]"
+                />
+              </figure>
+            </div>
+            <div>
+              <ul className="flex gap-x-4 text-seabrick-blue direct-children:bg-white direct-children:rounded-full direct-children:p-1">
+                <li>
+                  <FooterSVG path={SVGPaths.Instagram} />
+                </li>
 
-              <li>
-                <FooterSVG path={SVGPaths.LinkedIn} />
-              </li>
+                <li>
+                  <FooterSVG path={SVGPaths.LinkedIn} />
+                </li>
 
-              <li>
-                <FooterSVG path={SVGPaths.X} />
-              </li>
-              <li>
-                <FooterSVG path={SVGPaths.Youtube} />
-              </li>
-            </ul>
+                <li>
+                  <FooterSVG path={SVGPaths.X} />
+                </li>
+                <li>
+                  <FooterSVG path={SVGPaths.Youtube} />
+                </li>
+              </ul>
+            </div>
           </div>
+          <footer className="pb-2.5">
+            <div className="text-white">
+              © 2024 Seabrick | Designed by{" "}
+              <a
+                href="https://grafikavision.com/"
+                title="Vancouver Branding and Web Design"
+                target="_blank"
+              >
+                GrafikaVision
+              </a>
+            </div>
+          </footer>
         </div>
-
-        <footer className="min-h-[62px]">
-          <div className="text-white">
-            © 2024 Seabrick | Designed by{" "}
-            <a
-              href="https://grafikavision.com/"
-              title="Vancouver Branding and Web Design"
-              target="_blank"
-            >
-              GrafikaVision
-            </a>
-          </div>
-        </footer>
-      </div>
+        <div className="flex align-middle gap-x-3 text-white hover:text-[#ddd]">
+          <a href="#">Lorem</a>
+          <a href="#">Lorem</a>
+          <a href="#">Lorem</a>
+        </div>
+      </div>  
     </div>
   );
 }
