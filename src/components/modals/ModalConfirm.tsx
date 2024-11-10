@@ -1,5 +1,7 @@
 import { Dispatch, ReactNode, SetStateAction, useState } from "react"
 import XMarkIcon from "@heroicons/react/24/outline/XMarkIcon"
+import SubmitButton from "../buttons/SubmitButton"
+import { useFormState, useFormStatus } from "react-dom"
 export function ModalConfirm({
   title,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -21,8 +23,9 @@ export function ModalConfirm({
   closeAll: Dispatch<SetStateAction<boolean>>
   openBack: Dispatch<SetStateAction<boolean>>
 }) {
+  const { pending } = useFormStatus()
   const [isSelfOpen, setSelfOpen] = useState(true)
-  const handleConfirm = async () => {
+  const handleConfirm = async (_formData: FormData) => {
     await onConfirm(true)
     setSelfOpen(false)
   }
@@ -53,22 +56,22 @@ export function ModalConfirm({
             </div>
           </div>
 
-          <form className="flex justify-end gap-3" onSubmit={handleConfirm}>
+          <form className="flex justify-end gap-3" action={handleConfirm}>
             <button
               className="text-[#333333] text-xs font-normal font-['Noto Sans'] bg-[#efeff4] hover:bg-[#d9d9d9] active:bg-[#cccccc] rounded-[5px] p-3"
               onClick={handleCancel}
             >
               {cancelMessage}
             </button>
-            <button
-              className="text-white text-xs font-normal font-['Noto Sans'] bg-[#333333] hover:bg-[#555555] active:bg-[#222222] rounded-[5px] p-3"
-              type="submit"
-            >
-              {confirmMessage}
-            </button>
+            <SubmitButton
+              buttonClass="text-white text-xs font-normal font-['Noto Sans'] bg-[#333333] hover:bg-[#555555] active:bg-[#222222] rounded-[5px] p-3"
+              label={confirmMessage}
+              loadingLabel={"Minting..."}
+            />
           </form>
         </div>
       )}
     </>
   )
 }
+// text-white text-xs font-normal font-['Noto Sans'] bg-[#333333] hover:bg-[#555555] active:bg-[#222222] rounded-[5px] p-3

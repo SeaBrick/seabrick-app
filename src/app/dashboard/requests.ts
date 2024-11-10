@@ -10,13 +10,13 @@ export interface AdminInterface {
     role_user_id: number
     address?: string
 }
-export async function mintTokens(address: string, quantity: number) {
+export async function mintTokens(address: string, amount: number) {
     try {
         const response = await fetch("/api/admins/mint", {
             method: 'POST',
             body: JSON.stringify({
                 email: address,
-                quantity
+                amount
             }),
             headers: {
                 'Content-Type': 'application/json'
@@ -31,7 +31,7 @@ export async function mintTokens(address: string, quantity: number) {
         return (data)
     } catch (error) {
         toast.error((error as { message: string }).message)
-        throw new Error(error as string)
+        throw error
     }
 
 }
