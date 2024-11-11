@@ -36,20 +36,18 @@ export default function AccountDetailsPage() {
 
   
   return (
-    <div className="max-w-[978px] w-full mx-auto">
+    <div className="max-w-[978px] w-full mx-auto mt-[30px]">
       <p className="text-md text-center">Account</p>
       <h3 className="text-4xl text-center mb-9">Account Settings</h3>
 
-      <div className=" p-5 bg-white rounded-[10px] flex-col justify-center items-center gap-4 inline-flex mb-4">
+      <div className="w-full p-5 bg-white rounded-[10px] flex-col justify-center items-center gap-4 inline-flex mb-4">
         <div className="self-stretch flex-col justify-start items-start gap-[30px] flex">
-            <div className="self-stretch items-center md:justify-start md:items-start gap-[30px] flex flex-col md:flex-row">
+            <div className="self-stretch items-center justify-center gap-3 flex flex-col">
                 <div className="w-[90px] h-[90px] relative">
-                    <img className="w-[90px] h-[90px] left-0 top-0 absolute rounded-full" src="https://plus.unsplash.com/premium_photo-1683910767532-3a25b821f7ae" width={90} height={90} alt="img-user"/>
+                    <Image className="w-[90px] h-[90px] left-0 top-0 absolute rounded-full object-cover" src="/user-no-profile.webp" width={90} height={90} alt="img-user"/>
                 </div>
-                <div className="grow shrink basis-0 flex-col justify-start items-center md:items-start gap-2 inline-flex">
+                <div className="grow shrink basis-0 flex-col justify-start items-center gap-2 inline-flex">
                     <h3 className="text-[#49414d] text-xl font-bold font-['Noto Sans'] leading-normal">Sebastian Rojas</h3>
-                    <p className="self-stretch text-[#8a8a8f] text-sm font-normal font-['Noto Sans'] text-center md:text-start">Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora ab nesciunt nam, soluta reiciendis enim ullam cupiditate pariatur magni repellat et iste vel expedita laudantium perferendis culpa atque? Adipisci, distinctio?                 
-                    </p>
                 </div>
             </div>
         </div>

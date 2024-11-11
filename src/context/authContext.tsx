@@ -7,7 +7,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { Session } from "@supabase/supabase-js";
+import { Session, User } from "@supabase/supabase-js";
 import { useAccountEffect } from "wagmi";
 import type {
   AuthContextAuthenticated,
@@ -17,6 +17,7 @@ import type {
 } from "@/lib/interfaces/auth";
 import { decodeJWT, getUserRole } from "@/lib/utils/auth";
 import { getAddress, type Address } from "viem";
+import { useRouter } from "next/navigation";
 
 type AuthContextProps = AuthContextAuthenticated | AuthContextUnauthenticated;
 
@@ -25,39 +26,31 @@ const AuthContext = createContext<AuthContextProps>({
   userType: null,
   userRole: null,
   userAddress: null,
+  signOut: async () => {},
   refetch: async () => {},
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const router = useRouter();
   const [user, setUser] = useState<Session["user"] | null>(null);
   const [userType, setUserType] = useState<UserType | null>(null);
   const [userRole, setUserRole] = useState<UserRole>(null);
   const [userAddress, setUserAddress] = useState<Address | null>(null);
   const supabaseClient = createClient();
 
-  async function getUserData() {
-    if (user) {
-      const { data, error } = await supabaseClient
-        .from("wallet_users")
-        .select("address")
-        .eq("user_id", user.id)
-        .single<{ address: string }>();
-
-      if (error) {
-        setUserAddress(null);
-        return;
-      }
-
-      setUserAddress(getAddress(data.address));
+  async function signOut() {
+    const { error } = await createClient().auth.signOut();
+    if (error) {
+      // TODO: set error modal (??)
+      console.log(error);
     }
+
+    await refetch();
+    router.push("/login");
   }
 
   useAccountEffect({
     onDisconnect() {
-      async function signOut() {
-        await supabaseClient.auth.signOut();
-        await refetch();
-      }
       signOut();
     },
   });
@@ -68,8 +61,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } = await supabaseClient.auth.getUser();
 
     const userRole = await getUserRole(supabaseClient);
-    await getUserData();
 
+    async function getUserAddress(user_: User | null) {
+      if (user_) {
+        const { data, error } = await supabaseClient
+          .from("wallet_users")
+          .select("address")
+          .eq("user_id", user_.id)
+          .single<{ address: string }>();
+
+        if (!error) {
+          return getAddress(data.address);
+        }
+      }
+
+      return null;
+    }
+
+    const userAddress = await getUserAddress(user);
+
+    setUserAddress(userAddress);
     setUser(user);
     setUserType(user?.user_metadata?.type || null);
     setUserRole(userRole);
@@ -104,6 +115,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           userType,
           userRole,
           userAddress,
+          signOut,
           refetch,
         }
       : {
@@ -111,6 +123,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           userType: null,
           userRole: null,
           userAddress: null,
+          signOut,
           refetch,
         };
 

@@ -10,6 +10,7 @@ export interface AuthContextAuthenticated {
   userType: UserType;
   userRole: UserRole;
   userAddress: Address | null;
+  signOut: () => Promise<void>;
   refetch: () => Promise<void>;
 }
 
@@ -18,6 +19,7 @@ export interface AuthContextUnauthenticated {
   userType: null;
   userRole: null;
   userAddress: null;
+  signOut: () => Promise<void>;
   refetch: () => Promise<void>;
 }
 
