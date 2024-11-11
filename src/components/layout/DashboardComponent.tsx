@@ -19,6 +19,7 @@ import { useState } from "react"
 import { useContractContext } from "@/context/contractContext"
 import { Buy, Transfer } from "@/lib/interfaces"
 import ClaimNFT from "../cards/ClaimNFT"
+import Link from "next/link"
 
 interface ModalProps {
   userTransactionData: UserTransactionHistoryData[]
@@ -149,9 +150,13 @@ export default function DashboardComponent({
                   >
                     Claim!
                   </button>
-                  <button className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-xs font-normal font-['Noto Sans']">
+                  <Link
+                    className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-xs font-normal font-['Noto Sans']"
+                    href={`/buy`}
+                    prefetch={true}
+                  >
                     Buy
-                  </button>
+                  </Link>
                 </div>
               )}
             </div>
