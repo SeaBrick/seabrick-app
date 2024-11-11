@@ -12,7 +12,9 @@ module.exports = {
       colors: {
         "seabrick-blue": "#2069a0",
         "seabrick-green": "#52b09f",
-        "text-gray":"#333"
+        "dark-blue": "#242c41",
+        "text-gray":"#333",
+        "light-gray":"#6f6f6f"
       },
       boxShadow:{
         '2md':'0px 4px 5px 0px rgba(0, 0, 0, 0.05);'        
