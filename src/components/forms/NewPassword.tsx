@@ -4,6 +4,7 @@ import SubmitButton from "../buttons/SubmitButton";
 import { PasswordResetSchema } from "@/lib/zod";
 import { Errors } from "@/lib/interfaces";
 import { resetPasswordAction } from "@/app/auth/reset/action";
+import { toast } from "react-toastify";
 
 const NewPasswordForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -40,7 +41,7 @@ const NewPasswordForm: React.FC = () => {
       return;
     }
 
-    // Password success
+    toast.success("Password changed succesfully");
   }
 
   return (
