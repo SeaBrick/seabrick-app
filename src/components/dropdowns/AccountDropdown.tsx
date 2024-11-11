@@ -1,6 +1,5 @@
 "use client";
 import { useAuth } from "@/context/authContext";
-import { addressResumer } from "@/lib/utils";
 import {
   Menu,
   MenuButton,
@@ -8,13 +7,9 @@ import {
   MenuItems,
   MenuSeparator,
   MenuSection,
-  MenuHeading,
 } from "@headlessui/react";
 import {
-  ArrowRightStartOnRectangleIcon,
   UserCircleIcon,
-  ListBulletIcon,
-  ArrowDownCircleIcon,
   ArrowsUpDownIcon,
   ArrowLeftStartOnRectangleIcon,
   Cog6ToothIcon,
@@ -27,8 +22,8 @@ interface AccountDropdownProps {
   num?: number;
 }
 
-export default function AccountDropdown({ num: _num }: AccountDropdownProps) {
-  const { user, userType, userAddress, signOut, userRole } = useAuth();
+export default function AccountDropdown(_props: AccountDropdownProps) {
+  const { user, userType, signOut, userRole } = useAuth();
 
   async function onClickSignOut() {
     await signOut();
