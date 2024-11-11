@@ -47,13 +47,17 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  if (user && request.nextUrl.pathname == "/auth/reset") {
+    return supabaseResponse;
+  }
+
   // Check if the current path is in the list of public paths
   const isPublicPath = publicPaths.some((path) =>
     request.nextUrl.pathname.startsWith(path)
   );
 
   // Redirect unauthenticated users to the login page if they're trying to access a protected path
-  if (!user && !isPublicPath) {
+  if (!user && (request.nextUrl.pathname == "/auth/reset" || !isPublicPath)) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);

@@ -3,17 +3,15 @@ import React from "react";
 import NewPasswordForm from "@/components/forms/NewPassword";
 import { LoginBanner } from "@/components/layout/LoginBanner";
 
-
-
 export default function NewPasswordPage() {
-  return(
+  return (
     <>
-    <LoginBanner/> 
-    <div className="flex justify-center">        
-        <div className="flex flex-col z-10">                    
-          <NewPasswordForm/>
+      <LoginBanner />
+      <div className="flex justify-center">
+        <div className="flex flex-col z-10">
+          <NewPasswordForm />
         </div>
-    </div>
+      </div>
     </>
-    );
+  );
 }
