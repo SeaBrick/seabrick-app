@@ -55,7 +55,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="w-full px-3">
+      <div className="w-full px-3 max-w-[1500px] m-auto">
         <div className="w-full justify-start items-center gap-2 inline-flex mb-4">
           <Image
             src={`/brick.png`} // TODO: linkear la img
@@ -76,13 +76,13 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
+        <DashboardComponent
+          userTransactionData={testDataMap}
+          dataBuys={buyData.read()}
+          dataTransfer={transfersData.read()}
+          isAdmin={isAdmin}
+        />
       </div>
-      <DashboardComponent
-        userTransactionData={testDataMap}
-        dataBuys={buyData.read()}
-        dataTransfer={transfersData.read()}
-        isAdmin={isAdmin}
-      />
     </>
   )
 }
