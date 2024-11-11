@@ -1,61 +1,22 @@
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import ClaimModal from "../modals/ClaimModal"
 import Table, { TableColumn } from "../table/TableTest"
 import CurrencyDollarIcon from "@heroicons/react/24/outline/CurrencyDollarIcon"
 import Image from "next/image"
 import { ModalDone } from "../modals/ModalDone"
 import SubmitButton from "../buttons/SubmitButton"
+import { claimToken, getClaimedTokens } from "@/app/dashboard/requests"
+import PageLoaderSpinner from "../spinners/PageLoaderSpinner"
 
 const dataTestColums: TableColumn[] = [
   {
     label: "Token ID",
-    key: "tokenId",
+    key: "token_id",
   },
-  { label: "Status", key: "status" },
-  { label: "Date", key: "date" },
+  { label: "Status", key: "claimed" },
+  { label: "Date", key: "created_at" },
 ]
-
-const dataTestBody = [
-  {
-    tokenId: 2,
-    status: "Claimed",
-    date: "05/11/2024",
-  },
-  {
-    tokenId: 2,
-    status: "Claimed",
-    date: "05/11/2024",
-  },
-  {
-    tokenId: 2,
-    status: "Claimed",
-    date: "05/11/2024",
-  },
-  {
-    tokenId: 2,
-    status: "Claimed",
-    date: "05/11/2024",
-  },
-  {
-    tokenId: 2,
-    status: "Claimed",
-    date: "05/11/2024",
-  },
-  {
-    tokenId: 2,
-    status: "Claimed",
-    date: "05/11/2024",
-  },
-  {
-    tokenId: 2,
-    status: "Claimed",
-    date: "05/11/2024",
-  },
-]
-
 const dataColumns: TableColumn[] = dataTestColums
-const dataBody = dataTestBody
-const tokenNumber = "1234"
 export default function ClaimTokens({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   open,
@@ -65,16 +26,33 @@ export default function ClaimTokens({
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
 }) {
-  const [nftClaimed, setNftClaimed] = useState("")
   const [isSelfOpen, setSelfOpen] = useState(true)
   const [isDoneOpen, setDoneOpen] = useState(false)
+  const [nftClaimedList, setNftClaimedList] = useState<TableColumn[]>([])
+  const [isLoading, setLoading] = useState(false)
 
-  function claimNFT(formData: FormData) {
-    console.log("I claimed my nft number", formData.get("tokenNumber"))
-    setNftClaimed(tokenNumber.toString())
-    setSelfOpen(false)
-    setDoneOpen(true)
+  async function claimNFT(_formData: FormData) {
+    try {
+      await claimToken()
+      setSelfOpen(false)
+      setDoneOpen(true)
+      console.log("I claimed my nft")
+    } catch (error) {
+      console.log(error)
+    }
   }
+  //
+  useEffect(() => {
+    setLoading(true)
+    fetchData()
+  }, [])
+  //
+  const fetchData = async () => {
+    const result = await getClaimedTokens()
+    setNftClaimedList(result.data)
+    setLoading(false)
+  }
+  //
   return (
     <>
       {isDoneOpen && (
@@ -82,8 +60,8 @@ export default function ClaimTokens({
           title="Sucessfully Claimed"
           message={
             <p>
-              You successfully claimed <strong>{nftClaimed}</strong> to your
-              wallet
+              You successfully claimed a <strong>Seabrick Token NFT</strong> to
+              your wallet
             </p>
           }
           action={setOpen}
@@ -92,7 +70,17 @@ export default function ClaimTokens({
       {isSelfOpen && (
         <ClaimModal open={open} setOpen={setOpen} title={"NFTs"}>
           <div className="gap-2 flex flex-col overflow-y-auto">
-            <Table columns={dataColumns} data={dataBody} fontSize="0.7rem" />
+            {isLoading ? (
+              <PageLoaderSpinner height="h-max" width="w-1/2" />
+            ) : (
+              nftClaimedList.length > 0 && (
+                <Table
+                  columns={dataColumns}
+                  data={nftClaimedList}
+                  fontSize="0.7rem"
+                />
+              )
+            )}
           </div>
           <div className="flex gap-2">
             <div className="px-3 py-1 grow shrink rounded-[5px] border border-[#babcc3]/60 justify-start items-center gap-2.5 inline-flex ">
@@ -105,11 +93,10 @@ export default function ClaimTokens({
                   className="h-[20px] w-[20px] object-scale-down"
                 />
               </div>
-              <div className="text-sm text-[#333333]">ID #{tokenNumber}</div>
               <div className="text-sm font-bold">Seabrick NFT</div>
             </div>
             <form action={claimNFT}>
-              <input value={tokenNumber} name="tokenNumber" type="hidden" />
+              <input name="tokenNumber" type="hidden" />
               <SubmitButton
                 buttonIcon={
                   <CurrencyDollarIcon className="size-[1.5rem] inline mr-[-3px] " />

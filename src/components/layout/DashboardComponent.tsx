@@ -72,7 +72,7 @@ export default function DashboardComponent({
     { key: "blockNumber", label: "Block Number" },
     { key: "from", label: "From" },
     { key: "to", label: "To" },
-    { key: "blockTimestamp", label: "Date" },
+    { key: "blockTimestamp", label: "Time" },
   ]
   // TODO: Conectar
   const totalBalance = 3500
