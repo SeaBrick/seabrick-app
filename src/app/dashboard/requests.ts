@@ -35,3 +35,46 @@ export async function mintTokens(address: string, amount: number) {
     }
 
 }
+
+export async function getClaimedTokens() {
+    try {
+        const response = await fetch("/api/seabrick_tokens", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+
+        if (!response.ok) {
+            throw new Error(`${response.status} - ${response.statusText}`)
+        }
+        const data = response.json()
+        console.log(data)
+        return (data)
+    } catch (error) {
+        toast.error((error as { message: string }).message)
+        // throw error
+    }
+
+}
+export async function claimToken() {
+    try {
+        const response = await fetch("/api/seabrick_tokens", {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+
+        if (!response.ok) {
+            throw new Error(`${response.status} - ${response.statusText}`)
+        }
+        const data = response.json()
+        console.log(data)
+        return (data)
+    } catch (error) {
+        toast.error((error as { message: string }).message)
+        throw error
+    }
+
+}

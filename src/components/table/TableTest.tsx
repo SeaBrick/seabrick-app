@@ -2,6 +2,7 @@ export interface TableColumn {
   key: string
   label: string
 }
+import { processTime, timeAgo } from "@/lib/utils"
 import TextCopier from "../TextCopier"
 export function truncateString(str: string) {
   if (str.length <= 13) {
@@ -48,10 +49,17 @@ function Table({
                 let enableCopier = false
                 let valueText = ""
                 let showText = row[column.key]
-                if (row[column.key].length > 13) {
+                if (row[column.key] && row[column.key].length > 13) {
                   enableCopier = true
                   valueText = row[column.key]
                   showText = truncateString(row[column.key])
+                }
+                if (column.key === "claimed") {
+                  showText =
+                    row[column.key] === false ? "Not Claimed" : "Claimed"
+                }
+                if (column.key === "blockTimestamp") {
+                  showText = timeAgo(processTime(row[column.key]))
                 }
                 return (
                   <td

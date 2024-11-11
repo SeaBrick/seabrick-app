@@ -48,8 +48,6 @@ export default function Dashboard() {
     },
   ]
 
-  console.log("Reading: ", buyData.read())
-
   const { user } = useAuth()
   const isAdmin = user?.role === "admin" || user?.role === "owner"
 
