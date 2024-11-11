@@ -27,6 +27,12 @@ export async function GET(request: NextRequest) {
     }
 
     if (type === "recovery") {
+      // TODO: Add a cookie that should be visible at the reset page.
+      // If the cookie is present there, then you can access to recovery your password
+      // Otherwsie, it will be not allowed to go thre
+      // This because the path is accesible for the current autheticated user
+      // We want a flow to be like, to recover the password, use this.
+      // FOr a normal password change, use the account details
       redirect("/auth/reset");
     }
 
