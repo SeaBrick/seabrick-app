@@ -1,82 +1,83 @@
-"use client";
-import { useEffect, useState } from "react";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import { login } from "./actions";
-import { useAuth } from "@/context/authContext";
-import Link from "next/link";
-import SubmitButton from "@/components/buttons/SubmitButton";
-import { isEmpty } from "lodash";
-import LoginWallet from "./LoginWallet";
-import { useSearchParams } from "next/navigation";
-import type { Errors } from "@/lib/interfaces";
-import { LoginBanner } from "@/components/layout/LoginBanner";
+"use client"
+import { useEffect, useState } from "react"
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline"
+import { login } from "./actions"
+import { useAuth } from "@/context/authContext"
+import Link from "next/link"
+import SubmitButton from "@/components/buttons/SubmitButton"
+import { isEmpty } from "lodash"
+import LoginWallet from "./LoginWallet"
+import { useSearchParams } from "next/navigation"
+import type { Errors } from "@/lib/interfaces"
+import { LoginBanner } from "@/components/layout/LoginBanner"
 
 // TODO: Add captchas
 export default function LoginPage() {
-  const { refetch: authRefetch } = useAuth();
-  const [haveWallet, setHaveWallet] = useState<boolean>(false);
-  const [loginWallet, setLoginWallet] = useState<boolean>(false);
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [errors, setErrors] = useState<Errors>({});
+  const { refetch: authRefetch } = useAuth()
+  const [haveWallet, setHaveWallet] = useState<boolean>(false)
+  const [loginWallet, setLoginWallet] = useState<boolean>(false)
+  const [email, setEmail] = useState<string>("")
+  const [password, setPassword] = useState<string>("")
+  const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [errors, setErrors] = useState<Errors>({})
 
-  const searchParams = useSearchParams();
-  const tab = searchParams.get("tab");
+  const searchParams = useSearchParams()
+  const tab = searchParams.get("tab")
 
   useEffect(() => {
     switch (tab) {
       case "wallet":
-        setLoginWallet(true);
-        break;
+        setLoginWallet(true)
+        break
       default:
-        break;
+        break
     }
-  }, [tab]);
+  }, [tab])
 
   useEffect(() => {
     if (window.ethereum) {
-      setHaveWallet(true);
+      setHaveWallet(true)
     }
-  }, []);
+  }, [])
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+    setShowPassword(!showPassword)
+  }
 
   async function loginFormAction(formData: FormData) {
-    const newErrors: Errors = {};
+    const newErrors: Errors = {}
+    // TODO: implementar validaciones del zod
 
     if (!email) {
-      newErrors.message = "Email is required";
+      newErrors.message = "Email is required"
     } else if (!password) {
-      newErrors.message = "Password is required";
+      newErrors.message = "Password is required"
     }
 
     // if errors is NOT empty, somethins is missing. We do not try to login
     // Maube use a tostify here?
     if (!isEmpty(newErrors)) {
-      setErrors(newErrors);
-      return;
+      setErrors(newErrors)
+      return
     }
 
-    const resp = await login(formData);
+    const resp = await login(formData)
 
     if (resp && resp.error) {
-      newErrors.message = resp.error;
-      setErrors(newErrors);
-      return;
+      newErrors.message = resp.error
+      setErrors(newErrors)
+      return
     }
 
     // Refetch the user
-    await authRefetch();
+    await authRefetch()
   }
 
   return (
     <>
       <LoginWallet open={loginWallet} setOpen={setLoginWallet} />
-      <LoginBanner/>
-      <div className="flex justify-center">        
+      <LoginBanner />
+      <div className="flex justify-center">
         <form
           action={loginFormAction}
           className="h-[339px] md:h-[447px] w-[350px] md:w-[606px] mt-[40px] md:mt-[180px] p-6 relative bg-white rounded-[10px] flex-col justify-start items-center gap-8 inline-flex z-10"
@@ -193,5 +194,5 @@ export default function LoginPage() {
         </form>
       </div>
     </>
-  );
+  )
 }

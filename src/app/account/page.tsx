@@ -1,16 +1,16 @@
-"use client";
-import { useAuth } from "@/context/authContext";
-import React, { useEffect, useState } from "react";
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
-import Link from "next/link";
-import Image from "next/image";
-import { useSearchParams } from "next/navigation";
-import { useFormState } from "react-dom";
-import { Button } from "@headlessui/react";
-import { Address, zeroAddress } from "viem";
-import { changeAccountDetails } from "./actions";
-import SubmitButton from "@/components/buttons/SubmitButton";
-import ChangePasswordForm from "@/components/forms/ChangePassword";
+"use client"
+import { useAuth } from "@/context/authContext"
+import React, { useEffect, useState } from "react"
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react"
+import Link from "next/link"
+import Image from "next/image"
+import { useSearchParams } from "next/navigation"
+import { useFormState } from "react-dom"
+import { Button } from "@headlessui/react"
+import { Address, zeroAddress } from "viem"
+import { changeAccountDetails } from "./actions"
+import SubmitButton from "@/components/buttons/SubmitButton"
+import ChangePasswordForm from "@/components/forms/ChangePassword"
 
 enum TabsIndex {
   DETAILS,
@@ -18,21 +18,21 @@ enum TabsIndex {
 }
 
 export default function AccountDetailsPage() {
-  const [selectedIndex, setSelectedIndex] = useState<number>(TabsIndex.DETAILS);
+  const [selectedIndex, setSelectedIndex] = useState<number>(TabsIndex.DETAILS)
 
-  const searchParams = useSearchParams();
-  const tab = searchParams.get("tab");
+  const searchParams = useSearchParams()
+  const tab = searchParams.get("tab")
 
   useEffect(() => {
     switch (tab) {
       case "transactions":
-        setSelectedIndex(TabsIndex.TRANSACTIONS);
-        break;
+        setSelectedIndex(TabsIndex.TRANSACTIONS)
+        break
       default:
-        setSelectedIndex(TabsIndex.DETAILS);
-        break;
+        setSelectedIndex(TabsIndex.DETAILS)
+        break
     }
-  }, [tab]);
+  }, [tab])
 
   return (
     <div className="max-w-[978px] w-full mx-auto mt-[30px]">
@@ -62,103 +62,90 @@ export default function AccountDetailsPage() {
         <AccountDetails />
       </div>
     </div>
-  );
+  )
 }
 
 const AccountDetails: React.FC = () => {
-  const { user, userType } = useAuth();
-  const [modifying, setModifying] = useState<boolean>(false);
+  const { user, userType } = useAuth()
+  const [modifying, setModifying] = useState<boolean>(false)
 
-  const [email, setEmail] = useState<string>("");
-  const [originalEmail, setOriginalEmail] = useState<string>("");
+  const [email, setEmail] = useState<string>("")
+  const [originalEmail, setOriginalEmail] = useState<string>("")
 
-  const [name, setName] = useState<string>("");
-  const [originalName, setOriginalName] = useState<string>("");
+  const [name, setName] = useState<string>("")
+  const [originalName, setOriginalName] = useState<string>("")
 
-  const [address, setAddress] = useState<Address>(zeroAddress);
-  const [originalAddress, setOriginalAddress] = useState<Address>(zeroAddress);
+  const [address, setAddress] = useState<Address>(zeroAddress)
+  const [originalAddress, setOriginalAddress] = useState<Address>(zeroAddress)
 
-  const initMessageState = { message: "" };
-  const [messageState, changeDetailsAction] = useFormState(
-    formAction,
-    initMessageState
-  );
+  async function formAction(data: FormData) {
+    // guiarse de login
+    const resp = await changeAccountDetails(data)
 
-  async function formAction(
-    currentState: {
-      message: string;
-    },
-    data: FormData
-  ) {
-    const resp = await changeAccountDetails(currentState, data);
-
-    if (resp.message.includes("User details updated")) {
-      setOriginalEmail(email);
-      setOriginalName(name);
-      setOriginalAddress(address);
-      setModifying(false);
+    if (resp.message) {
+      setOriginalEmail(email)
+      setOriginalName(name)
+      setOriginalAddress(address)
+      setModifying(false)
     }
-
-    return resp;
   }
 
   useEffect(() => {
     if (user) {
       if (user.email) {
-        setEmail(user.email);
-        setOriginalEmail(user.email);
+        setEmail(user.email)
+        setOriginalEmail(user.email)
       }
 
       if (user.user_metadata.name) {
-        setName(user.user_metadata.name);
-        setOriginalName(user.user_metadata.name);
+        setName(user.user_metadata.name)
+        setOriginalName(user.user_metadata.name)
       }
 
       // TODO: Support for 'email' account with linked wallet
       if (userType == "wallet") {
         // We can include the wallet
-        setAddress(user.user_metadata.address);
-        setOriginalAddress(user.user_metadata.address);
+        setAddress(user.user_metadata.address)
+        setOriginalAddress(user.user_metadata.address)
       }
     }
-  }, [user, userType]);
+  }, [user, userType])
 
   const handleModify = () => {
-    setModifying(true);
-  };
+    setModifying(true)
+  }
 
   const cancelModify = () => {
-    restoreOriginalValues();
-    setModifying(false);
-    messageState.message = "";
-  };
+    restoreOriginalValues()
+    setModifying(false)
+  }
 
   const emailOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
+    setEmail(e.target.value)
+  }
 
   const nameOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  };
+    setName(e.target.value)
+  }
 
   const restoreOriginalValues = () => {
-    setEmail(originalEmail);
-    setName(originalName);
-    setAddress(originalAddress);
-  };
+    setEmail(originalEmail)
+    setName(originalName)
+    setAddress(originalAddress)
+  }
 
   const checkChanges = () => {
     return (
       originalEmail === email &&
       originalName === name &&
       originalAddress === address
-    );
-  };
+    )
+  }
 
   return (
     <div className="">
       {user && (
-        <form className="flex flex-col gap-y-4" action={changeDetailsAction}>
+        <form className="flex flex-col gap-y-4" action={formAction}>
           <h3 className="text-xl font-bold leading-6">Personal Information</h3>
           <div className="flex flex-col md:flex-row md:items-center gap-4 justify-between">
             <div className="md:w-1/2">
@@ -229,20 +216,20 @@ const AccountDetails: React.FC = () => {
             </div>
           )}
 
-          {messageState.message && (
+          {/* {messageState.message && (
             <p className="text-red-500">{messageState.message}</p>
-          )}
+          )} */}
         </form>
       )}
       <hr className="my-6" />
 
       <ChangePasswordForm />
     </div>
-  );
-};
+  )
+}
 
 const AccountTransactions: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useAuth()
 
-  return <div>{user && <>Account transactions</>}</div>;
-};
+  return <div>{user && <>Account transactions</>}</div>
+}

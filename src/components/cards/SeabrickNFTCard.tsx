@@ -1,7 +1,12 @@
 import Image from "next/image"
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline"
+import { useContractContext } from "@/context/contractContext"
 
 export default function SeabrickNFTCard() {
+  const {
+    data: { seabrick, market },
+  } = useContractContext()
+
   return (
     <>
       <div className="p-5 bg-white rounded-[10px] justify-start items-start gap-6 inline-flex w-full h-full">
@@ -21,7 +26,7 @@ export default function SeabrickNFTCard() {
                     <div className="flex-col justify-start items-start gap-3.5 inline-flex">
                       <div className=" justify-start items-end gap-2 inline-flex">
                         <div className="text-[#333333] text-2xl font-normal font-['Noto Sans']">
-                          Seabrick NFT
+                          {seabrick.name}
                         </div>
                       </div>
                     </div>
@@ -42,7 +47,7 @@ export default function SeabrickNFTCard() {
                     Symbol
                   </div>
                   <div className="text-[#8a8a8f] text-xs font-normal font-['Noto Sans']">
-                    SB_NFT
+                    {seabrick.symbol}
                   </div>
                 </div>
                 <div className="self-stretch justify-between items-center inline-flex">
@@ -50,7 +55,7 @@ export default function SeabrickNFTCard() {
                     Address
                   </div>
                   <div className="text-[#8a8a8f] text-xs font-normal font-['Noto Sans'] [overflow-wrap:anywhere] ml-2">
-                    0x056b74b11c59b64cc532eed4bce181b3ad5412e0
+                    {seabrick.id}
                   </div>
                 </div>
                 <div className="self-stretch justify-between items-center inline-flex">
@@ -58,7 +63,7 @@ export default function SeabrickNFTCard() {
                     Total Supply
                   </div>
                   <div className="text-[#8a8a8f] text-xs font-normal font-['Noto Sans']">
-                    36
+                    {seabrick.totalSupply}
                   </div>
                 </div>
                 <div className="self-stretch justify-between items-center inline-flex">
@@ -66,7 +71,7 @@ export default function SeabrickNFTCard() {
                     Price
                   </div>
                   <div className="text-[#8a8a8f] text-xs font-normal font-['Noto Sans']">
-                    100 USD
+                    {market.price} USD
                   </div>
                 </div>
               </div>

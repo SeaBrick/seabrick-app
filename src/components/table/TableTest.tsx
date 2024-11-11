@@ -3,7 +3,6 @@ export interface TableColumn {
   label: string
 }
 import TextCopier from "../TextCopier"
-
 export function truncateString(str: string) {
   if (str.length <= 13) {
     return str
@@ -49,12 +48,7 @@ function Table({
                 let enableCopier = false
                 let valueText = ""
                 let showText = row[column.key]
-                if (
-                  column.key === "hash" ||
-                  column.key == "address" ||
-                  column.key === "from_address" ||
-                  column.key == "to_address"
-                ) {
+                if (row[column.key].length > 13) {
                   enableCopier = true
                   valueText = row[column.key]
                   showText = truncateString(row[column.key])

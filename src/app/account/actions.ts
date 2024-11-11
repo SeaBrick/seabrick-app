@@ -6,7 +6,6 @@ import { UserAttributes } from "@supabase/supabase-js";
 import { headers } from "next/headers";
 
 export async function changeAccountDetails(
-  currentState: { message: string },
   formData: FormData
 ) {
   const supabase = createClient();
@@ -17,13 +16,15 @@ export async function changeAccountDetails(
 
   // Maybe this is useless since the middleware already do this
   if (!user) {
-    return { message: "not logged..." };
+    return { error: "Not logged" };
+
   }
 
   // TODO: USe Zod to validate inputs
   const user_type = formData.get("user_type") as "wallet" | "email";
   const name = formData.get("name") as string;
   const email = formData.get("email") as string;
+  
 
   // User data to be updated
   const userData: UserAttributes = {};
@@ -51,11 +52,11 @@ export async function changeAccountDetails(
 
   if (errorUpdate) {
     if (errorUpdate.code === "email_exists") {
-      return { message: errorUpdate.message };
+      return { error: errorUpdate.message };
     } else {
       console.log("Error when updating user details: ", errorUpdate);
     }
-    return { message: "User details were not updated" };
+    return { error: "User details were not updated" };
   }
 
   if (user_type === "wallet") {

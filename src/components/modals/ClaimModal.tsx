@@ -15,7 +15,7 @@ export default function ClaimModal({
 }) {
   return (
     <>
-      <div className="bg-white rounded-[10px] h-fit min-h-[300px] max-h-[70vh] w-[40vw] min-w-[450px] p-6 gap-6 flex flex-col">
+      <div className="bg-white rounded-[10px] h-fit min-h-[300px] max-h-[70vh] w-[45vw] min-w-[450px] p-6 gap-6 flex flex-col">
         <div className="flex gap-2 justify-between">
           <div className="flex flex-col text-left gap-2">
             <span className="text-[#333333] text-3xl font-normal font-['Noto Sans']">
