@@ -93,6 +93,8 @@ const AccountDetails: React.FC = () => {
       // i dunno about loadash for something simple
       setErrors(newErrors)
       return
+    } else {
+      setErrors({})
     }
     const resp = await changeAccountDetails(data)
 
