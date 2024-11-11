@@ -1,52 +1,61 @@
 import React, { useState } from "react";
-import { useAuth } from "@/context/authContext";
-import { isEmpty } from "lodash";
 import SubmitButton from "../buttons/SubmitButton";
 import CheckEmail from "../auth/CheckEmail";
+import { UserAuthSchema } from "@/lib/zod";
+import { requestResetPassword } from "@/app/reset-password/action";
 
 interface Errors {
   message?: string;
 }
 
-interface EmailProps {
+interface ResetPasswordFormProps {
   onConfirm: (email: string) => void;
 }
 
-const ResetPasswordForm: React.FC<EmailProps> = ({ onConfirm }) => {
+const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ onConfirm }) => {
   const [email, setEmail] = useState<string>("");
-  const { refetch: authRefetch } = useAuth();
   const [errors, setErrors] = useState<Errors>({});
 
-  async function loginFormAction(formData: FormData) {
+  function showError(value: string | Errors) {
+    setErrors(typeof value === "string" ? { message: value } : value);
+  }
+
+  async function resetPasswordFormAction(formData: FormData) {
     const newErrors: Errors = {};
 
-    if (!email) newErrors.message = "Email is required";
+    // Validate the formdata
+    const { success: validationSuccess, error: validationError } =
+      UserAuthSchema.omit({ password: true }).safeParse({
+        email: formData.get("email"),
+      });
 
-    if (!isEmpty(newErrors)) {
+    if (!validationSuccess) {
+      showError(validationError.errors[0].message);
+      return;
+    }
+
+    showError("");
+
+    const resp = await requestResetPassword(formData);
+
+    if (resp && resp.error) {
+      newErrors.message = resp.error;
       setErrors(newErrors);
       return;
     }
 
-    await authRefetch();
+    onConfirm(email);
   }
 
-  const handleSendLink = () => {
-    if (!email) {
-      setErrors({ message: "Email is required" });
-      return;
-    }
-    onConfirm(email);
-  };
-
   return (
-    <form action={handleSendLink}>
+    <form action={resetPasswordFormAction}>
       <div className="w-[606px] h-[366px] p-6 bg-white rounded-[10px] flex-col justify-start items-center gap-8 inline-flex z-10 mt-[180px]">
         <div className="self-stretch h-[141px] flex-col justify-start items-center gap-4 flex">
           <div className="h-[74px] flex-col justify-center items-center gap-[5px] flex">
             <div className="text-[#333333] text-[15px] font-normal font-['Noto Sans']">
               Account
             </div>
-            <div className="text-[#333333] text-4xl font-normal font-['Noto Sans']">
+            <div className="textresetPasswordFormAction-[#333333] text-4xl font-normal font-['Noto Sans']">
               Password Reset
             </div>
           </div>
@@ -78,7 +87,8 @@ const ResetPasswordForm: React.FC<EmailProps> = ({ onConfirm }) => {
           <div className="self-stretch justify-start items-center gap-2 inline-flex">
             <div className="grow shrink basis-0 h-[45px] justify-start items-center gap-2 flex">
               <SubmitButton
-                label="Send Link"
+                label="Request reset"
+                loadingLabel="Sending..."
                 buttonClass="grow shrink basis-0 h-[45px] p-[17px] bg-[#2069a0] rounded-[5px] justify-center items-center gap-2.5 flex"
               ></SubmitButton>
             </div>
