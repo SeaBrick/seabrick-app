@@ -21,7 +21,7 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ onConfirm }) => {
   }
 
   async function resetPasswordFormAction(formData: FormData) {
-    const newErrors: Errors = {};
+    showError("");
 
     // Validate the formdata
     const { success: validationSuccess, error: validationError } =
@@ -39,8 +39,7 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ onConfirm }) => {
     const resp = await requestResetPassword(formData);
 
     if (resp && resp.error) {
-      newErrors.message = resp.error;
-      setErrors(newErrors);
+      showError(resp.error);
       return;
     }
 
