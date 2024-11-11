@@ -96,6 +96,11 @@ const AccountDetails: React.FC = () => {
     }
     const resp = await changeAccountDetails(data)
 
+    if (resp && resp.error) {
+      newErrors.message = resp.error
+      setErrors(newErrors)
+      return
+    }
     if (resp.message) {
       setOriginalEmail(email)
       setOriginalName(name)
