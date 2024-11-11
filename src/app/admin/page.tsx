@@ -95,7 +95,7 @@ export default function AdminPage() {
 
   return (
     <>
-      <div className="w-full px-3">
+      <div className="w-full px-3 max-w-[1500px] m-auto">
         {isLoading ? (
           <div className="py-24 my-auto">
             <PageLoaderSpinner height="h-max" width="w-1/2" />

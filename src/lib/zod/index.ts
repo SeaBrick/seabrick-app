@@ -43,3 +43,14 @@ export const PasswordResetSchema = z
     // This points the error message to the newPassword field
     path: ["newPassword"],
   });
+
+  /**
+ * Schema for setting account personal info 
+ */
+export const UserAccountPersonalInfoSchema = z.object({
+  name: z.string().min(1, "Name is required"), // en el form de account se llama name
+  email: z.string().min(1, "Email is required").email("Invalid email address"),
+  user_type: z.enum(["wallet", "email"])
+
+
+})
