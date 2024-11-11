@@ -23,7 +23,7 @@ interface AccountDropdownProps {
 }
 
 export default function AccountDropdown(_props: AccountDropdownProps) {
-  const { user, userType, signOut, userRole } = useAuth();
+  const { user, signOut, userRole } = useAuth();
 
   async function onClickSignOut() {
     await signOut();
@@ -71,32 +71,34 @@ export default function AccountDropdown(_props: AccountDropdownProps) {
                 <ArrowsUpDownIcon className="size-6 text-dark-blue" />
               </Link>
             </MenuItem>
-            {(user && userRole == "admin") ||
-              (userRole == "owner" && (
-                <>
-                  <MenuSeparator className="my-1 h-px bg-light-gray/10" />
-                  <MenuItem>
-                    <Link
-                      href="/admin-list"
-                      prefetch={true}
-                      className="group flex w-full items-center justify-end gap-2 rounded-lg py-1.5 px-4 data-[focus]:bg-black/10"
-                    >
-                      <span className="text-dark-blue font-['Montserrat'] text-sm ">
-                        Admin
-                      </span>
-                      <UserCircleIcon className="size-6 text-dark-blue" />
-                    </Link>
-                  </MenuItem>
-                </>
-              ))}
+
+            {user && (userRole == "admin" || userRole == "owner") && (
+              <>
+                <MenuSeparator className="my-1 h-px bg-light-gray/10" />
+                <MenuItem>
+                  <Link
+                    href="/admin-list"
+                    prefetch={true}
+                    className="group flex w-full items-center justify-end gap-2 rounded-lg py-1.5 px-4 data-[focus]:bg-black/10"
+                  >
+                    <span className="text-dark-blue font-['Montserrat'] text-sm ">
+                      Admin
+                    </span>
+                    <UserCircleIcon className="size-6 text-dark-blue" />
+                  </Link>
+                </MenuItem>
+              </>
+            )}
           </MenuSection>
           <MenuSeparator className="my-1 h-px bg-light-gray/10" />
           <MenuItem>
             <button
               onClick={onClickSignOut}
-              className="group flex w-full text-dark-blue font-['Montserrat'] text-sm items-center justify-end gap-2 rounded-lg py-1.5 px-4 data-[focus]:bg-black/10"
+              className="group flex w-full items-center justify-end gap-2 rounded-lg py-1.5 px-4 data-[focus]:bg-black/10"
             >
-              {userType == "wallet" ? <>Disconnect</> : <>Log Out</>}
+              <span className="text-dark-blue font-['Montserrat'] text-sm ">
+                Log Out
+              </span>
               <ArrowLeftStartOnRectangleIcon className="size-6 text-dark-blue" />
             </button>
           </MenuItem>
