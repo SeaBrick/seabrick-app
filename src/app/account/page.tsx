@@ -34,21 +34,28 @@ export default function AccountDetailsPage() {
     }
   }, [tab]);
 
-  
   return (
     <div className="max-w-[978px] w-full mx-auto mt-[30px]">
       <p className="text-md text-center">Account</p>
       <h3 className="text-4xl text-center mb-9">Account Settings</h3>
       <div className="w-full p-5 bg-white rounded-[10px] flex-col justify-center items-center gap-4 inline-flex mb-4">
         <div className="self-stretch flex-col justify-start items-start gap-[30px] flex">
-            <div className="self-stretch items-center justify-center gap-3 flex flex-col">
-                <div className="w-[90px] h-[90px] relative">
-                    <Image className="w-[90px] h-[90px] left-0 top-0 absolute rounded-full object-cover" src="/user-no-profile.webp" width={90} height={90} alt="img-user"/>
-                </div>
-                <div className="grow shrink basis-0 flex-col justify-start items-center gap-2 inline-flex">
-                    <h3 className="text-[#49414d] text-xl font-bold font-['Noto Sans'] leading-normal">Sebastian Rojas</h3>
-                </div>
+          <div className="self-stretch items-center justify-center gap-3 flex flex-col">
+            <div className="w-[90px] h-[90px] relative">
+              <Image
+                className="w-[90px] h-[90px] left-0 top-0 absolute rounded-full object-cover"
+                src="/user-no-profile.webp"
+                width={90}
+                height={90}
+                alt="img-user"
+              />
             </div>
+            <div className="grow shrink basis-0 flex-col justify-start items-center gap-2 inline-flex">
+              <h3 className="text-[#49414d] text-xl font-bold font-['Noto Sans'] leading-normal">
+                Sebastian Rojas
+              </h3>
+            </div>
+          </div>
         </div>
       </div>
       {/* Tabs 
@@ -78,7 +85,6 @@ export default function AccountDetailsPage() {
       <div className="p-6 bg-white rounded-[10px]">
         <AccountDetails />
       </div>
-      
     </div>
   );
 }
@@ -181,7 +187,7 @@ const AccountDetails: React.FC = () => {
           <div className="flex flex-col md:flex-row md:items-center gap-4 justify-between">
             <div className="md:w-1/2">
               <label className="block text-[#333333] text-xs font-normal ">
-                Full Name 
+                Full Name
               </label>
               <input
                 className="disabled:cursor-not-allowed disabled:text-gray-500 disabled:bg-seabrick-blue/10 mt-1 block w-full bg-seabrick-blue/5 border border-gray-700 rounded py-2 px-4 focus:outline-none focus:ring focus:ring-blue-500"
@@ -194,7 +200,9 @@ const AccountDetails: React.FC = () => {
             </div>
 
             <div className="md:w-1/2">
-              <label className="block text-[#333333] text-xs font-normal ">Email</label>
+              <label className="block text-[#333333] text-xs font-normal ">
+                Email
+              </label>
               <input
                 className="disabled:cursor-not-allowed disabled:text-gray-500 disabled:bg-seabrick-blue/10 mt-1 block w-full bg-seabrick-blue/5 border border-gray-700 rounded py-2 px-4 focus:outline-none focus:ring focus:ring-blue-500"
                 disabled={!modifying}
@@ -249,11 +257,10 @@ const AccountDetails: React.FC = () => {
             <p className="text-red-500">{messageState.message}</p>
           )}
         </form>
-        
       )}
       <hr className="my-6" />
 
-      <ChangePasswordForm/>
+      <ChangePasswordForm />
     </div>
   );
 };
