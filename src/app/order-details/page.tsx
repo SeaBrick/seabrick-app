@@ -2,6 +2,7 @@
 import Image from "next/image"
 import Table from "@/components/table/TableTest"
 import { useRouter } from "next/navigation"
+import BackButton from "@/components/buttons/BackButton"
 export default function OrderDetailsMain() {
   const router = useRouter()
   const columnDataTest = [
@@ -33,8 +34,11 @@ export default function OrderDetailsMain() {
   ]
   return (
     <>
-      <div className="flex justify-center">
-        <div className="max-w-[978px] w-[80%] flex flex-col items-center">
+      <div className="flex justify-center">     
+        <div className="max-w-[978px] w-[80%] flex flex-col items-center mx-auto mt-[30px] relative">
+          <div className="absolute top-4 left-4">
+            <BackButton />
+          </div>
           <h2 className="text-black text-3xl font-normal font-['Noto Sans'] text-center mb-8">
             Order Details
           </h2>

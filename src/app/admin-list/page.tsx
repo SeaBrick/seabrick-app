@@ -2,6 +2,7 @@
 import AdminTable from "@/components/table/AdminTable"
 import { useState, useEffect } from "react"
 import { addAdmin, AdminInterface, getAdmins, removeAdmin } from "./requests"
+import BackButton from "@/components/buttons/BackButton"
 
 const App: React.FC = () => {
   const [adminList, setAdminList] = useState<AdminInterface[]>([])
@@ -25,8 +26,11 @@ const App: React.FC = () => {
     await fetchData()
   }
   return (
-    <div>
-      <div className="flex flex-col items-center justify-center mb-10 mt-8">
+    <div className="max-w-[978px] w-full mx-auto mt-[30px] relative">
+      <div className="absolute top-4 left-4">
+        <BackButton />
+      </div>
+      <div className="flex flex-col items-center justify-center mb-10 mt-8 relative">
         <span className="text-center text-[#666666] text-[17px] font-normal font-['Noto Sans']">
           Account
         </span>
