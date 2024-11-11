@@ -57,17 +57,14 @@ export default function Dashboard() {
     <>
       <div className="w-full px-3">
         <div className="w-full justify-start items-center gap-2 inline-flex mb-4">
-          {isAdmin ? (
-            <div></div>
-          ) : (
-            <Image
-              src={`/brick.png`} // TODO: linkear la img
-              alt="user-image"
-              height={45}
-              width={48}
-              className="rounded-[100px]"
-            />
-          )}
+          <Image
+            src={`/brick.png`} // TODO: linkear la img
+            alt="user-image"
+            height={45}
+            width={48}
+            className="rounded-[100px]"
+          />
+
           <div className="h-[70px] flex-col justify-center items-start gap-px inline-flex">
             <div className="self-stretch text-[#666666] text-[9px] font-normal font-['Noto Sans']">
               Welcome Back!
