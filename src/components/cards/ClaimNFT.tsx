@@ -17,7 +17,6 @@ const dataTestColums: TableColumn[] = [
   { label: "Date", key: "created_at" },
 ]
 const dataColumns: TableColumn[] = dataTestColums
-const tokenNumber = "1234"
 export default function ClaimTokens({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   open,
@@ -27,19 +26,17 @@ export default function ClaimTokens({
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
 }) {
-  const [nftClaimed, setNftClaimed] = useState("")
   const [isSelfOpen, setSelfOpen] = useState(true)
   const [isDoneOpen, setDoneOpen] = useState(false)
   const [nftClaimedList, setNftClaimedList] = useState<TableColumn[]>([])
   const [isLoading, setLoading] = useState(false)
 
-  async function claimNFT(formData: FormData) {
+  async function claimNFT(_formData: FormData) {
     try {
       await claimToken()
       setSelfOpen(false)
       setDoneOpen(true)
-      setNftClaimed(tokenNumber.toString())
-      console.log("I claimed my nft number", formData.get("tokenNumber"))
+      console.log("I claimed my nft")
     } catch (error) {
       console.log(error)
     }
@@ -63,8 +60,8 @@ export default function ClaimTokens({
           title="Sucessfully Claimed"
           message={
             <p>
-              You successfully claimed <strong>{nftClaimed}</strong> to your
-              wallet
+              You successfully claimed a <strong>Seabrick Token NFT</strong> to
+              your wallet
             </p>
           }
           action={setOpen}
@@ -96,11 +93,10 @@ export default function ClaimTokens({
                   className="h-[20px] w-[20px] object-scale-down"
                 />
               </div>
-              <div className="text-sm text-[#333333]">ID #{tokenNumber}</div>
               <div className="text-sm font-bold">Seabrick NFT</div>
             </div>
             <form action={claimNFT}>
-              <input value={tokenNumber} name="tokenNumber" type="hidden" />
+              <input name="tokenNumber" type="hidden" />
               <SubmitButton
                 buttonIcon={
                   <CurrencyDollarIcon className="size-[1.5rem] inline mr-[-3px] " />
