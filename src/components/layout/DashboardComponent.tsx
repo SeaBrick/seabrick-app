@@ -18,6 +18,7 @@ import Table from "../table/TableTest"
 import { useState } from "react"
 import { useContractContext } from "@/context/contractContext"
 import { Buy, Transfer } from "@/lib/interfaces"
+import ClaimNFT from "../cards/ClaimNFT"
 
 interface ModalProps {
   userTransactionData: UserTransactionHistoryData[]
@@ -40,6 +41,8 @@ export default function DashboardComponent({
   const [isCardVisible, setIsCardVisible] = useState(false)
   const [isClaimTokensOpen, setClaimTokensOpen] = useState(false)
   const [isMintTokensOpen, setMintTokensOpen] = useState(false)
+  const [showClaimModal, setShowClaimModal] = useState(false)
+
   const router = useRouter()
   //
   const {
@@ -96,7 +99,9 @@ export default function DashboardComponent({
           </Modal>
         </>
       ) : (
-        ""
+        <Modal open={showClaimModal} setOpen={setShowClaimModal}>
+          <ClaimNFT open={showClaimModal} setOpen={setShowClaimModal} />
+        </Modal>
       )}
       <div className="w-full gap-3 flex md:flex-row flex-col">
         {/* left side */}
@@ -138,7 +143,10 @@ export default function DashboardComponent({
                 </div>
               ) : (
                 <div className="flex flex-start w-full gap-2">
-                  <button className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-xs font-normal font-['Noto Sans']">
+                  <button
+                    className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-xs font-normal font-['Noto Sans']"
+                    onClick={() => setShowClaimModal(true)}
+                  >
                     Claim!
                   </button>
                   <button className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-xs font-normal font-['Noto Sans']">
