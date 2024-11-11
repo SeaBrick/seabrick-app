@@ -1,9 +1,9 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { getUrl } from "@/lib/utils";
 import { UserAuthSchema } from "@/lib/zod";
-
-// TODO: Check if it's a wallet user
+import { headers } from "next/headers";
 
 export async function requestResetPassword(formData: FormData) {
   // Create supabase client
@@ -62,10 +62,14 @@ export async function requestResetPassword(formData: FormData) {
     };
   }
 
+  // Get this whole url
+  const fullUrl = headers().get("referer");
+  const redirectUrl = getUrl(fullUrl);
+
   const { error: resetError } = await supabaseClient.auth.resetPasswordForEmail(
     email,
     {
-      redirectTo: "https://example.com/update-password",
+      redirectTo: redirectUrl,
     }
   );
 
