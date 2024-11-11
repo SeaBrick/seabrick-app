@@ -34,7 +34,6 @@ export default function AdminPage() {
   const [isMinter, setIsMinter] = useState<boolean>(false) // conditional button
   const [isNFTContractOwner, setIsNFTContractOwner] = useState<boolean>(false)
   // conditional button
-  const [isMarketOwner, setIsMarketOwner] = useState<boolean>(false)
   //
   const testDataMap: UserTransactionHistoryData[] = [
     {
@@ -67,12 +66,11 @@ export default function AdminPage() {
   //
   useEffect(() => {
     if (!walletAddress) {
-      // router.push("/dashboard")
+      router.push("/dashboard")
     }
 
     // It has a wallet conntected, but it is not a NFT minter or owner contract
     if (
-      // eslint-disable-next-line no-constant-condition
       !accountData.isMinter &&
       getAddress(contractsData.market.owner) !== walletAddress &&
       getAddress(contractsData.seabrick.owner) !== walletAddress
@@ -84,11 +82,6 @@ export default function AdminPage() {
       // Is a token minter?
       if (accountData.isMinter) {
         setIsMinter(true)
-      }
-
-      // Is the market owner?
-      if (getAddress(contractsData.market.owner) === walletAddress) {
-        setIsMarketOwner(true)
       }
 
       // Is the NFT contract owner?
@@ -115,9 +108,7 @@ export default function AdminPage() {
                   Welcome Back!
                 </div>
                 <div className="text-black text-2xl font-normal font-['Noto Sans']">
-                  {user?.user_metadata["name"] ||
-                    user?.user_metadata["fullname"] ||
-                    "User"}
+                  {user?.user_metadata["name"] || user?.email}
                 </div>
               </div>
             </div>
@@ -126,6 +117,8 @@ export default function AdminPage() {
               dataBuys={buyData.read()}
               dataTransfer={transfersData.read()}
               isAdmin={true} // by default
+              isMinter={isMinter}
+              isNFTContractOwner={isNFTContractOwner}
             />
           </>
         )}

@@ -6,7 +6,6 @@ import { UserAttributes } from "@supabase/supabase-js";
 import { headers } from "next/headers";
 
 export async function changeAccountDetails(
-  currentState: { message: string },
   formData: FormData
 ) {
   const supabase = createClient();
