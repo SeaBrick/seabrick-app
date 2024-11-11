@@ -189,7 +189,7 @@ const AccountDetails: React.FC = () => {
               />
             </div>
           </div>
-          <input hidden value={userType} name="user_type" />
+          <input hidden value={userType} readOnly name="user_type" />
 
           {userType === "wallet" && (
             <div>
