@@ -58,30 +58,6 @@ export default function AccountDetailsPage() {
           </div>
         </div>
       </div>
-      {/* Tabs 
-      <TabGroup selectedIndex={selectedIndex} onChange={setSelectedIndex}>
-        <TabList className="flex gap-4">
-          <Tab className="rounded-full py-1 px-3 focus:outline-none data-[selected]:bg-seabrick-blue/10 data-[hover]:bg-seabrick-blue/5 data-[selected]:data-[hover]:bg-seabrick-blue/10 data-[focus]:outline-1 data-[focus]:outline-white">
-            <Link prefetch={true} href="/account">
-              Account details
-            </Link>
-          </Tab>
-          <Tab className="rounded-full py-1 px-3 focus:outline-none data-[selected]:bg-seabrick-blue/10 data-[hover]:bg-seabrick-blue/5 data-[selected]:data-[hover]:bg-seabrick-blue/10 data-[focus]:outline-1 data-[focus]:outline-white">
-            <Link prefetch={true} href="/account?tab=transactions">
-              Account transactions
-            </Link>
-          </Tab>
-        </TabList>
-        <TabPanels className="mt-3">
-          <TabPanel className="rounded-xl bg-seabrick-blue/5 p-5">
-            <AccountDetails />
-          </TabPanel>
-          <TabPanel className="rounded-xl bg-seabrick-blue/5 p-5">
-            <AccountTransactions />
-          </TabPanel>
-        </TabPanels>
-      </TabGroup>
-      */}
       <div className="p-6 bg-white rounded-[10px]">
         <AccountDetails />
       </div>
