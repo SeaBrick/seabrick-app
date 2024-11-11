@@ -19,6 +19,17 @@ export async function GET(request: NextRequest) {
       token_hash,
     });
 
+    // If the verifyOtp failed, tokens is expired or something else happened.
+    // So, it's not allowed to do something
+    if (error) {
+      console.log("error: ", verifiedData);
+      redirect("/");
+    }
+
+    if (type === "recovery") {
+      redirect("/auth/reset");
+    }
+
     // Once the user is verfied and we know that is a wallet user type
     // we proceed to add the data to the wallet_users table
     if (
@@ -58,6 +69,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (!error) {
+      console.log("no error: ");
       // redirect user to specified redirect URL or root of app
       revalidatePath("/", "layout");
       redirect(next);

@@ -27,3 +27,19 @@ export const userLoginWalletSchema = z.object({
 export const UserRegisterWalletSchema = userLoginWalletSchema.extend(
   UserAuthSchema.omit({ password: true }).shape
 );
+
+// Schema for password reset
+export const PasswordResetSchema = z
+  .object({
+    newPassword: z
+      .string()
+      .min(8, "Password must be at least 8 characters long"),
+    repeatedPassword: z
+      .string()
+      .min(8, "Password must be at least 8 characters long"),
+  })
+  .refine((data) => data.repeatedPassword === data.repeatedPassword, {
+    message: "Passwords must match",
+    // This points the error message to the newPassword field
+    path: ["newPassword"],
+  });
