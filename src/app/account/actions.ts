@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { getUrl } from "@/lib/utils";
+import { UserAccountPersonalInfoSchema } from "@/lib/zod";
 import { UserAttributes } from "@supabase/supabase-js";
 import { headers } from "next/headers";
 
@@ -10,6 +11,20 @@ export async function changeAccountDetails(
 ) {
   const supabase = createClient();
 
+  const {
+    data: validationData,
+    success: validationSuccess,
+    error: validationError,
+  } = UserAccountPersonalInfoSchema.safeParse({
+    email: formData.get("email"),
+    name: formData.get("name"),
+    user_type: formData.get("user_type")
+  })
+
+  if (!validationSuccess) {
+    // Just return the first error encountered
+    return { error: validationError.errors[0].message };
+  }
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -21,10 +36,10 @@ export async function changeAccountDetails(
   }
 
   // TODO: USe Zod to validate inputs
-  const user_type = formData.get("user_type") as "wallet" | "email";
-  const name = formData.get("name") as string;
-  const email = formData.get("email") as string;
-  
+  const user_type = validationData.user_type as "wallet" | "email";
+  const name = validationData.name
+  const email = validationData.email
+
 
   // User data to be updated
   const userData: UserAttributes = {};

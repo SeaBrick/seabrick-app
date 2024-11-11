@@ -1,16 +1,15 @@
 "use client"
 import { useAuth } from "@/context/authContext"
 import React, { useEffect, useState } from "react"
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react"
-import Link from "next/link"
 import Image from "next/image"
 import { useSearchParams } from "next/navigation"
-import { useFormState } from "react-dom"
 import { Button } from "@headlessui/react"
 import { Address, zeroAddress } from "viem"
 import { changeAccountDetails } from "./actions"
 import SubmitButton from "@/components/buttons/SubmitButton"
 import ChangePasswordForm from "@/components/forms/ChangePassword"
+import { Errors } from "@/lib/interfaces"
+import { isEmpty } from "lodash"
 
 enum TabsIndex {
   DETAILS,
@@ -77,9 +76,24 @@ const AccountDetails: React.FC = () => {
 
   const [address, setAddress] = useState<Address>(zeroAddress)
   const [originalAddress, setOriginalAddress] = useState<Address>(zeroAddress)
+  const [errors, setErrors] = useState<Errors>({})
 
   async function formAction(data: FormData) {
-    // guiarse de login
+    const newErrors: Errors = {}
+
+    if (!email) {
+      newErrors.message = "Email is required"
+    } else if (!name) {
+      newErrors.message = "Name is required"
+    }
+
+    // if errors is NOT empty, somethins is missing. We do not try to login
+    // Maube use a tostify here?
+    if (!isEmpty(newErrors)) {
+      // i dunno about loadash for something simple
+      setErrors(newErrors)
+      return
+    }
     const resp = await changeAccountDetails(data)
 
     if (resp.message) {
@@ -154,7 +168,7 @@ const AccountDetails: React.FC = () => {
               </label>
               <input
                 className="disabled:cursor-not-allowed disabled:text-gray-500 disabled:bg-seabrick-blue/10 mt-1 block w-full bg-seabrick-blue/5 border border-gray-700 rounded py-2 px-4 focus:outline-none focus:ring focus:ring-blue-500"
-                placeholder="Your name (optional information)"
+                placeholder="Your name"
                 disabled={!modifying}
                 value={name}
                 onChange={nameOnchange}
@@ -170,7 +184,6 @@ const AccountDetails: React.FC = () => {
                 className="disabled:cursor-not-allowed disabled:text-gray-500 disabled:bg-seabrick-blue/10 mt-1 block w-full bg-seabrick-blue/5 border border-gray-700 rounded py-2 px-4 focus:outline-none focus:ring focus:ring-blue-500"
                 disabled={!modifying}
                 value={email}
-                required
                 onChange={emailOnchange}
                 name="email"
               />
@@ -216,9 +229,7 @@ const AccountDetails: React.FC = () => {
             </div>
           )}
 
-          {/* {messageState.message && (
-            <p className="text-red-500">{messageState.message}</p>
-          )} */}
+          {errors.message && <p className="text-red-500">{errors.message}</p>}
         </form>
       )}
       <hr className="my-6" />
