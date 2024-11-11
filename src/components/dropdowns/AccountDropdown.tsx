@@ -14,84 +14,85 @@ import {
   ArrowRightStartOnRectangleIcon,
   UserCircleIcon,
   ListBulletIcon,
+  ArrowDownCircleIcon,
+  ArrowsUpDownIcon,
+  ArrowLeftStartOnRectangleIcon,
+  Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
-import { UserIcon } from "@heroicons/react/24/solid";
+import Image from "next/image";
 import Link from "next/link";
+import { ChevronDownIcon } from '@heroicons/react/16/solid'
 
 interface AccountDropdownProps {
   num?: number;
 }
 
 export default function AccountDropdown({ num: _num }: AccountDropdownProps) {
-  const { user, userType, userAddress, signOut } = useAuth();
+  const { user, userType, userAddress, signOut, userRole } = useAuth();
 
   async function onClickSignOut() {
     await signOut();
   }
-
   return (
     <Menu>
-      <MenuButton className="flex items-center text-white p-2 gap-2 rounded-md bg-seabrick-blue py-1.5 px-3 data-[hover]:bg-seabrick-blue/85 data-[open]:bg-seabrick-blue/85 data-[focus]:outline-1 data-[focus]:outline-white">
-        Account
-        <UserIcon className="size-4 fill-white" />
-      </MenuButton>
+      <div className="flex flex-col items-end gap-1">
+        <h3 className="text-base text-dark-blue font-semibold">Sebastian Rojas</h3>
+        <MenuButton className="flex text-sm items-center text-light-gray gap-1 rounded-md data-[focus]:outline-1 data-[focus]:outline-white">
+          My Account         
+          <ChevronDownIcon className="size-4 fill-light-gray" />
+        </MenuButton>
 
-      <MenuItems
-        transition
-        anchor="bottom end"
-        className="w-52 origin-top-right rounded-xl border bg-white p-1 z-50 text-right transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
-      >
-        <MenuSection>
-          <MenuHeading className="text-sm opacity-50 mx-auto w-fit mb-2">
-            {user && (
+        <MenuItems
+          transition
+          anchor="bottom end"
+          className="w-46 origin-top-right rounded-xl border bg-white p-1 z-50 text-right transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
+        >
+          <MenuSection>           
+            <MenuItem>
+              <button className="group flex w-full text-dark-blue font-['Montserrat'] text-sm items-center justify-end gap-2 rounded-lg py-1.5 px-4 data-[focus]:bg-black/10"> 
+                <Link href="/account">Account Settings</Link>
+                <Cog6ToothIcon className="size-6 text-dark-blue" />
+              </button>
+            </MenuItem>
+            <MenuSeparator className="my-1 h-px bg-light-gray/10" />
+            <MenuItem>
+              <button className="group flex w-full text-dark-blue font-['Montserrat'] text-sm items-center justify-end gap-2 rounded-lg py-1.5 px-4 data-[focus]:bg-black/10">               
+                <Link href="/account?tab=transactions">Transactions</Link>
+                <ArrowsUpDownIcon className="size-6 text-dark-blue" />
+              </button>
+            </MenuItem>
+            {(user && userRole == "admin") ||
+            (userRole == "owner" && (
               <>
-                {userType == "wallet" ? (
-                  <>
-                    {userAddress
-                      ? addressResumer(userAddress, 3)
-                      : user.user_metadata.email}
-                  </>
-                ) : (
-                  <>{user.user_metadata.email}</>
-                )}
+                <MenuSeparator className="my-1 h-px bg-light-gray/10" />
+                <MenuItem>
+                  <button className="group flex w-full text-dark-blue font-['Montserrat'] text-sm items-center justify-end gap-2 rounded-lg py-1.5 px-4 data-[focus]:bg-black/10">               
+                    <Link href="/admin-list">Admin</Link>
+                    <UserCircleIcon className="size-6 text-dark-blue" />
+                  </button>
+                </MenuItem>
               </>
-            )}
-          </MenuHeading>
-          <MenuSeparator className="my-1 h-px bg-black/25" />
+            ))}
+          </MenuSection>
+          <MenuSeparator className="my-1 h-px bg-light-gray/10" />
           <MenuItem>
-            <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-black/10">
-              <UserCircleIcon className="size-4" />
-              <Link href="/account">Account details</Link>
-              <kbd className="ml-auto hidden font-sans text-xs group-data-[focus]:inline">
-                ⌘A
-              </kbd>
+            <button
+              onClick={onClickSignOut}
+              className="group flex w-full text-dark-blue font-['Montserrat'] text-sm items-center justify-end gap-2 rounded-lg py-1.5 px-4 data-[focus]:bg-black/10"
+            >
+              {userType == "wallet" ? <>Disconnect</> : <>Log Out</>}
+              <ArrowLeftStartOnRectangleIcon className="size-6 text-dark-blue" />
             </button>
-          </MenuItem>
-          <MenuItem>
-            <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-black/10">
-              <ListBulletIcon className="size-4" />
-              <Link href="/account?tab=transactions">Transactions</Link>
-              <kbd className="ml-auto hidden font-sans text-xs group-data-[focus]:inline">
-                ⌘T
-              </kbd>
-            </button>
-          </MenuItem>
-        </MenuSection>
-
-        <MenuSeparator className="my-1 h-px bg-black/25" />
-        <MenuItem>
-          <button
-            onClick={onClickSignOut}
-            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-black/10"
-          >
-            <ArrowRightStartOnRectangleIcon className="size-4" />
-            {userType == "wallet" ? <>Disconnect</> : <>Sign out</>}
-            <kbd className="ml-auto hidden font-sans text-xs group-data-[focus]:inline">
-              ⌘D
-            </kbd>
-          </button>
-        </MenuItem>
-      </MenuItems>
+          </MenuItem>         
+        </MenuItems>
+      </div>
+      <Image
+        className="hidden md:block"
+        src="/user-no-profile.webp"
+        alt="user"
+        width={55}
+        height={55}
+      />
     </Menu>
   );
 }
