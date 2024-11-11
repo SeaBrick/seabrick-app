@@ -19,6 +19,7 @@ enum TabsIndex {
 
 export default function AccountDetailsPage() {
   const [selectedIndex, setSelectedIndex] = useState<number>(TabsIndex.DETAILS)
+  const { user } = useAuth()
 
   const searchParams = useSearchParams()
   const tab = searchParams.get("tab")
@@ -55,7 +56,7 @@ export default function AccountDetailsPage() {
             </div>
             <div className="grow shrink basis-0 flex-col justify-start items-center gap-2 inline-flex">
               <h3 className="text-[#49414d] text-xl font-bold font-['Noto Sans'] leading-normal">
-                Sebastian Rojas
+                {user?.user_metadata["name"]}
               </h3>
             </div>
           </div>
@@ -69,7 +70,7 @@ export default function AccountDetailsPage() {
 }
 
 const AccountDetails: React.FC = () => {
-  const { user, userType } = useAuth()
+  const { user, userType, refetch: authRefetch } = useAuth()
   const [modifying, setModifying] = useState<boolean>(false)
 
   const [email, setEmail] = useState<string>("")
@@ -112,6 +113,7 @@ const AccountDetails: React.FC = () => {
       setOriginalName(name)
       setOriginalAddress(address)
       setModifying(false)
+      authRefetch()
     }
   }
 

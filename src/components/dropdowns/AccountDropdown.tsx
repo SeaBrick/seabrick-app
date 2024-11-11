@@ -1,5 +1,5 @@
-"use client";
-import { useAuth } from "@/context/authContext";
+"use client"
+import { useAuth } from "@/context/authContext"
 import {
   Menu,
   MenuButton,
@@ -7,32 +7,32 @@ import {
   MenuItems,
   MenuSeparator,
   MenuSection,
-} from "@headlessui/react";
+} from "@headlessui/react"
 import {
   UserCircleIcon,
   ArrowsUpDownIcon,
   ArrowLeftStartOnRectangleIcon,
   Cog6ToothIcon,
-} from "@heroicons/react/24/outline";
-import Image from "next/image";
-import Link from "next/link";
-import { ChevronDownIcon } from "@heroicons/react/16/solid";
+} from "@heroicons/react/24/outline"
+import Image from "next/image"
+import Link from "next/link"
+import { ChevronDownIcon } from "@heroicons/react/16/solid"
 
 interface AccountDropdownProps {
-  num?: number;
+  num?: number
 }
 
 export default function AccountDropdown(_props: AccountDropdownProps) {
-  const { user, signOut, userRole } = useAuth();
+  const { user, signOut, userRole } = useAuth()
 
   async function onClickSignOut() {
-    await signOut();
+    await signOut()
   }
   return (
     <Menu>
       <div className="flex flex-col items-end gap-1">
         <h3 className="text-base text-dark-blue font-semibold">
-          Sebastian Rojas
+          {user?.user_metadata["name"]}
         </h3>
         <MenuButton className="flex text-sm items-center text-light-gray gap-1 rounded-md data-[focus]:outline-1 data-[focus]:outline-white">
           My Account
@@ -112,5 +112,5 @@ export default function AccountDropdown(_props: AccountDropdownProps) {
         height={55}
       />
     </Menu>
-  );
+  )
 }
