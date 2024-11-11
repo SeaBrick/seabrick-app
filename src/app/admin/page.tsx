@@ -73,10 +73,9 @@ export default function AdminPage() {
     // It has a wallet conntected, but it is not a NFT minter or owner contract
     if (
       // eslint-disable-next-line no-constant-condition
-      false
-      // !accountData.isMinter &&
-      // getAddress(contractsData.market.owner) !== walletAddress &&
-      // getAddress(contractsData.seabrick.owner) !== walletAddress
+      !accountData.isMinter &&
+      getAddress(contractsData.market.owner) !== walletAddress &&
+      getAddress(contractsData.seabrick.owner) !== walletAddress
     ) {
       router.push("/dashboard")
     } else {

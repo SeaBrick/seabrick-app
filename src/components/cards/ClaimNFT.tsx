@@ -4,6 +4,7 @@ import Table, { TableColumn } from "../table/TableTest"
 import CurrencyDollarIcon from "@heroicons/react/24/outline/CurrencyDollarIcon"
 import Image from "next/image"
 import { ModalDone } from "../modals/ModalDone"
+import SubmitButton from "../buttons/SubmitButton"
 
 const dataTestColums: TableColumn[] = [
   {
@@ -68,8 +69,8 @@ export default function ClaimTokens({
   const [isSelfOpen, setSelfOpen] = useState(true)
   const [isDoneOpen, setDoneOpen] = useState(false)
 
-  function claimNFT(tokenNumber: number | string) {
-    console.log("I claimed my nft number", tokenNumber)
+  function claimNFT(formData: FormData) {
+    console.log("I claimed my nft number", formData.get("tokenNumber"))
     setNftClaimed(tokenNumber.toString())
     setSelfOpen(false)
     setDoneOpen(true)
@@ -107,13 +108,16 @@ export default function ClaimTokens({
               <div className="text-sm text-[#333333]">ID #{tokenNumber}</div>
               <div className="text-sm font-bold">Seabrick NFT</div>
             </div>
-            <button
-              className="bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] rounded-[5px] p-3 flex text-white items-center justify-between text-sm "
-              onClick={() => claimNFT(tokenNumber)}
-            >
-              <CurrencyDollarIcon className="size-[1.25rem] inline mr-1" />{" "}
-              Claim Available Tokens
-            </button>
+            <form action={claimNFT}>
+              <input value={tokenNumber} name="tokenNumber" type="hidden" />
+              <SubmitButton
+                buttonIcon={
+                  <CurrencyDollarIcon className="size-[1.5rem] inline mr-[-3px] " />
+                }
+                buttonClass="bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] rounded-[5px] p-2.5 text-white text-sm"
+                label="Claim Available Tokens"
+              />
+            </form>
           </div>
         </ClaimModal>
       )}
