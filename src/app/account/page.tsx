@@ -10,6 +10,7 @@ import SubmitButton from "@/components/buttons/SubmitButton"
 import ChangePasswordForm from "@/components/forms/ChangePassword"
 import { Errors } from "@/lib/interfaces"
 import { isEmpty } from "lodash"
+import BackButton from "@/components/buttons/BackButton"
 
 enum TabsIndex {
   DETAILS,
@@ -34,7 +35,10 @@ export default function AccountDetailsPage() {
   }, [tab])
 
   return (
-    <div className="max-w-[978px] w-full mx-auto mt-[30px]">
+    <div className="max-w-[978px] w-full mx-auto mt-[30px] relative">
+      <div className="absolute top-4 left-4">
+        <BackButton />
+      </div>
       <p className="text-md text-center">Account</p>
       <h3 className="text-4xl text-center mb-9">Account Settings</h3>
       <div className="w-full p-5 bg-white rounded-[10px] flex-col justify-center items-center gap-4 inline-flex mb-4">
