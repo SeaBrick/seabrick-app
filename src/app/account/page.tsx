@@ -49,7 +49,7 @@ export default function AccountDetailsPage() {
 }
 
 const AccountDetails: React.FC = () => {
-  const { user, userType, refetch: authRefetch } = useAuth();
+  const { user, userType, userAddress, refetch: authRefetch } = useAuth();
   const [modifying, setModifying] = useState<boolean>(false);
 
   const [email, setEmail] = useState<string>("");
@@ -96,26 +96,36 @@ const AccountDetails: React.FC = () => {
     }
   }
 
+  function setEmails(email_: string) {
+    setEmail(email_);
+    setOriginalEmail(email_);
+  }
+  function setNames(name_: string) {
+    setName(name_);
+    setOriginalName(name_);
+  }
+
+  function setAddresses(address_: Address) {
+    setAddress(address_);
+    setOriginalAddress(address_);
+  }
+
   useEffect(() => {
     if (user) {
       if (user.email) {
-        setEmail(user.email);
-        setOriginalEmail(user.email);
+        setEmails(user.email);
       }
 
       if (user.user_metadata.name) {
-        setName(user.user_metadata.name);
-        setOriginalName(user.user_metadata.name);
+        setNames(user.user_metadata.name);
       }
 
       // TODO: Support for 'email' account with linked wallet
-      if (userType == "wallet") {
-        // We can include the wallet
-        setAddress(user.user_metadata.address);
-        setOriginalAddress(user.user_metadata.address);
+      if (userAddress) {
+        setAddresses(userAddress);
       }
     }
-  }, [user, userType]);
+  }, [user, userAddress, userType]);
 
   const handleModify = () => {
     setModifying(true);
