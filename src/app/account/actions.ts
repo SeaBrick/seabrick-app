@@ -36,6 +36,11 @@ export async function changeAccountDetails(formData: FormData) {
   const name = validationData.name;
   const email = validationData.email;
 
+  if (user.user_metadata.type != user_type) {
+    // This error should not happen if the values are correclty passed
+    return { error: "Bad request - Mismatch user_type" };
+  }
+
   // User data to be updated
   const userData: UserAttributes = {};
 
