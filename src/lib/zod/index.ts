@@ -44,13 +44,11 @@ export const PasswordResetSchema = z
     path: ["newPassword"],
   });
 
-  /**
- * Schema for setting account personal info 
+/**
+ * Schema for setting account personal info
  */
 export const UserAccountPersonalInfoSchema = z.object({
-  name: z.string().min(1, "Name is required"), // en el form de account se llama name
+  name: z.string().min(1, "Name is required"), // It's called 'name' on the form of the account
   email: z.string().min(1, "Email is required").email("Invalid email address"),
-  user_type: z.enum(["wallet", "email"])
-
-
-})
+  user_type: z.enum(["wallet", "email"]),
+});

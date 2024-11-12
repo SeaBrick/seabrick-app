@@ -6,9 +6,7 @@ import { UserAccountPersonalInfoSchema } from "@/lib/zod";
 import { UserAttributes } from "@supabase/supabase-js";
 import { headers } from "next/headers";
 
-export async function changeAccountDetails(
-  formData: FormData
-) {
+export async function changeAccountDetails(formData: FormData) {
   const supabase = createClient();
 
   const {
@@ -18,8 +16,8 @@ export async function changeAccountDetails(
   } = UserAccountPersonalInfoSchema.safeParse({
     email: formData.get("email"),
     name: formData.get("name"),
-    user_type: formData.get("user_type")
-  })
+    user_type: formData.get("user_type"),
+  });
 
   if (!validationSuccess) {
     // Just return the first error encountered
@@ -32,14 +30,11 @@ export async function changeAccountDetails(
   // Maybe this is useless since the middleware already do this
   if (!user) {
     return { error: "Not logged" };
-
   }
 
-  // TODO: USe Zod to validate inputs
-  const user_type = validationData.user_type as "wallet" | "email";
-  const name = validationData.name
-  const email = validationData.email
-
+  const user_type = validationData.user_type;
+  const name = validationData.name;
+  const email = validationData.email;
 
   // User data to be updated
   const userData: UserAttributes = {};
