@@ -1,5 +1,5 @@
-"use client"
-import { useAuth } from "@/context/authContext"
+"use client";
+import { useAuth } from "@/context/authContext";
 import {
   Menu,
   MenuButton,
@@ -7,26 +7,26 @@ import {
   MenuItems,
   MenuSeparator,
   MenuSection,
-} from "@headlessui/react"
+} from "@headlessui/react";
 import {
   UserCircleIcon,
   ArrowsUpDownIcon,
   ArrowLeftStartOnRectangleIcon,
   Cog6ToothIcon,
-} from "@heroicons/react/24/outline"
-import Image from "next/image"
-import Link from "next/link"
-import { ChevronDownIcon } from "@heroicons/react/16/solid"
+} from "@heroicons/react/24/outline";
+import Image from "next/image";
+import Link from "next/link";
+import { ChevronDownIcon } from "@heroicons/react/16/solid";
 
 interface AccountDropdownProps {
-  num?: number
+  num?: number;
 }
 
 export default function AccountDropdown(_props: AccountDropdownProps) {
-  const { user, signOut, userRole } = useAuth()
+  const { user, signOut, userRole } = useAuth();
 
   async function onClickSignOut() {
-    await signOut()
+    await signOut();
   }
   return (
     <Menu>
@@ -77,7 +77,7 @@ export default function AccountDropdown(_props: AccountDropdownProps) {
                 <MenuSeparator className="my-1 h-px bg-light-gray/10" />
                 <MenuItem>
                   <Link
-                    href="/admin-list"
+                    href="/admin"
                     prefetch={true}
                     className="group flex w-full items-center justify-end gap-2 rounded-lg py-1.5 px-4 data-[focus]:bg-black/10"
                   >
@@ -112,5 +112,5 @@ export default function AccountDropdown(_props: AccountDropdownProps) {
         height={55}
       />
     </Menu>
-  )
+  );
 }
