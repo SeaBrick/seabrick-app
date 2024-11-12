@@ -94,7 +94,7 @@ export async function signup(formData: FormData) {
     return registerResp;
   }
 
-  revalidatePath("/", "layout");
+  revalidatePath("/dashboard", "layout");
 }
 
 export async function signUpWithWallet(formData: FormData) {
@@ -187,5 +187,5 @@ export async function signUpWithWallet(formData: FormData) {
   }
 
   deleteNonceSession();
-  revalidatePath("/", "layout");
+  revalidatePath("/dashboard", "layout");
 }

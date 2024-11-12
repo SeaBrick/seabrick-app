@@ -60,8 +60,8 @@ export async function login(formData: FormData) {
     return loginResp;
   }
 
-  revalidatePath("/", "layout");
-  redirect("/");
+  revalidatePath("/dashboard", "layout");
+  redirect("/dashboard");
 }
 
 export async function loginWithWallet(formData: FormData) {
@@ -153,6 +153,6 @@ export async function loginWithWallet(formData: FormData) {
   }
 
   deleteNonceSession();
-  revalidatePath("/", "layout");
-  redirect("/");
+  revalidatePath("/dashboard", "layout");
+  redirect("/dashboard");
 }

@@ -22,7 +22,7 @@ export default function Return() {
   }, []);
 
   if (status === "open") {
-    return redirect("/");
+    return redirect("/dashboard");
   }
 
   if (status === "complete") {
