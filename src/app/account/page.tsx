@@ -1,39 +1,18 @@
-"use client"
-import { useAuth } from "@/context/authContext"
-import React, { useEffect, useState } from "react"
-import Image from "next/image"
-import { useSearchParams } from "next/navigation"
-import { Button } from "@headlessui/react"
-import { Address, zeroAddress } from "viem"
-import { changeAccountDetails } from "./actions"
-import SubmitButton from "@/components/buttons/SubmitButton"
-import ChangePasswordForm from "@/components/forms/ChangePassword"
-import { Errors } from "@/lib/interfaces"
-import { isEmpty } from "lodash"
-import BackButton from "@/components/buttons/BackButton"
-
-enum TabsIndex {
-  DETAILS,
-  TRANSACTIONS,
-}
+"use client";
+import { useAuth } from "@/context/authContext";
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import { Button } from "@headlessui/react";
+import { Address, zeroAddress } from "viem";
+import { changeAccountDetails } from "./actions";
+import SubmitButton from "@/components/buttons/SubmitButton";
+import ChangePasswordForm from "@/components/forms/ChangePassword";
+import { Errors } from "@/lib/interfaces";
+import { isEmpty } from "lodash";
+import BackButton from "@/components/buttons/BackButton";
 
 export default function AccountDetailsPage() {
-  const [selectedIndex, setSelectedIndex] = useState<number>(TabsIndex.DETAILS)
-  const { user } = useAuth()
-
-  const searchParams = useSearchParams()
-  const tab = searchParams.get("tab")
-
-  useEffect(() => {
-    switch (tab) {
-      case "transactions":
-        setSelectedIndex(TabsIndex.TRANSACTIONS)
-        break
-      default:
-        setSelectedIndex(TabsIndex.DETAILS)
-        break
-    }
-  }, [tab])
+  const { user } = useAuth();
 
   return (
     <div className="max-w-[978px] w-full mx-auto mt-[30px] relative">
@@ -66,108 +45,108 @@ export default function AccountDetailsPage() {
         <AccountDetails />
       </div>
     </div>
-  )
+  );
 }
 
 const AccountDetails: React.FC = () => {
-  const { user, userType, refetch: authRefetch } = useAuth()
-  const [modifying, setModifying] = useState<boolean>(false)
+  const { user, userType, refetch: authRefetch } = useAuth();
+  const [modifying, setModifying] = useState<boolean>(false);
 
-  const [email, setEmail] = useState<string>("")
-  const [originalEmail, setOriginalEmail] = useState<string>("")
+  const [email, setEmail] = useState<string>("");
+  const [originalEmail, setOriginalEmail] = useState<string>("");
 
-  const [name, setName] = useState<string>("")
-  const [originalName, setOriginalName] = useState<string>("")
+  const [name, setName] = useState<string>("");
+  const [originalName, setOriginalName] = useState<string>("");
 
-  const [address, setAddress] = useState<Address>(zeroAddress)
-  const [originalAddress, setOriginalAddress] = useState<Address>(zeroAddress)
-  const [errors, setErrors] = useState<Errors>({})
+  const [address, setAddress] = useState<Address>(zeroAddress);
+  const [originalAddress, setOriginalAddress] = useState<Address>(zeroAddress);
+  const [errors, setErrors] = useState<Errors>({});
 
   async function formAction(data: FormData) {
-    const newErrors: Errors = {}
+    const newErrors: Errors = {};
 
     if (!email) {
-      newErrors.message = "Email is required"
+      newErrors.message = "Email is required";
     } else if (!name) {
-      newErrors.message = "Name is required"
+      newErrors.message = "Name is required";
     }
 
     // if errors is NOT empty, somethins is missing. We do not try to login
     // Maube use a tostify here?
     if (!isEmpty(newErrors)) {
       // i dunno about loadash for something simple
-      setErrors(newErrors)
-      return
+      setErrors(newErrors);
+      return;
     } else {
-      setErrors({})
+      setErrors({});
     }
-    const resp = await changeAccountDetails(data)
+    const resp = await changeAccountDetails(data);
 
     if (resp && resp.error) {
-      newErrors.message = resp.error
-      setErrors(newErrors)
-      return
+      newErrors.message = resp.error;
+      setErrors(newErrors);
+      return;
     }
     if (resp.message) {
-      setOriginalEmail(email)
-      setOriginalName(name)
-      setOriginalAddress(address)
-      setModifying(false)
-      authRefetch()
+      setOriginalEmail(email);
+      setOriginalName(name);
+      setOriginalAddress(address);
+      setModifying(false);
+      authRefetch();
     }
   }
 
   useEffect(() => {
     if (user) {
       if (user.email) {
-        setEmail(user.email)
-        setOriginalEmail(user.email)
+        setEmail(user.email);
+        setOriginalEmail(user.email);
       }
 
       if (user.user_metadata.name) {
-        setName(user.user_metadata.name)
-        setOriginalName(user.user_metadata.name)
+        setName(user.user_metadata.name);
+        setOriginalName(user.user_metadata.name);
       }
 
       // TODO: Support for 'email' account with linked wallet
       if (userType == "wallet") {
         // We can include the wallet
-        setAddress(user.user_metadata.address)
-        setOriginalAddress(user.user_metadata.address)
+        setAddress(user.user_metadata.address);
+        setOriginalAddress(user.user_metadata.address);
       }
     }
-  }, [user, userType])
+  }, [user, userType]);
 
   const handleModify = () => {
-    setModifying(true)
-  }
+    setModifying(true);
+  };
 
   const cancelModify = () => {
-    restoreOriginalValues()
-    setModifying(false)
-  }
+    restoreOriginalValues();
+    setModifying(false);
+  };
 
   const emailOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value)
-  }
+    setEmail(e.target.value);
+  };
 
   const nameOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value)
-  }
+    setName(e.target.value);
+  };
 
   const restoreOriginalValues = () => {
-    setEmail(originalEmail)
-    setName(originalName)
-    setAddress(originalAddress)
-  }
+    setEmail(originalEmail);
+    setName(originalName);
+    setAddress(originalAddress);
+  };
 
   const checkChanges = () => {
     return (
       originalEmail === email &&
       originalName === name &&
       originalAddress === address
-    )
-  }
+    );
+  };
 
   return (
     <div className="">
@@ -249,11 +228,5 @@ const AccountDetails: React.FC = () => {
 
       <ChangePasswordForm />
     </div>
-  )
-}
-
-const AccountTransactions: React.FC = () => {
-  const { user } = useAuth()
-
-  return <div>{user && <>Account transactions</>}</div>
-}
+  );
+};
