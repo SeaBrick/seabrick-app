@@ -18,23 +18,15 @@ const getLatestBuysInfo = async () => {
 const getLatestTransfersInfo = async () => {
   return await getLatestTransfers();
 };
-//
 const buyData = wrapPromise(getLatestBuysInfo());
 const transfersData = wrapPromise(getLatestTransfersInfo());
-//
 
 export default function AdminPage() {
-  const router = useRouter();
-  const { address: walletAddress } = useAccount();
-  const { data: contractsData } = useContractContext();
-  const { data: accountData } = useAccountContext();
   const { user, userRole } = useAuth();
-  //
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isMinter, setIsMinter] = useState<boolean>(false); // conditional button
   const [isNFTContractOwner, setIsNFTContractOwner] = useState<boolean>(false);
   // conditional button
-  //
+
   const testDataMap: UserTransactionHistoryData[] = [
     {
       total: 400,
@@ -80,7 +72,7 @@ export default function AdminPage() {
         userTransactionData={testDataMap}
         dataBuys={buyData.read()}
         dataTransfer={transfersData.read()}
-        isAdmin={true} // by default
+        isAdmin={userRole == "admin" || userRole == "owner"} // by default
         isMinter={isMinter}
         isNFTContractOwner={isNFTContractOwner}
       />
