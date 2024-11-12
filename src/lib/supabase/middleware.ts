@@ -71,7 +71,7 @@ export async function updateSession(request: NextRequest) {
   // Redirect  authenticated users to the home page if they're trying to access a authentication path
   if (user && isLoggedDisallowed) {
     const url = request.nextUrl.clone();
-    url.pathname = "/";
+    url.pathname = "/dashboard";
     return NextResponse.redirect(url);
   }
 
@@ -84,7 +84,7 @@ export async function updateSession(request: NextRequest) {
   // Redirect unauthorized users to the home page if they're trying to access an only admin path
   if (!userRole && isOnlyAdmin) {
     const url = request.nextUrl.clone();
-    url.pathname = "/";
+    url.pathname = "/dashboard";
     return NextResponse.redirect(url);
   }
 
