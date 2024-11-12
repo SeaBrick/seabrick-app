@@ -35,7 +35,7 @@ export default function AccountDetailsPage() {
             </div>
             <div className="grow shrink basis-0 flex-col justify-start items-center gap-2 inline-flex">
               <h3 className="text-[#49414d] text-xl font-bold font-['Noto Sans'] leading-normal">
-                {user?.user_metadata["name"]}
+                {user ? (user.user_metadata?.name ?? user.email) : "User"}
               </h3>
             </div>
           </div>
