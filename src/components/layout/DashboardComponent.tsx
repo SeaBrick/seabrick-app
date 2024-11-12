@@ -26,8 +26,7 @@ interface ModalProps {
   dataBuys: Buy[];
   dataTransfer: Transfer[];
   isAdmin: boolean;
-  isMinter?: boolean;
-  isNFTContractOwner?: boolean;
+  isOwner?: boolean;
 }
 
 export default function DashboardComponent({
@@ -35,8 +34,7 @@ export default function DashboardComponent({
   dataBuys,
   dataTransfer,
   isAdmin,
-  isMinter = false,
-  isNFTContractOwner = false,
+  isOwner = false,
 }: ModalProps) {
   const [dataOnDisplay, setDataOnDisplay] = useState("Transfers");
   const [isCardVisible, setIsCardVisible] = useState(false);
@@ -138,7 +136,7 @@ export default function DashboardComponent({
                   <button
                     className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-xs font-normal font-['Noto Sans'] disabled:cursor-not-allowed disabled:bg-gray-400"
                     onClick={() => setMintTokensOpen(true)}
-                    disabled={!isMinter}
+                    disabled={!isAdmin}
                   >
                     Mint New Tokens
                   </button>
@@ -212,7 +210,7 @@ export default function DashboardComponent({
             <div className="lg:w-[50%] w-full min-h-[10rem] gap-2 flex flex-col">
               {isAdmin ? (
                 <div className="bg-white w-full h-full rounded-[10px] gap-3 p-4 flex flex-col justify-between">
-                  <ModalTransferOwnership disableButton={!isNFTContractOwner} />
+                  <ModalTransferOwnership disableButton={!isOwner} />
                   <button
                     className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-left"
                     onClick={() => {

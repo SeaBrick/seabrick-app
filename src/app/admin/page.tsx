@@ -1,11 +1,6 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAccountContext } from "@/context/accountContext";
-import { useContractContext } from "@/context/contractContext";
-import { useAccount } from "wagmi";
-import PageLoaderSpinner from "@/components/spinners/PageLoaderSpinner";
-import { getAddress } from "viem";
 import DashboardComponent from "@/components/layout/DashboardComponent";
 import { getLatestBuys, getLatestTransfers } from "@/lib/subgraph";
 import { wrapPromise } from "@/lib/utils";
@@ -23,9 +18,14 @@ const transfersData = wrapPromise(getLatestTransfersInfo());
 
 export default function AdminPage() {
   const { user, userRole } = useAuth();
-  const [isMinter, setIsMinter] = useState<boolean>(false); // conditional button
-  const [isNFTContractOwner, setIsNFTContractOwner] = useState<boolean>(false);
-  // conditional button
+  const router = useRouter();
+
+  useEffect(() => {
+    // If no user role, it's just an unauthenticated
+    if (userRole === null) {
+      router.push("/dashboard");
+    }
+  }, [router, userRole]);
 
   const testDataMap: UserTransactionHistoryData[] = [
     {
@@ -72,9 +72,8 @@ export default function AdminPage() {
         userTransactionData={testDataMap}
         dataBuys={buyData.read()}
         dataTransfer={transfersData.read()}
-        isAdmin={userRole == "admin" || userRole == "owner"} // by default
-        isMinter={isMinter}
-        isNFTContractOwner={isNFTContractOwner}
+        isAdmin={userRole == "admin" || userRole == "owner"}
+        isOwner={userRole == "owner"}
       />
     </div>
   );
