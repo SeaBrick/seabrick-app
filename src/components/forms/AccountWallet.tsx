@@ -82,7 +82,7 @@ const AccountWallet: React.FC = () => {
       return;
     }
 
-    console.log(resp);
+    authRefetch();
   }
 
   return (
