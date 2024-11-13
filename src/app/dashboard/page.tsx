@@ -1,20 +1,21 @@
-"use client"
-import { UserTransactionHistoryData } from "@/components/cards/UserTransactionsHistory"
-import Image from "next/image"
-import { useAuth } from "@/context/authContext"
-import DashboardComponent from "@/components/layout/DashboardComponent"
-import { wrapPromise } from "@/lib/utils"
-import { getLatestBuys, getLatestTransfers } from "@/lib/subgraph"
+"use client";
+import { UserTransactionHistoryData } from "@/components/cards/UserTransactionsHistory";
+import Image from "next/image";
+import { useAuth } from "@/context/authContext";
+import DashboardComponent from "@/components/layout/DashboardComponent";
+import { wrapPromise } from "@/lib/utils";
+import { getLatestBuys, getLatestTransfers } from "@/lib/subgraph";
+import UserName from "@/components/auth/UserName";
 //
 const getLatestBuysInfo = async () => {
-  return await getLatestBuys()
-}
+  return await getLatestBuys();
+};
 const getLatestTransfersInfo = async () => {
-  return await getLatestTransfers()
-}
+  return await getLatestTransfers();
+};
 //
-const buyData = wrapPromise(getLatestBuysInfo())
-const transfersData = wrapPromise(getLatestTransfersInfo())
+const buyData = wrapPromise(getLatestBuysInfo());
+const transfersData = wrapPromise(getLatestTransfersInfo());
 //
 
 export default function Dashboard() {
@@ -46,10 +47,10 @@ export default function Dashboard() {
       type: "minted",
       amount: 208,
     },
-  ]
+  ];
 
-  const { user } = useAuth()
-  const isAdmin = user?.role === "admin" || user?.role === "owner"
+  const { user } = useAuth();
+  const isAdmin = user?.role === "admin" || user?.role === "owner";
 
   return (
     <>
@@ -68,9 +69,7 @@ export default function Dashboard() {
               Welcome Back!
             </div>
             <div className="text-black text-2xl font-normal font-['Noto Sans']">
-              {user?.user_metadata["name"] ||
-                user?.user_metadata["fullname"] ||
-                "User"}
+              <UserName resumeAddressBy={3} />
             </div>
           </div>
         </div>
@@ -82,5 +81,5 @@ export default function Dashboard() {
         />
       </div>
     </>
-  )
+  );
 }

@@ -18,6 +18,7 @@ import Link from "next/link";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import { UserProfile } from "../images/UserProfile";
 import { Fragment } from "react";
+import UserName from "../auth/UserName";
 
 interface AccountDropdownProps {
   num?: number;
@@ -33,7 +34,7 @@ export default function AccountDropdown(_props: AccountDropdownProps) {
     <Menu>
       <div className="flex flex-col items-end gap-1">
         <h3 className="text-base text-dark-blue font-semibold">
-          {user?.user_metadata["name"]}
+          <UserName resumeAddressBy={3} />
         </h3>
         <MenuButton as={Fragment}>
           {({ active }) => (

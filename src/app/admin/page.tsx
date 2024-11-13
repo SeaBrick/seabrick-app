@@ -6,6 +6,7 @@ import { getLatestBuys, getLatestTransfers } from "@/lib/subgraph";
 import { wrapPromise } from "@/lib/utils";
 import { useAuth } from "@/context/authContext";
 import { UserTransactionHistoryData } from "@/components/cards/UserTransactionsHistory";
+import UserName from "@/components/auth/UserName";
 
 const getLatestBuysInfo = async () => {
   return await getLatestBuys();
@@ -17,7 +18,7 @@ const buyData = wrapPromise(getLatestBuysInfo());
 const transfersData = wrapPromise(getLatestTransfersInfo());
 
 export default function AdminPage() {
-  const { user, userRole } = useAuth();
+  const { userRole } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -64,7 +65,7 @@ export default function AdminPage() {
             Welcome Back!
           </div>
           <div className="text-black text-2xl font-normal font-['Noto Sans']">
-            {user?.user_metadata["name"] || user?.email}
+            <UserName resumeAddressBy={3} />
           </div>
         </div>
       </div>

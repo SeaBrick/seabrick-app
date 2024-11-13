@@ -2,7 +2,6 @@
 import { useAuth } from "@/context/authContext";
 import React, { useEffect, useState } from "react";
 import { Button } from "@headlessui/react";
-import { Address, zeroAddress } from "viem";
 import { changeAccountDetails } from "./actions";
 import SubmitButton from "@/components/buttons/SubmitButton";
 import ChangePasswordForm from "@/components/forms/ChangePassword";
@@ -12,10 +11,9 @@ import BackButton from "@/components/buttons/BackButton";
 import { toast } from "react-toastify";
 import { UserProfile } from "@/components/images/UserProfile";
 import AccountWallet from "@/components/forms/AccountWallet";
+import UserName from "@/components/auth/UserName";
 
 export default function AccountDetailsPage() {
-  const { user } = useAuth();
-
   return (
     <div className="max-w-[978px] w-full mx-auto mt-[30px] relative">
       <div className="absolute top-4 left-4">
@@ -35,7 +33,7 @@ export default function AccountDetailsPage() {
             </div>
             <div className="grow shrink basis-0 flex-col justify-start items-center gap-2 inline-flex">
               <h3 className="text-[#49414d] text-xl font-bold font-['Noto Sans'] leading-normal">
-                {user ? (user.user_metadata?.name ?? user.email) : "User"}
+                <UserName />
               </h3>
             </div>
           </div>
