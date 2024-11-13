@@ -14,9 +14,10 @@ import {
   ArrowLeftStartOnRectangleIcon,
   Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
-import Image from "next/image";
 import Link from "next/link";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
+import { UserProfile } from "../images/UserProfile";
+import { Fragment } from "react";
 
 interface AccountDropdownProps {
   num?: number;
@@ -34,9 +35,17 @@ export default function AccountDropdown(_props: AccountDropdownProps) {
         <h3 className="text-base text-dark-blue font-semibold">
           {user?.user_metadata["name"]}
         </h3>
-        <MenuButton className="flex text-sm items-center text-light-gray gap-1 rounded-md data-[focus]:outline-1 data-[focus]:outline-white">
-          My Account
-          <ChevronDownIcon className="size-4 fill-light-gray" />
+        <MenuButton as={Fragment}>
+          {({ active }) => (
+            <button className="flex text-sm items-center text-light-gray gap-1 rounded-md data-[focus]:outline-1 data-[focus]:outline-white">
+              <span>My Account</span>
+              <span
+                className={`transition-transform duration-200 ${active ? "rotate-180" : "rotate-0"}`}
+              >
+                <ChevronDownIcon className="size-4 fill-light-gray mt-0.5" />
+              </span>
+            </button>
+          )}
         </MenuButton>
 
         <MenuItems
@@ -104,13 +113,8 @@ export default function AccountDropdown(_props: AccountDropdownProps) {
           </MenuItem>
         </MenuItems>
       </div>
-      <Image
-        className="hidden md:block"
-        src="/user-no-profile.webp"
-        alt="user"
-        width={55}
-        height={55}
-      />
+
+      <UserProfile />
     </Menu>
   );
 }
