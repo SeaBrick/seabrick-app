@@ -3,6 +3,11 @@
 import { createClient } from "@/lib/supabase/server";
 import { getUrl } from "@/lib/utils";
 import {
+  deleteNonceSession,
+  getNonceSession,
+  verifySignature,
+} from "@/lib/utils/session";
+import {
   UserAccountPersonalInfoSchema,
   UserChangePassword,
   userLoginWalletSchema,
@@ -181,9 +186,9 @@ export async function changeOrLinkWallet(formData: FormData) {
     data: validationData,
     success: validationSuccess,
     error: validationError,
-  } = userLoginWalletSchema.omit({ signature: true }).safeParse({
+  } = userLoginWalletSchema.safeParse({
     address: formData.get("address"),
-    // signature: formData.get("signature"),
+    signature: formData.get("signature"),
   });
 
   if (!validationSuccess) {
@@ -191,8 +196,25 @@ export async function changeOrLinkWallet(formData: FormData) {
     return { error: validationError.errors[0].message };
   }
 
-  // const { address, signature } = validationData;
-  const { address } = validationData;
+  const { address, signature } = validationData;
+
+  // Get the nonce session
+  const nonceSession = await getNonceSession();
+  if (!nonceSession) {
+    return { error: "Nonce session not found" };
+  }
+
+  // Validating signature
+  const isValidSignature = await verifySignature(
+    address,
+    nonceSession,
+    signature
+  );
+
+  // Return error message if not valid signature
+  if (!isValidSignature) {
+    return { error: "Not valid signature" };
+  }
 
   const { error: walletUserError } = await createClient()
     .from("wallet_users")
@@ -223,4 +245,6 @@ export async function changeOrLinkWallet(formData: FormData) {
     console.error(upsertError);
     return { error: "Failed to link the wallet" };
   }
+
+  deleteNonceSession();
 }
