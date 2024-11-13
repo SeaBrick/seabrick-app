@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { changePassword } from "@/app/account/actions";
 import SubmitButton from "../buttons/SubmitButton";
-import { PasswordResetSchema, UserChangePassword } from "@/lib/zod";
+import { toast } from "react-toastify";
 
 const ChangePasswordForm: React.FC = () => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -53,16 +53,20 @@ const ChangePasswordForm: React.FC = () => {
     }
   };
 
-  // TODO: ADd toastify
-  const pve = async (formData: FormData) => {
-    console.log("clink");
+  const changePasswordAction = async (formData: FormData) => {
     const resp = await changePassword(formData);
-    console.log(resp);
+
+    if (resp.error) {
+      console.log(resp);
+      toast.error(resp.error);
+    } else {
+      toast.success(resp.message);
+    }
   };
 
   return (
     <form
-      action={pve}
+      action={changePasswordAction}
       className="pb-6 max-w-[978px] w-full mx-auto flex flex-col gap-y-4"
     >
       <h3 className="text-xl font-bold leading-6">Change Password</h3>
