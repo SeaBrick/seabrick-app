@@ -30,12 +30,14 @@ async function registerInternal(
     data.options.emailRedirectTo = redirectUrl;
   }
 
-  const { error } = await supabaseClient.auth.signUp(data);
+  const { error, data: userData } = await supabaseClient.auth.signUp(data);
 
   if (error) {
     console.error("Register error: ", error);
     return { error: error.message };
   }
+
+  return { user: userData.user };
 }
 
 export async function signup(formData: FormData) {
@@ -89,9 +91,9 @@ export async function signup(formData: FormData) {
   // Call the register
   const registerResp = await registerInternal(supabase, data);
 
-  // If we got response from registerInternal, an error happened
-  if (registerResp) {
-    return registerResp;
+  // If we got erorr response from registerInternal, an error happened
+  if (registerResp.error) {
+    return registerResp.error;
   }
 
   revalidatePath("/dashboard", "layout");
@@ -179,11 +181,29 @@ export async function signUpWithWallet(formData: FormData) {
 
   // Call the register
   const registerResp = await registerInternal(supabase, data);
-  console.error("registerResp");
-  console.error(registerResp);
-  // If we got response from registerInternal, an error happened
-  if (registerResp) {
-    return registerResp;
+  // If we got an error response from registerInternal, an error happened
+  if (registerResp.error) {
+    return registerResp.error;
+  }
+
+  const user = registerResp.user;
+  if (!user) {
+    return "Error: Failed to register user";
+  }
+
+  const { error: insertError } = await createClient(true)
+    .from("wallet_users")
+    .insert({
+      address: address.toLowerCase(),
+      user_id: user.id,
+      email: email,
+    });
+
+  if (insertError) {
+    // Something happened when adding the wallet user
+    console.log("Wallet user insert error: ", insertError);
+
+    return "Error: Failed to register address to the user";
   }
 
   deleteNonceSession();

@@ -45,18 +45,7 @@ export async function GET(request: NextRequest) {
     ) {
       // For a signup
       if (type === "signup") {
-        const { error: insertError } = await supabase
-          .from("wallet_users")
-          .insert({
-            address: verifiedData.user.user_metadata.address,
-            user_id: verifiedData.user.id,
-            email: verifiedData.user.email,
-          });
-
-        if (insertError) {
-          // Something happened when adding the wallet user
-          console.log("Wallet user insert error: ", insertError);
-        }
+        //
       }
 
       if (type === "email_change") {
@@ -75,7 +64,6 @@ export async function GET(request: NextRequest) {
     }
 
     if (!error) {
-      console.log("no error: ");
       // redirect user to specified redirect URL or root of app
       revalidatePath("/", "layout");
       redirect(next);
