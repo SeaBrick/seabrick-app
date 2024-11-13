@@ -53,6 +53,7 @@ const ChangePasswordForm: React.FC = () => {
     }
   };
 
+  // TODO: ADd toastify
   const pve = async (formData: FormData) => {
     console.log("clink");
     const resp = await changePassword(formData);
@@ -62,7 +63,7 @@ const ChangePasswordForm: React.FC = () => {
   return (
     <form
       action={pve}
-      className=" pb-6 max-w-[978px] w-full mx-auto flex flex-col gap-y-4"
+      className="pb-6 max-w-[978px] w-full mx-auto flex flex-col gap-y-4"
     >
       <h3 className="text-xl font-bold leading-6">Change Password</h3>
       <div className="mb-4">
