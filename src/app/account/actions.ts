@@ -2,8 +2,8 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { getUrl } from "@/lib/utils";
-import { UserAccountPersonalInfoSchema } from "@/lib/zod";
-import { UserAttributes } from "@supabase/supabase-js";
+import { UserAccountPersonalInfoSchema, UserChangePassword } from "@/lib/zod";
+import type { UserAttributes } from "@supabase/supabase-js";
 import { headers } from "next/headers";
 
 export async function changeAccountDetails(formData: FormData) {
@@ -23,6 +23,7 @@ export async function changeAccountDetails(formData: FormData) {
     // Just return the first error encountered
     return { error: validationError.errors[0].message };
   }
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -95,5 +96,66 @@ export async function changeAccountDetails(formData: FormData) {
 
   return {
     message: `User details updated.${emailMessage}`,
+  };
+}
+
+export async function changePassword(formData: FormData) {
+  const supabase = createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // Maybe this is useless since the middleware already do this
+  if (!user) {
+    return { error: "Not logged" };
+  }
+
+  const {
+    data: validatedData,
+    success: validationSuccess,
+    error: validationError,
+  } = UserChangePassword.safeParse({
+    currentPassword: formData.get("currentPassword"),
+    newPassword: formData.get("newPassword"),
+    repeatedPassword: formData.get("repeatedPassword"),
+  });
+
+  if (!validationSuccess) {
+    // Just return the first error encountered
+    return { error: validationError.errors[0].message };
+  }
+
+  // We already checked that the newPassword and repeatedPassword are equal
+  const { currentPassword, newPassword } = validatedData;
+
+  const { data: checkPassword, error: checkPasswordError } = await supabase.rpc(
+    "verify_user_password",
+    {
+      password: currentPassword,
+    }
+  );
+
+  if (checkPasswordError) {
+    return { error: "Failed to changed the password" };
+  }
+
+  if (!checkPassword) {
+    return { error: "Invalid current password" };
+  }
+
+  const { data: changedPassword, error: changePasswordError } =
+    await supabase.auth.updateUser({
+      password: newPassword,
+    });
+
+  if (changePasswordError) {
+    return { error: "Failed to changed the password" };
+  }
+
+  console.log(changedPassword);
+
+  return {
+    message: "Password change succesfully!",
   };
 }
