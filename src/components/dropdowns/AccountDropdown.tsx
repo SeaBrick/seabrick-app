@@ -13,6 +13,7 @@ import {
   ArrowsUpDownIcon,
   ArrowLeftStartOnRectangleIcon,
   Cog6ToothIcon,
+  HomeIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
@@ -57,6 +58,19 @@ export default function AccountDropdown(_props: AccountDropdownProps) {
           <MenuSection>
             <MenuItem>
               <Link
+                href="/dashboard"
+                prefetch={true}
+                className="group flex w-full items-center justify-end gap-2 rounded-lg py-1.5 px-4 data-[focus]:bg-black/10"
+              >
+                <span className="text-dark-blue font-['Montserrat'] text-sm">
+                  Home
+                </span>
+                <HomeIcon className="size-6 text-dark-blue" />
+              </Link>
+            </MenuItem>
+            <MenuSeparator className="my-1 h-px bg-light-gray/10" />
+            <MenuItem>
+              <Link
                 href="/account"
                 prefetch={true}
                 className="group flex w-full items-center justify-end gap-2 rounded-lg py-1.5 px-4 data-[focus]:bg-black/10"
@@ -66,10 +80,9 @@ export default function AccountDropdown(_props: AccountDropdownProps) {
                 </span>
                 <Cog6ToothIcon className="size-6 text-dark-blue" />
               </Link>
-              {/* </button> */}
             </MenuItem>
-            <MenuSeparator className="my-1 h-px bg-light-gray/10" />
-            <MenuItem>
+            {/* <MenuSeparator className="my-1 h-px bg-light-gray/10" /> */}
+            {/* <MenuItem>
               <Link
                 href="/account?tab=transactions"
                 prefetch={true}
@@ -80,7 +93,7 @@ export default function AccountDropdown(_props: AccountDropdownProps) {
                 </span>
                 <ArrowsUpDownIcon className="size-6 text-dark-blue" />
               </Link>
-            </MenuItem>
+            </MenuItem> */}
 
             {user && (userRole == "admin" || userRole == "owner") && (
               <>
