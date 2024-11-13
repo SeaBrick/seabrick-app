@@ -18,6 +18,7 @@ import type {
 import { decodeJWT, getUserRole } from "@/lib/utils/auth";
 import { getAddress, type Address } from "viem";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 type AuthContextProps = AuthContextAuthenticated | AuthContextUnauthenticated;
 
@@ -41,7 +42,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   async function signOut() {
     const { error } = await createClient().auth.signOut();
     if (error) {
-      // TODO: set error modal (??)
+      toast.error(error.message)
       console.log(error);
     }
 

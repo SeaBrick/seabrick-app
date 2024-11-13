@@ -183,12 +183,12 @@ export async function signUpWithWallet(formData: FormData) {
   const registerResp = await registerInternal(supabase, data);
   // If we got an error response from registerInternal, an error happened
   if (registerResp.error) {
-    return registerResp.error;
+    return registerResp;
   }
 
   const user = registerResp.user;
   if (!user) {
-    return "Error: Failed to register user";
+    return { error: "Error: Failed to register user" };
   }
 
   const { error: insertError } = await createClient(true)
@@ -203,7 +203,7 @@ export async function signUpWithWallet(formData: FormData) {
     // Something happened when adding the wallet user
     console.log("Wallet user insert error: ", insertError);
 
-    return "Error: Failed to register address to the user";
+    return { error: "Error: Failed to register address to the user" };
   }
 
   deleteNonceSession();

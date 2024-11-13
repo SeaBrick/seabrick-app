@@ -163,7 +163,6 @@ export async function mintSeabrickTokens(
   }
 }
 
-// TODO: Changes when new ownership logic for contracts
 export async function getContractsOwner(): Promise<Address> {
   const client = getClient();
 

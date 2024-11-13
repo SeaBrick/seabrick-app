@@ -6,9 +6,7 @@ import { checkAddress } from "@/lib/utils";
 import { getContractsOwner } from "@/lib/contracts/transactions";
 import { Address } from "viem";
 
-// TODO: Make the change on the contracts. Instead of two transactions
-// for each contract, maube just deploy one contract that manages
-// the ownership address.
+// TODO: Make a transaction at front end and then check the transaction here...
 export async function POST(request: NextRequest) {
   const supabaseClient = createClient();
 

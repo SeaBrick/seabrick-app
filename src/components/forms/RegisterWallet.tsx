@@ -97,7 +97,7 @@ const RegisterWalletForm: React.FC = () => {
     showError("");
 
     const resp = await signUpWithWallet(formData);
-    if (resp && resp.error) {
+    if (resp) {
       showError(resp.error);
       return;
     }

@@ -2,6 +2,7 @@ import Image from "next/image"
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline"
 import { useContractContext } from "@/context/contractContext"
 
+// TODO: Fulfill with real data
 export default function SeabrickNFTCard() {
   const {
     data: { seabrick, market },
@@ -32,7 +33,7 @@ export default function SeabrickNFTCard() {
                     </div>
                     <div className="w-[30px] h-[30px] relative">
                       <a
-                        href="/" // TODO: Add url to nft on market
+                        href="/buy"
                         className="w-[30px] h-[30px] left-0 top-0 absolute rounded-full border border-[#9b9a9b]/60 flex justify-center items-center hover:bg-slate-50 active:bg-slate-200"
                       >
                         <ArrowUpRightIcon className="size-[0.7rem]" />

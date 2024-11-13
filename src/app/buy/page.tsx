@@ -13,9 +13,7 @@ export default function BuyPage() {
 
   useEffect(() => {
     if (!user) {
-      // TODO: Add little modal with message that need to login
-      // TODO: Move this logic to backend nextjs
-      router.push("/login");
+      // router.push("/login");
       return;
     }
   }, [router, user]);

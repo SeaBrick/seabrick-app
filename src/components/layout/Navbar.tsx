@@ -46,7 +46,6 @@ export function Navbar() {
         </div>
 
         <div className="flex h-[70px] w-6/12 justify-end items-center gap-2.5 hover:direct-children:text-seabrick-blue ">
-          {/* TODO: Better UX for account details */}
           {user ? (
             <AccountDropdown />
           ) : (

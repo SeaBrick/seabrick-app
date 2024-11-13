@@ -57,7 +57,8 @@ export default function Dashboard() {
       <div className="w-full px-3 max-w-[2000px] m-auto">
         <div className="w-full justify-start items-center gap-2 inline-flex mb-4">
           <Image
-            src={`/brick.png`} // TODO: linkear la img
+            // TODO: Usar un .webp
+            src={`/brick.png`}
             alt="user-image"
             height={45}
             width={48}

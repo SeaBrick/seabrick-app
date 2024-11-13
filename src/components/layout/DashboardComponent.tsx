@@ -270,7 +270,7 @@ export default function DashboardComponent({
                   )}
                 </div>
                 <a
-                  href="/" // TODO: Add url to lastes??
+                  href="/dashboard"
                   className="w-[30px] h-[30px] rounded-full border border-[#9b9a9b]/60 flex justify-center items-center hover:bg-slate-50 active:bg-slate-200"
                 >
                   <ArrowUpRightIcon className="size-[0.7rem]" />

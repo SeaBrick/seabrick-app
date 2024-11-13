@@ -1,6 +1,5 @@
 import { useAuth } from "@/context/authContext";
-import { useEffect, useState } from "react";
-import { UserRejectedRequestError, zeroAddress, type Address } from "viem";
+import { UserRejectedRequestError } from "viem";
 import { useAccount, useSignMessage } from "wagmi";
 import ConnectButton from "../buttons/ConnectButton";
 import SubmitButton from "../buttons/SubmitButton";
@@ -8,27 +7,9 @@ import { changeOrLinkWallet } from "@/app/account/actions";
 import { toast } from "react-toastify";
 
 const AccountWallet: React.FC = () => {
-  const { user, userType, userAddress, refetch: authRefetch } = useAuth();
+  const { userType, userAddress, refetch: authRefetch } = useAuth();
   const { isConnected, address: connectedAddress } = useAccount();
   const { signMessageAsync } = useSignMessage();
-
-  // const [address, setAddress] = useState<Address>();
-  // const [originalAddress, setOriginalAddress] = useState<Address>(zeroAddress);
-  //
-
-  function setAddresses(address_: Address) {
-    // setAddress(address_);
-    // setOriginalAddress(address_);
-  }
-
-  useEffect(() => {
-    if (user) {
-      // TODO: Support for 'email' account with linked wallet
-      if (userAddress) {
-        setAddresses(userAddress);
-      }
-    }
-  }, [user, userAddress, userType]);
 
   async function linkWalletAction(formData: FormData) {
     if (!connectedAddress) {
