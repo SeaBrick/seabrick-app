@@ -111,6 +111,14 @@ export async function changePassword(formData: FormData) {
     return { error: "Not logged" };
   }
 
+  if (user.user_metadata.type == "wallet") {
+    // This error should not happen if the values are correclty passed
+    return {
+      error:
+        "You are not able to change the password. This account was created with a Web3 wallet",
+    };
+  }
+
   const {
     data: validatedData,
     success: validationSuccess,
