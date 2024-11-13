@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import SeabrickSVG from "../utils/SeabrickSVG";
+import SeabrickSVG from "../images/SeabrickSVG";
 import { useAccount } from "wagmi";
 import { useEffect } from "react";
 import { getAccount } from "@/lib/subgraph";
