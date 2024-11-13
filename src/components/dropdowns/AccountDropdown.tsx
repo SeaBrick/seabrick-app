@@ -114,7 +114,7 @@ export default function AccountDropdown(_props: AccountDropdownProps) {
         </MenuItems>
       </div>
 
-      <UserProfile />
+      <UserProfile width={55} height={55} />
     </Menu>
   );
 }
