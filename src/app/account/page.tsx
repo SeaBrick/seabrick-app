@@ -10,6 +10,7 @@ import ChangePasswordForm from "@/components/forms/ChangePassword";
 import { Errors } from "@/lib/interfaces";
 import { isEmpty } from "lodash";
 import BackButton from "@/components/buttons/BackButton";
+import { toast } from "react-toastify";
 
 export default function AccountDetailsPage() {
   const { user } = useAuth();
@@ -87,12 +88,14 @@ const AccountDetails: React.FC = () => {
       setErrors(newErrors);
       return;
     }
+
     if (resp.message) {
       setOriginalEmail(email);
       setOriginalName(name);
       setOriginalAddress(address);
       setModifying(false);
       authRefetch();
+      toast.success(resp.message);
     }
   }
 
