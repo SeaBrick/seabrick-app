@@ -38,7 +38,7 @@ export const PasswordResetSchema = z
       .string()
       .min(8, "Password must be at least 8 characters long"),
   })
-  .refine((data) => data.repeatedPassword === data.repeatedPassword, {
+  .refine((data) => data.newPassword === data.repeatedPassword, {
     message: "Passwords must match",
     // This points the error message to the newPassword field
     path: ["newPassword"],
