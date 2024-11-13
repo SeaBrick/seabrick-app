@@ -91,14 +91,16 @@ const AccountWallet: React.FC = () => {
       <h3 className="text-xl font-bold leading-6">User wallet</h3>
 
       {(userType == "wallet" || userAddress) && (
-        <div className="disabled:cursor-not-allowed disabled:text-gray-500 disabled:bg-seabrick-blue/10 mt-1 block w-full bg-seabrick-blue/5 border border-gray-700 rounded py-2 px-4 focus:outline-none focus:ring focus:ring-blue-500">
-          {userAddress}
+        <div>
+          <div className="cursor-default mt-1 block w-full bg-seabrick-blue/5 border border-gray-700 rounded py-2 px-4 focus:outline-none focus:ring focus:ring-blue-500">
+            {userAddress}
+          </div>
+          <p className="mt-1 ml-2 text-sm">
+            Your wallet address cannot be changed as it was used to create this
+            account.
+          </p>
         </div>
       )}
-
-      {/* If userType == "wallet", do not allow to change his connected wallet */}
-
-      {/* If userType == "email" allow to change it or link it*/}
 
       {userType == "email" && (
         <>
