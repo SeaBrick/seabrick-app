@@ -284,7 +284,6 @@ export default function DashboardComponent({
                       : columnBuyInterface
                   }
                   data={dataOnDisplay == "Transfers" ? dataTransfer : dataBuys}
-                  fontSize="0.75rem"
                 />
               </div>
             </div>
