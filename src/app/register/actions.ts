@@ -93,7 +93,7 @@ export async function signup(formData: FormData) {
 
   // If we got erorr response from registerInternal, an error happened
   if (registerResp.error) {
-    return registerResp.error;
+    return registerResp;
   }
 
   revalidatePath("/dashboard", "layout");
