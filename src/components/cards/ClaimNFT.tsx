@@ -77,7 +77,7 @@ export default function ClaimTokens({
                 <Table
                   columns={dataColumns}
                   data={nftClaimedList}
-                  fontSize="0.7rem"
+                  textExtraClasses="text-[0.7rem]"
                 />
               )
             )}
