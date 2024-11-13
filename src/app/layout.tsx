@@ -1,25 +1,25 @@
-import "./globals.css"
-import type { Metadata } from "next"
-import { Navbar } from "@/components/layout/Navbar"
-import SplashScreen from "@/components/layout/SplashScreen"
-import { Footer } from "@/components/layout/Footer"
-import { ContractProvider } from "@/context/contractContext"
-import { AccountProvider } from "@/context/accountContext"
-import { AggregatorsProvider } from "@/context/aggregatorsContext"
-import { AuthProvider } from "@/context/authContext"
-import { Web3Provider } from "@/config/Web3Provider"
-import { Bounce, ToastContainer } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
+import "./globals.css";
+import type { Metadata } from "next";
+import { Navbar } from "@/components/layout/Navbar";
+import SplashScreen from "@/components/layout/SplashScreen";
+import { Footer } from "@/components/layout/Footer";
+import { ContractProvider } from "@/context/contractContext";
+import { AccountProvider } from "@/context/accountContext";
+import { AggregatorsProvider } from "@/context/aggregatorsContext";
+import { AuthProvider } from "@/context/authContext";
+import { Web3Provider } from "@/config/Web3Provider";
+import { Bounce, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const metadata: Metadata = {
   title: "Seabrick App",
   description: "Seabrick Web app",
-}
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <Web3Provider>
@@ -30,16 +30,15 @@ export default function RootLayout({
               <html lang="en">
                 <body className="flex flex-col min-h-svh">
                   <ToastContainer
-                    position="top-left"
+                    position="top-right"
                     autoClose={5000}
-                    hideProgressBar
                     newestOnTop
                     closeOnClick
                     rtl={false}
                     pauseOnFocusLoss
                     draggable
                     pauseOnHover
-                    theme="colored"
+                    theme={"light"}
                     transition={Bounce}
                   />
                   <Navbar />
@@ -54,5 +53,5 @@ export default function RootLayout({
         </ContractProvider>
       </AuthProvider>
     </Web3Provider>
-  )
+  );
 }
