@@ -78,21 +78,6 @@ export async function changeAccountDetails(formData: FormData) {
     return { error: "User details were not updated" };
   }
 
-  if (user_type === "wallet") {
-    // TODO: Checkers like we are not "updating" the same wallet
-    // TODO: Change address disabled at the moment
-    // TODO: USe Zod to validate inputs
-    // const address = formData.get("address") as string;
-    // TODO: Maybe ask for a wallet sign with the old wallet
-    // Add CHECKERS since after change, if does not have access to the wallet, it will lose the account
-    // Verify the new signature, etc etc
-    // const { error: queryError, data: queryData } = await supabase
-    //   .from("wallet_users")
-    //   .select("metadata")
-    //   .eq("email", user.email)
-    //   .single();
-  }
-
   // Return message based on the changes
   const emailMessage = userData.email
     ? " Please check your new email inbox."
@@ -209,9 +194,9 @@ export async function changeOrLinkWallet(formData: FormData) {
   // const { address, signature } = validationData;
   const { address } = validationData;
 
-  const { data: walletUser, error: walletUserError } = await createClient()
+  const { error: walletUserError } = await createClient()
     .from("wallet_users")
-    .select("address, user_id")
+    .select("address")
     .eq("address", address?.toLowerCase())
     .single();
 
