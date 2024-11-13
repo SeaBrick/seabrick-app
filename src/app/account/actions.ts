@@ -32,9 +32,8 @@ export async function changeAccountDetails(formData: FormData) {
     return { error: "Not logged" };
   }
 
-  const user_type = validationData.user_type;
-  const name = validationData.name;
-  const email = validationData.email;
+  // Deconstruct for convenience
+  const { name, email, user_type } = validationData;
 
   if (user.user_metadata.type != user_type) {
     // This error should not happen if the values are correclty passed
@@ -89,9 +88,12 @@ export async function changeAccountDetails(formData: FormData) {
     //   .single();
   }
 
+  // Return message based on the changes
+  const emailMessage = userData.email
+    ? " Please check your new email inbox."
+    : "";
+
   return {
-    message: userData.email
-      ? "Email updated. Check your new email inbox"
-      : "User details updated",
+    message: `User details updated.${emailMessage}`,
   };
 }
