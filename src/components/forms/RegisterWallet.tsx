@@ -20,7 +20,7 @@ const RegisterWalletForm: React.FC = () => {
   const { signMessageAsync } = useSignMessage();
 
   // TODO: Show not "installed wallet"
-  const [haveWallet, setHaveWallet] = useState<boolean>(false);
+  const [, setHaveWallet] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [errors, setErrors] = useState<Errors>({});
   const [openModal, setOpenModal] = useState<boolean>(false);

@@ -5,8 +5,7 @@ import SeabrickSVG from "../images/SeabrickSVG";
 import { useAccount } from "wagmi";
 import { useEffect } from "react";
 import { getAccount } from "@/lib/subgraph";
-import { Address, getAddress } from "viem";
-import { useContractContext } from "@/context/contractContext";
+import { Address } from "viem";
 import {
   accountInitialState,
   useAccountContext,
@@ -17,9 +16,8 @@ import AccountDropdown from "../dropdowns/AccountDropdown";
 export function Navbar() {
   const pathname = usePathname();
   const { address: walletAddress } = useAccount();
-  const { data: contractsData } = useContractContext();
-  const { data: accountData, dispatch: dispatchAccount } = useAccountContext();
-  const { user, userRole } = useAuth();
+  const { dispatch: dispatchAccount } = useAccountContext();
+  const { user } = useAuth();
 
   useEffect(() => {
     async function callGetter(address: Address) {
