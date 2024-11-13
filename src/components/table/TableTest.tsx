@@ -26,12 +26,12 @@ function Table({
 }) {
   return (
     <div className="overflow-auto w-full rounded-t-[10px]">
-      <table className="w-full min-w-[max-content] bg-white gap-2.5 table-fixed">
+      <table className=" bg-white gap-2.5 table-fixed min-w-full">
         <thead className="w-full bg-[#efeff4] gap-5">
           <tr className="w-full table-row">
             {columns.map((column) => (
               <th
-                className={`text-black w-full text-justify text-[0.75rem]  font-normal font-['Noto Sans'] table-cell p-3 ${textExtraClasses}`}
+                className={`text-black w-[auto] text-justify text-[0.75rem]  font-normal font-['Noto Sans'] table-cell p-3 ${textExtraClasses}`}
                 key={column.key}
               >
                 {column.label}
@@ -42,7 +42,7 @@ function Table({
         <tbody className="w-full px-6 pt-[14px] gap-4 min-w-fit">
           {data.map((row, j) => (
             <tr
-              className="w-full table-row border-b-[1px] border-[#efeff4]"
+              className="table-row w-full border-b-[1px] border-[#efeff4]"
               key={j}
             >
               {columns.map((column, i) => {
@@ -63,11 +63,11 @@ function Table({
                 }
                 return (
                   <td
-                    className={`text-black w-full text-justify text-[0.75rem] font-normal font-['Noto Sans'] table-cell p-3 inline-flex ${textExtraClasses}`}
+                    className={`text-black text-justify text-[0.75rem] font-normal font-['Noto_Sans'] table-cell p-3 inline-flex ${textExtraClasses} test`}
                     key={`${j}-${i}`}
                   >
-                    <div className="inline-flex">
-                      <span>{showText}</span>
+                    <div className="flex">
+                      <p>{showText}</p>
                       {enableCopier ? <TextCopier text={valueText} /> : ""}
                     </div>
                   </td>
