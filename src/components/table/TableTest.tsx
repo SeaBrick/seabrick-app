@@ -17,21 +17,21 @@ export function truncateString(str: string) {
 function Table({
   columns,
   data,
-  fontSize = "0.75rem",
+  textExtraClasses = "",
 }: {
   columns: TableColumn[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: { [s: string]: any }[]
-  fontSize?: string
+  textExtraClasses?: string
 }) {
   return (
     <div className="overflow-auto w-full rounded-t-[10px]">
-      <table className="w-full min-w-[450px] bg-white gap-2.5 table-fixed">
+      <table className=" bg-white gap-2.5 table-fixed min-w-full">
         <thead className="w-full bg-[#efeff4] gap-5">
           <tr className="w-full table-row">
             {columns.map((column) => (
               <th
-                className={`text-black w-full text-justify text-[${fontSize}]  font-normal font-['Noto Sans'] table-cell p-3`}
+                className={`text-black w-[auto] text-justify text-base  font-normal font-['Noto Sans'] table-cell p-3 ${textExtraClasses}`}
                 key={column.key}
               >
                 {column.label}
@@ -42,7 +42,7 @@ function Table({
         <tbody className="w-full px-6 pt-[14px] gap-4 min-w-fit">
           {data.map((row, j) => (
             <tr
-              className="w-full table-row border-b-[1px] border-[#efeff4]"
+              className="table-row w-full border-b-[1px] border-[#efeff4]"
               key={j}
             >
               {columns.map((column, i) => {
@@ -63,11 +63,11 @@ function Table({
                 }
                 return (
                   <td
-                    className={`text-black w-full text-justify text-[${fontSize}] font-normal font-['Noto Sans'] table-cell p-3 inline-flex`}
+                    className={`text-black text-justify text-base font-normal font-['Noto_Sans'] table-cell p-3 inline-flex ${textExtraClasses} test`}
                     key={`${j}-${i}`}
                   >
-                    <div className="inline-flex">
-                      {showText}
+                    <div className="flex">
+                      <p>{showText}</p>
                       {enableCopier ? <TextCopier text={valueText} /> : ""}
                     </div>
                   </td>

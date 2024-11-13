@@ -34,7 +34,7 @@ export default function OrderDetailsMain() {
   ]
   return (
     <>
-      <div className="flex justify-center">     
+      <div className="flex justify-center">
         <div className="max-w-[978px] w-[80%] flex flex-col items-center mx-auto mt-[30px] relative">
           <div className="absolute top-4 left-4">
             <BackButton />
@@ -42,7 +42,7 @@ export default function OrderDetailsMain() {
           <h2 className="text-black text-3xl font-normal font-['Noto Sans'] text-center mb-8">
             Order Details
           </h2>
-          <div className=" min-w-[200px] box-content p-6 bg-white rounded-[10px] justify-center items-center gap-2.5 flex m-auto flex-col mb-4">
+          <div className=" min-w-[200px] box-content p-6 bg-white rounded-[10px] justify-center items-center gap-2.5 flex m-auto flex-col mb-4 w-full">
             <div className="self-stretch h-auto flex-col justify-start items-start gap-6 flex">
               <div className="self-stretch justify-start items-center gap-4 inline-flex">
                 <Image
@@ -64,7 +64,7 @@ export default function OrderDetailsMain() {
                 </div>
               </div>
             </div>
-            <div className="mb-4">
+            <div className="mb-4 w-full">
               <Table columns={columnDataTest} data={bodyDataTest} />
             </div>
           </div>

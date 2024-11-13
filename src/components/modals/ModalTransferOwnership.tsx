@@ -242,11 +242,11 @@ const App: React.FC<{ disableButton: boolean }> = ({ disableButton }) => {
   return (
     <div className="">
       <button
-        className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-left w-full disabled:cursor-not-allowed disabled:bg-gray-400"
+        className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-left w-full disabled:cursor-not-allowed disabled:bg-gray-400 text-lg"
         onClick={() => setShowEmailModal(true)}
         disabled={disableButton}
       >
-        <ArrowsRightLeftIcon className="size-[1.25rem] inline mx-2 mt-[-3px]" />
+        <ArrowsRightLeftIcon className="size-[1.5rem] inline mx-2 mt-[-3px]" />
         Transfer Ownership
       </button>
 

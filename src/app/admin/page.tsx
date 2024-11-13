@@ -58,10 +58,10 @@ export default function AdminPage() {
   ];
 
   return (
-    <div className="w-full px-3 max-w-[1500px] m-auto">
+    <div className="w-full px-3 max-w-[2000px] m-auto">
       <div className="w-full justify-start items-center gap-2 inline-flex mb-4">
         <div className="h-[70px] flex-col justify-center items-start gap-px inline-flex">
-          <div className="self-stretch text-[#666666] text-[9px] font-normal font-['Noto Sans']">
+          <div className="self-stretch text-[#666666] text-base font-normal font-['Noto Sans']">
             Welcome Back!
           </div>
           <div className="text-black text-2xl font-normal font-['Noto Sans']">

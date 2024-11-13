@@ -16,10 +16,10 @@ export default function ClaimNFTCard() {
       </Modal>
       <div className="h-full w-full p-3 bg-gradient-to-b from-[#52b09f] to-[#005391] rounded-[10px] flex-col justify-between items-start inline-flex overflow-hidden">
         <div className="h-[] flex-col justify-start items-start gap-2 flex mb-[5px]">
-          <div className="self-stretch text-white text-base font-bold font-['Noto Sans']">
+          <div className="self-stretch text-white text-2xl font-bold font-['Noto Sans']">
             Influence the user to buy, claim, send, etc!
           </div>
-          <div className="self-stretch text-white text-sm font-normal font-['Noto Sans']">
+          <div className="self-stretch text-white text-lg font-normal font-['Noto Sans']">
             Claim your NFTs!
           </div>
         </div>
@@ -31,7 +31,7 @@ export default function ClaimNFTCard() {
           className="h-[50px] p-[17px] bg-white rounded-[5px] justify-start items-center gap-2.5 inline-flex hover:bg-slate-50 active:bg-slate-200"
           onClick={() => handleOpenModalClaim(true)}
         >
-          <div className="text-right text-black text-sm font-normal font-['Noto Sans']">
+          <div className="text-right text-black text-lg font-normal font-['Noto Sans']">
             Claim your NFTs
           </div>
         </button>
