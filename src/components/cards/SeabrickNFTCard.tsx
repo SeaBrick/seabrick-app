@@ -25,7 +25,7 @@ export default function SeabrickNFTCard() {
                   <div className=" justify-between items-start inline-flex">
                     <div className="flex-col justify-start items-start gap-3.5 inline-flex">
                       <div className=" justify-start items-end gap-2 inline-flex">
-                        <div className="text-[#333333] text-2xl font-normal font-['Noto Sans']">
+                        <div className="text-[#333333] text-4xl font-normal font-['Noto Sans']">
                           {seabrick.name}
                         </div>
                       </div>
@@ -43,34 +43,34 @@ export default function SeabrickNFTCard() {
               </div>
               <div className="self-stretch flex-col justify-start items-start gap-1.5 flex">
                 <div className="self-stretch justify-between items-center inline-flex">
-                  <div className="text-black text-xs font-normal font-['Noto Sans']">
+                  <div className="text-black text-base font-normal font-['Noto Sans']">
                     Symbol
                   </div>
-                  <div className="text-[#8a8a8f] text-xs font-normal font-['Noto Sans']">
+                  <div className="text-[#8a8a8f] text-base font-normal font-['Noto Sans']">
                     {seabrick.symbol}
                   </div>
                 </div>
                 <div className="self-stretch justify-between items-center inline-flex">
-                  <div className="text-black text-xs font-normal font-['Noto Sans']">
+                  <div className="text-black text-base font-normal font-['Noto Sans']">
                     Address
                   </div>
-                  <div className="text-[#8a8a8f] text-xs font-normal font-['Noto Sans'] [overflow-wrap:anywhere] ml-2">
+                  <div className="text-[#8a8a8f] text-base font-normal font-['Noto Sans'] [overflow-wrap:anywhere] ml-3">
                     {seabrick.id}
                   </div>
                 </div>
                 <div className="self-stretch justify-between items-center inline-flex">
-                  <div className="text-black text-xs font-normal font-['Noto Sans']">
+                  <div className="text-black text-base font-normal font-['Noto Sans']">
                     Total Supply
                   </div>
-                  <div className="text-[#8a8a8f] text-xs font-normal font-['Noto Sans']">
+                  <div className="text-[#8a8a8f] text-base font-normal font-['Noto Sans']">
                     {seabrick.totalSupply}
                   </div>
                 </div>
                 <div className="self-stretch justify-between items-center inline-flex">
-                  <div className="text-black text-xs font-normal font-['Noto Sans']">
+                  <div className="text-black text-base font-normal font-['Noto Sans']">
                     Price
                   </div>
-                  <div className="text-[#8a8a8f] text-xs font-normal font-['Noto Sans']">
+                  <div className="text-[#8a8a8f] text-base font-normal font-['Noto Sans']">
                     {market.price} USD
                   </div>
                 </div>
