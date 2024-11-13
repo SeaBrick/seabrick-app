@@ -64,10 +64,10 @@ export default function Dashboard() {
           />
 
           <div className="h-[70px] flex-col justify-center items-start gap-px inline-flex">
-            <div className="self-stretch text-[#666666] text-[9px] font-normal font-['Noto Sans']">
+            <div className="self-stretch text-[#666666] text-sm font-normal font-['Noto Sans']">
               Welcome Back!
             </div>
-            <div className="text-black text-2xl font-normal font-['Noto Sans']">
+            <div className="text-black text-3xl font-normal font-['Noto Sans']">
               {user?.user_metadata["name"] ||
                 user?.user_metadata["fullname"] ||
                 "User"}
