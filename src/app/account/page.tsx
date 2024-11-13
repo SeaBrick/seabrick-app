@@ -1,7 +1,6 @@
 "use client";
 import { useAuth } from "@/context/authContext";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import { Button } from "@headlessui/react";
 import { Address, zeroAddress } from "viem";
 import { changeAccountDetails } from "./actions";
@@ -11,6 +10,7 @@ import { Errors } from "@/lib/interfaces";
 import { isEmpty } from "lodash";
 import BackButton from "@/components/buttons/BackButton";
 import { toast } from "react-toastify";
+import { UserProfile } from "@/components/images/UserProfile";
 
 export default function AccountDetailsPage() {
   const { user } = useAuth();
@@ -26,12 +26,10 @@ export default function AccountDetailsPage() {
         <div className="self-stretch flex-col justify-start items-start gap-[30px] flex">
           <div className="self-stretch items-center justify-center gap-3 flex flex-col">
             <div className="w-[90px] h-[90px] relative">
-              <Image
-                className="w-[90px] h-[90px] left-0 top-0 absolute rounded-full object-cover"
-                src="/user-no-profile.webp"
+              <UserProfile
                 width={90}
                 height={90}
-                alt="img-user"
+                className="w-[90px] h-[90px] left-0 top-0 absolute rounded-full object-cover"
               />
             </div>
             <div className="grow shrink basis-0 flex-col justify-start items-center gap-2 inline-flex">
