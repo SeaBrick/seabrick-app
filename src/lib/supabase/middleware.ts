@@ -2,6 +2,8 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { getUserRole } from "../utils/auth";
 
+// FIXME: FIx logic for validation patters. Refactor
+
 const publicPaths = ["/login", "/register", "/reset-password", "/auth", "/api"];
 const loggedDisallowedPaths = [
   "/login",
@@ -47,7 +49,11 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (user && request.nextUrl.pathname == "/auth/reset") {
+  if (
+    user &&
+    (request.nextUrl.pathname == "/auth/reset" ||
+      request.nextUrl.pathname == "/auth/confirm")
+  ) {
     return supabaseResponse;
   }
 
