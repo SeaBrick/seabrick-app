@@ -2,7 +2,11 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { getUrl } from "@/lib/utils";
-import { UserAccountPersonalInfoSchema, UserChangePassword } from "@/lib/zod";
+import {
+  UserAccountPersonalInfoSchema,
+  UserChangePassword,
+  userLoginWalletSchema,
+} from "@/lib/zod";
 import type { UserAttributes } from "@supabase/supabase-js";
 import { headers } from "next/headers";
 
@@ -166,4 +170,55 @@ export async function changePassword(formData: FormData) {
   return {
     message: "Password change succesfully!",
   };
+}
+
+export async function changeOrLinkWallet(formData: FormData) {
+  const supabase = createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // Maybe this is useless since the middleware already do this
+  if (!user) {
+    return { error: "Not logged" };
+  }
+
+  if (user.user_metadata.type == "wallet") {
+    // This error should not happen if the values are correclty passed
+    return {
+      error:
+        "You are not able to change the wallet. This account was created with a Web3 wallet",
+    };
+  }
+
+  const {
+    data: validationData,
+    success: validationSuccess,
+    error: validationError,
+  } = userLoginWalletSchema.omit({ signature: true }).safeParse({
+    address: formData.get("address"),
+    // signature: formData.get("signature"),
+  });
+
+  if (!validationSuccess) {
+    // Just return the first error encountered
+    return { error: validationError.errors[0].message };
+  }
+
+  // const { address, signature } = validationData;
+  const { address } = validationData;
+
+  const { error: walletUserError } = await createClient()
+    .from("wallet_users")
+    .select("address")
+    .eq("address", address?.toLowerCase())
+    .single();
+
+  if (
+    !walletUserError ||
+    (walletUserError && walletUserError.code != "PGRST116")
+  ) {
+    return { error: "Wallet address already linked" };
+  }
 }
