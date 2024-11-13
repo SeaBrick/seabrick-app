@@ -241,11 +241,11 @@ export default function DashboardComponent({
                   className="text-black text-[17px] font-normal relative  hover:cursor-pointer"
                   onClick={() => setIsCardVisible(!isCardVisible)}
                 >
-                  <span className="text-[#8a8a8f]">Latest </span>
-                  {dataOnDisplay}
+                  <span className="text-[#8a8a8f] text-lg">Latest </span>
+                  <span className="text-lg">{dataOnDisplay}</span>
                   <ChevronDownIcon className="size-[0.7rem] inline ml-1" />
                   {isCardVisible ? (
-                    <div className="bg-white rounded-[1px] absolute h-min w-[120px] flex flex-col divide-y border border-[#babcc3]/30">
+                    <div className="bg-white rounded-[5px] absolute h-min w-[120px] flex flex-col divide-y border border-[#babcc3]/30">
                       <button
                         className="text-start text-sm px-3 h-1/2 p-1"
                         onClick={() => {
@@ -284,7 +284,7 @@ export default function DashboardComponent({
                       : columnBuyInterface
                   }
                   data={dataOnDisplay == "Transfers" ? dataTransfer : dataBuys}
-                  fontSize="0.7rem"
+                  fontSize="0.75rem"
                 />
               </div>
             </div>
