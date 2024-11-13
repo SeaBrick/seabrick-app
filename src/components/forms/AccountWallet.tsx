@@ -127,6 +127,12 @@ const AccountWallet: React.FC = () => {
 
                 <div className="mx-auto flex w-1/4">
                   <SubmitButton
+                    disable={userAddress == connectedAddress}
+                    disabledTitle={
+                      userAddress == connectedAddress
+                        ? "Already linked wallet"
+                        : undefined
+                    }
                     label={userAddress ? "Change wallet" : "Link wallet"}
                     loadingLabel={userAddress ? "Changing..." : "Linking..."}
                     buttonClass="inline-flex items-center gap-2 rounded-md bg-[#2069a0] py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none hover:bg-gray-500 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white"
