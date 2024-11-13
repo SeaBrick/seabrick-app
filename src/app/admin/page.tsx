@@ -57,13 +57,13 @@ export default function AdminPage() {
   ]
 
   return (
-    <div className="w-full px-3 max-w-[1500px] m-auto">
+    <div className="w-full px-3 max-w-[2000px] m-auto">
       <div className="w-full justify-start items-center gap-2 inline-flex mb-4">
         <div className="h-[70px] flex-col justify-center items-start gap-px inline-flex">
-          <div className="self-stretch text-[#666666] text-sm font-normal font-['Noto Sans']">
+          <div className="self-stretch text-[#666666] text-base font-normal font-['Noto Sans']">
             Welcome Back!
           </div>
-          <div className="text-black text-3xl font-normal font-['Noto Sans']">
+          <div className="text-black text-4xl font-normal font-['Noto Sans']">
             {user?.user_metadata["name"] || user?.email}
           </div>
         </div>

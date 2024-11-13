@@ -25,21 +25,21 @@ export default function UserTransactionHistory({
               <div className="self-stretch justify-center items-center gap-3 inline-flex">
                 <div className="grow shrink basis-0 h-[39px] justify-start items-center gap-4 flex">
                   <div className="flex-col justify-start items-start gap-px inline-flex">
-                    <div className="text-[#333333] text-sm font-bold font-['Noto Sans']">
+                    <div className="text-[#333333] text-base font-bold font-['Noto Sans']">
                       {d.type === "claimed" ? `Claimed` : `Minted`} Tokens
                     </div>
-                    <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">
+                    <div className="text-[#333333] text-sm font-normal font-['Noto Sans']">
                       {d.type === "claimed"
                         ? `${d.amount} ${d.token}`
                         : `X${d.amount}`}
                     </div>
                   </div>
                   <div className="grow shrink basis-0 flex-col justify-start items-end gap-px inline-flex">
-                    <div className="self-stretch text-right text-[#00b158] text-sm font-normal font-['Noto Sans']">
+                    <div className="self-stretch text-right text-[#00b158] text-base font-normal font-['Noto Sans']">
                       ${d.amount}
                     </div>
                     <div className="self-stretch justify-end items-start gap-1.5 inline-flex">
-                      <div className="text-right text-[#333333] text-xs font-normal font-['Noto Sans'] inline-flex items-center">
+                      <div className="text-right text-[#333333] text-sm font-normal font-['Noto Sans'] inline-flex items-center">
                         to {truncateString(d.hash)} <TextCopier text={d.hash} />
                       </div>
                     </div>

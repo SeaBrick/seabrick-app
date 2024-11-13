@@ -110,19 +110,19 @@ export default function DashboardComponent({
             {/* top with texts */}
             <div className="self-stretch flex-col justify-between items-start inline-flex">
               <div className="justify-start items-center gap-2.5 inline-flex">
-                <div className="text-[#8a8a8f] text-sm font-normal font-['Noto Sans']">
+                <div className="text-[#8a8a8f] text-base font-normal font-['Noto Sans']">
                   Total {isAdmin ? "Supply" : "Balance"}
                 </div>
               </div>
               <div className="self-stretch justify-start items-end gap-2.5 inline-flex">
                 {isAdmin ? (
-                  <div className="text-[#333333] text-2xl font-normal font-['Noto Sans']">
+                  <div className="text-[#333333] text-3xl font-normal font-['Noto Sans']">
                     {seabrick.totalSupply} Seabrick NFTs
                   </div>
                 ) : (
-                  <div className="text-[#333333] text-2xl font-normal font-['Noto Sans'] flex gap-2">
+                  <div className="text-[#333333] text-3xl font-normal font-['Noto Sans'] flex gap-2">
                     {USDollar.format(totalBalance)}
-                    <div className="text-[#8a8a8f] text-xs font-normal font-['Noto Sans']">
+                    <div className="text-[#8a8a8f] text-sm font-normal font-['Noto Sans']">
                       {totalQuantity} Seabrick NFTs
                     </div>
                   </div>
@@ -134,7 +134,7 @@ export default function DashboardComponent({
               {isAdmin ? (
                 <div className="justify-start items-center gap-2 flex">
                   <button
-                    className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-sm font-normal font-['Noto Sans'] disabled:cursor-not-allowed disabled:bg-gray-400"
+                    className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-base font-normal font-['Noto Sans'] disabled:cursor-not-allowed disabled:bg-gray-400"
                     onClick={() => setMintTokensOpen(true)}
                     disabled={!isAdmin}
                   >
@@ -144,13 +144,13 @@ export default function DashboardComponent({
               ) : (
                 <div className="flex flex-start w-full gap-2">
                   <button
-                    className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-sm font-normal font-['Noto Sans']"
+                    className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-base font-normal font-['Noto Sans']"
                     onClick={() => setShowClaimModal(true)}
                   >
                     Claim!
                   </button>
                   <Link
-                    className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-sm font-normal font-['Noto Sans']"
+                    className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-base font-normal font-['Noto Sans']"
                     href={`/buy`}
                     prefetch={true}
                   >
@@ -166,11 +166,11 @@ export default function DashboardComponent({
             <div className="flex-col justify-start items-start gap-2 flex">
               {/* filter and date  */}
               <div className="self-stretch justify-start items-center gap-[5px] flex flex-wrap">
-                <div className="text-[#8a8a8f] text-sm font-normal font-['Noto Sans']">
+                <div className="text-[#8a8a8f] text-base font-normal font-['Noto Sans']">
                   {isAdmin ? "Minted Tokens" : "Transactions"}
                 </div>
                 <div className="justify-start items-center gap-[3px] flex">
-                  <div className="text-[#333333] text-sm font-normal font-['Noto Sans']">
+                  <div className="text-[#333333] text-base font-normal font-['Noto Sans']">
                     November 2024
                     {/* calendar??? */}
                   </div>
@@ -178,13 +178,13 @@ export default function DashboardComponent({
               </div>
               {/* small stats */}
               <div className="self-stretch justify-start items-center gap-4 inline-flex">
-                <div className="text-[#333333] text-xl font-normal font-['Noto Sans']">
+                <div className="text-[#333333] text-2xl font-normal font-['Noto Sans']">
                   {thisMontQuantity > 0 ? "+" : ""}
                   {isAdmin
                     ? thisMontQuantity
                     : USDollar.format(thisMontQuantity)}
                 </div>
-                <div className="text-[#8a8a8f] text-xs font-normal font-['Noto Sans']">
+                <div className="text-[#8a8a8f] text-sm font-normal font-['Noto Sans']">
                   This is{" "}
                   {differenceQuantity === 0 ? "" : Math.abs(differenceQuantity)}{" "}
                   {differenceQuantity > 0
@@ -212,7 +212,7 @@ export default function DashboardComponent({
                 <div className="bg-white w-full h-full rounded-[10px] gap-3 p-4 flex flex-col justify-between">
                   <ModalTransferOwnership disableButton={!isOwner} />
                   <button
-                    className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-left text-lg"
+                    className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-left text-xl"
                     onClick={() => {
                       router.push("/admin-list")
                     }}
@@ -221,7 +221,7 @@ export default function DashboardComponent({
                     Admins
                   </button>
                   <button
-                    className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] text-[white] rounded-[5px] text-left text-lg"
+                    className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] text-[white] rounded-[5px] text-left text-xl"
                     onClick={() => setClaimTokensOpen(true)}
                   >
                     <CurrencyDollarIcon className="size-[1.5rem] inline mx-2 mt-[-3px]" />
@@ -241,13 +241,13 @@ export default function DashboardComponent({
                   className="text-black text-[17px] font-normal relative  hover:cursor-pointer"
                   onClick={() => setIsCardVisible(!isCardVisible)}
                 >
-                  <span className="text-[#8a8a8f] text-lg">Latest </span>
-                  <span className="text-lg">{dataOnDisplay}</span>
-                  <ChevronDownIcon className="size-[0.7rem] inline ml-1" />
+                  <span className="text-[#8a8a8f] text-xl">Latest </span>
+                  <span className="text-xl">{dataOnDisplay}</span>
+                  <ChevronDownIcon className="size-[1.25rem] inline ml-1" />
                   {isCardVisible ? (
-                    <div className="bg-white rounded-[5px] absolute h-min w-[120px] flex flex-col divide-y border border-[#babcc3]/30">
+                    <div className="bg-white rounded-[5px] absolute h-min w-[150px] flex flex-col divide-y border border-[#babcc3]/30">
                       <button
-                        className="text-start text-sm px-3 h-1/2 p-1"
+                        className="text-start text-lg px-3 h-1/2 p-1"
                         onClick={() => {
                           setIsCardVisible(false)
                           setDataOnDisplay("Buys")
@@ -256,7 +256,7 @@ export default function DashboardComponent({
                         Buys
                       </button>
                       <button
-                        className="text-start text-sm px-3 h-1/2 p-1"
+                        className="text-start text-lg px-3 h-1/2 p-1"
                         onClick={() => {
                           setIsCardVisible(false)
                           setDataOnDisplay("Transfers")

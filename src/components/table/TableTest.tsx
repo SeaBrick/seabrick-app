@@ -31,7 +31,7 @@ function Table({
           <tr className="w-full table-row">
             {columns.map((column) => (
               <th
-                className={`text-black w-[auto] text-justify text-[0.75rem]  font-normal font-['Noto Sans'] table-cell p-3 ${textExtraClasses}`}
+                className={`text-black w-[auto] text-justify text-base  font-normal font-['Noto Sans'] table-cell p-3 ${textExtraClasses}`}
                 key={column.key}
               >
                 {column.label}
@@ -63,7 +63,7 @@ function Table({
                 }
                 return (
                   <td
-                    className={`text-black text-justify text-[0.75rem] font-normal font-['Noto_Sans'] table-cell p-3 inline-flex ${textExtraClasses} test`}
+                    className={`text-black text-justify text-base font-normal font-['Noto_Sans'] table-cell p-3 inline-flex ${textExtraClasses} test`}
                     key={`${j}-${i}`}
                   >
                     <div className="flex">
