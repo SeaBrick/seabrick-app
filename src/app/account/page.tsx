@@ -11,6 +11,7 @@ import { isEmpty } from "lodash";
 import BackButton from "@/components/buttons/BackButton";
 import { toast } from "react-toastify";
 import { UserProfile } from "@/components/images/UserProfile";
+import AccountWallet from "@/components/forms/AccountWallet";
 
 export default function AccountDetailsPage() {
   const { user } = useAuth();
@@ -57,8 +58,6 @@ const AccountDetails: React.FC = () => {
   const [name, setName] = useState<string>("");
   const [originalName, setOriginalName] = useState<string>("");
 
-  const [address, setAddress] = useState<Address>(zeroAddress);
-  const [originalAddress, setOriginalAddress] = useState<Address>(zeroAddress);
   const [errors, setErrors] = useState<Errors>({});
 
   async function formAction(data: FormData) {
@@ -90,7 +89,6 @@ const AccountDetails: React.FC = () => {
     if (resp.message) {
       setOriginalEmail(email);
       setOriginalName(name);
-      setOriginalAddress(address);
       setModifying(false);
       authRefetch();
       toast.success(resp.message);
@@ -106,11 +104,6 @@ const AccountDetails: React.FC = () => {
     setOriginalName(name_);
   }
 
-  function setAddresses(address_: Address) {
-    setAddress(address_);
-    setOriginalAddress(address_);
-  }
-
   useEffect(() => {
     if (user) {
       if (user.email) {
@@ -119,11 +112,6 @@ const AccountDetails: React.FC = () => {
 
       if (user.user_metadata.name) {
         setNames(user.user_metadata.name);
-      }
-
-      // TODO: Support for 'email' account with linked wallet
-      if (userAddress) {
-        setAddresses(userAddress);
       }
     }
   }, [user, userAddress, userType]);
@@ -148,19 +136,14 @@ const AccountDetails: React.FC = () => {
   const restoreOriginalValues = () => {
     setEmail(originalEmail);
     setName(originalName);
-    setAddress(originalAddress);
   };
 
   const checkChanges = () => {
-    return (
-      originalEmail === email &&
-      originalName === name &&
-      originalAddress === address
-    );
+    return originalEmail === email && originalName === name;
   };
 
   return (
-    <div className="">
+    <div className="divide-y-2 space-y-4">
       {user && (
         <form className="flex flex-col gap-y-4" action={formAction}>
           <h3 className="text-xl font-bold leading-6">Personal Information</h3>
@@ -194,21 +177,6 @@ const AccountDetails: React.FC = () => {
           </div>
           <input hidden value={userType} readOnly name="user_type" />
 
-          {userType === "wallet" && (
-            <div>
-              <label className="block">Wallet address</label>
-              <input
-                className="disabled:cursor-not-allowed disabled:text-gray-500 disabled:bg-seabrick-blue/10 mt-1 block w-full bg-seabrick-blue/5 border border-gray-700 rounded py-2 px-4 focus:outline-none focus:ring focus:ring-blue-500"
-                // disabled={!modifying}
-                disabled
-                required
-                value={address}
-                onChange={emailOnchange}
-                name="address"
-              />
-            </div>
-          )}
-
           {modifying ? (
             <div className="flex gap-x-4 justify-end">
               <SubmitButton disable={checkChanges()} label="Save" />
@@ -235,9 +203,14 @@ const AccountDetails: React.FC = () => {
           {errors.message && <p className="text-red-500">{errors.message}</p>}
         </form>
       )}
-      <hr className="my-6" />
 
-      <ChangePasswordForm />
+      <div className="pt-4">
+        <ChangePasswordForm />
+      </div>
+
+      <div className="pt-4">
+        <AccountWallet />
+      </div>
     </div>
   );
 };
