@@ -28,21 +28,29 @@ export const UserRegisterWalletSchema = userLoginWalletSchema.extend(
   UserAuthSchema.omit({ password: true }).shape
 );
 
+const UserPasswordCheckSchema = z.object({
+  newPassword: z.string().min(8, "Password must be at least 8 characters long"),
+  repeatedPassword: z
+    .string()
+    .min(8, "Password must be at least 8 characters long"),
+});
+
+const matchPasswords = (data: {
+  newPassword: string;
+  repeatedPassword: string;
+}) => data.repeatedPassword === data.newPassword;
+
+const matchPasswordsOptions = {
+  message: "Passwords must match",
+  // This points the error message to the newPassword field
+  path: ["newPassword"],
+};
+
 // Schema for password reset
-export const PasswordResetSchema = z
-  .object({
-    newPassword: z
-      .string()
-      .min(8, "Password must be at least 8 characters long"),
-    repeatedPassword: z
-      .string()
-      .min(8, "Password must be at least 8 characters long"),
-  })
-  .refine((data) => data.newPassword === data.repeatedPassword, {
-    message: "Passwords must match",
-    // This points the error message to the newPassword field
-    path: ["newPassword"],
-  });
+export const PasswordResetSchema = UserPasswordCheckSchema.refine(
+  matchPasswords,
+  matchPasswordsOptions
+);
 
 /**
  * Schema for setting account personal info
@@ -52,3 +60,8 @@ export const UserAccountPersonalInfoSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email address"),
   user_type: z.enum(["wallet", "email"]),
 });
+
+/** Schema for changing password on Accounts */
+export const UserChangePassword = UserPasswordCheckSchema.extend({
+  currentPassword: z.string().min(1, "Current password is required"),
+}).refine(matchPasswords, matchPasswordsOptions);
