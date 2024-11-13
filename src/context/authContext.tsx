@@ -51,7 +51,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useAccountEffect({
     onDisconnect() {
-      signOut();
+      // Only do this on wallet users
+      if (userType == "wallet") {
+        signOut();
+      }
     },
   });
 
