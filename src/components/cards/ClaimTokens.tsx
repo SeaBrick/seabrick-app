@@ -13,25 +13,25 @@ const testData: TokensMap[] = [
   {
     id: 1,
     symbol: "ETH",
-    logo: "/tokens/eth.png",
+    logo: "/tokens/eth.webp",
     amount: 121,
   },
   {
     id: 2,
     symbol: "ETH",
-    logo: "/tokens/sol.png",
+    logo: "/tokens/sol.webp",
     amount: 121,
   },
   {
     id: 3,
     symbol: "ETH",
-    logo: "/tokens/usdc.png",
+    logo: "/tokens/usdc.webp",
     amount: 121,
   },
   {
     id: 4,
     symbol: "ETH",
-    logo: "/tokens/usdt.png",
+    logo: "/tokens/usdt.webp",
     amount: 121,
   },
   {
