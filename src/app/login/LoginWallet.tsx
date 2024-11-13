@@ -153,7 +153,7 @@ const LoginWallet: React.FC<LoginWallet> = ({ open, setOpen }: LoginWallet) => {
               loadingLabel="Login..."
               disable={!isRegistered}
               disabledTitle="Wallet not connected"
-              buttonClass="w-1/2 h-[45px]"
+              buttonClass="w-1/2 h-[45px] mx-auto"
             />
           </form>
           <p className="text-red-500 text-sm">{errors.message}</p>
