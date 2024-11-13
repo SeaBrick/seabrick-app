@@ -26,7 +26,7 @@ function Table({
 }) {
   return (
     <div className="overflow-auto w-full rounded-t-[10px]">
-      <table className="w-full min-w-[450px] bg-white gap-2.5 table-fixed">
+      <table className="w-full min-w-[max-content] bg-white gap-2.5 table-fixed">
         <thead className="w-full bg-[#efeff4] gap-5">
           <tr className="w-full table-row">
             {columns.map((column) => (
@@ -67,7 +67,7 @@ function Table({
                     key={`${j}-${i}`}
                   >
                     <div className="inline-flex">
-                      {showText}
+                      <span>{showText}</span>
                       {enableCopier ? <TextCopier text={valueText} /> : ""}
                     </div>
                   </td>
