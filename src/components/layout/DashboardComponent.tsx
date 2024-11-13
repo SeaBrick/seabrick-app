@@ -212,19 +212,19 @@ export default function DashboardComponent({
                 <div className="bg-white w-full h-full rounded-[10px] gap-3 p-4 flex flex-col justify-between">
                   <ModalTransferOwnership disableButton={!isOwner} />
                   <button
-                    className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-left"
+                    className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-left text-lg"
                     onClick={() => {
                       router.push("/admin-list")
                     }}
                   >
-                    <UserIcon className="size-[1.25rem] inline mx-2 mt-[-3px]" />
+                    <UserIcon className="size-[1.5rem] inline mx-2 mt-[-3px]" />
                     Admins
                   </button>
                   <button
-                    className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] text-[white] rounded-[5px] text-left"
+                    className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] text-[white] rounded-[5px] text-left text-lg"
                     onClick={() => setClaimTokensOpen(true)}
                   >
-                    <CurrencyDollarIcon className="size-[1.25rem] inline mx-2 mt-[-3px]" />
+                    <CurrencyDollarIcon className="size-[1.5rem] inline mx-2 mt-[-3px]" />
                     Claim Earnings
                   </button>
                 </div>
