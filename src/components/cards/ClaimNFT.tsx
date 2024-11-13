@@ -1,12 +1,12 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
-import ClaimModal from "../modals/ClaimModal"
-import Table, { TableColumn } from "../table/TableTest"
-import CurrencyDollarIcon from "@heroicons/react/24/outline/CurrencyDollarIcon"
-import Image from "next/image"
-import { ModalDone } from "../modals/ModalDone"
-import SubmitButton from "../buttons/SubmitButton"
-import { claimToken, getClaimedTokens } from "@/app/dashboard/requests"
-import PageLoaderSpinner from "../spinners/PageLoaderSpinner"
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import ClaimModal from "../modals/ClaimModal";
+import Table, { TableColumn } from "../table/TableTest";
+import CurrencyDollarIcon from "@heroicons/react/24/outline/CurrencyDollarIcon";
+import Image from "next/image";
+import { ModalDone } from "../modals/ModalDone";
+import SubmitButton from "../buttons/SubmitButton";
+import { claimToken, getClaimedTokens } from "@/app/dashboard/requests";
+import PageLoaderSpinner from "../spinners/PageLoaderSpinner";
 
 const dataTestColums: TableColumn[] = [
   {
@@ -15,43 +15,43 @@ const dataTestColums: TableColumn[] = [
   },
   { label: "Status", key: "claimed" },
   { label: "Date", key: "created_at" },
-]
-const dataColumns: TableColumn[] = dataTestColums
+];
+const dataColumns: TableColumn[] = dataTestColums;
 export default function ClaimTokens({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   open,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setOpen,
 }: {
-  open: boolean
-  setOpen: Dispatch<SetStateAction<boolean>>
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
-  const [isSelfOpen, setSelfOpen] = useState(true)
-  const [isDoneOpen, setDoneOpen] = useState(false)
-  const [nftClaimedList, setNftClaimedList] = useState<TableColumn[]>([])
-  const [isLoading, setLoading] = useState(false)
+  const [isSelfOpen, setSelfOpen] = useState(true);
+  const [isDoneOpen, setDoneOpen] = useState(false);
+  const [nftClaimedList, setNftClaimedList] = useState<TableColumn[]>([]);
+  const [isLoading, setLoading] = useState(false);
 
   async function claimNFT(_formData: FormData) {
     try {
-      await claimToken()
-      setSelfOpen(false)
-      setDoneOpen(true)
-      console.log("I claimed my nft")
+      await claimToken();
+      setSelfOpen(false);
+      setDoneOpen(true);
+      console.log("I claimed my nft");
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
   //
   useEffect(() => {
-    setLoading(true)
-    fetchData()
-  }, [])
+    setLoading(true);
+    fetchData();
+  }, []);
   //
   const fetchData = async () => {
-    const result = await getClaimedTokens()
-    setNftClaimedList(result.data)
-    setLoading(false)
-  }
+    const result = await getClaimedTokens();
+    setNftClaimedList(result.data);
+    setLoading(false);
+  };
   //
   return (
     <>
@@ -86,7 +86,7 @@ export default function ClaimTokens({
             <div className="px-3 py-1 grow shrink rounded-[5px] border border-[#babcc3]/60 justify-start items-center gap-2.5 inline-flex ">
               <div className="rounded-[100px] bg-slate-200 h-[20px] w-[20px] flex justify-center items-center">
                 <Image
-                  src={`/brick.png`}
+                  src={`/brick.webp`}
                   alt={`BRC`}
                   height={20}
                   width={20}
@@ -109,5 +109,5 @@ export default function ClaimTokens({
         </ClaimModal>
       )}
     </>
-  )
+  );
 }

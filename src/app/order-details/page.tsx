@@ -1,16 +1,16 @@
-"use client"
-import Image from "next/image"
-import Table from "@/components/table/TableTest"
-import { useRouter } from "next/navigation"
-import BackButton from "@/components/buttons/BackButton"
+"use client";
+import Image from "next/image";
+import Table from "@/components/table/TableTest";
+import { useRouter } from "next/navigation";
+import BackButton from "@/components/buttons/BackButton";
 export default function OrderDetailsMain() {
-  const router = useRouter()
+  const router = useRouter();
   const columnDataTest = [
     { key: "tokenId", label: "Token Id" },
     { key: "status", label: "Status" },
     { key: "hash", label: "TX Hash" },
     { key: "date", label: "Date" },
-  ]
+  ];
 
   const bodyDataTest = [
     {
@@ -31,7 +31,7 @@ export default function OrderDetailsMain() {
       hash: "0x0001000000000000000000",
       date: "01/03/2024",
     },
-  ]
+  ];
   return (
     <>
       <div className="flex justify-center">
@@ -47,7 +47,7 @@ export default function OrderDetailsMain() {
               <div className="self-stretch justify-start items-center gap-4 inline-flex">
                 <Image
                   className="w-[65px] h-[62px]"
-                  src={`/brick.png`}
+                  src={`/brick.webp`}
                   alt="logo"
                   width={65}
                   height={62}
@@ -81,5 +81,5 @@ export default function OrderDetailsMain() {
         </div>
       </div>
     </>
-  )
+  );
 }

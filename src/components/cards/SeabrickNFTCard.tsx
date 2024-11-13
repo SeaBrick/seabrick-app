@@ -1,12 +1,12 @@
-import Image from "next/image"
-import { ArrowUpRightIcon } from "@heroicons/react/24/outline"
-import { useContractContext } from "@/context/contractContext"
+import Image from "next/image";
+import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
+import { useContractContext } from "@/context/contractContext";
 
 // TODO: Fulfill with real data
 export default function SeabrickNFTCard() {
   const {
     data: { seabrick, market },
-  } = useContractContext()
+  } = useContractContext();
 
   return (
     <>
@@ -17,7 +17,7 @@ export default function SeabrickNFTCard() {
               className="w-30"
               width={100}
               height={75}
-              src={`/brick.png`}
+              src={`/brick.webp`}
               alt="nft-image"
             ></Image>
             <div className="w-full flex-col justify-between items-start inline-flex">
@@ -81,5 +81,5 @@ export default function SeabrickNFTCard() {
         </div>
       </div>
     </>
-  )
+  );
 }
