@@ -209,9 +209,9 @@ export async function changeOrLinkWallet(formData: FormData) {
   // const { address, signature } = validationData;
   const { address } = validationData;
 
-  const { error: walletUserError } = await createClient()
+  const { data: walletUser, error: walletUserError } = await createClient()
     .from("wallet_users")
-    .select("address")
+    .select("address, user_id")
     .eq("address", address?.toLowerCase())
     .single();
 
@@ -220,5 +220,22 @@ export async function changeOrLinkWallet(formData: FormData) {
     (walletUserError && walletUserError.code != "PGRST116")
   ) {
     return { error: "Wallet address already linked" };
+  }
+
+  const { error: upsertError } = await createClient(true)
+    .from("wallet_users")
+    .upsert(
+      {
+        address: address.toLowerCase(),
+        user_id: user.id,
+        email: user.email,
+      },
+      { onConflict: "user_id" }
+    );
+
+  if (upsertError) {
+    console.error("Failed to link the wallet");
+    console.error(upsertError);
+    return { error: "Failed to link the wallet" };
   }
 }

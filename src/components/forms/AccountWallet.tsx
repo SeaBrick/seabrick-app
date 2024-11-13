@@ -82,6 +82,7 @@ const AccountWallet: React.FC = () => {
       return;
     }
 
+    toast.success("Wallet linked succesfully!");
     authRefetch();
   }
 
