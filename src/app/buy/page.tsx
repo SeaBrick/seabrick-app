@@ -18,7 +18,8 @@ enum TabsIndex {
 export default function BuyPage() {
   const { user } = useAuth();
   const router = useRouter();
-  const [selectedIndex, setSelectedIndex] = useState<number>(TabsIndex.STRIPE);
+  const [selectedIndex, setSelectedIndex] = useState<number>(TabsIndex.CRYPTO);
+  // const [selectedIndex, setSelectedIndex] = useState<number>(TabsIndex.STRIPE);
 
   useEffect(() => {
     if (!user) {
@@ -42,26 +43,26 @@ export default function BuyPage() {
           <Tab
             className={`rounded-t-xl py-2 px-3 outline-none ${selectedIndex == TabsIndex.STRIPE ? "bg-white" : "bg-gray-200 hover:bg-gray-300 shadow-inner"}`}
           >
-            <button className="flex items-center gap-x-1">
+            <div className="flex items-center gap-x-1">
               <AtSymbolIcon className="size-4" />
               <div
                 className={`${selectedIndex == TabsIndex.STRIPE ? "text-[#49414d]" : "text-[#8a8a8f]"} text-xl font-bold font-['Noto Sans'] leading-normal`}
               >
                 Credit/Debit Card
               </div>
-            </button>
+            </div>
           </Tab>
           <Tab
             className={`rounded-t-xl py-2 px-3 outline-none ${selectedIndex == TabsIndex.CRYPTO ? "bg-white" : "bg-gray-200 hover:bg-gray-300 shadow-inner"}`}
           >
-            <button className="flex items-center gap-x-1">
+            <div className="flex items-center gap-x-1">
               <AtSymbolIcon className="size-4" />
               <div
                 className={`${selectedIndex == TabsIndex.CRYPTO ? "text-[#49414d]" : "text-[#8a8a8f]"} text-xl font-bold font-['Noto Sans'] leading-normal`}
               >
                 Crypto
               </div>
-            </button>
+            </div>
           </Tab>
         </TabList>
         <TabPanels className="px-5">
