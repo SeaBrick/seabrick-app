@@ -1,14 +1,15 @@
-"use client"
-import { ReactElement } from "react"
-import { useFormStatus } from "react-dom"
+"use client";
+import { ReactElement } from "react";
+import { useFormStatus } from "react-dom";
 
 interface SubmitButtonProps {
-  label: string
-  loadingLabel?: string
-  disable?: boolean
-  disabledTitle?: string
-  buttonClass?: string
-  buttonIcon?: ReactElement<any, any>
+  label: string;
+  loadingLabel?: string;
+  disable?: boolean;
+  disabledTitle?: string;
+  buttonClass?: string;
+  buttonIcon?: ReactElement<any, any>;
+  onClick?: () => void;
 }
 export default function SubmitButton(props: SubmitButtonProps) {
   const {
@@ -18,13 +19,15 @@ export default function SubmitButton(props: SubmitButtonProps) {
     disabledTitle,
     buttonClass,
     buttonIcon,
-  } = props
+    onClick,
+  } = props;
   const sharedButtonClass =
-    "grow shrink basis-0 self-stretch bg-[#2069a0] rounded-[5px] justify-center items-center gap-2.5 hover:bg-[#2069a0]/80 disabled:cursor-not-allowed disabled:bg-gray-400 text-center text-white text-sm font-normal font-['Noto Sans'] flex justify-center"
-  const { pending } = useFormStatus()
+    "grow shrink basis-0 self-stretch bg-[#2069a0] rounded-[5px] justify-center items-center gap-2.5 hover:bg-[#2069a0]/80 disabled:cursor-not-allowed disabled:bg-gray-400 text-center text-white text-sm font-normal font-['Noto Sans'] flex justify-center";
+  const { pending } = useFormStatus();
 
   return (
     <button
+      onClick={onClick !== undefined ? onClick : undefined}
       type="submit"
       disabled={pending || disable}
       title={pending || disable ? (disabledTitle ?? "Not allowed") : undefined}
@@ -33,5 +36,5 @@ export default function SubmitButton(props: SubmitButtonProps) {
       {buttonIcon ?? ""}
       {pending ? (loadingLabel ?? "Loading...") : label}
     </button>
-  )
+  );
 }
