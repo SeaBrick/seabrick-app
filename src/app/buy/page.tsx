@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import BuyWithStripe from "./BuyWithStripe";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/react";
 import { AtSymbolIcon } from "@heroicons/react/24/outline";
+import BuyNFTCrypto from "@/components/cards/BuyNFTCrypto";
 
 enum TabsIndex {
   STRIPE,
@@ -68,8 +69,7 @@ export default function BuyPage() {
             <BuyWithStripe />
           </TabPanel>
           <TabPanel className="-5">
-            <p>CRYPTOOOOOOOOO</p>
-            {/* <RegisterWalletForm /> */}
+            <BuyNFTCrypto />
           </TabPanel>
         </TabPanels>
       </TabGroup>
