@@ -49,7 +49,7 @@ const BuyNFTCrypto: React.FC = () => {
                               width={25}
                               height={25}
                               className="w-[25px] h-[25px]"
-                              src="/tokens/eth-r.webp"
+                              src="/tokens/ETH-R.webp"
                               alt="token"
                             />
                           </div>
@@ -71,7 +71,7 @@ const BuyNFTCrypto: React.FC = () => {
                                 width={25}
                                 height={25}
                                 className="w-[25px] h-[25px]"
-                                src="/tokens/sol-r.webp"
+                                src="/tokens/SOL-R.webp"
                                 alt="token"
                               />
                             </div>
@@ -95,7 +95,7 @@ const BuyNFTCrypto: React.FC = () => {
                               width={25}
                               height={25}
                               className="w-[25px] h-[25px]"
-                              src="/tokens/eth-r.webp"
+                              src="/tokens/ETH-R.webp"
                               alt="token"
                             />
                           </div>
@@ -117,7 +117,7 @@ const BuyNFTCrypto: React.FC = () => {
                                 width={25}
                                 height={25}
                                 className="w-[25px] h-[25px]"
-                                src="/tokens/sol-r.webp"
+                                src="/tokens/SOL-R.webp"
                                 alt="token"
                               />
                             </div>
@@ -141,7 +141,7 @@ const BuyNFTCrypto: React.FC = () => {
                               width={25}
                               height={25}
                               className="w-[25px] h-[25px]"
-                              src="/tokens/eth-r.webp"
+                              src="/tokens/ETH-R.webp"
                               alt="token"
                             />
                           </div>
@@ -163,7 +163,7 @@ const BuyNFTCrypto: React.FC = () => {
                                 width={25}
                                 height={25}
                                 className="w-[25px] h-[25px]"
-                                src="/tokens/sol-r.webp"
+                                src="/tokens/SOL-R.webp"
                                 alt="token"
                               />
                             </div>
