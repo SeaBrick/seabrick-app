@@ -5,11 +5,17 @@ import { useContractContext } from "@/context/contractContext";
 import AggregatorsLoader from "../loaders/AggregatorsLoader";
 import { Aggregator, ERC20Token } from "@/lib/interfaces";
 import ImageFallback from "../images/ImageFallback";
-import { useAccount, useReadContract } from "wagmi";
-import { aggregatorV3InterfaceAbi, ierc20Abi } from "@/lib/contracts/abis";
+import { useAccount, useReadContract, useWriteContract } from "wagmi";
+import {
+  aggregatorV3InterfaceAbi,
+  ierc20Abi,
+  iMarketAbi,
+} from "@/lib/contracts/abis";
 import { Address, formatUnits } from "viem";
 import ConnectButton from "../buttons/ConnectButton";
 import Link from "next/link";
+import ApproveERC20Modal from "../modals/ApproveERC20Modal";
+import { toast } from "react-toastify";
 
 interface SelecTokenButtonProps {
   setSelect: () => void;
@@ -24,7 +30,7 @@ const SelecTokenButton: React.FC<SelecTokenButtonProps> = ({
   isSelected,
   walletAddress,
 }) => {
-  const { data: balance, refetch: refetchBalance } = useReadContract({
+  const { data: balance } = useReadContract({
     abi: ierc20Abi,
     address: token.address,
     functionName: "balanceOf",
@@ -73,6 +79,10 @@ const SelecTokenButton: React.FC<SelecTokenButtonProps> = ({
   );
 };
 
+// TODO: Send transaction as async, wait for the tx hash. Then use the tx hash and get the logs
+// to see if the tokens were buyed
+// It's working, but need to be refined
+// TODO: After a success buy, redirect to the return cart to show the buy info
 const BuyNFTCrypto: React.FC = () => {
   const {
     data: {
@@ -87,14 +97,29 @@ const BuyNFTCrypto: React.FC = () => {
   const [pricePerToken, setPricePerToken] = useState<bigint>(0n);
   const [quantity, setQuantity] = useState<number>(1);
   const [totalPrice, setTotalPrice] = useState<bigint>(0n);
-
+  const [approveOpen, setApproveOpen] = useState<boolean>(false);
   const { isConnected, address: walletAddress } = useAccount();
+  const [isBuying, setIsBuying] = useState<boolean>(false);
+
+  const {
+    data: hash,
+    writeContract,
+    isPending,
+    writeContractAsync,
+  } = useWriteContract();
 
   const { data: latestRoundData } = useReadContract({
     abi: aggregatorV3InterfaceAbi,
     address: aggregators[selectedToken]?.aggregator,
     functionName: "latestRoundData",
     args: [],
+  });
+
+  const { data: marketAllowance } = useReadContract({
+    abi: ierc20Abi,
+    address: tokens[selectedToken]?.address,
+    functionName: "allowance",
+    args: [walletAddress!, marketAddress],
   });
 
   function onChangeQuantity(e: React.ChangeEvent<HTMLInputElement>) {
@@ -105,6 +130,30 @@ const BuyNFTCrypto: React.FC = () => {
     if (!isNaN(parsedValue)) {
       setQuantity(parsedValue);
     }
+  }
+
+  async function buyAction() {
+    if (!walletAddress) {
+      toast.error("No wallet connected");
+      return;
+    }
+
+    setIsBuying(true);
+    await toast.promise(
+      writeContractAsync({
+        address: marketAddress,
+        abi: iMarketAbi,
+        functionName: "buy",
+        args: [walletAddress, aggregators[selectedToken].name, quantity],
+      }),
+      {
+        pending: "Buying the Seabrick",
+        success: "Buy transaction complete",
+        error: "Transaction failed",
+      }
+    );
+
+    setIsBuying(false);
   }
 
   useEffect(() => {
@@ -146,18 +195,18 @@ const BuyNFTCrypto: React.FC = () => {
         dispatchAggregators={setAggregators}
         dispatchTokens={setTokens}
       />
+
+      {marketAllowance !== undefined && (
+        <ApproveERC20Modal
+          setOpen={setApproveOpen}
+          open={approveOpen}
+          token={tokens[selectedToken]}
+          totalAmount={totalPrice}
+          currentMarketAllowance={marketAllowance}
+        />
+      )}
+
       <div className="w-full bg-white">
-        <button
-          className="bg-red-400 p-2 w-fit"
-          onClick={() => {
-            console.log("aggregators: ", aggregators);
-            console.log("tokens: ", tokens);
-            console.log("latestRoundData: ", latestRoundData);
-            console.log("priceToken: ", pricePerToken);
-          }}
-        >
-          Print data {pricePerToken}
-        </button>
         <div className="w-fit mx-auto">
           <div className="w-[580px] p-6 bg-white rounded-[10px] justify-start items-center gap-2.5 inline-flex">
             <div className="grow shrink basis-0 self-stretch flex-col justify-start items-start gap-[30px] inline-flex">
@@ -271,11 +320,29 @@ const BuyNFTCrypto: React.FC = () => {
                             </div>
                           </div>
                           <div className="bg-[#2069a0] rounded-md shadow-inner w-fit mx-auto">
-                            <SubmitButton
-                              disable={!isConnected}
-                              buttonClass="grow shrink basis-0 h-[45px] p-[17px] bg-[#2069a0] w-full rounded-[5px] justify-center items-center gap-2.5 flex"
-                              label="Approve SOL Transaction"
-                            />
+                            {totalPrice &&
+                              marketAllowance !== undefined &&
+                              (marketAllowance < totalPrice ? (
+                                // Approve method
+                                <SubmitButton
+                                  onClick={() => {
+                                    setApproveOpen(true);
+                                  }}
+                                  disable={!isConnected}
+                                  buttonClass="grow shrink basis-0 h-[45px] p-[17px] bg-[#2069a0] w-full rounded-[5px] justify-center items-center gap-2.5 flex"
+                                  label="Approve SOL Transaction"
+                                />
+                              ) : (
+                                <SubmitButton
+                                  onClick={() => {
+                                    buyAction();
+                                    console.log("Buy");
+                                  }}
+                                  disable={!isConnected || isBuying}
+                                  buttonClass="grow shrink basis-0 h-[45px] p-[17px] bg-[#2069a0] w-full rounded-[5px] justify-center items-center gap-2.5 flex"
+                                  label={isBuying ? "Buying" : "Buy Seabrick"}
+                                />
+                              ))}
                           </div>
                         </div>
                       </div>
