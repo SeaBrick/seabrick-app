@@ -1,14 +1,9 @@
 "use client";
-import React, { Suspense, useEffect, useState } from "react";
-// import RequireWallet from "@/app/components/utils/RequireWallet";
-import BuyNFT from "./BuyNFT";
-import PageLoaderSpinner from "@/components/spinners/PageLoaderSpinner";
-import { useAuth } from "@/context/authContext";
-import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import BuyWithStripe from "./BuyWithStripe";
+import BuyNFTCrypto from "@/components/cards/BuyNFTCrypto";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/react";
 import { AtSymbolIcon } from "@heroicons/react/24/outline";
-import BuyNFTCrypto from "@/components/cards/BuyNFTCrypto";
 
 enum TabsIndex {
   STRIPE,
@@ -16,17 +11,8 @@ enum TabsIndex {
 }
 
 export default function BuyPage() {
-  const { user } = useAuth();
-  const router = useRouter();
   const [selectedIndex, setSelectedIndex] = useState<number>(TabsIndex.CRYPTO);
   // const [selectedIndex, setSelectedIndex] = useState<number>(TabsIndex.STRIPE);
-
-  useEffect(() => {
-    if (!user) {
-      // router.push("/login");
-      return;
-    }
-  }, [router, user]);
 
   return (
     <div className="w-1/2 mx-auto">
@@ -74,24 +60,6 @@ export default function BuyPage() {
           </TabPanel>
         </TabPanels>
       </TabGroup>
-
-      {/* {user && (
-        <>
-          {user.user_metadata.type == "email" && <BuyWithStripe />}
-
-          {user.user_metadata.type == "wallet" && (
-            <Suspense
-              fallback={
-                <div className="py-24 my-auto">
-                  <PageLoaderSpinner height="h-max" width="w-1/2" />
-                </div>
-              }
-            >
-              <BuyNFT />
-            </Suspense>
-          )}
-        </>
-      )} */}
     </div>
   );
 }
