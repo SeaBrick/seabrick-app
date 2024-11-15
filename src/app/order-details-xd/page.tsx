@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { HomeIcon } from "@heroicons/react/24/outline";
 import DetailsTable from "./DetailsTable";
+import { isHash } from "viem";
 
 interface OrderDetailsProps {
   searchParams: {
@@ -15,7 +16,32 @@ export default async function OrderDetails({
 }: OrderDetailsProps) {
   const { type, hash, session_id } = searchParams;
 
-//   try
+  // Functions getter to obtain the data
+  // And alse we define the const/object for the table colums
+  try {
+    if (type === "crypto") {
+      if (!hash || !isHash(hash)) {
+        throw new Error("Invalid hash for Crypto transaction");
+      }
+      // Perform for crypto
+    }
+    //
+    else if (type === "stripe") {
+      if (!session_id) {
+        throw new Error("Invalid ID Stripe transaction");
+      }
+
+      // Perform for stripe
+    }
+    //
+    else {
+      throw new Error("Invalid transaction");
+    }
+
+    //
+  } catch (error) {
+    //
+  }
 
   return (
     <div className="flex justify-center">
