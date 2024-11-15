@@ -1,5 +1,5 @@
 import { useAuth } from "@/context/authContext";
-import { UserRejectedRequestError } from "viem";
+import { UserRejectedRequestError, zeroAddress } from "viem";
 import { useAccount, useSignMessage } from "wagmi";
 import ConnectButton from "../buttons/ConnectButton";
 import SubmitButton from "../buttons/SubmitButton";
@@ -71,10 +71,10 @@ const AccountWallet: React.FC = () => {
     <div className="flex flex-col gap-y-4">
       <h3 className="text-xl font-bold leading-6">User wallet</h3>
 
-      {(userType == "wallet" || userAddress) && (
+      {userType == "wallet" && (
         <div>
           <div className="cursor-default mt-1 block w-full bg-seabrick-blue/5 border border-gray-700 rounded py-2 px-4 focus:outline-none focus:ring focus:ring-blue-500">
-            {userAddress}
+            {userAddress ?? zeroAddress}
           </div>
           <p className="mt-1 ml-2 text-sm">
             Your wallet address cannot be changed as it was used to create this
@@ -85,12 +85,17 @@ const AccountWallet: React.FC = () => {
 
       {userType == "email" && (
         <>
-          {!userAddress && (
+          {userAddress ? (
+            <div className="cursor-default mt-1 block w-full bg-seabrick-blue/5 border border-gray-700 rounded py-2 px-4 focus:outline-none focus:ring focus:ring-blue-500">
+              {userAddress ?? zeroAddress}
+            </div>
+          ) : (
             <p className="">
               The account does not have a linked wallet. You can claim your
               Seabrick NFTs once you linked a Web3 Wallet.
             </p>
           )}
+
           <div className="mx-auto">
             <ConnectButton />
           </div>
