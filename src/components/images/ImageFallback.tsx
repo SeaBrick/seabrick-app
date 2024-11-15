@@ -21,12 +21,6 @@ export default function ImageFallback({
       {...rest}
       alt={alt}
       src={imgSrc}
-      onLoadingComplete={(result) => {
-        if (result.naturalWidth === 0) {
-          // Broken image
-          set_imgSrc(fallbackSrc);
-        }
-      }}
       onError={() => {
         set_imgSrc(fallbackSrc);
       }}
