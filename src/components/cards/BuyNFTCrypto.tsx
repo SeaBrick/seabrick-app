@@ -4,18 +4,17 @@ import SubmitButton from "../buttons/SubmitButton";
 import { useContractContext } from "@/context/contractContext";
 import AggregatorsLoader from "../loaders/AggregatorsLoader";
 import { Aggregator, ERC20Token } from "@/lib/interfaces";
-import { useAccount, useReadContract, useWriteContract } from "wagmi";
-import {
-  aggregatorV3InterfaceAbi,
-  ierc20Abi,
-  iMarketAbi,
-} from "@/lib/contracts/abis";
+import { useAccount, useConfig, useReadContract } from "wagmi";
+import { aggregatorV3InterfaceAbi, ierc20Abi } from "@/lib/contracts/abis";
 import { formatUnits } from "viem";
 import ConnectButton from "../buttons/ConnectButton";
 import Link from "next/link";
 import ApproveERC20Modal from "../modals/ApproveERC20Modal";
-import { toast } from "react-toastify";
 import SelecTokenButton from "../buttons/SelectTokenButton";
+import {
+  buySeabrick,
+  toastifyPromiseWrapper,
+} from "@/lib/contracts/clientTransactions";
 
 // TODO: Send transaction as async, wait for the tx hash. Then use the tx hash and get the logs
 // to see if the tokens were buyed
@@ -39,8 +38,7 @@ const BuyNFTCrypto: React.FC = () => {
   const [approveOpen, setApproveOpen] = useState<boolean>(false);
   const { isConnected, address: walletAddress } = useAccount();
   const [isBuying, setIsBuying] = useState<boolean>(false);
-
-  const { writeContractAsync } = useWriteContract();
+  const config = useConfig();
 
   const { data: latestRoundData } = useReadContract({
     abi: aggregatorV3InterfaceAbi,
@@ -71,27 +69,21 @@ const BuyNFTCrypto: React.FC = () => {
   }
 
   async function buyAction() {
-    if (!walletAddress) {
-      toast.error("No wallet connected");
-      return;
-    }
-
     setIsBuying(true);
-    await toast.promise(
-      writeContractAsync({
-        address: marketAddress,
-        abi: iMarketAbi,
-        functionName: "buy",
-        args: [walletAddress, aggregators[selectedToken].name, quantity],
-      }),
-      {
-        pending: "Buying the Seabrick",
-        success: "Buy transaction complete",
-        error: "Transaction failed",
-      }
+
+    // Approve tokens tranasction with toastify.promise wrapper
+    toastifyPromiseWrapper(() =>
+      buySeabrick(config, {
+        marketAddress,
+        walletAddress,
+        quantity,
+        agregatorName: aggregators[selectedToken].name,
+      })
     );
 
     setIsBuying(false);
+
+    // TODO: Redirect with the tx hash I guess
   }
 
   useEffect(() => {
@@ -277,10 +269,7 @@ const BuyNFTCrypto: React.FC = () => {
                                 />
                               ) : (
                                 <SubmitButton
-                                  onClick={() => {
-                                    // buyAction();
-                                    console.log("Buy");
-                                  }}
+                                  onClick={buyAction}
                                   disable={
                                     !isConnected || !termsAccepted || isBuying
                                   }
