@@ -8,19 +8,27 @@ import {
   approveTokens,
   toastifyPromiseWrapper,
 } from "@/lib/contracts/clientTransactions";
+import type {
+  QueryObserverResult,
+  RefetchOptions,
+} from "@tanstack/react-query";
+import type { ReadContractErrorType } from "wagmi/actions";
 
 interface ApproveERC20TokensProps {
   token: ERC20Token;
   totalAmount: bigint;
-  currentMarketAllowance: bigint;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  refetchAllowance: (
+    options?: RefetchOptions
+  ) => Promise<QueryObserverResult<bigint, ReadContractErrorType>>;
 }
 const ApproveERC20Modal: React.FC<ApproveERC20TokensProps> = ({
   open,
   setOpen,
   token,
   totalAmount,
+  refetchAllowance,
 }) => {
   const [amountToApprove, setAmountToApprove] = useState<bigint>(0n);
   const [isApproving, setIsApproving] = useState<boolean>(false);
@@ -33,8 +41,10 @@ const ApproveERC20Modal: React.FC<ApproveERC20TokensProps> = ({
 
   async function submitApprove(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
+    // User is on approving process
     setIsApproving(true);
+
+    // Approve tokens tranasction with toastify.promise wrapper
     toastifyPromiseWrapper(() =>
       approveTokens(config, {
         tokenAddress: token.address,
@@ -42,6 +52,11 @@ const ApproveERC20Modal: React.FC<ApproveERC20TokensProps> = ({
         amount: amountToApprove,
       })
     );
+
+    // Refetch the allowance of the market
+    await refetchAllowance();
+
+    // Closing the approve process
     setIsApproving(false);
     setOpen(false);
   }
