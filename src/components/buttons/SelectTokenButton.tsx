@@ -33,12 +33,11 @@ const SelecTokenButton: React.FC<SelecTokenButtonProps> = ({
           className={`self-stretch grow shrink basis-0 px-[15px] py-2.5 rounded-[5px] border border-[#babcc3]/60 justify-start items-center gap-2.5 inline-flex hover:bg-[#2069a0] hover:text-white ${isSelected && "bg-[#2069a0] text-white"}`}
         >
           <div className="w-[25px] h-[25px] relative">
-            <div className="w-[22.22px] left-[1.40px] top-[1.39px] absolute">
+            <div className="w-[25px] left-[1.40px] top-[1.39px] absolute">
               <ImageFallback
                 width={25}
                 height={25}
                 className="w-[25px] h-[25px] object-cover"
-                //  src="/tokens/ETH-R.webp"
                 src={`/tokens/${token.symbol}.webp`}
                 fallbackSrc="/tokens/empty-token.svg"
                 alt="Token"
