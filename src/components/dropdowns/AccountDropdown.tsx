@@ -10,7 +10,6 @@ import {
 } from "@headlessui/react";
 import {
   UserCircleIcon,
-  ArrowsUpDownIcon,
   ArrowLeftStartOnRectangleIcon,
   Cog6ToothIcon,
   HomeIcon,

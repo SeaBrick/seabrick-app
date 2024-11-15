@@ -8,7 +8,7 @@ interface SubmitButtonProps {
   disable?: boolean;
   disabledTitle?: string;
   buttonClass?: string;
-  buttonIcon?: ReactElement<any, any>;
+  buttonIcon?: ReactElement;
   onClick?: () => void;
 }
 export default function SubmitButton(props: SubmitButtonProps) {
