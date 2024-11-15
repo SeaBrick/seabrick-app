@@ -14,7 +14,6 @@ enum TabsIndex {
   WALLET,
 }
 
-// TODO: Add captchas
 export default function RegisterPage() {
   const [selectedIndex, setSelectedIndex] = useState<number>(TabsIndex.EMAIL);
   const searchParams = useSearchParams();
