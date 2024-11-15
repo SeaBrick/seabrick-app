@@ -81,6 +81,10 @@ const BuyNFTCrypto: React.FC = () => {
       })
     );
 
+    // Refetch this (? maybe no)
+    await refetchAllowance();
+
+    // Remove the state
     setIsBuying(false);
 
     // TODO: Redirect with the tx hash I guess
