@@ -16,9 +16,6 @@ import {
   toastifyPromiseWrapper,
 } from "@/lib/contracts/clientTransactions";
 
-// TODO: Send transaction as async, wait for the tx hash. Then use the tx hash and get the logs
-// to see if the tokens were buyed
-// It's working, but need to be refined
 // TODO: After a success buy, redirect to the return cart to show the buy info
 const BuyNFTCrypto: React.FC = () => {
   const {
