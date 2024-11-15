@@ -4,7 +4,12 @@ import SubmitButton from "../buttons/SubmitButton";
 import { useContractContext } from "@/context/contractContext";
 import AggregatorsLoader from "../loaders/AggregatorsLoader";
 import { Aggregator, ERC20Token } from "@/lib/interfaces";
-import { useAccount, useReadContract, useWriteContract } from "wagmi";
+import {
+  useAccount,
+  useClient,
+  useReadContract,
+  useWriteContract,
+} from "wagmi";
 import {
   aggregatorV3InterfaceAbi,
   ierc20Abi,
@@ -39,12 +44,7 @@ const BuyNFTCrypto: React.FC = () => {
   const { isConnected, address: walletAddress } = useAccount();
   const [isBuying, setIsBuying] = useState<boolean>(false);
 
-  const {
-    data: hash,
-    writeContract,
-    isPending,
-    writeContractAsync,
-  } = useWriteContract();
+  const { writeContractAsync } = useWriteContract();
 
   const { data: latestRoundData } = useReadContract({
     abi: aggregatorV3InterfaceAbi,
@@ -53,7 +53,7 @@ const BuyNFTCrypto: React.FC = () => {
     args: [],
   });
 
-  const { data: marketAllowance } = useReadContract({
+  const { data: marketAllowance, refetch: refetchAllowance } = useReadContract({
     abi: ierc20Abi,
     address: tokens[selectedToken]?.address,
     functionName: "allowance",
@@ -140,7 +140,7 @@ const BuyNFTCrypto: React.FC = () => {
           open={approveOpen}
           token={tokens[selectedToken]}
           totalAmount={totalPrice}
-          currentMarketAllowance={marketAllowance}
+          refetchAllowance={refetchAllowance}
         />
       )}
 
@@ -221,6 +221,7 @@ const BuyNFTCrypto: React.FC = () => {
                             <span className="font-bold">Amount required:</span>
 
                             <span>
+                              ~
                               {parseFloat(
                                 formatUnits(
                                   totalPrice,
