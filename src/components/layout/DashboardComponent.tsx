@@ -3,30 +3,30 @@ import {
   CurrencyDollarIcon,
   ChevronDownIcon,
   ArrowUpRightIcon,
-} from "@heroicons/react/24/outline"
-import { useRouter } from "next/navigation"
-import ClaimTokens from "../cards/ClaimNFT"
-import ClaimNFTCard from "../cards/ClaimNFTCard"
-import SeabrickNFTCard from "../cards/SeabrickNFTCard"
+} from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
+import ClaimTokens from "../cards/ClaimNFT";
+import ClaimNFTCard from "../cards/ClaimNFTCard";
+import SeabrickNFTCard from "../cards/SeabrickNFTCard";
 import UserTransactionHistory, {
   UserTransactionHistoryData,
-} from "../cards/UserTransactionsHistory"
-import { MintTokensModal } from "../modals/MintTokensModal"
-import Modal from "../modals/Modal"
-import ModalTransferOwnership from "../modals/ModalTransferOwnership"
-import Table from "../table/TableTest"
-import { useState } from "react"
-import { useContractContext } from "@/context/contractContext"
-import { Buy, Transfer } from "@/lib/interfaces"
-import ClaimNFT from "../cards/ClaimNFT"
-import Link from "next/link"
+} from "../cards/UserTransactionsHistory";
+import { MintTokensModal } from "../modals/MintTokensModal";
+import Modal from "../modals/Modal";
+import ModalTransferOwnership from "../modals/ModalTransferOwnership";
+import Table from "../table/TableTest";
+import { useState } from "react";
+import { useContractContext } from "@/context/contractContext";
+import { Buy, Transfer } from "@/lib/interfaces";
+import ClaimNFT from "../cards/ClaimNFT";
+import Link from "next/link";
 
 interface ModalProps {
-  userTransactionData: UserTransactionHistoryData[]
-  dataBuys: Buy[]
-  dataTransfer: Transfer[]
-  isAdmin: boolean
-  isOwner?: boolean
+  userTransactionData: UserTransactionHistoryData[];
+  dataBuys: Buy[];
+  dataTransfer: Transfer[];
+  isAdmin: boolean;
+  isOwner?: boolean;
 }
 
 export default function DashboardComponent({
@@ -36,32 +36,31 @@ export default function DashboardComponent({
   isAdmin,
   isOwner = false,
 }: ModalProps) {
-  const [dataOnDisplay, setDataOnDisplay] = useState("Transfers")
-  const [isCardVisible, setIsCardVisible] = useState(false)
-  const [isClaimTokensOpen, setClaimTokensOpen] = useState(false)
-  const [isMintTokensOpen, setMintTokensOpen] = useState(false)
-  const [showClaimModal, setShowClaimModal] = useState(false)
+  const [dataOnDisplay, setDataOnDisplay] = useState("Transfers");
+  const [isCardVisible, setIsCardVisible] = useState(false);
+  const [isClaimTokensOpen, setClaimTokensOpen] = useState(false);
+  const [isMintTokensOpen, setMintTokensOpen] = useState(false);
+  const [showClaimModal, setShowClaimModal] = useState(false);
 
-  const router = useRouter()
+  const router = useRouter();
   //
   const {
     data: { seabrick },
-  } = useContractContext()
+  } = useContractContext();
 
   const USDollar = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-  })
+  });
   //
 
   const columnBuyInterface = [
     { key: "tokenId", label: "Token Id" },
-    { key: "buyer", label: "From" },
+    { key: "buyer", label: "Buyer" },
     { key: "transactionHash", label: "TX Hash" },
     { key: "blockNumber", label: "Block Number" },
-    { key: "to_address", label: "To" },
     { key: "blockTimestamp", label: "Date" },
-  ]
+  ];
 
   const columnTransferInterface = [
     { key: "id", label: "TX Hash" },
@@ -71,14 +70,14 @@ export default function DashboardComponent({
     { key: "from", label: "From" },
     { key: "to", label: "To" },
     { key: "blockTimestamp", label: "Time" },
-  ]
+  ];
 
   // TODO: Conectar
-  const totalBalance = 3500
-  const totalQuantity = 35
-  const lastMontQuantity = isAdmin ? 5 : 100
-  const thisMontQuantity = isAdmin ? 10 : 300
-  const differenceQuantity = thisMontQuantity - lastMontQuantity
+  const totalBalance = 3500;
+  const totalQuantity = 35;
+  const lastMontQuantity = isAdmin ? 5 : 100;
+  const thisMontQuantity = isAdmin ? 10 : 300;
+  const differenceQuantity = thisMontQuantity - lastMontQuantity;
 
   //
   return (
@@ -214,7 +213,7 @@ export default function DashboardComponent({
                   <button
                     className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-left text-xl"
                     onClick={() => {
-                      router.push("/admin-list")
+                      router.push("/admin-list");
                     }}
                   >
                     <UserIcon className="size-[1.5rem] inline mx-2 mt-[-3px]" />
@@ -249,8 +248,8 @@ export default function DashboardComponent({
                       <button
                         className="text-start text-lg px-3 h-1/2 p-1"
                         onClick={() => {
-                          setIsCardVisible(false)
-                          setDataOnDisplay("Buys")
+                          setIsCardVisible(false);
+                          setDataOnDisplay("Buys");
                         }}
                       >
                         Buys
@@ -258,8 +257,8 @@ export default function DashboardComponent({
                       <button
                         className="text-start text-lg px-3 h-1/2 p-1"
                         onClick={() => {
-                          setIsCardVisible(false)
-                          setDataOnDisplay("Transfers")
+                          setIsCardVisible(false);
+                          setDataOnDisplay("Transfers");
                         }}
                       >
                         Transfers
@@ -291,5 +290,5 @@ export default function DashboardComponent({
         </div>
       </div>
     </>
-  )
+  );
 }

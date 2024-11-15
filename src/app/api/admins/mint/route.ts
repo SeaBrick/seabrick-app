@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { data: queryData, error: queryError } = await supabaseClient
+  const { data: queryData } = await supabaseClient
     .from("wallet_users")
     .select("address")
     .eq("user_id", dataUser.id)

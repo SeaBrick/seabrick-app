@@ -19,18 +19,10 @@ const RegisterWalletForm: React.FC = () => {
   const { address, isConnected } = useAccount();
   const { signMessageAsync } = useSignMessage();
 
-  // TODO: Show not "installed wallet"
-  const [, setHaveWallet] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [errors, setErrors] = useState<Errors>({});
   const [openModal, setOpenModal] = useState<boolean>(false);
   const router = useRouter();
-
-  useEffect(() => {
-    if (window.ethereum) {
-      setHaveWallet(true);
-    }
-  }, []);
 
   useEffect(() => {
     showError("");

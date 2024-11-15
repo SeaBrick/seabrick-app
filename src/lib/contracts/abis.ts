@@ -140,7 +140,7 @@ export const ierc20Abi = [
       { name: "value", internalType: "uint256", type: "uint256" },
     ],
     name: "approve",
-    outputs: [{ name: "", internalType: "bool", type: "bool" }],
+    outputs: [],
     stateMutability: "nonpayable",
   },
   {

@@ -57,7 +57,6 @@ export default function Dashboard() {
       <div className="w-full px-3 max-w-[2000px] m-auto">
         <div className="w-full justify-start items-center gap-2 inline-flex mb-4">
           <Image
-            // TODO: Usar un .webp
             src={`/brick.webp`}
             alt="user-image"
             height={45}

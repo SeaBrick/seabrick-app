@@ -8,7 +8,7 @@ interface ModalProps {
   children: React.ReactNode
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, children }) => {
   return (
     <div
       className={`fixed z-10 inset-0 overflow-y-auto ${

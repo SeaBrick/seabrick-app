@@ -11,7 +11,6 @@ import { useSearchParams } from "next/navigation";
 import type { Errors } from "@/lib/interfaces";
 import { LoginBanner } from "@/components/layout/LoginBanner";
 
-// TODO: Add captchas
 export default function LoginPage() {
   const { refetch: authRefetch } = useAuth();
   const [haveWallet, setHaveWallet] = useState<boolean>(false);

@@ -1,7 +1,6 @@
 import { Dispatch, ReactNode, SetStateAction, useState } from "react"
 import XMarkIcon from "@heroicons/react/24/outline/XMarkIcon"
 import SubmitButton from "../buttons/SubmitButton"
-import { useFormState, useFormStatus } from "react-dom"
 export function ModalConfirm({
   title,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -23,7 +22,6 @@ export function ModalConfirm({
   closeAll: Dispatch<SetStateAction<boolean>>
   openBack: Dispatch<SetStateAction<boolean>>
 }) {
-  const { pending } = useFormStatus()
   const [isSelfOpen, setSelfOpen] = useState(true)
   const handleConfirm = async (_formData: FormData) => {
     await onConfirm(true)
