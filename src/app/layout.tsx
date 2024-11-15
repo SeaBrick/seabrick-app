@@ -11,6 +11,17 @@ import { Web3Provider } from "@/config/Web3Provider";
 import { Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+// TODO: Send email receipts after a buy that contains info of their tokens, like:
+//       - Token IDs
+//       - Amount Spent on Dollars (always) (if buy with crypto, it will means the amount spent on Dollars $ in that moment)
+//       - Amounr spent on Crypto (if buy with crypto)
+//       - Via: Stripe/Crypto
+//       - Tx ID: Session ID for stripe or Tx Hash for Crypto
+//       - Time of buy
+//       - User email
+//       - Wallet user (if apply)
+//       - A buy with crypto can be made while logged a given user email. We should specify what wallet address made it
+
 export const metadata: Metadata = {
   title: "Seabrick App",
   description: "Seabrick Web app",
