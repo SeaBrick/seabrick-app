@@ -1,11 +1,13 @@
+import { useEffect, useState } from "react";
+import { formatUnits } from "viem";
+import { useConfig } from "wagmi";
 import { useContractContext } from "@/context/contractContext";
 import { ERC20Token } from "@/lib/interfaces";
-import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import Modal from "./Modal";
-import { formatUnits } from "viem";
-import { ierc20Abi } from "@/lib/contracts/abis";
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import {
+  approveTokens,
+  toastifyPromiseWrapper,
+} from "@/lib/contracts/clientTransactions";
 
 interface ApproveERC20TokensProps {
   token: ERC20Token;
@@ -19,57 +21,55 @@ const ApproveERC20Modal: React.FC<ApproveERC20TokensProps> = ({
   setOpen,
   token,
   totalAmount,
-  currentMarketAllowance,
 }) => {
   const [amountToApprove, setAmountToApprove] = useState<bigint>(0n);
-  const { data: hash, writeContract, isPending } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess: isConfirmed } =
-    useWaitForTransactionReceipt({
-      hash,
-    });
+  const [isApproving, setIsApproving] = useState<boolean>(false);
+  const config = useConfig();
   const {
     data: {
       market: { id: marketAddress },
     },
   } = useContractContext();
 
-  async function submit(e: React.FormEvent<HTMLFormElement>) {
+  async function submitApprove(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    writeContract({
-      address: token.address,
-      abi: ierc20Abi,
-      functionName: "approve",
-      args: [marketAddress, amountToApprove],
-    });
+    setIsApproving(true);
+    toastifyPromiseWrapper(() =>
+      approveTokens(config, {
+        tokenAddress: token.address,
+        marketAddress,
+        amount: amountToApprove,
+      })
+    );
+    setIsApproving(false);
+    setOpen(false);
   }
 
   useEffect(() => {
     // Slip page of 1%
+    // But we only will be approve the difference
     const amountWithSlip = (totalAmount * 1n) / 100n + totalAmount;
-    if (currentMarketAllowance >= amountWithSlip) {
-      setAmountToApprove(0n);
-    } else {
-      setAmountToApprove(amountWithSlip - currentMarketAllowance);
-    }
-  }, [currentMarketAllowance, totalAmount]);
-
-  useEffect(() => {
-    if (isConfirmed) {
-      toast.success("Tokens approved");
-      setOpen(false);
-    }
-  }, [isConfirmed, setOpen]);
+    setAmountToApprove(amountWithSlip);
+  }, [totalAmount]);
 
   return (
     <Modal open={open} setOpen={setOpen}>
       <div className="rounded flex flex-col gap-y-4 bg-white px-6 py-8 w-[500px]">
         <h1 className="text-xl font-bold font-['Noto Sans']">Approve tokens</h1>
 
-        <p className="text-sm font-['Noto Sans']">
-          You need to approve your tokens to continue
-        </p>
-        <form onSubmit={submit} className="rounded flex flex-col gap-y-2 ">
+        <div>
+          <p className="text-sm font-['Noto Sans']">
+            You need to approve your tokens to continue
+          </p>
+          <p className="text-sm font-['Noto Sans']">
+            We will approve only the difference
+          </p>
+        </div>
+        <form
+          onSubmit={submitApprove}
+          className="rounded flex flex-col gap-y-2 "
+        >
           <div className="space-y-2">
             <input
               title="Amount to approve"
@@ -86,19 +86,12 @@ const ApproveERC20Modal: React.FC<ApproveERC20TokensProps> = ({
             </p>
           </div>
           <button
-            disabled={isPending || isConfirming}
+            disabled={isApproving}
             className="grow shrink basis-0 self-stretch bg-[#2069a0] rounded-[5px] justify-center items-center gap-2.5 hover:bg-[#2069a0]/80 disabled:cursor-not-allowed disabled:bg-gray-400 text-center text-white text-sm font-normal font-['Noto Sans'] flex justify-center p-2 rounded w-fit mx-auto"
             type="submit"
           >
-            {isPending
-              ? "Sending..."
-              : isConfirming
-                ? "Confirming..."
-                : "Approve"}
+            {isApproving ? "Approving..." : "Approve"}
           </button>
-
-          {isConfirming && <div>Waiting for confirmation...</div>}
-          {isConfirmed && <div>Transaction confirmed.</div>}
         </form>
       </div>
     </Modal>
