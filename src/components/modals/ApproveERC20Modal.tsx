@@ -45,7 +45,7 @@ const ApproveERC20Modal: React.FC<ApproveERC20TokensProps> = ({
     setIsApproving(true);
 
     // Approve tokens tranasction with toastify.promise wrapper
-    toastifyPromiseWrapper(() =>
+    await toastifyPromiseWrapper(() =>
       approveTokens(config, {
         tokenAddress: token.address,
         marketAddress,

@@ -72,7 +72,7 @@ const BuyNFTCrypto: React.FC = () => {
     setIsBuying(true);
 
     // Approve tokens tranasction with toastify.promise wrapper
-    toastifyPromiseWrapper(() =>
+    await toastifyPromiseWrapper(() =>
       buySeabrick(config, {
         marketAddress,
         walletAddress,
@@ -270,6 +270,11 @@ const BuyNFTCrypto: React.FC = () => {
                               ) : (
                                 <SubmitButton
                                   onClick={buyAction}
+                                  disabledTitle={
+                                    !termsAccepted
+                                      ? "You must accept the terms"
+                                      : undefined
+                                  }
                                   disable={
                                     !isConnected || !termsAccepted || isBuying
                                   }
