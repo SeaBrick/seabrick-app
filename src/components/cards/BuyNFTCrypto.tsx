@@ -241,7 +241,7 @@ const BuyNFTCrypto: React.FC = () => {
                                 type="checkbox"
                                 className="mr-3"
                                 required
-                                onChange={(e) => onChangeAccepTerms(e)}
+                                onChange={onChangeAccepTerms}
                               />
                               <p className="text-[#1a1a1a]/70 text-[13px] font-normal font-['Noto Sans'] leading-[16.90px]">
                                 I accept the Seabrick{" "}
