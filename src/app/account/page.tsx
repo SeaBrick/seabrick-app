@@ -202,9 +202,11 @@ const AccountDetails: React.FC = () => {
         </form>
       )}
 
-      <div className="pt-4">
-        <ChangePasswordForm />
-      </div>
+      {userType == "email" && (
+        <div className="pt-4">
+          <ChangePasswordForm />
+        </div>
+      )}
 
       <div className="pt-4">
         <AccountWallet />
