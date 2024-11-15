@@ -4,12 +4,7 @@ import SubmitButton from "../buttons/SubmitButton";
 import { useContractContext } from "@/context/contractContext";
 import AggregatorsLoader from "../loaders/AggregatorsLoader";
 import { Aggregator, ERC20Token } from "@/lib/interfaces";
-import {
-  useAccount,
-  useClient,
-  useReadContract,
-  useWriteContract,
-} from "wagmi";
+import { useAccount, useReadContract, useWriteContract } from "wagmi";
 import {
   aggregatorV3InterfaceAbi,
   ierc20Abi,
@@ -39,6 +34,7 @@ const BuyNFTCrypto: React.FC = () => {
   const [tokens, setTokens] = useState<ERC20Token[]>([]);
   const [pricePerToken, setPricePerToken] = useState<bigint>(0n);
   const [quantity, setQuantity] = useState<number>(1);
+  const [termsAccepted, setTermsAccepted] = useState<boolean>(false);
   const [totalPrice, setTotalPrice] = useState<bigint>(0n);
   const [approveOpen, setApproveOpen] = useState<boolean>(false);
   const { isConnected, address: walletAddress } = useAccount();
@@ -68,6 +64,10 @@ const BuyNFTCrypto: React.FC = () => {
     if (!isNaN(parsedValue)) {
       setQuantity(parsedValue);
     }
+  }
+
+  function onChangeAccepTerms(e: React.ChangeEvent<HTMLInputElement>) {
+    setTermsAccepted(e.target.checked);
   }
 
   async function buyAction() {
@@ -219,7 +219,6 @@ const BuyNFTCrypto: React.FC = () => {
                         <div>
                           <p className="flex gap-x-1 font-['Noto Sans']">
                             <span className="font-bold">Amount required:</span>
-
                             <span>
                               ~
                               {parseFloat(
@@ -240,9 +239,9 @@ const BuyNFTCrypto: React.FC = () => {
                               <input
                                 id="check"
                                 type="checkbox"
-                                placeholder=""
                                 className="mr-3"
                                 required
+                                onChange={(e) => onChangeAccepTerms(e)}
                               />
                               <p className="text-[#1a1a1a]/70 text-[13px] font-normal font-['Noto Sans'] leading-[16.90px]">
                                 I accept the Seabrick{" "}
@@ -267,17 +266,24 @@ const BuyNFTCrypto: React.FC = () => {
                                   onClick={() => {
                                     setApproveOpen(true);
                                   }}
-                                  disable={!isConnected}
+                                  disabledTitle={
+                                    !termsAccepted
+                                      ? "You must accept the terms"
+                                      : undefined
+                                  }
+                                  disable={!isConnected || !termsAccepted}
                                   buttonClass="grow shrink basis-0 h-[45px] p-[17px] bg-[#2069a0] w-full rounded-[5px] justify-center items-center gap-2.5 flex"
                                   label="Approve SOL Transaction"
                                 />
                               ) : (
                                 <SubmitButton
                                   onClick={() => {
-                                    buyAction();
+                                    // buyAction();
                                     console.log("Buy");
                                   }}
-                                  disable={!isConnected || isBuying}
+                                  disable={
+                                    !isConnected || !termsAccepted || isBuying
+                                  }
                                   buttonClass="grow shrink basis-0 h-[45px] p-[17px] bg-[#2069a0] w-full rounded-[5px] justify-center items-center gap-2.5 flex"
                                   label={isBuying ? "Buying" : "Buy Seabrick"}
                                 />
