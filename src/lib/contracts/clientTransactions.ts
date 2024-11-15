@@ -6,14 +6,20 @@ import {
   writeContract,
   waitForTransactionReceipt,
 } from "wagmi/actions";
-import { ierc20Abi } from "./abis";
-import { type Address, BaseError as ViemBaseError } from "viem";
+import { ierc20Abi, iMarketAbi } from "./abis";
+import { type Address, Hex, BaseError as ViemBaseError } from "viem";
 import { BaseError as WagmiBaseError } from "@wagmi/core";
 
 interface ApproveTokensOptions {
   tokenAddress: Address;
   marketAddress: Address;
   amount: bigint;
+}
+interface BuySeabrickOptions {
+  marketAddress: Address;
+  walletAddress: Address | undefined;
+  agregatorName: Hex;
+  quantity: number;
 }
 
 export async function approveTokens(
@@ -22,6 +28,7 @@ export async function approveTokens(
 ) {
   const { tokenAddress, marketAddress, amount } = options;
 
+  // Simulate the transaction to catch any early error
   const { request } = await simulateContract(config, {
     address: tokenAddress,
     abi: ierc20Abi,
@@ -29,10 +36,10 @@ export async function approveTokens(
     args: [marketAddress, amount],
   });
 
-  // Get the tx
+  // Send the tx
   const txHash = await writeContract(config, request);
 
-  // Wait for the transaction receipt
+  // Wait for the transaction receipt with 2 confirmations
   const resp = await waitForTransactionReceipt(config, {
     hash: txHash,
     confirmations: 2,
@@ -42,6 +49,37 @@ export async function approveTokens(
     return "Tokens approved";
   } else {
     throw new Error("Transaction failed");
+  }
+}
+
+export async function buySeabrick(config: Config, options: BuySeabrickOptions) {
+  const { marketAddress, walletAddress, agregatorName, quantity } = options;
+
+  if (!walletAddress) {
+    throw new Error("No wallet address");
+  }
+
+  // Simulate the transaction to catch any early error
+  const { request } = await simulateContract(config, {
+    address: marketAddress,
+    abi: iMarketAbi,
+    functionName: "buy",
+    args: [walletAddress, agregatorName, quantity],
+  });
+
+  // Send the tx
+  const txHash = await writeContract(config, request);
+
+  // Wait for the transaction receipt with 2 confirmations
+  const resp = await waitForTransactionReceipt(config, {
+    hash: txHash,
+    confirmations: 2,
+  });
+
+  if (resp.status == "success") {
+    return "Buy transaction complete";
+  } else {
+    throw new Error("Buy transaction failed");
   }
 }
 
