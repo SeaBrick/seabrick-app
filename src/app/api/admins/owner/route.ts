@@ -7,6 +7,20 @@ import { getContractsOwner } from "@/lib/contracts/transactions";
 import { Address } from "viem";
 
 // TODO: Make a transaction at front end and then check the transaction here...
+// I mean, a transaction for transfering the ownership...
+// THere are few options here (I like more the 3rd but need tecnically two transactions):
+// - Fullfil (NOT SENT) a transaction wherethe user at frontend (current owner) will sign it. Then
+//     we go and send it now here on the backend. This way we make sure that the transaction
+//     was made and we can change the owner of the app right away.
+// - Make the transfer ownership at the frontend, then we can use the transaction hash here
+//     (or just check the new current owner) and transfer it to that. The only risk is something
+//     fail at the backend, so the ownership will be sent to the address but the owner role
+//     will stay on the previous user account.
+// - Make a transfer ownership at the frontend to send the ownership to our wallet at database
+//      and then we can transfer the ownership again to the desired wallet user. We can have
+//      some error catches in case something bad happened at backend, we still letting the user
+//      to retry to send the ownership to his desired address
+
 export async function POST(request: NextRequest) {
   const supabaseClient = createClient();
 
