@@ -22,10 +22,18 @@ interface BuySeabrickOptions {
   quantity: number;
 }
 
+interface ToastifyPromiseReturn<T> {
+  message: string;
+  data: T;
+}
+interface TransactionData {
+  txHash: Hex;
+}
+
 export async function approveTokens(
   config: Config,
   options: ApproveTokensOptions
-) {
+): Promise<ToastifyPromiseReturn<TransactionData>> {
   const { tokenAddress, marketAddress, amount } = options;
 
   // Simulate the transaction to catch any early error
@@ -46,13 +54,16 @@ export async function approveTokens(
   });
 
   if (resp.status == "success") {
-    return "Tokens approved";
+    return { message: "Tokens approved", data: { txHash } };
   } else {
     throw new Error("Transaction failed");
   }
 }
 
-export async function buySeabrick(config: Config, options: BuySeabrickOptions) {
+export async function buySeabrick(
+  config: Config,
+  options: BuySeabrickOptions
+): Promise<ToastifyPromiseReturn<TransactionData>> {
   const { marketAddress, walletAddress, agregatorName, quantity } = options;
 
   if (!walletAddress) {
@@ -77,19 +88,21 @@ export async function buySeabrick(config: Config, options: BuySeabrickOptions) {
   });
 
   if (resp.status == "success") {
-    return "Buy transaction complete";
+    return { message: "Buy transaction complete", data: { txHash } };
   } else {
     throw new Error("Buy transaction failed");
   }
 }
 
 // Toastify wrapper function
-export async function toastifyPromiseWrapper(fn: () => Promise<string>) {
+export async function toastifyPromiseWrapper<T>(
+  fn: () => Promise<ToastifyPromiseReturn<T>>
+) {
   return toast.promise(fn(), {
     pending: "Waiting for the transaction...",
     success: {
       render({ data }) {
-        return data;
+        return data.message;
       },
     },
     error: {
