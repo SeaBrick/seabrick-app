@@ -71,12 +71,10 @@ export async function getAccounts(): Promise<AccountResponse[]> {
     .accounts;
 }
 
-export async function getSeabrickContract(
-  address: string
-): Promise<SeabrickNFT> {
+export async function getSeabrickContract(): Promise<SeabrickNFT> {
   const document = gql`
     {
-      seabrickContract(id: "${address}") {
+      seabrickContracts {
         id
         owner
         name
@@ -86,16 +84,14 @@ export async function getSeabrickContract(
     }
   `;
 
-  return (await generateRequest<{ seabrickContract: SeabrickNFT }>(document))
-    .seabrickContract;
+  return (await generateRequest<{ seabrickContracts: SeabrickNFT[] }>(document))
+    .seabrickContracts[0];
 }
 
-export async function getSeabrickMarket(
-  address: string
-): Promise<SeabrickMarket> {
+export async function getSeabrickMarket(): Promise<SeabrickMarket> {
   const document = gql`
     {
-      seabrickMarketContract(id: "${address}") {
+      seabrickMarketContracts {
         id
         owner
         price
@@ -105,8 +101,10 @@ export async function getSeabrickMarket(
   `;
 
   return (
-    await generateRequest<{ seabrickMarketContract: SeabrickMarket }>(document)
-  ).seabrickMarketContract;
+    await generateRequest<{ seabrickMarketContracts: SeabrickMarket[] }>(
+      document
+    )
+  ).seabrickMarketContracts[0];
 }
 
 export async function getLatestBuys(

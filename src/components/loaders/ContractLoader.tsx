@@ -2,12 +2,11 @@
 import React, { useEffect } from "react";
 import { wrapPromise } from "@/lib/utils";
 import { getSeabrickContract, getSeabrickMarket } from "@/lib/subgraph";
-import { addresses } from "@/lib/contracts";
 import { useContractContext } from "@/context/contractContext";
 
 const getContracts = async () => {
-  const seabrick = await getSeabrickContract(addresses.SeabrickNFT);
-  const market = await getSeabrickMarket(addresses.SeabrickMarket);
+  const seabrick = await getSeabrickContract();
+  const market = await getSeabrickMarket();
 
   return { seabrick, market };
 };
