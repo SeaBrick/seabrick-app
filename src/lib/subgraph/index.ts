@@ -8,7 +8,7 @@ import {
   TransferResponse,
 } from "../interfaces/subgraph";
 import { Address, Hash, isHash } from "viem";
-import { SeabrickMarket, SeabrickNFT } from "../interfaces";
+import { OwnershipSettings, SeabrickMarket, SeabrickNFT } from "../interfaces";
 import { sleep } from "../utils";
 
 export const SubgraphClient = new GraphQLClient(
@@ -104,6 +104,23 @@ export async function getSeabrickMarket(): Promise<SeabrickMarket> {
       document
     )
   ).seabrickMarketContracts[0];
+}
+
+export async function getOwnership(): Promise<OwnershipSettings> {
+  const document = gql`
+    {
+      ownershipSettings(id: "contracts") {
+        id
+        ownershipAddress
+        seabrickMarketAddress
+        seabrickContractAddress
+      }
+    }
+  `;
+
+  return (
+    await generateRequest<{ ownershipSettings: OwnershipSettings }>(document)
+  ).ownershipSettings;
 }
 
 export async function getLatestBuys(

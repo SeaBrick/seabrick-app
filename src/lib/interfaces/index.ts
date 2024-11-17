@@ -64,3 +64,9 @@ export interface SeabrickMarket {
   price: string;
   token: Address;
 }
+
+export interface OwnershipSettings {
+  ownershipAddress: Address;
+  seabrickMarketAddress: Address;
+  seabrickContractAddress: Address;
+}
