@@ -44,17 +44,22 @@ const ApproveERC20Modal: React.FC<ApproveERC20TokensProps> = ({
     // User is on approving process
     setIsApproving(true);
 
-    // Approve tokens tranasction with toastify.promise wrapper
-    await toastifyPromiseWrapper(() =>
-      approveTokens(config, {
-        tokenAddress: token.address,
-        marketAddress,
-        amount: amountToApprove,
-      })
-    );
+    try {
+      // Approve tokens tranasction with toastify.promise wrapper
+      await toastifyPromiseWrapper(() =>
+        approveTokens(config, {
+          tokenAddress: token.address,
+          marketAddress,
+          amount: amountToApprove,
+        })
+      );
 
-    // Refetch the allowance of the market
-    await refetchAllowance();
+      // Refetch the allowance of the market
+      await refetchAllowance();
+    } catch (error) {
+      // Print the error
+      console.log(error);
+    }
 
     // Closing the approve process
     setIsApproving(false);
