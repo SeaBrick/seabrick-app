@@ -1,4 +1,3 @@
-// "use client";
 import { gql, GraphQLClient } from "graphql-request";
 import {
   AccountResponse,
