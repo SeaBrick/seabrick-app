@@ -1,6 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React from "react";
 import DashboardComponent from "@/components/layout/DashboardComponent";
 import { getLatestBuys, getLatestTransfers } from "@/lib/subgraph";
 import { wrapPromise } from "@/lib/utils";
@@ -19,14 +18,6 @@ const transfersData = wrapPromise(getLatestTransfersInfo());
 
 export default function AdminPage() {
   const { userRole } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    // If no user role, it's just an unauthenticated
-    if (userRole === null) {
-      router.push("/dashboard");
-    }
-  }, [router, userRole]);
 
   const testDataMap: UserTransactionHistoryData[] = [
     {
