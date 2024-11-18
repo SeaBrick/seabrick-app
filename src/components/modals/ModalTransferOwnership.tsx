@@ -240,7 +240,7 @@ const App: React.FC<{ disableButton: boolean }> = ({ disableButton }) => {
   }
 
   return (
-    <div className="">
+    <>
       <button
         className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-left w-full disabled:cursor-not-allowed disabled:bg-gray-400 text-lg"
         onClick={() => setShowEmailModal(true)}
@@ -269,7 +269,7 @@ const App: React.FC<{ disableButton: boolean }> = ({ disableButton }) => {
         onClose={() => setShowSuccessModal(false)}
         email={email}
       />
-    </div>
+    </>
   )
 }
 
