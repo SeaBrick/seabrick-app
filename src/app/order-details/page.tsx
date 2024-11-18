@@ -111,6 +111,8 @@ export default async function OrderDetails({
 
     const appUrl = getUrl(headers().get("referer"));
 
+    console.log("appUrl: ", appUrl);
+
     const response = await fetch(
       `${appUrl}/api/stripe/checkout_sessions?session_id=${session_id}&skip_check=${1}`,
       {
