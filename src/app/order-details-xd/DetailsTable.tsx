@@ -23,7 +23,13 @@ interface CryptoTable {
 
 interface StripeTable {
   type: "stripe";
+  stripeId: string;
   tokensId: string[];
+  totalAmount: number;
+  currency: string;
+  txHash: string;
+  buyerEmail: string;
+  createdAt: string;
 }
 
 export type DetailsTableProps = CryptoTable | StripeTable;
