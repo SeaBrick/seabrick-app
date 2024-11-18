@@ -11,7 +11,7 @@ import {
 export async function POST(request: NextRequest) {
   // Get the current redirect url
   const fullUrl = request.headers.get("referer");
-  const redirectUrl = getUrl(fullUrl);
+  const redirectUrl = getUrl(fullUrl, false);
 
   // Get the supbase client
   const supabase = createClient();
