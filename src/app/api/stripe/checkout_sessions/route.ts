@@ -54,7 +54,10 @@ export async function POST(request: NextRequest) {
         terms_of_service: "required",
         promotions: "auto",
       },
-      return_url: redirectUrl + "return?session_id={CHECKOUT_SESSION_ID}",
+
+      return_url:
+        redirectUrl +
+        "order-details-xd?type=stripe&session_id={CHECKOUT_SESSION_ID}",
     });
 
     return NextResponse.json({ clientSecret: session.client_secret });
@@ -126,6 +129,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       status: session.status,
       customer_email: session.customer_details?.email || "Not found",
+      totalAmount: session.amount_total || 0,
+      currency: session.currency || "None",
     });
   } catch (error) {
     console.error("Stripe GET: ", error);
