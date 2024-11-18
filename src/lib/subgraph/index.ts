@@ -217,6 +217,7 @@ export async function getBuysByTransaction(
 
     return buys;
   } catch (e) {
+    console.log(e);
     return [];
   }
 }
