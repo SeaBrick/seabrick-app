@@ -3,8 +3,8 @@ import {
   CurrencyDollarIcon,
   ChevronDownIcon,
   ArrowUpRightIcon,
+  AtSymbolIcon,
 } from "@heroicons/react/24/outline";
-import { useRouter } from "next/navigation";
 import ClaimTokens from "../cards/ClaimNFT";
 import ClaimNFTCard from "../cards/ClaimNFTCard";
 import SeabrickNFTCard from "../cards/SeabrickNFTCard";
@@ -42,8 +42,6 @@ export default function DashboardComponent({
   const [isMintTokensOpen, setMintTokensOpen] = useState(false);
   const [showClaimModal, setShowClaimModal] = useState(false);
 
-  const router = useRouter();
-  //
   const {
     data: { seabrick },
   } = useContractContext();
@@ -208,17 +206,15 @@ export default function DashboardComponent({
             </div>
             <div className="lg:w-[50%] w-full min-h-[10rem] gap-2 flex flex-col">
               {isAdmin ? (
-                <div className="bg-white w-full h-full rounded-[10px] gap-3 p-4 flex flex-col justify-between">
+                <div className="bg-white w-full h-full rounded-[10px] gap-x-3 gap-y-6 p-6 grid grid-cols-2 justify-between">
                   <ModalTransferOwnership disableButton={!isOwner} />
-                  <button
-                    className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-left text-xl"
-                    onClick={() => {
-                      router.push("/admin-list");
-                    }}
+                  <Link
+                    className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-xl flex items-center"
+                    href="/admin-list"
                   >
                     <UserIcon className="size-[1.5rem] inline mx-2 mt-[-3px]" />
-                    Admins
-                  </button>
+                    <span>Admins</span>
+                  </Link>
                   <button
                     className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] text-[white] rounded-[5px] text-left text-xl"
                     onClick={() => setClaimTokensOpen(true)}
@@ -226,6 +222,13 @@ export default function DashboardComponent({
                     <CurrencyDollarIcon className="size-[1.5rem] inline mx-2 mt-[-3px]" />
                     Claim Earnings
                   </button>
+                  <Link
+                    className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-xl flex items-center"
+                    href="/admin/template"
+                  >
+                    <AtSymbolIcon className="size-[1.5rem] inline mx-2 mt-[-3px]" />
+                    <span>Email template</span>
+                  </Link>
                 </div>
               ) : (
                 <ClaimNFTCard />

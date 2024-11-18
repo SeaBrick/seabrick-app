@@ -242,7 +242,7 @@ const App: React.FC<{ disableButton: boolean }> = ({ disableButton }) => {
   return (
     <>
       <button
-        className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-left w-full disabled:cursor-not-allowed disabled:bg-gray-400 text-lg"
+        className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] text-[white] rounded-[5px] text-left w-full disabled:cursor-not-allowed disabled:bg-gray-400 text-lg"
         onClick={() => setShowEmailModal(true)}
         disabled={disableButton}
       >
