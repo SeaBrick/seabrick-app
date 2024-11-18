@@ -15,6 +15,7 @@ import {
   buySeabrick,
   toastifyPromiseWrapper,
 } from "@/lib/contracts/clientTransactions";
+import { useRouter } from "next/navigation";
 
 // TODO: After a success buy, redirect to the return cart to show the buy info
 const BuyNFTCrypto: React.FC = () => {
@@ -36,6 +37,7 @@ const BuyNFTCrypto: React.FC = () => {
   const { isConnected, address: walletAddress } = useAccount();
   const [isBuying, setIsBuying] = useState<boolean>(false);
   const config = useConfig();
+  const router = useRouter();
 
   const { data: latestRoundData } = useReadContract({
     abi: aggregatorV3InterfaceAbi,
@@ -68,23 +70,28 @@ const BuyNFTCrypto: React.FC = () => {
   async function buyAction() {
     setIsBuying(true);
 
-    // Approve tokens tranasction with toastify.promise wrapper
-    await toastifyPromiseWrapper(() =>
-      buySeabrick(config, {
-        marketAddress,
-        walletAddress,
-        quantity,
-        agregatorName: aggregators[selectedToken].name,
-      })
-    );
+    try {
+      // Approve tokens tranasction with toastify.promise wrapper
+      const { data } = await toastifyPromiseWrapper(() =>
+        buySeabrick(config, {
+          marketAddress,
+          walletAddress,
+          quantity,
+          agregatorName: aggregators[selectedToken].name,
+        })
+      );
 
-    // Refetch this (? maybe no)
-    await refetchAllowance();
+      // Refetch this (? maybe no)
+      await refetchAllowance();
 
-    // Remove the state
-    setIsBuying(false);
+      router.push(`/order-details?type=crypto&hash=${data.txHash}`);
+    } catch (error) {
+      // Print the error
+      console.log(error);
 
-    // TODO: Redirect with the tx hash I guess
+      // Remove the state
+      setIsBuying(false);
+    }
   }
 
   useEffect(() => {

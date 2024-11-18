@@ -1,15 +1,14 @@
-"use client";
 import { gql, GraphQLClient } from "graphql-request";
 import {
   AccountResponse,
   AggregatorResponse,
   BuyResponse,
   MetaResponse,
-  SingleBuyResponse,
+  SingleBuyByTxResponse,
   TransferResponse,
 } from "../interfaces/subgraph";
 import { Address, Hash, isHash } from "viem";
-import { SeabrickMarket, SeabrickNFT } from "../interfaces";
+import { OwnershipSettings, SeabrickMarket, SeabrickNFT } from "../interfaces";
 import { sleep } from "../utils";
 
 export const SubgraphClient = new GraphQLClient(
@@ -71,12 +70,10 @@ export async function getAccounts(): Promise<AccountResponse[]> {
     .accounts;
 }
 
-export async function getSeabrickContract(
-  address: string
-): Promise<SeabrickNFT> {
+export async function getSeabrickContract(): Promise<SeabrickNFT> {
   const document = gql`
     {
-      seabrickContract(id: "${address}") {
+      seabrickContracts {
         id
         owner
         name
@@ -86,16 +83,14 @@ export async function getSeabrickContract(
     }
   `;
 
-  return (await generateRequest<{ seabrickContract: SeabrickNFT }>(document))
-    .seabrickContract;
+  return (await generateRequest<{ seabrickContracts: SeabrickNFT[] }>(document))
+    .seabrickContracts[0];
 }
 
-export async function getSeabrickMarket(
-  address: string
-): Promise<SeabrickMarket> {
+export async function getSeabrickMarket(): Promise<SeabrickMarket> {
   const document = gql`
     {
-      seabrickMarketContract(id: "${address}") {
+      seabrickMarketContracts {
         id
         owner
         price
@@ -105,8 +100,27 @@ export async function getSeabrickMarket(
   `;
 
   return (
-    await generateRequest<{ seabrickMarketContract: SeabrickMarket }>(document)
-  ).seabrickMarketContract;
+    await generateRequest<{ seabrickMarketContracts: SeabrickMarket[] }>(
+      document
+    )
+  ).seabrickMarketContracts[0];
+}
+
+export async function getOwnership(): Promise<OwnershipSettings> {
+  const document = gql`
+    {
+      ownershipSettings(id: "contracts") {
+        id
+        ownershipAddress
+        seabrickMarketAddress
+        seabrickContractAddress
+      }
+    }
+  `;
+
+  return (
+    await generateRequest<{ ownershipSettings: OwnershipSettings }>(document)
+  ).ownershipSettings;
 }
 
 export async function getLatestBuys(
@@ -174,27 +188,38 @@ export async function getAggregatorsData(): Promise<AggregatorResponse[]> {
   ).aggregatorDatas;
 }
 
-export async function getSingleBuy(
+export async function getBuysByTransaction(
   txHash: Hash
-): Promise<SingleBuyResponse | null> {
-  const document = gql`
+): Promise<SingleBuyByTxResponse[]> {
+  try {
+    const document = gql`
     {
       buys(where: {transactionHash: "${txHash}"}) {
         tokenId
-        transactionHash
         buyer
+        amountPaid
         blockNumber
         blockTimestamp
+        paymentToken {
+          decimals
+          symbol
+          address
+        }
       }
     }
   `;
 
-  const buys = (await generateRequest<{ buys: SingleBuyResponse[] }>(document))
-    .buys;
+    const buys = (
+      await generateRequest<{ buys: SingleBuyByTxResponse[] }>(document)
+    ).buys;
 
-  if (buys.length == 0) return null;
+    if (buys.length == 0) return [];
 
-  return buys[0];
+    return buys;
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
 }
 
 export async function getAccount(

@@ -2,16 +2,9 @@ export interface TableColumn {
   key: string
   label: string
 }
-import { processTime, timeAgo } from "@/lib/utils"
+import { processTime, timeAgo, truncateString } from "@/lib/utils"
 import TextCopier from "../TextCopier"
-export function truncateString(str: string) {
-  if (str.length <= 13) {
-    return str
-  }
-  const firsts = str.slice(0, 5)
-  const lasts = str.slice(-5)
-  return firsts + "..." + lasts
-}
+
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function Table({

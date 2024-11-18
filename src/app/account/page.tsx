@@ -177,7 +177,15 @@ const AccountDetails: React.FC = () => {
 
           {modifying ? (
             <div className="flex gap-x-4 justify-end">
-              <SubmitButton disable={checkChanges()} label="Save" />
+              <div>
+                <SubmitButton
+                  disable={checkChanges()}
+                  buttonClass="grow shrink basis-0 h-[45px] p-[17px] bg-[#2069a0] w-full rounded-[5px] justify-center items-center gap-2.5 flex"
+                  disabledTitle="No changes to save"
+                  label="Save"
+                  loadingLabel="Saving..."
+                />
+              </div>
               <Button
                 type="button"
                 onClick={cancelModify}
@@ -202,9 +210,11 @@ const AccountDetails: React.FC = () => {
         </form>
       )}
 
-      <div className="pt-4">
-        <ChangePasswordForm />
-      </div>
+      {userType == "email" && (
+        <div className="pt-4">
+          <ChangePasswordForm />
+        </div>
+      )}
 
       <div className="pt-4">
         <AccountWallet />

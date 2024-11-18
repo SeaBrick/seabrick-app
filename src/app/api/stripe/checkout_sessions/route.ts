@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
   // If the user does not have an email, redirect to error
   if (!user.email) {
     console.error("User does not have an email. It is a total error");
-    redirect("/error");
+    throw new Error("User does not have an email. It is a total error");
   }
 
   try {
@@ -54,7 +54,10 @@ export async function POST(request: NextRequest) {
         terms_of_service: "required",
         promotions: "auto",
       },
-      return_url: redirectUrl + "return?session_id={CHECKOUT_SESSION_ID}",
+
+      return_url:
+        redirectUrl +
+        "order-details?type=stripe&session_id={CHECKOUT_SESSION_ID}",
     });
 
     return NextResponse.json({ clientSecret: session.client_secret });
@@ -89,7 +92,7 @@ export async function GET(request: NextRequest) {
     // If no session ID, redirect to an error page
     if (!sessionId) {
       console.error("No stripe session ID");
-      redirect("/error");
+      throw new Error("No stripe session ID");
     }
 
     // Get the session object from the sessionId
@@ -115,7 +118,10 @@ export async function GET(request: NextRequest) {
         );
 
         if (isAdded === false) {
-          redirect("/error");
+          return NextResponse.json(
+            { error: "Session already saved" },
+            { status: 500 }
+          );
         }
       }
     }
@@ -123,6 +129,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       status: session.status,
       customer_email: session.customer_details?.email || "Not found",
+      totalAmount: session.amount_total || 0,
+      currency: session.currency || "None",
     });
   } catch (error) {
     console.error("Stripe GET: ", error);

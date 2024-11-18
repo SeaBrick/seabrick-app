@@ -10,7 +10,6 @@ import {
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { iSeabrickAbi, iOwnershipAbi } from "@/lib/contracts/abis";
-import { addresses } from ".";
 import { createClient } from "../supabase/server";
 import { appChains } from "@/config/chains";
 
@@ -19,6 +18,7 @@ import type {
   MintSeabrickResp,
   TransferSeabrickResp,
 } from "@/lib/interfaces/api";
+import { getOwnership, getSeabrickContract } from "../subgraph";
 
 // ERROR if this env is missing
 const wallet_server_key = process.env.WALLET_SERVER_KEY;
@@ -123,10 +123,12 @@ export async function mintSeabrickTokens(
 
   let receipt: TransactionReceipt | undefined = undefined;
 
+  const seabrickNFTAddress = (await getSeabrickContract()).id;
+
   try {
     // We try to mint the tokens using the minter address
     const txHash = await walletClient.writeContract({
-      address: addresses.SeabrickNFT,
+      address: seabrickNFTAddress,
       abi: iSeabrickAbi,
       functionName: "mintBatch",
       args: [toAddress, amount],
@@ -166,8 +168,10 @@ export async function mintSeabrickTokens(
 export async function getContractsOwner(): Promise<Address> {
   const client = getClient();
 
+  const ownerShipAddress = (await getOwnership()).ownershipAddress;
+
   const ownerAddress = await client.readContract({
-    address: addresses.Ownership,
+    address: ownerShipAddress,
     abi: iOwnershipAbi,
     functionName: "owner",
   });
@@ -185,10 +189,12 @@ export async function transferFromVault(
 
   let receipt: TransactionReceipt | undefined = undefined;
 
+  const seabrickNFTAddress = (await getSeabrickContract()).id;
+
   try {
     // We transfer the tokens from the vault client address
     const txHash = await walletClient.writeContract({
-      address: addresses.SeabrickNFT,
+      address: seabrickNFTAddress,
       abi: iSeabrickAbi,
       functionName: "transferBatch",
       args: [walletClient.account.address, toAddress, tokenIds],

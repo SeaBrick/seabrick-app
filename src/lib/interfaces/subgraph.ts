@@ -5,12 +5,19 @@ export interface AggregatorResponse extends Aggregator {
   token: ERC20Token;
 }
 
-export interface SingleBuyResponse {
+export interface PaymentToken {
+  decimals: string;
+  symbol: string;
+  address: Address;
+}
+
+export interface SingleBuyByTxResponse {
   tokenId: string;
-  transactionHash: Hash;
   buyer: Address;
+  amountPaid: string;
   blockNumber: string;
   blockTimestamp: string;
+  paymentToken: PaymentToken;
 }
 
 export interface BlockResponse {

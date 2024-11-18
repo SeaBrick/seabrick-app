@@ -1,17 +1,17 @@
-import { truncateString } from "../table/TableTest"
-import TextCopier from "../TextCopier"
+import { truncateString } from "@/lib/utils";
+import TextCopier from "../TextCopier";
 
 export interface UserTransactionHistoryData {
-  total: number
-  type: "claimed" | "minted"
-  hash: string
-  amount: number
-  token?: string
+  total: number;
+  type: "claimed" | "minted";
+  hash: string;
+  amount: number;
+  token?: string;
 }
 export default function UserTransactionHistory({
   data,
 }: {
-  data: UserTransactionHistoryData[]
+  data: UserTransactionHistoryData[];
 }) {
   return (
     <>
@@ -48,8 +48,8 @@ export default function UserTransactionHistory({
               </div>
             </div>
           </div>
-        )
+        );
       })}
     </>
-  )
+  );
 }
