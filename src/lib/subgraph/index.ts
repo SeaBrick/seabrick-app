@@ -4,7 +4,7 @@ import {
   AggregatorResponse,
   BuyResponse,
   MetaResponse,
-  SingleBuyResponse,
+  SingleBuyByTxResponse,
   TransferResponse,
 } from "../interfaces/subgraph";
 import { Address, Hash, isHash } from "viem";
@@ -188,27 +188,33 @@ export async function getAggregatorsData(): Promise<AggregatorResponse[]> {
   ).aggregatorDatas;
 }
 
-export async function getSingleBuy(
+export async function getBuysByTransaction(
   txHash: Hash
-): Promise<SingleBuyResponse | null> {
+): Promise<SingleBuyByTxResponse[] | null> {
   const document = gql`
     {
       buys(where: {transactionHash: "${txHash}"}) {
         tokenId
-        transactionHash
         buyer
+        amountPaid
         blockNumber
         blockTimestamp
+        paymentToken {
+          decimals
+          symbol
+          address
+        }
       }
     }
   `;
 
-  const buys = (await generateRequest<{ buys: SingleBuyResponse[] }>(document))
-    .buys;
+  const buys = (
+    await generateRequest<{ buys: SingleBuyByTxResponse[] }>(document)
+  ).buys;
 
   if (buys.length == 0) return null;
 
-  return buys[0];
+  return buys;
 }
 
 export async function getAccount(
