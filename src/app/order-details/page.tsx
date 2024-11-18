@@ -119,13 +119,14 @@ const OrderDetails: React.FC = () => {
   const session_id = searchParams.get("session_id");
 
   const [tableDetails, setTableDetails] = useState<DetailsTableProps>();
-
-  // Functions getter to obtain the data
-  // And alse we define the const/object for the table colums
-  let tableData: DetailsTableProps;
+  const [error, setError] = useState<string>();
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function loadData() {
+      setLoading(true);
+      setError(undefined);
+
       try {
         // ALL the error are catched by the Error.tsx boundary
         if (type === "crypto") {
@@ -162,7 +163,13 @@ const OrderDetails: React.FC = () => {
           return;
         }
       } catch (error) {
-        //
+        let errorMessage = "Unknown error";
+        if (error instanceof Error) {
+          errorMessage = error.message;
+        }
+        setError(errorMessage);
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -176,13 +183,14 @@ const OrderDetails: React.FC = () => {
           Order Details
         </h2>
 
-        {tableDetails ? (
-          <DetailsTable {...tableDetails} />
-        ) : (
+        {loading ? (
+          <p>Loading...</p>
+        ) : error !== undefined || tableDetails === undefined ? (
           <div className="text-center p-24 bg-white rounded-lg shadow-xl flex flex-col gap-y-5">
             <h1 className="text-5xl font-bold text-seabrick-blue">Error</h1>
             <div>
               <p className="text-gray-500">Oops! Something went wrong!</p>
+              {error && <p className="text-gray-500">{error}</p>}
             </div>
             <div>
               <Link
@@ -193,17 +201,19 @@ const OrderDetails: React.FC = () => {
               </Link>
             </div>
           </div>
+        ) : (
+          <>
+            <DetailsTable {...tableDetails} />
+            <Link
+              href="/dashboard"
+              prefetch={true}
+              className="flex items-center gap-2 px-4 py-2 rounded mt-4 text-white bg-seabrick-blue hover:bg-seabrick-blue/80 self-end"
+            >
+              <span className="font-['Montserrat'] text-sm">Go to Home</span>
+              <HomeIcon className="size-6" />
+            </Link>
+          </>
         )}
-        {/* {tableDetails ? <DetailsTable {...tableDetails} /> : <p>Not found</p>} */}
-
-        <Link
-          href="/dashboard"
-          prefetch={true}
-          className="flex items-center gap-2 px-4 py-2 rounded mt-4 text-white bg-seabrick-blue hover:bg-seabrick-blue/80 self-end"
-        >
-          <span className="font-['Montserrat'] text-sm">Go to Home</span>
-          <HomeIcon className="size-6" />
-        </Link>
       </div>
     </div>
   );
