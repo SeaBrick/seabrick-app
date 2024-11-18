@@ -65,7 +65,7 @@ export default async function OrderDetails({
 
     const supabaseClient = createClient();
 
-    let { data: sessionData, error: sessionError } = await supabaseClient
+    const { data: sessionData, error: sessionError } = await supabaseClient
       .from("stripe_checkout_sessions")
       .select("id, fulfilled, created_at")
       .eq("session_id:", session_id)
@@ -84,7 +84,7 @@ export default async function OrderDetails({
       throw new Error("Stripe transaction not processed. Need to wait");
     }
 
-    let { data: buysData, error: buysError } = await supabaseClient
+    const { data: buysData, error: buysError } = await supabaseClient
       .from("stripe_buys")
       .select("token_id, claimed, tx_hash, created_at")
       .eq("session_id", sessionData.id)
