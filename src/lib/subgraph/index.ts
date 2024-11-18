@@ -190,8 +190,9 @@ export async function getAggregatorsData(): Promise<AggregatorResponse[]> {
 
 export async function getBuysByTransaction(
   txHash: Hash
-): Promise<SingleBuyByTxResponse[] | null> {
-  const document = gql`
+): Promise<SingleBuyByTxResponse[]> {
+  try {
+    const document = gql`
     {
       buys(where: {transactionHash: "${txHash}"}) {
         tokenId
@@ -208,13 +209,16 @@ export async function getBuysByTransaction(
     }
   `;
 
-  const buys = (
-    await generateRequest<{ buys: SingleBuyByTxResponse[] }>(document)
-  ).buys;
+    const buys = (
+      await generateRequest<{ buys: SingleBuyByTxResponse[] }>(document)
+    ).buys;
 
-  if (buys.length == 0) return null;
+    if (buys.length == 0) return [];
 
-  return buys;
+    return buys;
+  } catch (e) {
+    return [];
+  }
 }
 
 export async function getAccount(

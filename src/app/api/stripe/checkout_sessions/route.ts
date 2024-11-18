@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
   // If the user does not have an email, redirect to error
   if (!user.email) {
     console.error("User does not have an email. It is a total error");
-    redirect("/error");
+    throw new Error("User does not have an email. It is a total error");
   }
 
   try {
@@ -89,7 +89,7 @@ export async function GET(request: NextRequest) {
     // If no session ID, redirect to an error page
     if (!sessionId) {
       console.error("No stripe session ID");
-      redirect("/error");
+      throw new Error("No stripe session ID");
     }
 
     // Get the session object from the sessionId
@@ -115,7 +115,10 @@ export async function GET(request: NextRequest) {
         );
 
         if (isAdded === false) {
-          redirect("/error");
+          return NextResponse.json(
+            { error: "Session already saved" },
+            { status: 500 }
+          );
         }
       }
     }
