@@ -70,6 +70,15 @@ export const formatDate = (timestamp: number) => {
   return `${day.toString()} / ${month.toString()} / ${year.toString()} At ${hour}:${minute}:${seconds}  `;
 };
 
+export function truncateString(str: string) {
+  if (str.length <= 13) {
+    return str;
+  }
+  const firsts = str.slice(0, 5);
+  const lasts = str.slice(-5);
+  return firsts + "..." + lasts;
+}
+
 const sliceHex = (hexData: Hex, bytes: number) => {
   return (
     slice(hexData, 0, bytes) +
