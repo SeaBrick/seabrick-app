@@ -24,6 +24,10 @@ export default async function OrderDetails({
   // And alse we define the const/object for the table colums
   let tableData: DetailsTableProps;
 
+  console.log("type: ", type);
+  console.log("hash: ", hash);
+  console.log("session_id: ", session_id);
+
   // ALL the error are catched by the Error.tsx boundary
   if (type === "crypto") {
     if (!hash || !isHash(hash)) {
