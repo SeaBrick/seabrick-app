@@ -84,7 +84,7 @@ const BuyNFTCrypto: React.FC = () => {
       // Refetch this (? maybe no)
       await refetchAllowance();
 
-      router.push(`/order-details-xd?type=crypto&hash=${data.txHash}`);
+      router.push(`/order-details?type=crypto&hash=${data.txHash}`);
     } catch (error) {
       // Print the error
       console.log(error);

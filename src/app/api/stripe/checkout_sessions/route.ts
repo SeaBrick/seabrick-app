@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
 
       return_url:
         redirectUrl +
-        "order-details-xd?type=stripe&session_id={CHECKOUT_SESSION_ID}",
+        "order-details?type=stripe&session_id={CHECKOUT_SESSION_ID}",
     });
 
     return NextResponse.json({ clientSecret: session.client_secret });
