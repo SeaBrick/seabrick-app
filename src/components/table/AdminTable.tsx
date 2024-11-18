@@ -1,24 +1,17 @@
-"use client"
-import { useState } from "react"
-import Modal from "@/components/modals/Modal-add"
-import { TrashIcon } from "@heroicons/react/24/outline"
-import TextCopier from "../TextCopier"
-import ModalDelete from "../modals/Modal"
-import Container from "../utils/Container"
-import SubmitButton from "../buttons/SubmitButton"
-import { AdminInterface } from "@/app/admin-list/requests"
+"use client";
+import { useState } from "react";
+import Modal from "@/components/modals/Modal-add";
+import { TrashIcon } from "@heroicons/react/24/outline";
+import TextCopier from "../TextCopier";
+import ModalDelete from "../modals/Modal";
+import Container from "../utils/Container";
+import SubmitButton from "../buttons/SubmitButton";
+import { AdminInterface } from "@/app/admin-list/requests";
+import { truncateString } from "@/lib/utils";
 
 interface TableColumn {
-  key: string
-  label: string
-}
-function truncateString(str: string) {
-  if (str.length <= 13) {
-    return str
-  }
-  const firsts = str.slice(0, 5)
-  const lasts = str.slice(-5)
-  return firsts + "..." + lasts
+  key: string;
+  label: string;
 }
 
 function AdminTable({
@@ -27,16 +20,16 @@ function AdminTable({
   deleteAdmin,
   addAdmin,
 }: {
-  columns: TableColumn[]
-  data: AdminInterface[]
-  deleteAdmin: (id: string) => void
-  addAdmin: (email: string) => void
+  columns: TableColumn[];
+  data: AdminInterface[];
+  deleteAdmin: (id: string) => void;
+  addAdmin: (email: string) => void;
 }) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setOpen(false)
-  }
+    e.preventDefault();
+    setOpen(false);
+  };
   //
 
   //
@@ -68,16 +61,16 @@ function AdminTable({
               className="flex justify-between px-6 h-12 gap-5 items-center"
             >
               {columns.map((column) => {
-                let enableCopier = false
-                let valueText = ""
-                let showText = row[column.key as keyof AdminInterface]
+                let enableCopier = false;
+                let valueText = "";
+                let showText = row[column.key as keyof AdminInterface];
                 if (column.key == "address" && row[column.key]) {
-                  enableCopier = true
-                  valueText = row[column.key]!
-                  showText = truncateString(row[column.key]!)
+                  enableCopier = true;
+                  valueText = row[column.key]!;
+                  showText = truncateString(row[column.key]!);
                 }
                 if (column.key === "created_at") {
-                  showText = new Date(row[column.key]).toLocaleDateString()
+                  showText = new Date(row[column.key]).toLocaleDateString();
                 }
                 return (
                   <td
@@ -89,7 +82,7 @@ function AdminTable({
                       {enableCopier ? <TextCopier text={valueText} /> : ""}
                     </div>
                   </td>
-                )
+                );
               })}
               <td>
                 <button
@@ -133,7 +126,7 @@ function AdminTable({
         </Container>
       </ModalDelete>
     </div>
-  )
+  );
 }
 
-export default AdminTable
+export default AdminTable;
