@@ -72,7 +72,7 @@ export default async function OrderDetails({
     const { data: sessionData, error: sessionError } = await supabaseClient
       .from("stripe_checkout_sessions")
       .select("id, fulfilled, created_at")
-      .eq("session_id:", session_id)
+      .eq("session_id", session_id)
       .single<{ id: string; fulfilled: boolean; created_at: string }>();
 
     if (sessionError) {
@@ -109,7 +109,7 @@ export default async function OrderDetails({
       throw new Error("No buys found for this transaction");
     }
 
-    const appUrl = getUrl(headers().get("referer"));
+    const appUrl = getUrl(headers().get("referer") || headers().get("host"));
 
     console.log("appUrl: ", appUrl);
 
@@ -145,6 +145,11 @@ export default async function OrderDetails({
   }
   // No valid trasanction
   else {
+    console.log("-==============================================");
+    console.log("-==============================================");
+    console.log("-==============================================");
+    console.log("searchParams: ", searchParams);
+    console.log("headers: ", headers());
     // ALL the errors are catched by the error.tsx boundary
     throw new Error("Invalid transaction");
   }
