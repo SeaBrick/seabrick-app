@@ -57,28 +57,33 @@ const DetailsTable: React.FC<DetailsTableProps> = (
     // Pushing all the column keys
     columnDataTest2.push(
       ...[
+        { key: "number", label: "#" },
         { key: "tokenId", label: "Token Id" },
         { key: "status", label: "Status" },
         { key: "individualPrice", label: "Price unitary" },
+        { key: "date", label: "Date" },
       ]
     );
 
     // Added the data iterating over the tokensIds
-    props.tokensId.forEach((tokenId_, i) => {
+    props.tokensId.forEach((tokenId_, index) => {
       // Pushing each iteration
       bodyDataTest2.push({
+        number: index + 1,
         tokenId: tokenId_,
         status: "Confirmed",
         // Individual price as string
         individualPrice:
           parseFloat(
             formatUnits(
-              BigInt(props.buysData[i].amountPaid),
+              BigInt(props.buysData[index].amountPaid),
               parseInt(props.paymentToken.decimals)
             )
           ).toFixed(2) +
           " " +
           props.paymentToken.symbol,
+
+        date: timeAgo(processTime(props.blockTimestamp)),
       });
     });
   } else {
@@ -142,10 +147,6 @@ const DetailsTable: React.FC<DetailsTableProps> = (
               >
                 {props.txHash}
               </Link>
-            </div>
-            <div>
-              <span className="font-semibold">Date: </span>
-              <span>{timeAgo(processTime(props.blockTimestamp))}</span>
             </div>
             <div>
               <span className="font-semibold">Block number: </span>
