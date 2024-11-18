@@ -72,17 +72,6 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const supabaseClient = createClient();
-
-    const {
-      data: { user },
-    } = await supabaseClient.auth.getUser();
-
-    // If not user logged, redirect to login
-    if (!user) {
-      redirect("/login");
-    }
-
     // Get the URL from request
     const url = new URL(request.url);
 
@@ -101,6 +90,17 @@ export async function GET(request: NextRequest) {
 
     // The checkout session is complete. Payment processing may still be in progress
     if (session.status == "complete" && skipCheck === null) {
+      const supabaseClient = createClient();
+
+      const {
+        data: { user },
+      } = await supabaseClient.auth.getUser();
+
+      // If not user logged, redirect to login
+      if (!user) {
+        redirect("/login");
+      }
+
       // Get the session
       const { error: checkError } = await getCheckoutSession(
         supabaseClient,
