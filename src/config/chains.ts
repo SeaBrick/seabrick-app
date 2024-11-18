@@ -1,4 +1,4 @@
-import { type Chain, http } from "viem";
+import { type Chain, Hash, http } from "viem";
 import { arbitrum, arbitrumSepolia } from "wagmi/chains";
 
 // `appTransports` should have just one key. Like [arbitrumSepolia.id] or [arbitrum.id]
@@ -31,3 +31,14 @@ export const appChains: [Chain, ...Chain[]] =
 // Example: `https://eth-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID}`
 export const appTransports =
   definedChain == "arbitrum" ? arbitrumTransport : arbitrumSepoliaTransport;
+
+export const getExplorerUrl = () => {
+  return appChains[0].blockExplorers?.default.url;
+};
+
+export const getTxBlockExplorer = (txHash: Hash) => {
+  const explorerUrl = getExplorerUrl();
+  if (!explorerUrl) return;
+
+  return new URL(`/tx/${txHash}`, explorerUrl).toString();
+};
