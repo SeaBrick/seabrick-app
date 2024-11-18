@@ -112,14 +112,11 @@ async function getBuysStripe(stripeId: string): Promise<DetailsTableProps> {
 }
 
 // TODO: Add loading effect
-export default function OrderDetails() {
+const OrderDetails: React.FC = () => {
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
   const hash = searchParams.get("hash");
   const session_id = searchParams.get("session_id");
-  console.log("type: ", type);
-  console.log("hash: ", hash);
-  console.log("session_id: ", session_id);
 
   const [tableDetails, setTableDetails] = useState<DetailsTableProps>();
 
@@ -128,45 +125,49 @@ export default function OrderDetails() {
   let tableData: DetailsTableProps;
 
   useEffect(() => {
-    async function pave() {
-      // ALL the error are catched by the Error.tsx boundary
-      if (type === "crypto") {
-        if (!hash || !isHash(hash)) {
-          // throw new Error("Invalid hash for Crypto transaction");
-          console.log("Invalid hash for Crypto transaction");
-          setTableDetails(undefined);
-          return;
+    async function loadData() {
+      try {
+        // ALL the error are catched by the Error.tsx boundary
+        if (type === "crypto") {
+          if (!hash || !isHash(hash)) {
+            // throw new Error("Invalid hash for Crypto transaction");
+            console.log("Invalid hash for Crypto transaction");
+            setTableDetails(undefined);
+            return;
+          }
+          // Perform for crypto
+          const data = await getBuysCrypto(hash);
+          setTableDetails(data);
+          console.log("aja buy scripto");
         }
-        // Perform for crypto
-        const data = await getBuysCrypto(hash);
-        setTableDetails(data);
-        console.log("aja buy scripto");
-      }
-      //
-      else if (type === "stripe") {
-        if (!session_id) {
-          // throw new Error("Invalid ID Stripe transaction");
-          console.log("Invalid ID Stripe transaction");
-          setTableDetails(undefined);
-          return;
-        }
+        //
+        else if (type === "stripe") {
+          if (!session_id) {
+            // throw new Error("Invalid ID Stripe transaction");
+            console.log("Invalid ID Stripe transaction");
+            setTableDetails(undefined);
+            return;
+          }
 
-        // Perform for stripte
-        const data = await getBuysStripe(session_id);
-        setTableDetails(data);
-        console.log("aja buy stripe");
-      }
-      // No valid trasanction
-      else {
-        // throw new Error("Invalid transaction");
-        console.log("Invalid transaction");
-        setTableDetails(undefined);
-        return;
+          // Perform for stripte
+          const data = await getBuysStripe(session_id);
+          setTableDetails(data);
+          console.log("aja buy stripe");
+        }
+        // No valid trasanction
+        else {
+          // throw new Error("Invalid transaction");
+          console.log("Invalid transaction");
+          setTableDetails(undefined);
+          return;
+        }
+      } catch (error) {
+        //
       }
     }
 
-    pave();
-  }, []);
+    loadData();
+  }, [hash, session_id, type]);
 
   return (
     <div className="flex justify-center">
@@ -175,7 +176,25 @@ export default function OrderDetails() {
           Order Details
         </h2>
 
-        {tableDetails ? <DetailsTable {...tableDetails} /> : <p>Not found</p>}
+        {tableDetails ? (
+          <DetailsTable {...tableDetails} />
+        ) : (
+          <div className="text-center p-24 bg-white rounded-lg shadow-xl flex flex-col gap-y-5">
+            <h1 className="text-5xl font-bold text-seabrick-blue">Error</h1>
+            <div>
+              <p className="text-gray-500">Oops! Something went wrong!</p>
+            </div>
+            <div>
+              <Link
+                href="/"
+                className="inline-block px-4 py-2 text-white bg-seabrick-blue rounded hover:bg-blue-600"
+              >
+                Go Back to Home
+              </Link>
+            </div>
+          </div>
+        )}
+        {/* {tableDetails ? <DetailsTable {...tableDetails} /> : <p>Not found</p>} */}
 
         <Link
           href="/dashboard"
@@ -188,4 +207,6 @@ export default function OrderDetails() {
       </div>
     </div>
   );
-}
+};
+
+export default OrderDetails;
