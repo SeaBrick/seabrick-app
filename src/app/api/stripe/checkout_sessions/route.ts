@@ -88,6 +88,7 @@ export async function GET(request: NextRequest) {
 
     // Search the session_id from the query parameters
     const sessionId = url.searchParams.get("session_id");
+    const skipCheck = url.searchParams.get("skip_check");
 
     // If no session ID, redirect to an error page
     if (!sessionId) {
@@ -99,7 +100,7 @@ export async function GET(request: NextRequest) {
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
     // The checkout session is complete. Payment processing may still be in progress
-    if (session.status == "complete") {
+    if (session.status == "complete" && skipCheck === null) {
       // Get the session
       const { error: checkError } = await getCheckoutSession(
         supabaseClient,
