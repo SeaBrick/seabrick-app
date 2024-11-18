@@ -6,7 +6,7 @@ import Image from "next/image";
 import { ModalDone } from "../modals/ModalDone";
 import SubmitButton from "../buttons/SubmitButton";
 import { claimToken, getClaimedTokens } from "@/app/dashboard/requests";
-import PageLoaderSpinner from "../spinners/PageLoaderSpinner";
+import LoadingDots from "../spinners/LoadingDots";
 
 const dataTestColums: TableColumn[] = [
   {
@@ -71,7 +71,7 @@ export default function ClaimTokens({
         <ClaimModal open={open} setOpen={setOpen} title={"NFTs"}>
           <div className="gap-2 flex flex-col overflow-y-auto">
             {isLoading ? (
-              <PageLoaderSpinner height="h-max" width="w-1/2" />
+              <LoadingDots />
             ) : (
               nftClaimedList.length > 0 && (
                 <Table

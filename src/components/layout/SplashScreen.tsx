@@ -2,7 +2,7 @@
 
 import React, { Suspense } from "react";
 import ContractLoader from "../loaders/ContractLoader";
-import PageLoaderSpinner from "../spinners/PageLoaderSpinner";
+import LoadingDots from "../spinners/LoadingDots";
 
 interface SplashScreenProps {
   children: React.ReactNode;
@@ -12,9 +12,9 @@ const SplashScreen = ({ children }: SplashScreenProps) => {
     <>
       <Suspense
         fallback={
-          <div className="w-1/2 mx-auto">
+          <div className="w-1/2 mx-auto mt-80">
             <div className="py-24 my-auto">
-              <PageLoaderSpinner height="h-max" width="w-1/2" />
+              <LoadingDots />
             </div>
           </div>
         }
