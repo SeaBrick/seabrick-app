@@ -6,7 +6,7 @@ import type {
   PaymentToken,
   SingleBuyByTxResponse,
 } from "@/lib/interfaces/subgraph";
-import { processTime, timeAgo } from "@/lib/utils";
+import { processTime, timeAgo, truncateString } from "@/lib/utils";
 import { getTxBlockExplorer } from "@/config/chains";
 import Link from "next/link";
 
@@ -27,7 +27,7 @@ interface StripeTable {
   tokensId: string[];
   totalAmount: number;
   currency: string;
-  txHash: string;
+  txHash: Hex;
   buyerEmail: string;
   createdAt: string;
 }
@@ -37,7 +37,10 @@ export type DetailsTableProps = CryptoTable | StripeTable;
 const DetailsTable: React.FC<DetailsTableProps> = (
   props: DetailsTableProps
 ) => {
-  const symbol = props.type == "crypto" ? props.paymentToken.symbol : "US$";
+  const symbol =
+    props.type == "crypto"
+      ? props.paymentToken.symbol
+      : props.currency.toUpperCase();
   let totalPaid = "0";
 
   // timeAgo(processTime)
@@ -46,17 +49,12 @@ const DetailsTable: React.FC<DetailsTableProps> = (
   const bodyDataTest2: { [s: string]: any }[] = [];
 
   if (props.type == "crypto") {
-    // Total paid in crpto
+    // Total paid in crypto
     totalPaid = parseFloat(
       formatUnits(props.totalAmountPaid, parseInt(props.paymentToken.decimals))
     ).toFixed(2);
 
-    // date: timeAgo(processTime(props.blockTimestamp)),
-    // href: true,
-    // hrefParse: (value: any) => {
-    //   return getTxBlockExplorer(value) ?? value;
-    // },
-
+    // Pushing all the column keys
     columnDataTest2.push(
       ...[
         { key: "tokenId", label: "Token Id" },
@@ -64,10 +62,14 @@ const DetailsTable: React.FC<DetailsTableProps> = (
         { key: "individualPrice", label: "Price unitary" },
       ]
     );
+
+    // Added the data iterating over the tokensIds
     props.tokensId.forEach((tokenId_, i) => {
+      // Pushing each iteration
       bodyDataTest2.push({
         tokenId: tokenId_,
         status: "Confirmed",
+        // Individual price as string
         individualPrice:
           parseFloat(
             formatUnits(
@@ -81,70 +83,28 @@ const DetailsTable: React.FC<DetailsTableProps> = (
     });
   } else {
     // Stripe
+    totalPaid = (props.totalAmount / 100).toFixed(2);
+
+    const data = props.tokensId.map((tokenId, index) => {
+      return {
+        number: index + 1,
+        tokenId,
+        status: "Confirmed",
+        date: new Date(props.createdAt).toLocaleDateString(),
+      };
+    });
+
     columnDataTest2.push(
       ...[
+        { key: "number", label: "#" },
         { key: "tokenId", label: "Token Id" },
         { key: "status", label: "Status" },
-        {
-          key: "hash",
-          label: "TX Hash",
-        },
         { key: "date", label: "Date" },
       ]
     );
 
-    bodyDataTest2.push(
-      ...[
-        {
-          tokenId: 2,
-          status: "true",
-          hash: "0x0000000000000000000",
-          date: "01/01/2024",
-        },
-        {
-          tokenId: 3,
-          status: "cccc",
-          hash: "0x1000000000000000000",
-          date: "01/02/2024",
-        },
-        {
-          tokenId: 4,
-          status: "asdasd",
-          hash: "0x0001000000000000000000",
-          date: "01/03/2024",
-        },
-      ]
-    );
+    bodyDataTest2.push(...data);
   }
-
-  // // Stripe
-  // const columnDataTest = [
-  //   { key: "tokenId", label: "Token Id" },
-  //   { key: "status", label: "Status" },
-  //   { key: "hash", label: "TX Hash" },
-  //   { key: "date", label: "Date" },
-  // ];
-
-  // const bodyDataTest = [
-  //   {
-  //     tokenId: 2,
-  //     status: "true",
-  //     hash: "0x0000000000000000000",
-  //     date: "01/01/2024",
-  //   },
-  //   {
-  //     tokenId: 3,
-  //     status: "cccc",
-  //     hash: "0x1000000000000000000",
-  //     date: "01/02/2024",
-  //   },
-  //   {
-  //     tokenId: 4,
-  //     status: "asdasd",
-  //     hash: "0x0001000000000000000000",
-  //     date: "01/03/2024",
-  //   },
-  // ];
 
   return (
     <div className=" min-w-[200px] box-content p-6 bg-white rounded-[10px] justify-center items-center gap-2.5 flex m-auto flex-col mb-4 w-full">
@@ -170,7 +130,7 @@ const DetailsTable: React.FC<DetailsTableProps> = (
             </div>
           </div>
         </div>
-        {props.type == "crypto" && (
+        {props.type == "crypto" ? (
           <div className="text-lg font-['Noto Sans'] flex flex-col">
             <div>
               <span className="font-semibold">Transaction hash: </span>
@@ -183,19 +143,45 @@ const DetailsTable: React.FC<DetailsTableProps> = (
                 {props.txHash}
               </Link>
             </div>
-            <div className="flex gap-x-4">
-              <div>
-                <span className="font-semibold">Date: </span>
-                <span>{timeAgo(processTime(props.blockTimestamp))}</span>
-              </div>
-              <div>
-                <span className="font-semibold">Block number: </span>
-                <span>{props.blockNumber}</span>
-              </div>
-              <div>
-                <span className="font-semibold">Block timestamp: </span>
-                <span>{props.blockTimestamp}</span>
-              </div>
+            <div>
+              <span className="font-semibold">Date: </span>
+              <span>{timeAgo(processTime(props.blockTimestamp))}</span>
+            </div>
+            <div>
+              <span className="font-semibold">Block number: </span>
+              <span>{props.blockNumber}</span>
+            </div>
+            <div>
+              <span className="font-semibold">Block timestamp: </span>
+              <span>{props.blockTimestamp}</span>
+            </div>
+          </div>
+        ) : (
+          <div className="text-lg font-['Noto Sans'] flex flex-col">
+            <div>
+              <span className="font-semibold">Buy method: </span>
+              <span>Stripe</span>
+            </div>
+            <div>
+              <span className="font-semibold">Buyer email: </span>
+              <span>{props.buyerEmail}</span>
+            </div>
+            <div>
+              <span className="font-semibold">Stripe session ID: </span>
+              <span title={props.stripeId} className="cursor-default">
+                {truncateString(props.stripeId)}
+              </span>
+            </div>
+            <div>
+              <span className="font-semibold">Transaction hash: </span>
+              <Link
+                href={getTxBlockExplorer(props.txHash) ?? ""}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:text-blue-700 hover:underline"
+              >
+                {props.txHash}
+              </Link>
             </div>
           </div>
         )}
