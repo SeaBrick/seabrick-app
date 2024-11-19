@@ -126,10 +126,10 @@ const LoginWallet: React.FC<LoginWallet> = ({ open, setOpen }: LoginWallet) => {
     <Modal open={open} setOpen={setOpen}>
       <div className="h-80 w-96 md:w-[550px] p-6 relative bg-white rounded-[10px] flex-col justify-start items-center gap-8 inline-flex z-10">
         <div className="h-[74px] flex-col justify-center items-center gap-[5px] flex">
-          <div className="text-[#333333] text-[15px] font-normal font-['Noto Sans']">
+          <div className="text-dark-gray text-[15px] font-normal font-['Noto Sans']">
             Wallet authentication
           </div>
-          <div className="text-[#333333] text-3xl font-normal font-['Noto Sans']">
+          <div className="text-dark-gray text-3xl font-normal font-['Noto Sans']">
             Log In
           </div>
         </div>
@@ -161,7 +161,7 @@ const LoginWallet: React.FC<LoginWallet> = ({ open, setOpen }: LoginWallet) => {
             <Link
               href="/register?tab=wallet"
               prefetch={true}
-              className="text-[#333333] text-sm font-bold font-['Noto Sans'] text-center mx-auto"
+              className="text-dark-gray text-sm font-bold font-['Noto Sans'] text-center mx-auto"
             >
               Create an account
             </Link>

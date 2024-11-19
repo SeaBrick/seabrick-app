@@ -1,7 +1,7 @@
 import XMarkIcon from "@heroicons/react/24/outline/XMarkIcon"
 import { Dispatch, SetStateAction, useState } from "react"
 import { ModalConfirm } from "./ModalConfirm"
-import { validateEmail } from "./Modal-add"
+import { validateEmail } from "@/components/utils/ValidateEmail"
 import { ModalDone } from "./ModalDone"
 import { mintTokens } from "@/app/dashboard/requests"
 
@@ -43,8 +43,7 @@ export function MintTokensModal({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const validationError = validateEmail(address)
-    const validateWalletAddress = false
-    if (validationError && validateWalletAddress) {
+    if (validationError) {
       setError(validationError)
       return
     }
@@ -93,19 +92,18 @@ export function MintTokensModal({
           setOpen={setConfirmOpen}
           closeAll={setOpen}
           openBack={handleBack}
+          loadingLabel={"Minting..."}
         />
       )}
       {isSelfOpen && (
-        <div className="bg-white rounded-[10px] h-fit min-h-fit max-h-[70vh] w-[40vw] min-w-[450px] p-6 gap-6 flex flex-col">
+        <div className="bg-white rounded-[10px] h-fit min-h-fit max-h-[70vh] w-full max-w-[638px] md:min-w-[450px] p-6 gap-8 flex flex-col">
           <div className="flex gap-2 justify-between">
             <div className="flex flex-col text-left gap-2">
-              <span className="text-[#333333] text-3xl font-normal font-['Noto Sans']">
+              <span className="text-dark-gray text-3xl font-normal font-['Noto Sans']">
                 Mint Tokens
               </span>
-              <span className="text-[#8a8a8f] text-xs font-normal font-['Noto Sans']">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Delectus quas natus ut praesentium, nulla sed error officiis
-                quo.
+              <span className="text-[#8a8a8f] text-base font-normal font-['Noto Sans']">
+                This feature allows you to mint new tokens on the blockchain. By minting tokens, you can create unique digital assets that can represent anything from currency to collectibles. 
               </span>
             </div>
             <div className="">
@@ -120,7 +118,7 @@ export function MintTokensModal({
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
             <div className="flex gap-2">
               <div className="grow shrink">
-                <div className="text-[#333333] text-xs font-normal font-['Noto Sans'] text-start">
+                <div className="text-dark-gray text-base font-normal font-['Noto Sans'] text-start">
                   E-Mail or Wallet address
                 </div>
                 <div className="">
@@ -129,19 +127,19 @@ export function MintTokensModal({
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                     placeholder="Enter Email"
-                    className="bg-[#efeff4]/60 w-full py-2 px-4 rounded-md border border-[#babcc3]/60 text-[#8a8a8f] text-xs"
+                    className="bg-[#efeff4]/60 w-full py-2 px-4 rounded-md border border-[#babcc3]/60 text-[#8a8a8f] text-base"
                   />
                 </div>
               </div>
               <div className="grow shrink">
-                <div className="text-[#333333] text-xs font-normal font-['Noto Sans'] text-start">
+                <div className="text-dark-gray text-base font-normal font-['Noto Sans'] text-start">
                   Tokens Quantity
                 </div>
                 <div className="">
                   <input
                     type="number"
                     name="quantity"
-                    className="bg-white w-full py-2 px-4 rounded-md border border-[#8a8a8f] text-[#333333] text-xs"
+                    className="bg-white w-full py-2 px-4 rounded-md border border-[#8a8a8f] text-dark-gray text-base"
                     onChange={(e) => setQuantity(parseInt(e.target.value))}
                   />
                 </div>
@@ -149,20 +147,20 @@ export function MintTokensModal({
             </div>
             <div className="flex justify-end gap-3">
               <button
-                className="text-[#333333] text-xs font-normal font-['Noto Sans'] bg-[#efeff4] hover:bg-[#d9d9d9] active:bg-[#cccccc] rounded-[5px] p-3"
+                className="text-dark-gray text-base font-normal font-['Noto Sans'] bg-[#efeff4] hover:bg-[#d9d9d9] active:bg-[#cccccc] rounded-[5px] p-3"
                 onClick={handleCancel}
               >
                 Cancel
               </button>
               <button
-                className="text-white text-xs font-normal font-['Noto Sans'] bg-[#333333] hover:bg-[#555555] active:bg-[#222222] rounded-[5px] p-3"
+                className="text-white text-base font-normal font-['Noto Sans'] bg-dark-gray hover:bg-[#555555] active:bg-[#222222] rounded-[5px] p-3"
                 type="submit"
               >
                 Confirm
               </button>
             </div>
             {error && (
-              <p className="text-[#ff0019] text-xs font-normal font-['Noto Sans']">
+              <p className="text-[#ff0019] text-base font-normal font-['Noto Sans']">
                 {error}
               </p>
             )}{" "}

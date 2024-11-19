@@ -11,6 +11,7 @@ export function ModalConfirm({
   onConfirm,
   closeAll,
   openBack,
+  loadingLabel
 }: {
   title: string
   open: boolean
@@ -21,6 +22,7 @@ export function ModalConfirm({
   setOpen: Dispatch<SetStateAction<boolean>>
   closeAll: Dispatch<SetStateAction<boolean>>
   openBack: Dispatch<SetStateAction<boolean>>
+  loadingLabel?: string
 }) {
   const [isSelfOpen, setSelfOpen] = useState(true)
   const handleConfirm = async (_formData: FormData) => {
@@ -34,13 +36,13 @@ export function ModalConfirm({
   return (
     <>
       {isSelfOpen && (
-        <div className="bg-white rounded-[10px] h-fit min-h-fit max-h-[70vh]  w-[40vw] min-w-[450px] p-6 gap-6 flex flex-col">
+        <div className="bg-white rounded-[10px] h-fit min-h-fit max-h-[70vh] w-full max-w-[638px] md:min-w-[450px] p-6 gap-6 flex flex-col">
           <div className="flex gap-2 justify-between">
-            <div className="flex flex-col text-left gap-2">
-              <span className="text-[#333333] text-3xl font-normal font-['Noto Sans']">
+            <div className="flex flex-col text-left gap-4">
+              <span className="text-dark-gray text-3xl font-normal font-['Noto Sans']">
                 {title}
               </span>
-              <span className="text-[#8a8a8f] text-xs font-normal font-['Noto Sans']">
+              <span className="text-[#8a8a8f] text-base font-normal font-['Noto Sans']">
                 {description}
               </span>
             </div>
@@ -56,15 +58,15 @@ export function ModalConfirm({
 
           <form className="flex justify-end gap-3" action={handleConfirm}>
             <button
-              className="text-[#333333] text-xs font-normal font-['Noto Sans'] bg-[#efeff4] hover:bg-[#d9d9d9] active:bg-[#cccccc] rounded-[5px] p-3"
+              className="text-dark-gray text-base font-normal font-['Noto Sans'] bg-[#efeff4] hover:bg-[#d9d9d9] active:bg-[#cccccc] rounded-[5px] p-3"
               onClick={handleCancel}
             >
               {cancelMessage}
             </button>
             <SubmitButton
-              buttonClass="text-white text-xs font-normal font-['Noto Sans'] bg-[#333333] hover:bg-[#555555] active:bg-[#222222] rounded-[5px] p-3"
+              buttonClass="text-white text-base font-normal font-['Noto Sans'] bg-dark-gray hover:bg-[#555555] active:bg-[#222222] rounded-[5px] p-3 max-w-fit"
               label={confirmMessage}
-              loadingLabel={"Minting..."}
+              loadingLabel={loadingLabel}
             />
           </form>
         </div>
@@ -72,4 +74,4 @@ export function ModalConfirm({
     </>
   )
 }
-// text-white text-xs font-normal font-['Noto Sans'] bg-[#333333] hover:bg-[#555555] active:bg-[#222222] rounded-[5px] p-3
+// text-white text-base font-normal font-['Noto Sans'] bg-dark-gray hover:bg-[#555555] active:bg-[#222222] rounded-[5px] p-3

@@ -147,7 +147,7 @@ const AccountDetails: React.FC = () => {
           <h3 className="text-xl font-bold leading-6">Personal Information</h3>
           <div className="flex flex-col md:flex-row md:items-center gap-4 justify-between">
             <div className="md:w-1/2">
-              <label className="block text-[#333333] text-xs font-normal ">
+              <label className="block text-dark-gray text-sm font-normal ">
                 Full Name
               </label>
               <input
@@ -161,7 +161,7 @@ const AccountDetails: React.FC = () => {
             </div>
 
             <div className="md:w-1/2">
-              <label className="block text-[#333333] text-xs font-normal ">
+              <label className="block text-dark-gray text-sm font-normal ">
                 Email
               </label>
               <input

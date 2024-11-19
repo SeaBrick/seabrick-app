@@ -4,6 +4,7 @@ import {
   ChevronDownIcon,
   ArrowUpRightIcon,
   AtSymbolIcon,
+  ArrowsRightLeftIcon,
 } from "@heroicons/react/24/outline";
 import ClaimTokens from "../cards/ClaimNFT";
 import ClaimNFTCard from "../cards/ClaimNFTCard";
@@ -41,6 +42,7 @@ export default function DashboardComponent({
   const [isClaimTokensOpen, setClaimTokensOpen] = useState(false);
   const [isMintTokensOpen, setMintTokensOpen] = useState(false);
   const [showClaimModal, setShowClaimModal] = useState(false);
+  const [transferOwnerOpen, setTransferOwnerOpen] = useState(false);
 
   const {
     data: { seabrick },
@@ -92,6 +94,12 @@ export default function DashboardComponent({
             <MintTokensModal
               open={isMintTokensOpen}
               setOpen={setMintTokensOpen}
+            />
+          </Modal>
+          <Modal open={transferOwnerOpen} setOpen={setTransferOwnerOpen}>
+            <ModalTransferOwnership
+              open={transferOwnerOpen}
+              setOpen={setTransferOwnerOpen}
             />
           </Modal>
         </>
@@ -207,7 +215,17 @@ export default function DashboardComponent({
             <div className="lg:w-[50%] w-full min-h-[10rem] gap-2 flex flex-col">
               {isAdmin ? (
                 <div className="bg-white w-full h-full rounded-[10px] gap-x-3 gap-y-6 p-6 grid grid-cols-2 justify-between">
-                  <ModalTransferOwnership disableButton={!isOwner} />
+                  
+                  <div className="justify-start items-center gap-2 flex">
+                    <button
+                      className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] text-[white] rounded-[5px] text-left w-full h-full disabled:cursor-not-allowed disabled:bg-gray-400 text-lg"
+                      onClick={() => setTransferOwnerOpen(true)}
+                      disabled={!isOwner}
+                    >
+                      <ArrowsRightLeftIcon className="size-[1.5rem] inline mx-2 mt-[-3px]" />
+                      Transfer Ownership
+                    </button>
+                  </div>
                   <Link
                     className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-xl flex items-center"
                     href="/admin-list"

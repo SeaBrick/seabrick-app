@@ -25,7 +25,7 @@ export default function SeabrickNFTCard() {
                   <div className=" justify-between items-start inline-flex">
                     <div className="flex-col justify-start items-start gap-3.5 inline-flex">
                       <div className=" justify-start items-end gap-2 inline-flex">
-                        <div className="text-[#333333] text-4xl font-normal font-['Noto Sans']">
+                        <div className="text-dark-gray text-4xl font-normal font-['Noto Sans']">
                           {seabrick.name}
                         </div>
                       </div>
