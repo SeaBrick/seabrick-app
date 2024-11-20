@@ -122,10 +122,10 @@ const RegisterEmailForm: React.FC = () => {
         className="w-[606px] h-min p-6 relative bg-white rounded-[10px] rounded-tl-none flex-col justify-start items-center gap-8 inline-flex"
       >
         <div className="h-[74px] flex-col justify-center items-center gap-[5px] flex">
-          <div className="text-[#333333] text-[15px] font-normal font-['Noto Sans']">
+          <div className="text-dark-gray text-[15px] font-normal font-['Noto Sans']">
             Register
           </div>
-          <div className="text-[#333333] text-4xl font-normal font-['Noto Sans']">
+          <div className="text-dark-gray text-4xl font-normal font-['Noto Sans']">
             Create Account
           </div>
         </div>
@@ -134,7 +134,7 @@ const RegisterEmailForm: React.FC = () => {
             <div className="self-stretch h-[68px] flex-col justify-center items-start gap-2 flex">
               <label
                 htmlFor="fullName"
-                className="text-[#333333] text-xs font-normal font-['Noto Sans']"
+                className="text-dark-gray text-xs font-normal font-['Noto Sans']"
               >
                 Full Name
               </label>
@@ -151,7 +151,7 @@ const RegisterEmailForm: React.FC = () => {
             <div className="self-stretch h-[68px] flex-col justify-center items-start gap-2 flex">
               <label
                 htmlFor="email"
-                className="text-[#333333] text-xs font-normal font-['Noto Sans']"
+                className="text-dark-gray text-xs font-normal font-['Noto Sans']"
               >
                 Email
               </label>
@@ -162,14 +162,14 @@ const RegisterEmailForm: React.FC = () => {
                 value={email}
                 onChange={onChangeEmail}
                 placeholder="Enter your email"
-                className="self-stretch h-11 px-[15px] py-2.5 rounded-[5px] border border-[#333333] text-[#333333] text-sm font-normal font-['Noto Sans'] bg-[#efeff4]/60"
+                className="self-stretch h-11 px-[15px] py-2.5 rounded-[5px] border border-dark-gray text-dark-gray text-sm font-normal font-['Noto Sans'] bg-[#efeff4]/60"
               />
             </div>
             <div className="self-stretch justify-start items-start gap-4 inline-flex">
               <div className="grow shrink basis-0 flex-col justify-center items-start gap-2 inline-flex relative">
                 <label
                   htmlFor="password"
-                  className="text-[#333333] text-xs font-normal font-['Noto Sans']"
+                  className="text-dark-gray text-xs font-normal font-['Noto Sans']"
                 >
                   Password
                 </label>
@@ -198,7 +198,7 @@ const RegisterEmailForm: React.FC = () => {
               <div className="grow shrink basis-0 flex-col justify-center items-start gap-2 inline-flex relative">
                 <label
                   htmlFor="repeatedPassword"
-                  className="text-[#333333] text-xs font-normal font-['Noto Sans']"
+                  className="text-dark-gray text-xs font-normal font-['Noto Sans']"
                 >
                   Repeat Password
                 </label>
@@ -235,25 +235,25 @@ const RegisterEmailForm: React.FC = () => {
               />
             </div>
             <div className="self-stretch justify-between items-center inline-flex">
-              <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">
+              <div className="text-dark-gray text-xs font-normal font-['Noto Sans']">
                 Do you already have an account?
               </div>
               <Link
                 href="/login"
                 prefetch={true}
-                className="text-[#333333] text-xs font-bold font-['Noto Sans']"
+                className="text-dark-gray text-xs font-bold font-['Noto Sans']"
               >
                 Login
               </Link>
             </div>
             <div className="self-stretch justify-between items-center inline-flex">
-              <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">
+              <div className="text-dark-gray text-xs font-normal font-['Noto Sans']">
                 Forgot your password?
               </div>
               <Link
                 href="/reset-password"
                 prefetch={true}
-                className="text-[#333333] text-xs font-bold font-['Noto Sans']"
+                className="text-dark-gray text-xs font-bold font-['Noto Sans']"
               >
                 Reset password
               </Link>

@@ -18,12 +18,11 @@ export default function ClaimModal({
       <div className="bg-white rounded-[10px] h-fit min-h-[300px] max-h-[70vh] w-[45vw] min-w-[450px] p-6 gap-6 flex flex-col">
         <div className="flex gap-2 justify-between">
           <div className="flex flex-col text-left gap-2">
-            <span className="text-[#333333] text-3xl font-normal font-['Noto Sans']">
+            <span className="text-dark-gray text-3xl font-normal font-['Noto Sans']">
               Claim {title}
             </span>
-            <span className="text-[#8a8a8f] text-xs font-normal font-['Noto Sans']">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Delectus
-              quas natus ut praesentium, nulla sed error officiis quo.
+            <span className="text-[#8a8a8f] text-base font-normal font-['Noto Sans']">
+              This feature allows you to claim your NFTs (non-fungible tokens) and add them to your digital wallet. By claiming your NFTs, you can unlock unique digital assets, artwork or collectibles that are uniquely yours. 
             </span>
           </div>
           <div className="">
@@ -38,7 +37,7 @@ export default function ClaimModal({
         {children}
         <div className="flex justify-end">
           <button
-            className="text-[#333333] text-sm font-normal font-['Noto Sans'] bg-[#efeff4] hover:bg-[#d9d9d9] active:bg-[#cccccc] rounded-[5px] p-3"
+            className="text-dark-gray text-base font-normal font-['Noto Sans'] bg-[#efeff4] hover:bg-[#d9d9d9] active:bg-[#cccccc] rounded-[5px] p-3"
             onClick={() => setOpen(false)}
           >
             Cancel

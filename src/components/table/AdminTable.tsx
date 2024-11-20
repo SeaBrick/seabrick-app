@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
-import Modal from "@/components/modals/Modal-add";
+import ModalAdd from "@/components/modals/Modal-add";
+import Modal from "@/components/modals/Modal";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import TextCopier from "../TextCopier";
 import ModalDelete from "../modals/Modal";
@@ -18,7 +19,6 @@ function AdminTable({
   columns,
   data,
   deleteAdmin,
-  addAdmin,
 }: {
   columns: TableColumn[];
   data: AdminInterface[];
@@ -26,6 +26,8 @@ function AdminTable({
   addAdmin: (email: string) => void;
 }) {
   const [open, setOpen] = useState(false);
+
+  const [addAdminOpen, setAddAdminOpen] = useState(false);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setOpen(false);
@@ -38,14 +40,24 @@ function AdminTable({
     <div className="w-full max-w-[978px] p-6 bg-white rounded-[10px] flex-col justify-start items-center gap-4 flex mx-auto">
       <div className="flex justify-between items-center w-full">
         <h3 className="text-[#49414d] text-xl font-bold">Admin List</h3>
-        <Modal action={addAdmin} />
+        <div className="justify-start items-center gap-2 flex">
+          <button
+            className="text-white text-xs font-normal font-['Noto Sans'] p-[17px] bg-dark-gray hover:bg-dark-gray/90 hover:bg-[#222] rounded-[5px]"
+            onClick={() => setAddAdminOpen(true)}
+          >
+            Add Admins
+          </button>
+          <Modal open={addAdminOpen} setOpen={setAddAdminOpen}>
+            <ModalAdd open={addAdminOpen} setOpen={setAddAdminOpen} />
+          </Modal>
+        </div>
       </div>
       <table className="flex-col justify-start items-start gap-4 flex w-full overflow-x-auto">
         <thead className="w-full ">
           <tr className=" h-12 px-6 py-4 bg-[#efeff4] items-start gap-5 flex">
             {columns.map((column) => (
               <th
-                className="text-text-gray max-w-[173px] lg:max-w-[243px] w-full text-xs font-normal font-['Noto Sans'] text-start"
+                className="text-dark-gray max-w-[173px] lg:max-w-[243px] w-full text-xs font-normal font-['Noto Sans'] text-start"
                 key={column.key}
               >
                 {column.label}
@@ -74,7 +86,7 @@ function AdminTable({
                 }
                 return (
                   <td
-                    className="text-[#333] w-full text-justify text-xs font-normal font-['Noto Sans'] inline-flex"
+                    className="text-dark-gray w-full text-justify text-xs font-normal font-['Noto Sans'] inline-flex"
                     key={column.key}
                   >
                     <div className="inline-flex">
@@ -86,7 +98,7 @@ function AdminTable({
               })}
               <td>
                 <button
-                  className="text-[#333] text-xs font-normal font-['Noto Sans'] h-[30px] px-4 py-[17px] bg-text-gray rounded-[5px] justify-start items-center flex gap-1.5 hover:bg-text-gray/90"
+                  className="text-dark-gray text-xs font-normal font-['Noto Sans'] h-[30px] px-4 py-[17px] bg-dark-gray rounded-[5px] justify-start items-center flex gap-1.5 hover:bg-dark-gray/90"
                   onClick={() => deleteAdmin(row.user_id)}
                 >
                   <TrashIcon className="h-4 w-4 text-white" />
@@ -105,21 +117,21 @@ function AdminTable({
             onSubmit={handleSubmit}
             className="flex flex-col items-start gap-y-4 w-[40rem] p-6"
           >
-            <h3 className="text-text-gray text-4xl ">Delete</h3>
+            <h3 className="text-dark-gray text-4xl ">Delete</h3>
             <p className="text-[#8A8A8F] text-sm">
               Are you sure you want to delete this Admin?
             </p>
             <div className="flex justify-end gap-4 w-full mt-4">
               <button
                 onClick={() => setOpen(false)}
-                className="text-text-gray text-sm p-[17px] bg-[#efeff4] hover:bg-[#ccccd1] rounded-[5px]"
+                className="text-dark-gray text-sm p-[17px] bg-[#efeff4] hover:bg-[#ccccd1] rounded-[5px]"
               >
                 Cancel
               </button>
               <SubmitButton
                 label="Delete"
                 loadingLabel="Login..."
-                buttonClass="text-white text-sm p-[17px] bg-text-gray hover:bg-text-gray/90 rounded-[5px] max-w-fit"
+                buttonClass="text-white text-sm p-[17px] bg-dark-gray hover:bg-dark-gray/90 rounded-[5px] max-w-fit"
               />
             </div>
           </form>

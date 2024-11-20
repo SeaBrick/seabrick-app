@@ -81,10 +81,10 @@ export default function LoginPage() {
           className="h-[339px] md:h-[447px] w-[350px] md:w-[606px] mt-[40px] md:mt-[180px] p-6 relative bg-white rounded-[10px] flex-col justify-start items-center gap-8 inline-flex z-10"
         >
           <div className="h-[74px] flex-col justify-center items-center gap-[5px] flex">
-            <div className="text-[#333333] text-[15px] font-normal font-['Noto Sans']">
+            <div className="text-dark-gray text-[15px] font-normal font-['Noto Sans']">
               Authentication
             </div>
-            <div className="text-[#333333] text-4xl font-normal font-['Noto Sans']">
+            <div className="text-dark-gray text-4xl font-normal font-['Noto Sans']">
               Log In
             </div>
           </div>
@@ -95,7 +95,7 @@ export default function LoginPage() {
                 <div className="flex flex-col gap-1 w-full">
                   <label
                     htmlFor="email"
-                    className="text-[#333333] text-xs font-normal font-['Noto Sans']"
+                    className="text-dark-gray text-xs font-normal font-['Noto Sans']"
                   >
                     Email
                   </label>
@@ -106,7 +106,7 @@ export default function LoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
-                    className="self-stretch h-11 px-[15px] py-2.5 rounded-[5px] border border-[#333333] text-[#333333] text-sm font-normal font-['Noto Sans'] bg-[#efeff4]/60 placeholder-gray-500"
+                    className="self-stretch h-11 px-[15px] py-2.5 rounded-[5px] border border-dark-gray text-dark-gray text-sm font-normal font-['Noto Sans'] bg-[#efeff4]/60 placeholder-gray-500"
                   />
                 </div>
               </div>
@@ -114,7 +114,7 @@ export default function LoginPage() {
                 <div className="flex flex-col gap-1 w-full">
                   <label
                     htmlFor="password"
-                    className="text-[#333333] text-xs font-normal font-['Noto Sans']"
+                    className="text-dark-gray text-xs font-normal font-['Noto Sans']"
                   >
                     Password
                   </label>
@@ -153,7 +153,7 @@ export default function LoginPage() {
                   <button
                     onClick={() => setLoginWallet(true)}
                     type="button"
-                    className="grow shrink basis-0 h-[45px] p-[17px] bg-[#333333] hover:bg-[#333333]/80 rounded-[5px] justify-center items-center gap-2.5 flex disabled:cursor-not-allowed disabled:bg-gray-400"
+                    className="grow shrink basis-0 h-[45px] p-[17px] bg-dark-gray hover:bg-dark-gray/80 rounded-[5px] justify-center items-center gap-2.5 flex disabled:cursor-not-allowed disabled:bg-gray-400"
                   >
                     <span className="text-right text-white text-sm font-normal font-['Noto Sans']">
                       Connect using your Wallet
@@ -163,26 +163,26 @@ export default function LoginPage() {
               </div>
 
               <div className="self-stretch justify-between items-center inline-flex">
-                <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">
+                <div className="text-dark-gray text-xs font-normal font-['Noto Sans']">
                   Do you want to create an account?
                 </div>
                 <Link
                   href="/register"
                   prefetch={true}
-                  className="text-[#333333] text-xs font-bold font-['Noto Sans']"
+                  className="text-dark-gray text-xs font-bold font-['Noto Sans']"
                 >
                   Register
                 </Link>
               </div>
               <div className="self-stretch justify-between items-center inline-flex">
-                <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">
+                <div className="text-dark-gray text-xs font-normal font-['Noto Sans']">
                   Forgot your password?
                 </div>
 
                 <Link
                   href="/reset-password"
                   prefetch={true}
-                  className="text-[#333333] text-xs font-bold font-['Noto Sans']"
+                  className="text-dark-gray text-xs font-bold font-['Noto Sans']"
                 >
                   Reset Password
                 </Link>

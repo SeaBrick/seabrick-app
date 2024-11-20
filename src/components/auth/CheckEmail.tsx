@@ -9,10 +9,10 @@ const CheckEmail: React.FC<CheckEmailProps> = ({ email, text }) => {
     <div className="w-[606px] h-fit p-6 bg-white rounded-[10px] flex-col justify-start items-center gap-8 inline-flex z-10 mt-[180px]">
       <div className="self-stretch h-fit flex-col justify-start items-center gap-4 flex">
         <div className="h-[74px] flex-col justify-center items-center gap-[5px] flex">
-          <div className="text-[#333333] text-[15px] font-normal font-['Noto Sans']">
+          <div className="text-dark-gray text-[15px] font-normal font-['Noto Sans']">
             Account
           </div>
-          <div className="text-[#333333] text-4xl font-normal font-['Noto Sans']">
+          <div className="text-dark-gray text-4xl font-normal font-['Noto Sans']">
             Check your email!
           </div>
         </div>
@@ -40,10 +40,10 @@ const CheckEmail: React.FC<CheckEmailProps> = ({ email, text }) => {
       <div className="self-stretch h-24 flex-col justify-start items-start gap-4 flex">
         <div className="self-stretch h-[19px] flex-col justify-center items-start gap-2 flex">
           <div>
-            <span className="text-[#333333] text-sm font-normal font-['Noto Sans']">
+            <span className="text-dark-gray text-sm font-normal font-['Noto Sans']">
               Email sent to{" "}
             </span>
-            <span className="text-[#333333] text-sm font-bold font-['Noto Sans']">
+            <span className="text-dark-gray text-sm font-bold font-['Noto Sans']">
               {email}
             </span>
           </div>
