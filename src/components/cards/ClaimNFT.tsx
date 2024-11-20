@@ -113,7 +113,7 @@ export default function ClaimTokens({
                     alt="user-image"
                     height={120}
                     width={120}
-                    className="rounded-[100px] m-auto"
+                    className="m-auto"
                   />
                   <strong>No Tokens yet :c</strong>
                   <span>Fortunately, it is very easy to get ones C:</span>

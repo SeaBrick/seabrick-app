@@ -1,5 +1,6 @@
 import { truncateString } from "@/lib/utils";
 import TextCopier from "../TextCopier";
+import Image from "next/image";
 
 export interface UserTransactionHistoryData {
   total: number;
@@ -15,7 +16,8 @@ export default function UserTransactionHistory({
 }) {
   return (
     <>
-      {data.map((d, i) => {
+      {data.length < 0 ? (
+      data.map((d, i) => {
         return (
           <div
             className="self-stretch flex-col justify-start items-start gap-2 flex"
@@ -49,7 +51,19 @@ export default function UserTransactionHistory({
             </div>
           </div>
         );
-      })}
+      })
+    ):(
+    <div className="w-full h-full flex flex-col justify-center text-center gap-1">
+      <Image
+        src={`/empty.webp`}
+        alt="user-image"
+        height={120}
+        width={120}
+        className="m-auto"
+      />
+      <strong>No Transactions yet :c</strong>
+      </div>
+    )}
     </>
   );
 }
