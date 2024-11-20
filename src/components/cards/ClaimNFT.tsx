@@ -7,6 +7,8 @@ import { ModalDone } from "../modals/ModalDone"
 import SubmitButton from "../buttons/SubmitButton"
 import { claimToken, getClaimedTokens } from "@/app/dashboard/requests"
 import LoadingDots from "../spinners/LoadingDots"
+import LoadingBricks from "../spinners/LoadingBricks"
+import Link from "next/link"
 
 const dataColumns: TableColumn[] = [
   {
@@ -90,19 +92,45 @@ export default function ClaimTokens({
               and add them to your digital wallet. By claiming your NFTs, you
               can unlock unique digital assets that are uniquely yours."
         >
-          <div className="gap-2 flex flex-col overflow-y-auto">
             {isLoading ? (
-              <LoadingDots />
-            ) : (
-              nftClaimedList.length > 0 && (
+            <div className="gap-2 flex flex-col min-h-[150px] h-[fit-content] overflow-y-hidden">
+              {/* <LoadingDots /> */}
+              <LoadingBricks />
+              </div>
+            ) : (              
+              <div className="gap-2 flex flex-col overflow-y-auto">
+              {nftClaimedList.length > 0 ? (
                 <Table
                   columns={dataColumns}
                   data={nftClaimedList}
                   textExtraClasses="text-[0.7rem]"
                 />
-              )
+              ):
+              (<>
+                <div className="w-full h-full flex flex-col justify-center gap-1">
+                  <Image
+                    src={`/empty.webp`}
+                    alt="user-image"
+                    height={120}
+                    width={120}
+                    className="m-auto"
+                  />
+                  <strong>No Tokens yet </strong>
+                  <span>Fortunately, it is very easy to get ones</span>
+                  <Link
+                    className="m-auto px-6 py-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] rounded-[5px] justify-center items-center gap-2.5 flex text-center text-white text-base font-normal font-['Noto Sans']"
+                    href={`/buy`}
+                    prefetch={true}
+                  >
+                    Buy
+                  </Link>
+                </div>
+                </>
+              )}
+              </div>
+              
             )}
-          </div>
+          
           <div className="flex gap-2">
             <div className="px-3 py-1 grow shrink rounded-[5px] border border-[#babcc3]/60 justify-start items-center gap-2.5 inline-flex ">
               <div className="rounded-[100px] bg-slate-200 h-[20px] w-[20px] flex justify-center items-center">
