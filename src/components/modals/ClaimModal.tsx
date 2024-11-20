@@ -6,11 +6,13 @@ export default function ClaimModal({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setOpen,
   title,
+  description,
   children,
 }: {
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
   title: string
+  description: string
   children: ReactNode
 }) {
   return (
@@ -22,7 +24,7 @@ export default function ClaimModal({
               Claim {title}
             </span>
             <span className="text-[#8a8a8f] text-base font-normal font-['Noto Sans']">
-              This feature allows you to claim your NFTs (non-fungible tokens) and add them to your digital wallet. By claiming your NFTs, you can unlock unique digital assets, artwork or collectibles that are uniquely yours. 
+              {description}
             </span>
           </div>
           <div className="">
