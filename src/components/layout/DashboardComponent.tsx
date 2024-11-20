@@ -216,9 +216,9 @@ export default function DashboardComponent({
             <div className="lg:w-[50%] w-full min-h-[10rem] gap-2 flex flex-col">
               {isAdmin ? (
                 <div className="bg-white w-full h-full rounded-[10px] gap-x-3 gap-y-6 p-6 grid grid-cols-2 justify-between">
-                  <div className="justify-start items-center gap-2 flex">
+                  <div className="justify-start items-center gap-2 flex col-span-2">
                     <button
-                      className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] text-[white] rounded-[5px] text-left w-full h-full disabled:cursor-not-allowed disabled:bg-gray-400 text-lg"
+                      className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] text-[white] rounded-[5px] text-center w-full h-full disabled:cursor-not-allowed disabled:bg-gray-400 text-lg"
                       onClick={() => setTransferOwnerOpen(true)}
                       disabled={!isOwner}
                     >
