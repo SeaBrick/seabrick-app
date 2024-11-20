@@ -61,7 +61,7 @@ export default function UserTransactionHistory({
         width={120}
         className="m-auto"
       />
-      <strong>No Transactions yet :c</strong>
+      <strong>No Transactions yet</strong>
     </div>
     )}
     </>

@@ -115,8 +115,8 @@ export default function ClaimTokens({
                     width={120}
                     className="m-auto"
                   />
-                  <strong>No Tokens yet :c</strong>
-                  <span>Fortunately, it is very easy to get ones C:</span>
+                  <strong>No Tokens yet </strong>
+                  <span>Fortunately, it is very easy to get ones</span>
                   <Link
                     className="m-auto px-6 py-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] rounded-[5px] justify-center items-center gap-2.5 flex text-center text-white text-base font-normal font-['Noto Sans']"
                     href={`/buy`}

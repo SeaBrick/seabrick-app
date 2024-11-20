@@ -57,7 +57,7 @@ const App: React.FC = () => {
             width={120}
             className="rounded-[100px] m-auto"
           />
-          <strong>No Admins yet :c</strong>          
+          <strong>No Admins yet </strong>          
         </div>
       )}
     </div>
