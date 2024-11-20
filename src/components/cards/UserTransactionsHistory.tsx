@@ -16,7 +16,7 @@ export default function UserTransactionHistory({
 }) {
   return (
     <>
-      {data.length < 0 ? (
+      {data.length > 0 ? (
       data.map((d, i) => {
         return (
           <div
@@ -62,7 +62,7 @@ export default function UserTransactionHistory({
         className="m-auto"
       />
       <strong>No Transactions yet :c</strong>
-      </div>
+    </div>
     )}
     </>
   );

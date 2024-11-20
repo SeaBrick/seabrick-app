@@ -21,6 +21,7 @@ import { useContractContext } from "@/context/contractContext"
 import { Buy, Transfer } from "@/lib/interfaces"
 import ClaimNFT from "../cards/ClaimNFT"
 import Link from "next/link"
+import Image from "next/image"
 
 interface ModalProps {
   userTransactionData: UserTransactionHistoryData[]
@@ -295,6 +296,7 @@ export default function DashboardComponent({
                   <ArrowUpRightIcon className="size-[0.7rem]" />
                 </a>
               </div>
+              {dataOnDisplay.length > 0 ?(
               <div className="h-fit bg-[#efeff4] mt-3">
                 <Table
                   columns={
@@ -305,6 +307,18 @@ export default function DashboardComponent({
                   data={dataOnDisplay == "Transfers" ? dataTransfer : dataBuys}
                 />
               </div>
+              ):(
+                <div className="w-full h-fit flex flex-col justify-center text-center gap-1">
+                  <Image
+                    src={`/empty.webp`}
+                    alt="user-image"
+                    height={120}
+                    width={120}
+                    className="m-auto"
+                  />                  
+                  <strong>No Transactions yet :c</strong>
+                </div>
+            )}
             </div>
           </div>
         </div>
