@@ -33,7 +33,7 @@ export default function SeabrickNFTCard() {
                     <div className="w-[30px] h-[30px] relative">
                       <a
                         href="/buy"
-                        className="w-[30px] h-[30px] left-0 top-0 absolute rounded-full border border-[#9b9a9b]/60 flex justify-center items-center hover:bg-slate-50 active:bg-slate-200"
+                        className="w-[30px] h-[30px] left-0 top-0 absolute rounded-full border border-[#9b9a9b]/60 flex justify-center items-center hover:bg-slate-100 active:bg-slate-200"
                       >
                         <ArrowUpRightIcon className="size-[0.7rem]" />
                       </a>

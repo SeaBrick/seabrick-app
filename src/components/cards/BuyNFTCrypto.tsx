@@ -272,7 +272,7 @@ const BuyNFTCrypto: React.FC = () => {
                                       : undefined
                                   }
                                   disable={!isConnected || !termsAccepted}
-                                  buttonClass="grow shrink basis-0 h-[45px] p-[17px] bg-[#2069a0] w-full rounded-[5px] justify-center items-center gap-2.5 flex"
+                                  buttonClass="grow shrink basis-0 h-[45px] p-[17px] bg-[#2069a0] hover:bg-[#144d78] active:bg-[#0a3657] w-full rounded-[5px] justify-center items-center gap-2.5 flex"
                                   label="Approve SOL Transaction"
                                 />
                               ) : (
