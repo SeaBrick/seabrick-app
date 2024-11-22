@@ -43,11 +43,12 @@ export async function addAdmin(email: string) {
         if (!response.ok) {
             throw new Error(`${response.status} - ${response.statusText}`)
         }
-        const data = response.json()
+        const data = await response.json()
         console.log(data)
         return (data)
     } catch (error) {
         toast.error((error as { message: string }).message)
+        throw error
     }
 
 }

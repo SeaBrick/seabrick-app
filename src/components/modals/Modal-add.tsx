@@ -2,16 +2,17 @@ import { Dispatch, SetStateAction, useState } from "react"
 import { ModalConfirm } from "./ModalConfirm"
 import { validateEmail } from "@/components/utils/ValidateEmail"
 import { ModalDone } from "./ModalDone"
-import { addAdmin } from "@/app/admin-list/requests";
 import { XMarkIcon } from "@heroicons/react/16/solid";
 
 export default function AddAdminModal({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   open,
   setOpen,
+  addNewAdmin
 }: {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  addNewAdmin: (email: string) => void;
 }) {
   const [isConfirmOpen, setConfirmOpen] = useState(false);
   const [isSelfOpen, setSelfOpen] = useState(true);
@@ -26,7 +27,9 @@ export default function AddAdminModal({
   };
   const handleConfirm = async () => {
     try {
-      await addAdmin(address)
+      console.log(address);
+      await addNewAdmin(address)
+      console.log("Confirm");
       setOpenDone(true);
     } catch (error) {
       console.log(error);
