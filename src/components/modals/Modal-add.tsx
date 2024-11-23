@@ -2,60 +2,60 @@ import { Dispatch, SetStateAction, useState } from "react"
 import { ModalConfirm } from "./ModalConfirm"
 import { validateEmail } from "@/components/utils/ValidateEmail"
 import { ModalDone } from "./ModalDone"
-import { addAdmin } from "@/app/admin-list/requests";
-import { XMarkIcon } from "@heroicons/react/16/solid";
+import { XMarkIcon } from "@heroicons/react/16/solid"
 
 export default function AddAdminModal({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   open,
   setOpen,
+  addNewAdmin,
 }: {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  open: boolean
+  setOpen: Dispatch<SetStateAction<boolean>>
+  addNewAdmin: (email: string) => void
 }) {
-  const [isConfirmOpen, setConfirmOpen] = useState(false);
-  const [isSelfOpen, setSelfOpen] = useState(true);
-  const [isOpenDone, setOpenDone] = useState(false);
+  const [isConfirmOpen, setConfirmOpen] = useState(false)
+  const [isSelfOpen, setSelfOpen] = useState(true)
+  const [isOpenDone, setOpenDone] = useState(false)
 
-  const [address, setAddress] = useState("");
-  const [error, setError] = useState("");
+  const [address, setAddress] = useState("")
+  const [error, setError] = useState("")
 
   const printCancel = () => {
-    console.log("Cancel");
-    setOpen(false);
-  };
+    setOpen(false)
+  }
   const handleConfirm = async () => {
     try {
-      await addAdmin(address)
-      setOpenDone(true);
+      await addNewAdmin(address)
+      setOpenDone(true)
     } catch (error) {
-      console.log(error);
-      handleBack();
+      console.log(error)
+      handleBack()
     }
-  };
+  }
 
   const handleBack = () => {
-    setSelfOpen(true);
-    setConfirmOpen(false);
-  };
+    setSelfOpen(true)
+    setConfirmOpen(false)
+  }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const validationError = validateEmail(address);
+    e.preventDefault()
+    const validationError = validateEmail(address)
     if (validationError) {
-      setError(validationError);
-      return;
+      setError(validationError)
+      return
     }
-    setError("");
-    setConfirmOpen(true);
-    setSelfOpen(false);
-  };
+    setError("")
+    setConfirmOpen(true)
+    setSelfOpen(false)
+  }
 
   const handleCancel = () => {
-    printCancel();
-    setOpen(false);
-    setSelfOpen(false);
-  };
+    printCancel()
+    setOpen(false)
+    setSelfOpen(false)
+  }
 
   return (
     <>
@@ -64,7 +64,8 @@ export default function AddAdminModal({
           title={"Confirmed"}
           message={
             <p>
-              The new admin user {" "} <strong>{address}</strong> has been added successfully 
+              The new admin user <strong>{address}</strong> has been added
+              successfully
             </p>
           }
           action={setOpen}
@@ -97,7 +98,9 @@ export default function AddAdminModal({
                 Add Admin
               </span>
               <span className="text-[#8a8a8f] text-base font-normal font-['Noto Sans']">
-                Please enter the details of the new admin you wish to add. Make sure to provide a valid email address. This action will grant the new admin access to manage the platform and its features.
+                Please enter the details of the new admin you wish to add. Make
+                sure to provide a valid email address. This action will grant
+                the new admin access to manage the platform and its features.
               </span>
             </div>
             <div className="">
@@ -149,5 +152,5 @@ export default function AddAdminModal({
         </div>
       )}
     </>
-  );
+  )
 }
