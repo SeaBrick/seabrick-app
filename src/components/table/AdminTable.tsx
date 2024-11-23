@@ -1,36 +1,35 @@
-"use client";
-import { useState } from "react";
-import ModalAdd from "@/components/modals/Modal-add";
-import Modal from "@/components/modals/Modal";
-import { TrashIcon } from "@heroicons/react/24/outline";
-import TextCopier from "../TextCopier";
-import ModalDelete from "../modals/Modal";
-import Container from "../utils/Container";
-import SubmitButton from "../buttons/SubmitButton";
-import { addAdmin, AdminInterface } from "@/app/admin-list/requests";
-import { truncateString } from "@/lib/utils";
-import Image from "next/image";
+"use client"
+import { useState } from "react"
+import ModalAdd from "@/components/modals/Modal-add"
+import Modal from "@/components/modals/Modal"
+import { TrashIcon } from "@heroicons/react/24/outline"
+import TextCopier from "../TextCopier"
+import ModalDelete from "../modals/Modal"
+import Container from "../utils/Container"
+import SubmitButton from "../buttons/SubmitButton"
+import { AdminInterface } from "@/app/admin-list/requests"
+import { truncateString } from "@/lib/utils"
+import Image from "next/image"
 
 interface TableColumn {
-  key: string;
-  label: string;
+  key: string
+  label: string
 }
 
 function AdminTable({
   columns,
   data,
   deleteAdmin,
+  addAdmin,
 }: {
-  columns: TableColumn[];
-  data: AdminInterface[];
-  deleteAdmin: (id: string) => void;
-  addAdmin: (email: string) => void;
+  columns: TableColumn[]
+  data: AdminInterface[]
+  deleteAdmin: (id: string) => void
+  addAdmin: (email: string) => void
 }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
-  const [addAdminOpen, setAddAdminOpen] = useState(false);
-
-  //
+  const [addAdminOpen, setAddAdminOpen] = useState(false)
 
   //
 
@@ -46,7 +45,11 @@ function AdminTable({
             Add Admins
           </button>
           <Modal open={addAdminOpen} setOpen={setAddAdminOpen}>
-            <ModalAdd open={addAdminOpen} setOpen={setAddAdminOpen} addNewAdmin={addAdmin} />
+            <ModalAdd
+              open={addAdminOpen}
+              setOpen={setAddAdminOpen}
+              addNewAdmin={addAdmin}
+            />
           </Modal>
         </div>
       </div>
@@ -73,16 +76,16 @@ function AdminTable({
                   className="flex justify-between px-6 h-12 gap-5 items-center"
                 >
                   {columns.map((column) => {
-                    let enableCopier = false;
-                    let valueText = "";
-                    let showText = row[column.key as keyof AdminInterface];
+                    let enableCopier = false
+                    let valueText = ""
+                    let showText = row[column.key as keyof AdminInterface]
                     if (column.key == "address" && row[column.key]) {
-                      enableCopier = true;
-                      valueText = row[column.key]!;
-                      showText = truncateString(row[column.key]!);
+                      enableCopier = true
+                      valueText = row[column.key]!
+                      showText = truncateString(row[column.key]!)
                     }
                     if (column.key === "created_at") {
-                      showText = new Date(row[column.key]).toLocaleDateString();
+                      showText = new Date(row[column.key]).toLocaleDateString()
                     }
                     return (
                       <td
@@ -94,12 +97,14 @@ function AdminTable({
                           {enableCopier ? <TextCopier text={valueText} /> : ""}
                         </div>
                       </td>
-                    );
+                    )
                   })}
                   <td>
                     <button
                       className="text-dark-gray text-xs font-normal font-['Noto Sans'] h-[30px] px-4 py-[17px] bg-dark-gray rounded-[5px] justify-start items-center flex gap-1.5 hover:bg-dark-gray/90"
-                      onClick={() => setOpen(true)}
+                      onClick={() => {
+                        setOpen(true)
+                      }}
                     >
                       <TrashIcon className="h-4 w-4 text-white" />
                       <span className="text-white text-xs font-normal font-['Noto Sans']">
@@ -108,9 +113,7 @@ function AdminTable({
                     </button>
                     <ModalDelete open={open} setOpen={setOpen}>
                       <Container>
-                        <div
-                          className="flex flex-col items-start gap-y-4 w-[40rem] p-6"
-                        >
+                        <div className="flex flex-col items-start gap-y-4 w-[40rem] p-6">
                           <h3 className="text-dark-gray text-4xl ">Delete</h3>
                           <p className="text-[#8A8A8F] text-sm">
                             Are you sure you want to delete this Admin?
@@ -126,7 +129,10 @@ function AdminTable({
                               label="Delete"
                               loadingLabel="Deleting..."
                               buttonClass="text-white text-sm p-[17px] bg-dark-gray hover:bg-dark-gray/90 rounded-[5px] max-w-fit"
-                              onClick={() => deleteAdmin(row.user_id)}
+                              onClick={async () => {
+                                await deleteAdmin(row.user_id)
+                                setOpen(false)
+                              }}
                             />
                           </div>
                         </div>
@@ -151,7 +157,7 @@ function AdminTable({
         </div>
       )}
     </div>
-  );
+  )
 }
 
-export default AdminTable;
+export default AdminTable

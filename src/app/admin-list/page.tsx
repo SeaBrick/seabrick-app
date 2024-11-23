@@ -22,11 +22,8 @@ const App: React.FC = () => {
     await fetchData()
   }
   async function handleAddition(email: string) {
-    console.log("Adding admin")
     await addAdmin(email)
-    console.log("Added admin")
     await fetchData()
-    console.log("Fetched admins")
   }
   return (
     <div className="max-w-[978px] w-full mx-auto mt-[30px] relative">
@@ -39,7 +36,7 @@ const App: React.FC = () => {
         </span>
         <h1 className="text-center text-black text-4xl font-normal">Admins</h1>
       </div>
-      
+
       <AdminTable
         columns={[
           { key: "email", label: "Email" },
