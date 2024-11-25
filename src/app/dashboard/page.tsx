@@ -7,7 +7,10 @@ import { wrapPromise } from "@/lib/utils";
 import { getLatestBuys, getLatestTransfers } from "@/lib/subgraph";
 import UserName from "@/components/auth/UserName";
 
-//
+// TODO:Add a delay of few seconds to wait that the data is saved and fetched
+// Maybe we can take advantange of the loading component before fetching the data
+
+// TODO: Add a reload button on the Error
 const getLatestBuysInfo = async () => {
   return await getLatestBuys();
 };
