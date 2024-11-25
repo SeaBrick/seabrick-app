@@ -28,6 +28,7 @@ const initialState: ContractStateType = {
     owner: zeroAddress,
     price: "",
     token: zeroAddress,
+    claimVault: zeroAddress,
   },
 };
 
