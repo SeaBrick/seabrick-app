@@ -1,6 +1,5 @@
 import {
   UserIcon,
-  CurrencyDollarIcon,
   ChevronDownIcon,
   ArrowUpRightIcon,
   AtSymbolIcon,
@@ -73,7 +72,7 @@ export default function DashboardComponent({
     { key: "blockTimestamp", label: "Time" },
   ]
 
-  // TODO: Conectar
+  // TODO: Connect
   const totalBalance = 3500
   const totalQuantity = 35
   const lastMontQuantity = isAdmin ? 5 : 100
