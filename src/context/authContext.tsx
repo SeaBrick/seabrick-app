@@ -13,7 +13,7 @@ import type {
   AuthContextAuthenticated,
   AuthContextUnauthenticated,
   UserRole,
-  UserType,
+  UserType, //   // Somehow adding a query fix this
 } from "@/lib/interfaces/auth";
 import { decodeJWT, getUserRole } from "@/lib/utils/auth";
 import { getAddress, type Address } from "viem";
@@ -42,12 +42,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   async function signOut() {
     const { error } = await createClient().auth.signOut();
     if (error) {
-      toast.error(error.message)
+      toast.error(error.message);
       console.log(error);
     }
 
     await refetch();
-    router.push("/login");
+    // Somehow adding a query fix this
+    router.push(`/login?tab=email`);
   }
 
   useAccountEffect({

@@ -17,7 +17,6 @@ import {
 } from "@/lib/contracts/clientTransactions";
 import { useRouter } from "next/navigation";
 
-// TODO: After a success buy, redirect to the return cart to show the buy info
 const BuyNFTCrypto: React.FC = () => {
   const {
     data: {

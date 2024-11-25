@@ -25,7 +25,8 @@ export default function AddAdminModal({
   };
   const handleConfirm = async () => {
     try {
-      // await addAdmin(address) a la espera de funcionalidad por nanez
+      // TODO: Add functionality (need fix at the banckend side too)
+      // await transferOwnership(address)
       setOpenDone(true);
     } catch (error) {
       console.log(error);

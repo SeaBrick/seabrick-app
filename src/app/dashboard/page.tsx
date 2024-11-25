@@ -7,7 +7,6 @@ import { wrapPromise } from "@/lib/utils";
 import { getLatestBuys, getLatestTransfers } from "@/lib/subgraph";
 import UserName from "@/components/auth/UserName";
 
-//
 const getLatestBuysInfo = async () => {
   return await getLatestBuys();
 };
