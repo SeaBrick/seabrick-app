@@ -3,6 +3,7 @@
 import React, { Suspense } from "react";
 import ContractLoader from "../loaders/ContractLoader";
 import LoadingDots from "../spinners/LoadingDots";
+import LoadingBricks from "../spinners/LoadingBricks";
 
 interface SplashScreenProps {
   children: React.ReactNode;
@@ -14,7 +15,8 @@ const SplashScreen = ({ children }: SplashScreenProps) => {
         fallback={
           <div className="w-1/2 mx-auto mt-80">
             <div className="py-24 my-auto">
-              <LoadingDots />
+              {/* <LoadingDots /> */}
+              <LoadingBricks/>
             </div>
           </div>
         }

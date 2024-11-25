@@ -77,14 +77,10 @@ export default function MarketPanel() {
               <p className="font-bold">
                 Token: <span className="font-normal">{token.symbol}</span>
               </p>
+              {/* TODO: Work on new ways to show the total collected per Vault address */}
               <p className="font-bold">
                 Collected:{" "}
-                <span className="font-normal">
-                  {formatUnits(
-                    BigInt(token.totalCollected),
-                    parseInt(token.decimals)
-                  )}
-                </span>
+                <span className="font-normal">Should show per vault</span>
               </p>
             </div>
             <div>

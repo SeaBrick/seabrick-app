@@ -6,6 +6,7 @@ import { checkAddress } from "@/lib/utils";
 import { mintSeabrickTokens } from "@/lib/contracts/transactions";
 import { MintSeabrickResp } from "@/lib/interfaces/api";
 
+// TODO: SUpport for address
 export async function POST(request: NextRequest) {
   const supabaseClient = createClient();
 

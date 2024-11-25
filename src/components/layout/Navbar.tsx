@@ -49,13 +49,13 @@ export function Navbar() {
           ) : (
             <>
               <Link
-                className={`${pathname === "/register" && "text-text-gray"}`}
+                className={`${pathname === "/register" && "text-dark-gray"}`}
                 href="/register"
               >
                 Register
               </Link>
               <Link
-                className={`${pathname === "/login" && "text-text-gray"} hover:text-seabrick-blue`}
+                className={`${pathname === "/login" && "text-dark-gray"} hover:text-seabrick-blue`}
                 href="/login"
               >
                 Log in

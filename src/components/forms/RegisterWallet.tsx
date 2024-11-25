@@ -113,10 +113,10 @@ const RegisterWalletForm: React.FC = () => {
       </Modal>
       <div className="w-[606px] h-min p-6 relative bg-white rounded-[10px] rounded-tl-none flex-col justify-start items-center gap-8 inline-flex">
         <div className="h-[74px] flex-col justify-center items-center gap-[5px] flex">
-          <div className="text-[#333333] text-[15px] font-normal font-['Noto Sans']">
+          <div className="text-dark-gray text-[15px] font-normal font-['Noto Sans']">
             Register Wallet
           </div>
-          <div className="text-[#333333] text-4xl font-normal font-['Noto Sans']">
+          <div className="text-dark-gray text-4xl font-normal font-['Noto Sans']">
             Create Account
           </div>
         </div>
@@ -143,7 +143,7 @@ const RegisterWalletForm: React.FC = () => {
                 />
                 <label
                   htmlFor="email"
-                  className="text-[#333333] text-xs font-normal font-['Noto Sans']"
+                  className="text-dark-gray text-xs font-normal font-['Noto Sans']"
                 >
                   Email
                 </label>
@@ -155,7 +155,7 @@ const RegisterWalletForm: React.FC = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
-                  className="self-stretch h-11 px-[15px] py-2.5 rounded-[5px] border border-[#333333] text-[#333333] text-sm font-normal font-['Noto Sans'] bg-[#efeff4]/60"
+                  className="self-stretch h-11 px-[15px] py-2.5 rounded-[5px] border border-dark-gray text-dark-gray text-sm font-normal font-['Noto Sans'] bg-[#efeff4]/60"
                 />
               </div>
               <div className="self-stretch justify-start items-start gap-4 inline-flex"></div>
@@ -170,13 +170,13 @@ const RegisterWalletForm: React.FC = () => {
                 />
               </div>
               <div className="self-stretch justify-between items-center inline-flex">
-                <div className="text-[#333333] text-xs font-normal font-['Noto Sans']">
+                <div className="text-dark-gray text-xs font-normal font-['Noto Sans']">
                   Do you already have an account?
                 </div>
                 <Link
                   href="/login"
                   prefetch={true}
-                  className="text-[#333333] text-xs font-bold font-['Noto Sans']"
+                  className="text-dark-gray text-xs font-bold font-['Noto Sans']"
                 >
                   Login
                 </Link>

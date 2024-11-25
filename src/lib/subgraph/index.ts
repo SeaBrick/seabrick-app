@@ -177,7 +177,6 @@ export async function getAggregatorsData(): Promise<AggregatorResponse[]> {
           id
           name
           symbol
-          totalCollected
         }
       }
     }

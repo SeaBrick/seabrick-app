@@ -25,7 +25,7 @@ export default function SeabrickNFTCard() {
                   <div className=" justify-between items-start inline-flex">
                     <div className="flex-col justify-start items-start gap-3.5 inline-flex">
                       <div className=" justify-start items-end gap-2 inline-flex">
-                        <div className="text-[#333333] text-4xl font-normal font-['Noto Sans']">
+                        <div className="text-dark-gray text-4xl font-normal font-['Noto Sans']">
                           {seabrick.name}
                         </div>
                       </div>
@@ -33,7 +33,7 @@ export default function SeabrickNFTCard() {
                     <div className="w-[30px] h-[30px] relative">
                       <a
                         href="/buy"
-                        className="w-[30px] h-[30px] left-0 top-0 absolute rounded-full border border-[#9b9a9b]/60 flex justify-center items-center hover:bg-slate-50 active:bg-slate-200"
+                        className="w-[30px] h-[30px] left-0 top-0 absolute rounded-full border border-[#9b9a9b]/60 flex justify-center items-center hover:bg-slate-100 active:bg-slate-200"
                       >
                         <ArrowUpRightIcon className="size-[0.7rem]" />
                       </a>

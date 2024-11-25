@@ -28,7 +28,7 @@ export default function ClaimNFTCard() {
           <div className="w-[71.02px] h-[71.02px] left-[45.51px] top-[75.02px] absolute origin-top-left rotate-[-120deg] opacity-50 rounded-full border-2 border-white"></div>
         </div>
         <button
-          className="h-[50px] p-[17px] bg-white rounded-[5px] justify-start items-center gap-2.5 inline-flex hover:bg-slate-50 active:bg-slate-200"
+          className="h-[50px] p-[17px] bg-white rounded-[5px] justify-start items-center gap-2.5 inline-flex hover:bg-slate-200 active:bg-slate-400"
           onClick={() => handleOpenModalClaim(true)}
         >
           <div className="text-right text-black text-lg font-normal font-['Noto Sans']">
