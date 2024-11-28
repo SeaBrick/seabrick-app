@@ -122,6 +122,8 @@ async function fulfillCheckout(
     const mintResp = await mintSeabrickTokens(quantity);
 
     if (mintResp.isMinted === true) {
+      // TODO: 1Send receipt here
+
       const dataInsert = mintResp.ids.map((id_) => {
         return {
           tx_hash: mintResp.txHash,
