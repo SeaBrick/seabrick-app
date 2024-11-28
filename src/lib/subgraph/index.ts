@@ -95,6 +95,7 @@ export async function getSeabrickMarket(): Promise<SeabrickMarket> {
         owner
         price
         token
+        claimVault
       }
     }
   `;

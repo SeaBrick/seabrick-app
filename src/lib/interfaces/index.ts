@@ -62,6 +62,7 @@ export interface SeabrickMarket {
   owner: Address;
   price: string;
   token: Address;
+  claimVault: Address;
 }
 
 export interface OwnershipSettings {
