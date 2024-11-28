@@ -1,6 +1,8 @@
 "use server";
 
 import { Resend } from "resend";
+import * as ejs from "ejs";
+import { Hash } from "viem";
 
 const resend_key = process.env.RESEND_KEY;
 
@@ -8,21 +10,50 @@ if (!resend_key) {
   throw new Error("Missing RESEND_KEY value");
 }
 
-async function sendReceipt(email: string): Promise<boolean> {
+export async function sendReceipt(
+  email: string,
+  tokenIds: string[],
+  txHash: Hash,
+  date: Date
+): Promise<boolean> {
   if (!resend_key) {
     return false;
   }
 
   const resend = new Resend(resend_key);
 
+  // TODO: Use template from DB
+  const raw = `<div>
+  <p>User: <%=email%></p>
+  <p>
+  Token IDs: <span><%=tokenIds%></span>
+  </p>
+  <p>
+  Purchate at: <span><%=date%></span>
+  </p>
+  <p>
+  Verified at tx hash: <span><%=hash%></span>
+  </p>
+  </div>`;
+
+  const html = ejs.render(raw, {
+    // user: "Victor",
+    email,
+    date: date.toLocaleDateString(),
+    tokenIds: tokenIds.join(", "),
+    // address: "0x000000000000000000000000000000",
+    hash: txHash,
+    // img_url: "/brick.webp",
+  });
+
   try {
     const { data, error } = await resend.emails.send({
-      from: "Seabrick <onboarding@resend.dev>",
+      from: "Seabrick <receipt@seabrick.com>",
       to: [email],
-      // TODO: Change the subject
-      subject: "Hello man! Works! This is your receipt",
+      subject: "Thanks for the Buy! Here is your receipt",
       // TODO: Use the email template from the DB
-      html: "<strong>It works! You got your receipt!</strong>",
+      html: html,
+      // html: "<strong>It works! You got your receipt!</strong>",
     });
 
     if (error) {
@@ -32,7 +63,6 @@ async function sendReceipt(email: string): Promise<boolean> {
     }
 
     if (data) {
-      console.log("email sent: ", data);
       return true;
     }
   } catch (e) {
