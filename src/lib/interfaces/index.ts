@@ -18,7 +18,6 @@ export interface ERC20Token {
   decimals: string;
   name: string;
   symbol: string;
-  totalCollected: string;
 }
 
 export interface TokenNFT {
@@ -63,6 +62,7 @@ export interface SeabrickMarket {
   owner: Address;
   price: string;
   token: Address;
+  claimVault: Address;
 }
 
 export interface OwnershipSettings {

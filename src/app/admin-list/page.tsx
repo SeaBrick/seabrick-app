@@ -36,6 +36,7 @@ const App: React.FC = () => {
         </span>
         <h1 className="text-center text-black text-4xl font-normal">Admins</h1>
       </div>
+
       <AdminTable
         columns={[
           { key: "email", label: "Email" },

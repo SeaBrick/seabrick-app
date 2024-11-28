@@ -14,13 +14,13 @@ export function ModalDone({
     action(false)
   }
   return (
-    <div className="bg-white rounded-[10px] h-fit min-h-fit max-h-[70vh]  w-[40vw] min-w-[450px] p-6 gap-6 flex flex-col">
+    <div className="bg-white rounded-[10px] h-fit min-h-fit max-h-[70vh]  w-full max-w-[638px] md:min-w-[450px] p-6 gap-6 flex flex-col">
       <div className="flex gap-2 justify-between">
-        <div className="flex flex-col text-left gap-2">
-          <span className="text-[#333333] text-3xl font-normal font-['Noto Sans']">
+        <div className="flex flex-col text-left gap-4">
+          <span className="text-dark-gray text-3xl font-normal font-['Noto Sans']">
             {title}
           </span>
-          <span className="text-[#8a8a8f] text-xs font-normal font-['Noto Sans']">
+          <span className="text-[#8a8a8f] text-base font-normal font-['Noto Sans']">
             {message}
           </span>
         </div>
@@ -36,7 +36,7 @@ export function ModalDone({
 
       <div className="flex justify-end gap-3">
         <button
-          className="text-white text-xs font-normal font-['Noto Sans'] bg-[#333333] hover:bg-[#555555] active:bg-[#222222] rounded-[5px] p-3"
+          className="text-white text-base font-normal font-['Noto Sans'] bg-dark-gray hover:bg-[#555555] active:bg-[#222222] rounded-[5px] p-3"
           onClick={handleAction}
         >
           Done

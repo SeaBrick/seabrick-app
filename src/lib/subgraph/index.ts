@@ -95,6 +95,7 @@ export async function getSeabrickMarket(): Promise<SeabrickMarket> {
         owner
         price
         token
+        claimVault
       }
     }
   `;
@@ -177,7 +178,6 @@ export async function getAggregatorsData(): Promise<AggregatorResponse[]> {
           id
           name
           symbol
-          totalCollected
         }
       }
     }

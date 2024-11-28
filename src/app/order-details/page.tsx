@@ -111,7 +111,10 @@ async function getBuysStripe(stripeId: string): Promise<DetailsTableProps> {
   };
 }
 
-// TODO: Add loading effect
+// TODO:Add a delay of few seconds to wait that the data is saved and fetched
+// Maybe we can take advantange of the loading component before fetching the data
+
+// TODO: Add a reload button on the Error
 const OrderDetails: React.FC = () => {
   const searchParams = useSearchParams();
   const type = searchParams.get("type");

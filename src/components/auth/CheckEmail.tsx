@@ -9,10 +9,10 @@ const CheckEmail: React.FC<CheckEmailProps> = ({ email, text }) => {
     <div className="w-[606px] h-fit p-6 bg-white rounded-[10px] flex-col justify-start items-center gap-8 inline-flex z-10 mt-[180px]">
       <div className="self-stretch h-fit flex-col justify-start items-center gap-4 flex">
         <div className="h-[74px] flex-col justify-center items-center gap-[5px] flex">
-          <div className="text-[#333333] text-[15px] font-normal font-['Noto Sans']">
+          <div className="text-dark-gray text-[15px] font-normal font-['Noto Sans']">
             Account
           </div>
-          <div className="text-[#333333] text-4xl font-normal font-['Noto Sans']">
+          <div className="text-dark-gray text-4xl font-normal font-['Noto Sans']">
             Check your email!
           </div>
         </div>
@@ -22,28 +22,19 @@ const CheckEmail: React.FC<CheckEmailProps> = ({ email, text }) => {
           </div>
         )}
 
-        {/* TODO: Remove this. ONly for dev */}
         {!text && (
           <div className="self-stretch text-[#8a8a8f] text-sm font-normal font-['Noto Sans']">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industrys standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages,
-            and more recently with desktop publishing software like Aldus
-            PageMaker including versions of Lorem Ipsum.
+            You can go to your email. Remember to check your spam folder
           </div>
         )}
       </div>
       <div className="self-stretch h-24 flex-col justify-start items-start gap-4 flex">
         <div className="self-stretch h-[19px] flex-col justify-center items-start gap-2 flex">
           <div>
-            <span className="text-[#333333] text-sm font-normal font-['Noto Sans']">
+            <span className="text-dark-gray text-sm font-normal font-['Noto Sans']">
               Email sent to{" "}
             </span>
-            <span className="text-[#333333] text-sm font-bold font-['Noto Sans']">
+            <span className="text-dark-gray text-sm font-bold font-['Noto Sans']">
               {email}
             </span>
           </div>

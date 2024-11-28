@@ -17,6 +17,7 @@
     "@supabase/supabase-js": "2.45.4",
     "@tanstack/react-query": "^5.59.20",
     "connectkit": "^1.8.2",
+    "ejs": "^3.1.10",
     "graphql": "^16.9.0",
     "graphql-request": "^7.1.0",
     "jwt-decode": "^4.0.0",
@@ -32,6 +33,7 @@
     "wagmi": "^2.12.28"
   },
   "devDependencies": {
+    "@types/ejs": "^3.1.5",
     "@types/lodash": "^4.17.13",
     "@types/node": "^20.12.10",
     "@types/react": "^18.3.11",

@@ -1,13 +1,13 @@
-import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
-import Image from "next/image";
-import { Dispatch, SetStateAction, useState } from "react";
-import ClaimModal from "../modals/ClaimModal";
-import { ModalDone } from "../modals/ModalDone";
+import { CurrencyDollarIcon } from "@heroicons/react/24/outline"
+import Image from "next/image"
+import { Dispatch, SetStateAction, useState } from "react"
+import ClaimModal from "../modals/ClaimModal"
+import { ModalDone } from "../modals/ModalDone"
 interface TokensMap {
-  id: number;
-  symbol: string;
-  logo: string;
-  amount: number;
+  id: number
+  symbol: string
+  logo: string
+  amount: number
 }
 const testData: TokensMap[] = [
   {
@@ -40,8 +40,8 @@ const testData: TokensMap[] = [
     logo: "/brick.webp",
     amount: 121,
   },
-];
-const mapTokenData: TokensMap[] = testData;
+]
+const mapTokenData: TokensMap[] = testData
 
 export default function ClaimTokens({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -49,20 +49,20 @@ export default function ClaimTokens({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setOpen,
 }: {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  open: boolean
+  setOpen: Dispatch<SetStateAction<boolean>>
 }) {
-  const [isSelfOpen, setSelfOpen] = useState(true);
-  const [isDoneOpen, setDoneOpen] = useState(false);
-  const [tokensClaimed, setTokensClaimed] = useState(0);
-  const [tokenSymbol, setTokensSymbol] = useState("");
+  const [isSelfOpen, setSelfOpen] = useState(true)
+  const [isDoneOpen, setDoneOpen] = useState(false)
+  const [tokensClaimed, setTokensClaimed] = useState(0)
+  const [tokenSymbol, setTokensSymbol] = useState("")
 
   function claimToken(token: TokensMap) {
-    setTokensClaimed(token.amount);
-    setTokensSymbol(token.symbol);
-    setSelfOpen(false);
-    setDoneOpen(true);
-    console.log("I Claimed ", token.symbol);
+    setTokensClaimed(token.amount)
+    setTokensSymbol(token.symbol)
+    setSelfOpen(false)
+    setDoneOpen(true)
+    console.log("I Claimed ", token.symbol)
   }
   return (
     <>
@@ -82,7 +82,13 @@ export default function ClaimTokens({
         />
       )}
       {isSelfOpen && (
-        <ClaimModal open={open} setOpen={setOpen} title={"Tokens"}>
+        <ClaimModal
+          open={open}
+          setOpen={setOpen}
+          title={"Tokens"}
+          description="This feature allows you to claim your Tokens
+              and add them to the designed wallet. By doing this, you are redeeming all earnings from NFT's sellings"
+        >
           <div className="gap-2 flex flex-col overflow-y-auto">
             {mapTokenData.map((t, i) => {
               return (
@@ -110,11 +116,11 @@ export default function ClaimTokens({
                     Claim
                   </button>
                 </div>
-              );
+              )
             })}
           </div>
         </ClaimModal>
       )}
     </>
-  );
+  )
 }

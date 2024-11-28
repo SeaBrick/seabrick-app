@@ -72,7 +72,7 @@ const ChangePasswordForm: React.FC = () => {
       <h3 className="text-xl font-bold leading-6">Change Password</h3>
       <div className="mb-4">
         <label
-          className="block text-[#333333] text-xs font-normal mb-2"
+          className="block text-dark-gray text-sm font-normal mb-2"
           htmlFor="current-password"
         >
           Current Password
@@ -97,7 +97,7 @@ const ChangePasswordForm: React.FC = () => {
       <div className="flex flex-col md:flex-row gap-4">
         <div className="mb-4 md:w-1/2">
           <label
-            className="block text-[#333333] text-xs font-normal mb-2"
+            className="block text-dark-gray text-sm font-normal mb-2"
             htmlFor="new-password"
           >
             New Password
@@ -122,7 +122,7 @@ const ChangePasswordForm: React.FC = () => {
 
         <div className="mb-4 md:w-1/2">
           <label
-            className="block text-[#333333] text-xs font-normal mb-2"
+            className="block text-dark-gray text-sm font-normal mb-2"
             htmlFor="repeated-password"
           >
             Repeat New Password

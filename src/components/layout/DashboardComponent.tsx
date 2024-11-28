@@ -1,32 +1,33 @@
 import {
   UserIcon,
-  CurrencyDollarIcon,
   ChevronDownIcon,
   ArrowUpRightIcon,
   AtSymbolIcon,
-} from "@heroicons/react/24/outline";
-import ClaimTokens from "../cards/ClaimNFT";
-import ClaimNFTCard from "../cards/ClaimNFTCard";
-import SeabrickNFTCard from "../cards/SeabrickNFTCard";
+  ArrowsRightLeftIcon,
+} from "@heroicons/react/24/outline"
+import ClaimTokens from "../cards/ClaimNFT"
+import ClaimNFTCard from "../cards/ClaimNFTCard"
+import SeabrickNFTCard from "../cards/SeabrickNFTCard"
 import UserTransactionHistory, {
   UserTransactionHistoryData,
-} from "../cards/UserTransactionsHistory";
-import { MintTokensModal } from "../modals/MintTokensModal";
-import Modal from "../modals/Modal";
-import ModalTransferOwnership from "../modals/ModalTransferOwnership";
-import Table from "../table/TableTest";
-import { useState } from "react";
-import { useContractContext } from "@/context/contractContext";
-import { Buy, Transfer } from "@/lib/interfaces";
-import ClaimNFT from "../cards/ClaimNFT";
-import Link from "next/link";
+} from "../cards/UserTransactionsHistory"
+import { MintTokensModal } from "../modals/MintTokensModal"
+import Modal from "../modals/Modal"
+import ModalTransferOwnership from "../modals/ModalTransferOwnership"
+import Table from "../table/TableTest"
+import { useState } from "react"
+import { useContractContext } from "@/context/contractContext"
+import { Buy, Transfer } from "@/lib/interfaces"
+import ClaimNFT from "../cards/ClaimNFT"
+import Link from "next/link"
+import Image from "next/image"
 
 interface ModalProps {
-  userTransactionData: UserTransactionHistoryData[];
-  dataBuys: Buy[];
-  dataTransfer: Transfer[];
-  isAdmin: boolean;
-  isOwner?: boolean;
+  userTransactionData: UserTransactionHistoryData[]
+  dataBuys: Buy[]
+  dataTransfer: Transfer[]
+  isAdmin: boolean
+  isOwner?: boolean
 }
 
 export default function DashboardComponent({
@@ -36,20 +37,21 @@ export default function DashboardComponent({
   isAdmin,
   isOwner = false,
 }: ModalProps) {
-  const [dataOnDisplay, setDataOnDisplay] = useState("Transfers");
-  const [isCardVisible, setIsCardVisible] = useState(false);
-  const [isClaimTokensOpen, setClaimTokensOpen] = useState(false);
-  const [isMintTokensOpen, setMintTokensOpen] = useState(false);
-  const [showClaimModal, setShowClaimModal] = useState(false);
+  const [dataOnDisplay, setDataOnDisplay] = useState("Transfers")
+  const [isCardVisible, setIsCardVisible] = useState(false)
+  const [isClaimTokensOpen, setClaimTokensOpen] = useState(false)
+  const [isMintTokensOpen, setMintTokensOpen] = useState(false)
+  const [showClaimModal, setShowClaimModal] = useState(false)
+  const [transferOwnerOpen, setTransferOwnerOpen] = useState(false)
 
   const {
     data: { seabrick },
-  } = useContractContext();
+  } = useContractContext()
 
   const USDollar = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-  });
+  })
   //
 
   const columnBuyInterface = [
@@ -58,7 +60,7 @@ export default function DashboardComponent({
     { key: "transactionHash", label: "TX Hash" },
     { key: "blockNumber", label: "Block Number" },
     { key: "blockTimestamp", label: "Date" },
-  ];
+  ]
 
   const columnTransferInterface = [
     { key: "id", label: "TX Hash" },
@@ -68,14 +70,14 @@ export default function DashboardComponent({
     { key: "from", label: "From" },
     { key: "to", label: "To" },
     { key: "blockTimestamp", label: "Time" },
-  ];
+  ]
 
-  // TODO: Conectar
-  const totalBalance = 3500;
-  const totalQuantity = 35;
-  const lastMontQuantity = isAdmin ? 5 : 100;
-  const thisMontQuantity = isAdmin ? 10 : 300;
-  const differenceQuantity = thisMontQuantity - lastMontQuantity;
+  // TODO: Connect
+  const totalBalance = 3500
+  const totalQuantity = 35
+  const lastMontQuantity = isAdmin ? 5 : 100
+  const thisMontQuantity = isAdmin ? 10 : 300
+  const differenceQuantity = thisMontQuantity - lastMontQuantity
 
   //
   return (
@@ -92,6 +94,12 @@ export default function DashboardComponent({
             <MintTokensModal
               open={isMintTokensOpen}
               setOpen={setMintTokensOpen}
+            />
+          </Modal>
+          <Modal open={transferOwnerOpen} setOpen={setTransferOwnerOpen}>
+            <ModalTransferOwnership
+              open={transferOwnerOpen}
+              setOpen={setTransferOwnerOpen}
             />
           </Modal>
         </>
@@ -141,13 +149,13 @@ export default function DashboardComponent({
               ) : (
                 <div className="flex flex-start w-full gap-2">
                   <button
-                    className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-base font-normal font-['Noto Sans']"
+                    className="px-4 py-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-base font-normal font-['Noto Sans']"
                     onClick={() => setShowClaimModal(true)}
                   >
                     Claim!
                   </button>
                   <Link
-                    className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-base font-normal font-['Noto Sans']"
+                    className="px-6 py-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] rounded-[5px] justify-start items-center gap-2.5 flex text-right text-white text-base font-normal font-['Noto Sans']"
                     href={`/buy`}
                     prefetch={true}
                   >
@@ -207,7 +215,16 @@ export default function DashboardComponent({
             <div className="lg:w-[50%] w-full min-h-[10rem] gap-2 flex flex-col">
               {isAdmin ? (
                 <div className="bg-white w-full h-full rounded-[10px] gap-x-3 gap-y-6 p-6 grid grid-cols-2 justify-between">
-                  <ModalTransferOwnership disableButton={!isOwner} />
+                  <div className="justify-start items-center gap-2 flex col-span-2">
+                    <button
+                      className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] text-[white] rounded-[5px] text-center w-full h-full disabled:cursor-not-allowed disabled:bg-gray-400 text-lg"
+                      onClick={() => setTransferOwnerOpen(true)}
+                      disabled={!isOwner}
+                    >
+                      <ArrowsRightLeftIcon className="size-[1.5rem] inline mx-2 mt-[-3px]" />
+                      Transfer Ownership
+                    </button>
+                  </div>
                   <Link
                     className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-xl flex items-center"
                     href="/admin-list"
@@ -215,13 +232,13 @@ export default function DashboardComponent({
                     <UserIcon className="size-[1.5rem] inline mx-2 mt-[-3px]" />
                     <span>Admins</span>
                   </Link>
-                  <button
+                  {/* <button
                     className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] text-[white] rounded-[5px] text-left text-xl"
                     onClick={() => setClaimTokensOpen(true)}
                   >
                     <CurrencyDollarIcon className="size-[1.5rem] inline mx-2 mt-[-3px]" />
                     Claim Earnings
-                  </button>
+                  </button> */}
                   <Link
                     className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-xl flex items-center"
                     href="/admin/template"
@@ -251,8 +268,8 @@ export default function DashboardComponent({
                       <button
                         className="text-start text-lg px-3 h-1/2 p-1"
                         onClick={() => {
-                          setIsCardVisible(false);
-                          setDataOnDisplay("Buys");
+                          setIsCardVisible(false)
+                          setDataOnDisplay("Buys")
                         }}
                       >
                         Buys
@@ -260,8 +277,8 @@ export default function DashboardComponent({
                       <button
                         className="text-start text-lg px-3 h-1/2 p-1"
                         onClick={() => {
-                          setIsCardVisible(false);
-                          setDataOnDisplay("Transfers");
+                          setIsCardVisible(false)
+                          setDataOnDisplay("Transfers")
                         }}
                       >
                         Transfers
@@ -273,11 +290,12 @@ export default function DashboardComponent({
                 </div>
                 <a
                   href="/dashboard"
-                  className="w-[30px] h-[30px] rounded-full border border-[#9b9a9b]/60 flex justify-center items-center hover:bg-slate-50 active:bg-slate-200"
+                  className="w-[30px] h-[30px] rounded-full border border-[#9b9a9b]/60 flex justify-center items-center hover:bg-slate-100 active:bg-slate-200"
                 >
                   <ArrowUpRightIcon className="size-[0.7rem]" />
                 </a>
               </div>
+              {dataOnDisplay.length > 0 ?(
               <div className="h-fit bg-[#efeff4] mt-3">
                 <Table
                   columns={
@@ -288,10 +306,22 @@ export default function DashboardComponent({
                   data={dataOnDisplay == "Transfers" ? dataTransfer : dataBuys}
                 />
               </div>
+              ):(
+                <div className="w-full h-fit flex flex-col justify-center text-center gap-1">
+                  <Image
+                    src={`/empty.webp`}
+                    alt="user-image"
+                    height={120}
+                    width={120}
+                    className="m-auto"
+                  />                  
+                  <strong>No Transactions yet</strong>
+                </div>
+            )}
             </div>
           </div>
         </div>
       </div>
     </>
-  );
+  )
 }
