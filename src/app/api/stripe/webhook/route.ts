@@ -143,7 +143,10 @@ async function fulfillCheckout(
           "Stripe buy information was not added to the Database. Session ID: ",
           sessionId,
           "\n",
-          insertError
+          insertError,
+          "\n",
+          "Tx hash: ",
+          mintResp.txHash
         );
       }
 
