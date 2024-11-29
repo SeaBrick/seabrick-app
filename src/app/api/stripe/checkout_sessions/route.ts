@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
       },
       line_items: [
         {
-          price: "price_1Q7Kzq2KHsUnmKagnzvNoHwL",
+          price: seabrickPriceId,
           quantity: 1,
           adjustable_quantity: {
             enabled: true,
