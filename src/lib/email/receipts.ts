@@ -3,6 +3,8 @@
 import { Resend } from "resend";
 import * as ejs from "ejs";
 import { Hash } from "viem";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { createClient } from "../supabase/server";
 
 const resend_key = process.env.RESEND_KEY;
 
@@ -14,28 +16,33 @@ export async function sendReceipt(
   email: string,
   tokenIds: string[],
   txHash: Hash,
-  date: Date
+  date: Date,
+  supabaseClient?: SupabaseClient<never, "public", never>
 ): Promise<boolean> {
   if (!resend_key) {
     return false;
   }
 
-  const resend = new Resend(resend_key);
+  if (!supabaseClient) {
+    supabaseClient = createClient();
+  }
 
-  // TODO: Use template from DB
-  const raw = `<div>
-  <p>User: <%=email%></p>
-  <p>
-  Token IDs: <span><%=tokenIds%></span>
-  </p>
-  <p>
-  Purchate at: <span><%=date%></span>
-  </p>
-  <p>
-  Verified at tx hash: <span><%=hash%></span>
-  </p>
-  </div>`;
+  const { error, data } = await supabaseClient
+    .from("email_templates")
+    .select("raw_html")
+    .eq("id", "receipt")
+    .single<{ raw_html: string }>();
 
+  if (error) {
+    console.error("Failed to retrieve the email receipt template");
+    console.error(error);
+    return false;
+  }
+
+  // Raw data with the variable slots
+  const raw = data.raw_html;
+
+  // Html string with the raw html and variables rendered
   const html = ejs.render(raw, {
     email,
     date: date.toLocaleDateString(),
@@ -45,13 +52,15 @@ export async function sendReceipt(
   });
 
   try {
+    // Create resend entity
+    const resend = new Resend(resend_key);
+
+    // Send the email
     const { data, error } = await resend.emails.send({
       from: "Seabrick <receipt@seabrick.com>",
       to: [email],
       subject: "Thanks for the Buy! Here is your receipt",
-      // TODO: Use the email template from the DB
       html: html,
-      // html: "<strong>It works! You got your receipt!</strong>",
     });
 
     if (error) {

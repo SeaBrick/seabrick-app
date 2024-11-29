@@ -137,7 +137,7 @@ export default function RenderTest() {
             </button>
           </div>
           <div className="w-full flex justify-end gap-2">
-            {activeEditor ? (
+            {activeEditor && (
               <>
                 <span className="self-center mr-2 text-gray-800">
                   Press Alt+R to Render
@@ -150,8 +150,6 @@ export default function RenderTest() {
                   Render
                 </button>
               </>
-            ) : (
-              ""
             )}
             <button
               className="px-4 py-2 bg-seabrick-blue text-white text-base rounded-md hover:cursor-pointer hover:bg-blue-600 active:bg-[#4290d6]"

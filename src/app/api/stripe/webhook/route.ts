@@ -153,7 +153,8 @@ async function fulfillCheckout(
         userMetadata.email,
         mintResp.ids,
         mintResp.txHash,
-        new Date(checkoutSession.created * 1000)
+        new Date(checkoutSession.created * 1000),
+        supabaseClient
       );
 
       // If the receipt was not sent, we console the error for debug
