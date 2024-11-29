@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 const SVGPaths = {
   Instagram:
@@ -89,12 +90,12 @@ export function Footer() {
             </div>
           </footer>
         </div>
-        <div className="flex items-center gap-x-3 text-white hover:text-[#ddd]">
-          <a href="#">Lorem</a>
-          <a href="#">Lorem</a>
-          <a href="#">Lorem</a>
+        <div className="flex items-center gap-x-3 text-white hover:direct-children:text-[#ccc]">
+          <Link href="/dashboard">Home</Link>
+          <Link href="/buy">Buy</Link>
+          <Link href="/terms-conditions">Terms and Condtions</Link>
         </div>
-      </div>  
+      </div>
     </div>
   );
 }
