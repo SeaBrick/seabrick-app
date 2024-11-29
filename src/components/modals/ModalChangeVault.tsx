@@ -73,7 +73,7 @@ export default function ChangeVault({
           description={
             <p>
               Are you sure you want to transfer your app ownership to{" "}
-              <strong>{vault}</strong>
+              <strong>{vault}</strong>?
             </p>
           }
           cancelMessage={"No, I want to go back"}

@@ -64,7 +64,7 @@ export default function AddAdminModal({
           title={"Ownership Transferred"}
           message={
             <p>
-              Your app ownership was succesfuly transferred to{" "} <strong>{address}</strong> successfully 
+              Your app ownership was succesfully transferred to{" "} <strong>{address}</strong>.
             </p>
           }
           action={setOpen}
@@ -76,11 +76,11 @@ export default function AddAdminModal({
           description={
             <p>
               Are you sure you want to transfer your app ownership to{" "}
-              <strong>{address}</strong>
+              <strong>{address}</strong>?
             </p>
           }
           cancelMessage={"No, I want to go back"}
-          confirmMessage={"Yes, I want to add the new admin"}
+          confirmMessage={"Yes, I want to transfer it"}
           open={isConfirmOpen}
           onConfirm={handleConfirm}
           setOpen={setConfirmOpen}
