@@ -1,10 +1,9 @@
 import { Dispatch, SetStateAction, useState } from "react"
 import { ModalConfirm } from "./ModalConfirm"
-import { validateEmail } from "@/components/utils/ValidateEmail"
 import { ModalDone } from "./ModalDone"
 import { XMarkIcon } from "@heroicons/react/16/solid";
 
-export default function AddAdminModal({
+export default function ChangeVault({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   open,
   setOpen,
@@ -16,20 +15,18 @@ export default function AddAdminModal({
   const [isSelfOpen, setSelfOpen] = useState(true);
   const [isOpenDone, setOpenDone] = useState(false);
 
-  const [address, setAddress] = useState("");
+  const [vault, setVault] = useState("");
   const [error, setError] = useState("");
 
-  const printCancel = () => {
-    console.log("Cancel");
+  const printCancel = () => {    
     setOpen(false);
   };
   const handleConfirm = async () => {
     try {
-      // TODO: Add functionality (need fix at the banckend side too)
-      // await transferOwnership(address)
+      
       setOpenDone(true);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       handleBack();
     }
   };
@@ -41,11 +38,11 @@ export default function AddAdminModal({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const validationError = validateEmail(address);
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
+    const validationError = console.log('validate vault',vault);
+    // if (validationError) {
+    //   setError(validationError);
+    //   return;
+    // }
     setError("");
     setConfirmOpen(true);
     setSelfOpen(false);
@@ -61,10 +58,10 @@ export default function AddAdminModal({
     <>
       {isOpenDone && (
         <ModalDone
-          title={"Ownership Transferred"}
+          title={"Vault Address Changed"}
           message={
             <p>
-              Your app ownership was succesfully transferred to{" "} <strong>{address}</strong>.
+              Your app vault address was succesfully changed to{" "} <strong>{vault}</strong>. 
             </p>
           }
           action={setOpen}
@@ -76,17 +73,17 @@ export default function AddAdminModal({
           description={
             <p>
               Are you sure you want to transfer your app ownership to{" "}
-              <strong>{address}</strong>?
+              <strong>{vault}</strong>?
             </p>
           }
           cancelMessage={"No, I want to go back"}
-          confirmMessage={"Yes, I want to transfer it"}
+          confirmMessage={"Yes, I want to change to the new vault address"}
           open={isConfirmOpen}
           onConfirm={handleConfirm}
           setOpen={setConfirmOpen}
           closeAll={setOpen}
           openBack={handleBack}
-          loadingLabel={"Transferring..."}
+          loadingLabel={"Changing..."}
         />
       )}
       {isSelfOpen && (
@@ -94,10 +91,10 @@ export default function AddAdminModal({
           <div className="flex gap-2 justify-between">
             <div className="flex flex-col text-left gap-2">
               <span className="text-dark-gray text-3xl font-normal font-['Noto Sans']">
-                Transfer App Ownership
+                Change App Vault Address
               </span>
               <span className="text-[#8a8a8f] text-base font-normal font-['Noto Sans']">
-                This function allows you to transfer ownership of the contract to another user. By initiating this process, you relinquish all rights and responsibilities associated with the contract. Make sure that the new owner is prepared to manage the application effectively.
+                This function allows you to change the vault address where the funds received from purchases will be sent. By initiating this process, ensure that the new address is prepared to effectively manage the funds. Once the change is made, the new address will assume all responsibilities associated with managing the funds.
               </span>
             </div>
             <div className="">
@@ -112,16 +109,16 @@ export default function AddAdminModal({
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
             <div className="flex flex-col gap-y-4 w-full">
               <label
-                htmlFor="email"
+                htmlFor="Vault Address"
                 className="text-dark-gray text-base font-normal font-['Noto Sans'] text-start"
               >
-                Email
+                Vault Address
               </label>
               <input
-                name="email"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                placeholder="Enter Email"
+                name="vault"
+                value={vault}
+                onChange={(e) => setVault(e.target.value)}
+                placeholder="Enter Vault Address"
                 className="bg-gray-300 w-full py-2 px-4 rounded-md border border-[#8a8a8f] dark-gray-800"
               />
               {error && (

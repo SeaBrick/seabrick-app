@@ -4,6 +4,7 @@ import {
   ArrowUpRightIcon,
   AtSymbolIcon,
   ArrowsRightLeftIcon,
+  ArrowPathIcon
 } from "@heroicons/react/24/outline"
 import ClaimTokens from "../cards/ClaimNFT"
 import ClaimNFTCard from "../cards/ClaimNFTCard"
@@ -13,6 +14,7 @@ import UserTransactionHistory, {
 } from "../cards/UserTransactionsHistory"
 import { MintTokensModal } from "../modals/MintTokensModal"
 import Modal from "../modals/Modal"
+import ChangeVault from "../modals/ModalChangeVault"
 import ModalTransferOwnership from "../modals/ModalTransferOwnership"
 import Table from "../table/TableTest"
 import { useState } from "react"
@@ -43,6 +45,7 @@ export default function DashboardComponent({
   const [isMintTokensOpen, setMintTokensOpen] = useState(false)
   const [showClaimModal, setShowClaimModal] = useState(false)
   const [transferOwnerOpen, setTransferOwnerOpen] = useState(false)
+  const [isChangeVaultOpen, setChangeVaultOpen] = useState(false)
 
   const {
     data: { seabrick },
@@ -88,6 +91,12 @@ export default function DashboardComponent({
             <ClaimTokens
               open={isClaimTokensOpen}
               setOpen={setClaimTokensOpen}
+            />
+          </Modal>
+          <Modal open={isChangeVaultOpen} setOpen={setChangeVaultOpen}>
+            <ChangeVault
+              open={isChangeVaultOpen}
+              setOpen={setChangeVaultOpen}
             />
           </Modal>
           <Modal open={isMintTokensOpen} setOpen={setMintTokensOpen}>
@@ -215,9 +224,9 @@ export default function DashboardComponent({
             <div className="lg:w-[50%] w-full min-h-[10rem] gap-2 flex flex-col">
               {isAdmin ? (
                 <div className="bg-white w-full h-full rounded-[10px] gap-x-3 gap-y-6 p-6 grid grid-cols-2 justify-between">
-                  <div className="justify-start items-center gap-2 flex col-span-2">
+                  <div className="justify-start items-center gap-2 flex ">
                     <button
-                      className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] text-[white] rounded-[5px] text-center w-full h-full disabled:cursor-not-allowed disabled:bg-gray-400 text-lg"
+                      className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] text-[white] rounded-[5px] text-left w-full h-full disabled:cursor-not-allowed disabled:bg-gray-400 text-lg"
                       onClick={() => setTransferOwnerOpen(true)}
                       disabled={!isOwner}
                     >
@@ -232,13 +241,13 @@ export default function DashboardComponent({
                     <UserIcon className="size-[1.5rem] inline mx-2 mt-[-3px]" />
                     <span>Admins</span>
                   </Link>
-                  {/* <button
+                  <button
                     className="p-2 bg-[#2069a0] hover:bg-[#17548b] active:bg-[#4290d6] text-[white] rounded-[5px] text-left text-xl"
-                    onClick={() => setClaimTokensOpen(true)}
+                    onClick={() => setChangeVaultOpen(true)}
                   >
-                    <CurrencyDollarIcon className="size-[1.5rem] inline mx-2 mt-[-3px]" />
-                    Claim Earnings
-                  </button> */}
+                    <ArrowPathIcon className="size-[1.5rem] inline mx-2 mt-[-3px]" /> 
+                    Change Vault
+                  </button>
                   <Link
                     className="p-2 bg-[#333333] hover:bg-[#555555] active:bg-[#222222] text-[white] rounded-[5px] text-xl flex items-center"
                     href="/admin/template"
