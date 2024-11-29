@@ -2,15 +2,14 @@ import Image from "next/image";
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
 import { useContractContext } from "@/context/contractContext";
 
-
-interface CardProps {    
-  isOwner: boolean
+interface CardProps {
+  isOwner: boolean;
 }
 
-export default function SeabrickNFTCard(isOwner:CardProps) {
+export default function SeabrickNFTCard(isOwner: CardProps) {
   const {
     data: { seabrick, market },
-  } = useContractContext(); 
+  } = useContractContext();
 
   return (
     <>
@@ -79,15 +78,16 @@ export default function SeabrickNFTCard(isOwner:CardProps) {
                     {market.price} USD
                   </div>
                 </div>
-                {isOwner ? (
-                <div className="self-stretch justify-between items-center inline-flex">
-                  <div className="text-black text-base font-normal font-['Noto Sans']">
-                    Vault Address
+                {isOwner && (
+                  <div className="self-stretch justify-between items-center inline-flex">
+                    <div className="text-black text-base font-normal font-['Noto Sans']">
+                      Vault Address
+                    </div>
+                    <div className="text-[#8a8a8f] text-base font-normal font-['Noto Sans']">
+                      {market.claimVault}
+                    </div>
                   </div>
-                  <div className="text-[#8a8a8f] text-base font-normal font-['Noto Sans']">
-                    0x6514564215646512435
-                  </div>
-                </div>):(<></>)}
+                )}
               </div>
             </div>
           </div>
