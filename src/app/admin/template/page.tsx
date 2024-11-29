@@ -12,9 +12,6 @@ export default function RenderTest() {
   const [activateInstructions, setActivateInstructions] = useState(true);
   const [originalTemplate, setOriginalTemplate] = useState("");
   const [template, setTemplate] = useState("");
-
-  // get template for useContext
-  // and set it automatically
   const [render, setRender] = useState("<p>Your result Here</p>");
 
   const router = useRouter();
@@ -63,8 +60,19 @@ export default function RenderTest() {
     setTemplate(raw);
   }
 
-  function saveTemplate() {
-    console.log(template);
+  async function saveTemplate() {
+    const { error } = await createClient()
+      .from("email_templates")
+      .update({ raw_html: template })
+      .eq("id", "receipt");
+
+    if (error) {
+      console.error(error);
+      toast.error("Failed to save the template");
+      return;
+    }
+
+    toast.success("Template saved succesfully!");
   }
 
   useEffect(() => {
