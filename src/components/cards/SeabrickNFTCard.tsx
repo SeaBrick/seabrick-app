@@ -2,7 +2,7 @@ import Image from "next/image";
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
 import { useContractContext } from "@/context/contractContext";
 import TextCopier from "../TextCopier";
-import { truncateString } from "@/lib/utils"
+import { addressResumer } from "@/lib/utils";
 
 interface CardProps {
   isOwner: boolean;
@@ -53,15 +53,19 @@ export default function SeabrickNFTCard(isOwner: CardProps) {
                     Symbol
                   </div>
                   <div className="text-[#8a8a8f] text-base font-normal font-['Noto Sans']">
-                    {seabrick.symbol }
+                    {seabrick.symbol}
                   </div>
                 </div>
                 <div className="self-stretch justify-between items-center inline-flex">
                   <div className="text-black text-base font-normal font-['Noto Sans']">
                     Address
                   </div>
-                  <div className="text-[#8a8a8f] text-base font-normal font-['Noto Sans'] [overflow-wrap:anywhere] ml-3 flex items-center" title={seabrick.id}>
-                    {truncateString(seabrick.id)} <TextCopier text={seabrick.id} />
+                  <div
+                    className="text-[#8a8a8f] text-base font-normal font-['Noto Sans'] [overflow-wrap:anywhere] ml-3 flex items-center  cursor-default"
+                    title={seabrick.id}
+                  >
+                    {addressResumer(seabrick.id, 3)}
+                    <TextCopier text={seabrick.id} />
                   </div>
                 </div>
                 <div className="self-stretch justify-between items-center inline-flex">
@@ -85,8 +89,12 @@ export default function SeabrickNFTCard(isOwner: CardProps) {
                     <div className="text-black text-base font-normal font-['Noto Sans']">
                       Vault Address
                     </div>
-                    <div className="text-[#8a8a8f] text-base font-normal font-['Noto Sans'] flex items-center" title={market.claimVault}>
-                      {truncateString(market.claimVault)} <TextCopier text={market.claimVault} />
+                    <div
+                      className="text-[#8a8a8f] text-base font-normal font-['Noto Sans'] flex items-center cursor-default"
+                      title={market.claimVault}
+                    >
+                      {addressResumer(market.claimVault, 3)}
+                      <TextCopier text={market.claimVault} />
                     </div>
                   </div>
                 )}
