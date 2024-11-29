@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import * as ejs from "ejs";
 import { createClient } from "@/lib/supabase/client";
 import { zeroHash } from "viem";
+import { toast } from "react-toastify";
 export default function RenderTest() {
   const [activeEditor, setActiveEditor] = useState(false);
   const [activateInstructions, setActivateInstructions] = useState(true);
@@ -27,25 +28,69 @@ export default function RenderTest() {
     logoUrl: "The Seabrick logo URL",
   };
 
-  async function getReceiptTemplate() {
-    const { error, data } = await createClient()
-      .from("email_templates")
-      .select("raw_html")
-      .eq("id", "receipt")
-      .single<{ raw_html: string }>();
+  function templateOnChange(e: ChangeEvent<HTMLTextAreaElement>) {
+    setTemplate(e.target.value);
+  }
 
-    // TODO: Add some error catcher
-    if (error) {
-      console.error(error);
-      throw error;
+  function renderRawHtml(rawHtml: string): string {
+    try {
+      // This use mocked data since we are doing previews
+      const html = ejs.render(rawHtml, {
+        email: "jhon@seabrick.com",
+        date: new Date().toLocaleDateString(),
+        tokenIds: [1, 6, 20],
+        txHash: zeroHash,
+        img_url: "/seabrick.svg",
+      });
+      return html;
+    } catch (error) {
+      let errorMessage = "Failed to render the HTML provided";
+      if (error instanceof Error) {
+        console.log(error);
+        errorMessage = error.message;
+      }
+
+      toast.error(errorMessage);
+      return rawHtml;
     }
+  }
 
-    setOriginalTemplate(data.raw_html);
-    setTemplate(data.raw_html);
-    setRender(data.raw_html);
+  function captureText(formData: FormData) {
+    const raw = formData.get("raw") as string;
+    const html = renderRawHtml(raw);
+
+    setRender(html);
+    setTemplate(raw);
+  }
+
+  function saveTemplate() {
+    console.log(template);
   }
 
   useEffect(() => {
+    async function getReceiptTemplate() {
+      const { error, data } = await createClient()
+        .from("email_templates")
+        .select("raw_html")
+        .eq("id", "receipt")
+        .single<{ raw_html: string }>();
+
+      // TODO: Add some error catcher
+      if (error) {
+        console.error(error);
+        throw error;
+      }
+
+      // Save the raw html
+      setOriginalTemplate(data.raw_html);
+      setTemplate(data.raw_html);
+
+      // Render it with some mocke data
+      const html = renderRawHtml(data.raw_html);
+      setRender(html);
+    }
+
+    // Call the function
     getReceiptTemplate();
   }, []);
 
@@ -61,25 +106,6 @@ export default function RenderTest() {
       document.removeEventListener("keydown", listener);
     };
   }, []);
-
-  function captureText(formData: FormData) {
-    const raw = formData.get("raw") as string;
-    // define variables to be used
-    const html = ejs.render(raw, {
-      email: "jhon@seabrick.com",
-      date: new Date().toLocaleDateString(),
-      tokenIds: [1, 6, 20],
-      txHash: zeroHash,
-      img_url: "/seabrick.svg",
-    });
-
-    setRender(html);
-    setTemplate(raw);
-  }
-
-  function saveTemplate() {
-    console.log(template); // Este es pa guardar
-  }
 
   return (
     <div>
@@ -200,6 +226,8 @@ export default function RenderTest() {
               <textarea
                 className="bg-white border-sky-700 border-2 w-full h-full p-3 rounded-xl"
                 name="raw"
+                value={template}
+                onChange={templateOnChange}
                 placeholder={`Your code here`}
               ></textarea>
             </div>
