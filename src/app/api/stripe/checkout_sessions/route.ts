@@ -1,3 +1,4 @@
+"use server";
 import { createClient } from "@/lib/supabase/server";
 import { getUrl } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
@@ -7,6 +8,11 @@ import {
   getCheckoutSession,
   stripe,
 } from "@/app/api/stripe";
+
+const seabrickPriceId = process.env.STRIPE_SEABRICK_PRICE_ID;
+if (!seabrickPriceId) {
+  throw new Error("Missing STRIPE_SEABRICK_PRICE_ID env");
+}
 
 export async function POST(request: NextRequest) {
   // Get the current redirect url
