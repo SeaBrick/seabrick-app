@@ -1,19 +1,14 @@
 "use client";
 import Link from "next/link";
-import {
-  ArrowPathIcon,
-  HomeIcon,
-  ShoppingCartIcon,
-} from "@heroicons/react/24/outline";
+import { HomeIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
 import DetailsTable, { type DetailsTableProps } from "./DetailsTable";
 import { type Hex, isHash } from "viem";
 import { getBuysByTransaction } from "@/lib/subgraph";
 import { createClient } from "@/lib/supabase/client";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import LoadingBricks from "@/components/spinners/LoadingBricks";
-import { sleep } from "@/lib/utils";
+import ReloadButton from "@/components/buttons/ReloadButton";
 
 async function getBuysCrypto(txHash: Hex): Promise<DetailsTableProps> {
   const resp = await getBuysByTransaction(txHash);
@@ -54,7 +49,7 @@ async function getBuysStripe(stripeId: string): Promise<DetailsTableProps> {
     .single<{ id: string; fulfilled: boolean; created_at: string }>();
 
   if (sessionError) {
-    throw new Error(`Sessions: ${sessionError.message}`);
+    throw new Error("Stripe buy transaction not found");
   }
 
   if (!sessionData) {
@@ -127,61 +122,69 @@ const OrderDetails: React.FC = () => {
   const type = searchParams.get("type");
   const hash = searchParams.get("hash");
   const session_id = searchParams.get("session_id");
-  const router = useRouter();
-
-  function reload() {
-    router.refresh();
-  }
 
   const [tableDetails, setTableDetails] = useState<DetailsTableProps>();
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState<boolean>(true);
+
+  // Retry logic with exponential backoff
+  async function fetchWithRetries(
+    fetchFn: () => Promise<DetailsTableProps>,
+    maxRetries = 3,
+    delay = 1000
+  ) {
+    let attempts = 0;
+    while (attempts < maxRetries) {
+      try {
+        const data = await fetchFn();
+        return data; // If successful, return data
+      } catch (err) {
+        attempts++;
+        if (attempts >= maxRetries) {
+          throw err; // If max retries are reached, throw error
+        }
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      }
+    }
+  }
 
   useEffect(() => {
     async function loadData() {
       setLoading(true);
       setError(undefined);
 
-      await sleep(4000);
-
       try {
+        // Determine which function to call based on type
+        let fetchData: () => Promise<DetailsTableProps>;
+
         if (type === "crypto") {
           if (!hash || !isHash(hash)) {
-            // throw new Error("Invalid hash for Crypto transaction");
             console.log("Invalid hash for Crypto transaction");
             setTableDetails(undefined);
             return;
           }
-          // Perform for crypto
-          const data = await getBuysCrypto(hash);
-          setTableDetails(data);
-          console.log("aja buy scripto");
-        }
-        //
-        else if (type === "stripe") {
+          fetchData = () => getBuysCrypto(hash);
+        } else if (type === "stripe") {
           if (!session_id) {
-            // throw new Error("Invalid ID Stripe transaction");
             console.log("Invalid ID Stripe transaction");
             setTableDetails(undefined);
             return;
           }
-
-          // Perform for stripte
-          const data = await getBuysStripe(session_id);
-          setTableDetails(data);
-          console.log("aja buy stripe");
-        }
-        // No valid trasanction
-        else {
-          // throw new Error("Invalid transaction");
+          fetchData = () => getBuysStripe(session_id);
+        } else {
           console.log("Invalid transaction");
           setTableDetails(undefined);
           return;
         }
-      } catch (error) {
+
+        // Fetch data with retries
+        const data = await fetchWithRetries(fetchData, 3, 1000); // 3 retries with 1 second gap
+        setTableDetails(data);
+      } catch (err) {
         let errorMessage = "Unknown error";
-        if (error instanceof Error) {
-          errorMessage = error.message;
+
+        if (err instanceof Error) {
+          errorMessage = err.message;
         }
         setError(errorMessage);
       } finally {
@@ -205,7 +208,7 @@ const OrderDetails: React.FC = () => {
             <p>Loading...</p>
           </div>
         ) : error !== undefined || tableDetails === undefined ? (
-          <div className="flex items-center justify-center h-screen bg-gray-100">
+          <div className="flex items-center justify-center bg-gray-100">
             <div className="text-center p-24 bg-white rounded-lg shadow-xl flex flex-col gap-y-5">
               <h1 className="text-5xl font-bold text-seabrick-blue">Error</h1>
               <div className="flex flex-col gap-y-4">
@@ -213,7 +216,7 @@ const OrderDetails: React.FC = () => {
                 {error && <p className="text-gray-500">{error}</p>}
                 <p className="text-gray-500">You can try reloading the page</p>
               </div>
-              <div className="flex gap-x-4">
+              <div className="flex gap-x-4 justify-center">
                 <Link
                   href="/"
                   className="flex items-center gap-x-2 px-4 py-2 text-white bg-seabrick-blue rounded hover:bg-seabrick-blue/85"
@@ -221,14 +224,8 @@ const OrderDetails: React.FC = () => {
                   <HomeIcon className="size-5" />
                   <span>Go to Home</span>
                 </Link>
-                <button
-                  onClick={reload}
-                  className="flex items-center gap-x-2 px-4 py-2 text-white bg-seabrick-green rounded hover:bg-seabrick-green/85"
-                >
-                  <ArrowPathIcon className="size-5" />
 
-                  <span>Reload page</span>
-                </button>
+                <ReloadButton />
               </div>
             </div>
           </div>
