@@ -4,7 +4,14 @@ import { getUserRole } from "../utils/auth";
 
 // FIXME: FIx logic for validation patters. Refactor
 
-const publicPaths = ["/login", "/register", "/reset-password", "/auth", "/api"];
+const publicPaths = [
+  "/login",
+  "/register",
+  "/reset-password",
+  "/auth",
+  "/api",
+  "/terms-conditions",
+];
 const loggedDisallowedPaths = [
   "/login",
   "/register",
