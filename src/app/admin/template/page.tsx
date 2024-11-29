@@ -36,7 +36,7 @@ export default function RenderTest() {
     try {
       // This use mocked data since we are doing previews
       const html = ejs.render(rawHtml, {
-        email: "jhon@seabrick.com",
+        email: "user.email@example.com",
         date: new Date().toLocaleDateString(),
         tokenIds: [1, 6, 20],
         txHash: zeroHash,
@@ -186,12 +186,14 @@ export default function RenderTest() {
             </p>
             <p className="flex flex-col">
               <span>Example:</span>
-              <code className="bg-gray-200 p-4 rounded-md">{`<p>Hello <%=user%>!</p>`}</code>
+              <code className="bg-gray-200 p-4 rounded-md">{`<p>Email sent to <%=email%></p>`}</code>
             </p>
 
             <p className="flex flex-col">
               <span>Expected Output:</span>
-              <code className="bg-gray-200 p-5 rounded-md">Hello John!</code>
+              <code className="bg-gray-200 p-5 rounded-md">
+                Email sent to user@example.com
+              </code>
             </p>
 
             <div className="my-2">
