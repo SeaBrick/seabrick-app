@@ -80,7 +80,7 @@ export default function SeabrickNFTCard({isAdmin, isOwner}:CardProps) {
                     {market.price} USD
                   </div>
                 </div>
-                {isAdmin || isOwner ? (
+                {(isAdmin || isOwner) ? (
                 <div className="self-stretch justify-between items-center inline-flex">
                   <div className="text-black text-base font-normal font-['Noto Sans']">
                     Vault Address
