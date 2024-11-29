@@ -120,8 +120,8 @@ async function getBuysStripe(stripeId: string): Promise<DetailsTableProps> {
 
 // TODO:Add a delay of few seconds to wait that the data is saved and fetched
 // Maybe we can take advantange of the loading component before fetching the data
+// TODO: Isolate getter to retry like 3 times before show error
 
-// TODO: Add a reload button on the Error
 const OrderDetails: React.FC = () => {
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
@@ -142,7 +142,6 @@ const OrderDetails: React.FC = () => {
       setLoading(true);
       setError(undefined);
 
-      // TODO: Isolate getter to retry like 3 times before show error
       await sleep(4000);
 
       try {
