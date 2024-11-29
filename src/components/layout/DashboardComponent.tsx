@@ -219,7 +219,7 @@ export default function DashboardComponent({
           {/* cards div  */}
           <div className="flex w-full gap-3 lg:flex-row flex-col">
             <div className="lg:w-[50%] w-full">
-              <SeabrickNFTCard />
+              <SeabrickNFTCard isOwner={isOwner}/>
             </div>
             <div className="lg:w-[50%] w-full min-h-[10rem] gap-2 flex flex-col">
               {isAdmin ? (
