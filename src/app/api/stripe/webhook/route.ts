@@ -11,6 +11,7 @@ import {
 } from "@/app/api/stripe";
 import { type Stripe } from "stripe";
 import { FulfillCheckoutResp } from "@/lib/interfaces/api";
+import { sendReceipt } from "@/lib/email/receipts";
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_FULFILLMENT_SECRET ?? "";
 if (!endpointSecret) {
@@ -141,8 +142,25 @@ async function fulfillCheckout(
           "Stripe buy information was not added to the Database. Session ID: ",
           sessionId,
           "\n",
-          insertError
+          insertError,
+          "\n",
+          "Tx hash: ",
+          mintResp.txHash
         );
+      }
+
+      const receiptSent = await sendReceipt(
+        userMetadata.email,
+        mintResp.ids,
+        mintResp.txHash,
+        new Date(checkoutSession.created * 1000),
+        supabaseClient
+      );
+
+      // If the receipt was not sent, we console the error for debug
+      if (!receiptSent) {
+        //
+        console.error("Receipt was nt sent for tx hash: ", mintResp.txHash);
       }
 
       return { isMinted: true };
