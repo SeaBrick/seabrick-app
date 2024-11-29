@@ -1,3 +1,6 @@
+"use client"
+import BackButton from "@/components/buttons/BackButton"
+
 export default function TermsAndConditions() {
   // TODO: add go back
   const termsConditions = [
@@ -59,7 +62,10 @@ export default function TermsAndConditions() {
   ]
   return (
     <>
-      <div className="py-4 px-32 w-full">
+      <div className="py-4 px-32 w-full relative">
+        <div className="absolute top-12 right-32">
+          <BackButton />
+        </div>
         <p className="text-5xl w-full mt-8 mb-5 font-bold text-seabrick-blue">
           Terms and Conditions
         </p>
