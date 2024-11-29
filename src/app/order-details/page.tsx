@@ -12,6 +12,8 @@ import { createClient } from "@/lib/supabase/client";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import LoadingBricks from "@/components/spinners/LoadingBricks";
+import { sleep } from "@/lib/utils";
 
 async function getBuysCrypto(txHash: Hex): Promise<DetailsTableProps> {
   const resp = await getBuysByTransaction(txHash);
@@ -140,6 +142,9 @@ const OrderDetails: React.FC = () => {
       setLoading(true);
       setError(undefined);
 
+      // TODO: Isolate getter to retry like 3 times before show error
+      await sleep(4000);
+
       try {
         // ALL the error are catched by the Error.tsx boundary
         if (type === "crypto") {
@@ -197,7 +202,10 @@ const OrderDetails: React.FC = () => {
         </h2>
 
         {loading ? (
-          <p>Loading...</p>
+          <div>
+            <LoadingBricks />
+            <p>Loading...</p>
+          </div>
         ) : error !== undefined || tableDetails === undefined ? (
           <div className="flex items-center justify-center h-screen bg-gray-100">
             <div className="text-center p-24 bg-white rounded-lg shadow-xl flex flex-col gap-y-5">
