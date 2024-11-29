@@ -92,8 +92,8 @@ function AdminTable({
                         className="text-dark-gray w-full text-justify text-xs font-normal font-['Noto Sans'] inline-flex"
                         key={column.key}
                       >
-                        <div className="inline-flex">
-                          {showText ?? "No data"}
+                        <div className="inline-flex items-center">
+                          <span>{showText ?? "No data"}</span>
                           {enableCopier ? <TextCopier text={valueText} /> : ""}
                         </div>
                       </td>
