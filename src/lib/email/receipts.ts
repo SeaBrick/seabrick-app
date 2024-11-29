@@ -46,8 +46,8 @@ export async function sendReceipt(
   const html = ejs.render(raw, {
     email,
     date: date.toLocaleDateString(),
-    tokenIds: tokenIds,
-    hash: txHash,
+    tokenIds,
+    txHash,
     logoUrl: "app.seabrick.com/seabrick.svg",
   });
 
