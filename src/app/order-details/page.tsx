@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { HomeIcon } from "@heroicons/react/24/outline";
+import { HomeIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
 import DetailsTable, { type DetailsTableProps } from "./DetailsTable";
 import { type Hex, isHash } from "viem";
 import { getBuysByTransaction } from "@/lib/subgraph";
@@ -207,14 +207,24 @@ const OrderDetails: React.FC = () => {
         ) : (
           <>
             <DetailsTable {...tableDetails} />
-            <Link
-              href="/dashboard"
-              prefetch={true}
-              className="flex items-center gap-2 px-4 py-2 rounded mt-4 text-white bg-seabrick-blue hover:bg-seabrick-blue/80 self-end"
-            >
-              <span className="font-['Montserrat'] text-sm">Go to Home</span>
-              <HomeIcon className="size-6" />
-            </Link>
+            <div className="flex justify-end gap-4">
+              <Link
+                href="/dashboard"
+                prefetch={true}
+                className="flex items-center gap-2 px-4 py-2 rounded mt-4 text-white bg-seabrick-blue hover:bg-seabrick-blue/80 self-end"
+              >
+                <HomeIcon className="size-5" />
+                <span className="font-['Montserrat'] text-sm">Go to Home</span>
+              </Link>
+              <Link
+                href="/buy"
+                prefetch={true}
+                className="flex items-center gap-2 px-4 py-2 rounded mt-4 text-white bg-seabrick-green hover:bg-seabrick-green/80 self-end"
+              >
+                <ShoppingCartIcon className="size-5" />
+                <span className="font-['Montserrat'] text-sm">Buy more</span>
+              </Link>
+            </div>
           </>
         )}
       </div>
