@@ -1,6 +1,6 @@
-import { Dispatch, SetStateAction, useState } from "react"
-import { ModalConfirm } from "./ModalConfirm"
-import { ModalDone } from "./ModalDone"
+import { Dispatch, SetStateAction, useState } from "react";
+import { ModalConfirm } from "./ModalConfirm";
+import { ModalDone } from "./ModalDone";
 import { XMarkIcon } from "@heroicons/react/16/solid";
 
 export default function ChangeVault({
@@ -18,12 +18,11 @@ export default function ChangeVault({
   const [vault, setVault] = useState("");
   const [error, setError] = useState("");
 
-  const printCancel = () => {    
+  const printCancel = () => {
     setOpen(false);
   };
   const handleConfirm = async () => {
     try {
-      
       setOpenDone(true);
     } catch (error) {
       console.error(error);
@@ -38,7 +37,7 @@ export default function ChangeVault({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const validationError = console.log('validate vault',vault);
+    // const validationError = console.log('validate vault',vault);
     // if (validationError) {
     //   setError(validationError);
     //   return;
@@ -61,7 +60,8 @@ export default function ChangeVault({
           title={"Vault Address Changed"}
           message={
             <p>
-              Your app vault address was succesfully changed to{" "} <strong>{vault}</strong>. 
+              Your app vault address was succesfully changed to{" "}
+              <strong>{vault}</strong>.
             </p>
           }
           action={setOpen}
@@ -94,7 +94,11 @@ export default function ChangeVault({
                 Change App Vault Address
               </span>
               <span className="text-[#8a8a8f] text-base font-normal font-['Noto Sans']">
-                This function allows you to change the vault address where the funds received from purchases will be sent. By initiating this process, ensure that the new address is prepared to effectively manage the funds. Once the change is made, the new address will assume all responsibilities associated with managing the funds.
+                This function allows you to change the vault address where the
+                funds received from purchases will be sent. By initiating this
+                process, ensure that the new address is prepared to effectively
+                manage the funds. Once the change is made, the new address will
+                assume all responsibilities associated with managing the funds.
               </span>
             </div>
             <div className="">
