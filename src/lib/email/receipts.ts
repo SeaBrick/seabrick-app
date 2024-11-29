@@ -57,7 +57,7 @@ export async function sendReceipt(
 
     // Send the email
     const { data, error } = await resend.emails.send({
-      from: "Seabrick <receipt@seabrick.com>",
+      from: "Seabrick App <receipt@seabrick.com>",
       to: [email],
       subject: "Thanks for the Buy! Here is your receipt",
       html: html,
