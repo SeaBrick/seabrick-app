@@ -56,10 +56,11 @@ export async function POST(request: NextRequest) {
         },
       ],
       mode: "payment",
-      consent_collection: {
-        terms_of_service: "required",
-        promotions: "auto",
-      },
+      // TODO: John should activate this by adding the terms of service
+      // Or maybe it's just not supported by other country than US
+      // consent_collection: {
+      //   terms_of_service: "required",
+      // },
 
       return_url:
         redirectUrl +
