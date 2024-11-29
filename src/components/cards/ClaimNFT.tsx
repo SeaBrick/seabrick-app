@@ -6,7 +6,6 @@ import Image from "next/image"
 import { ModalDone } from "../modals/ModalDone"
 import SubmitButton from "../buttons/SubmitButton"
 import { claimToken, getClaimedTokens } from "@/app/dashboard/requests"
-import LoadingDots from "../spinners/LoadingDots"
 import LoadingBricks from "../spinners/LoadingBricks"
 import Link from "next/link"
 
@@ -94,7 +93,6 @@ export default function ClaimTokens({
         >
             {isLoading ? (
             <div className="gap-2 flex flex-col min-h-[150px] h-[fit-content] overflow-y-hidden">
-              {/* <LoadingDots /> */}
               <LoadingBricks />
               </div>
             ) : (              
