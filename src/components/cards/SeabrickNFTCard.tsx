@@ -3,12 +3,11 @@ import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
 import { useContractContext } from "@/context/contractContext";
 
 
-interface CardProps {  
-  isAdmin: boolean,
+interface CardProps {    
   isOwner: boolean
 }
 
-export default function SeabrickNFTCard({isAdmin, isOwner}:CardProps) {
+export default function SeabrickNFTCard(isOwner:CardProps) {
   const {
     data: { seabrick, market },
   } = useContractContext(); 
@@ -80,7 +79,7 @@ export default function SeabrickNFTCard({isAdmin, isOwner}:CardProps) {
                     {market.price} USD
                   </div>
                 </div>
-                {(isAdmin || isOwner) ? (
+                {isOwner ? (
                 <div className="self-stretch justify-between items-center inline-flex">
                   <div className="text-black text-base font-normal font-['Noto Sans']">
                     Vault Address
