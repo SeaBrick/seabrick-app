@@ -37,13 +37,11 @@ export async function sendReceipt(
   </div>`;
 
   const html = ejs.render(raw, {
-    // user: "Victor",
     email,
     date: date.toLocaleDateString(),
     tokenIds: tokenIds.join(", "),
-    // address: "0x000000000000000000000000000000",
     hash: txHash,
-    // img_url: "/brick.webp",
+    logoUrl: "app.seabrick.com/seabrick.svg",
   });
 
   try {
