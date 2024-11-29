@@ -55,10 +55,10 @@ function Table({
                 }
                 return (
                   <td
-                    className={`text-black text-justify text-base font-normal font-['Noto_Sans'] table-cell p-3 inline-flex ${textExtraClasses} test`}
+                    className={`text-black text-justify text-base font-normal font-['Noto_Sans'] table-cell p-3 ${textExtraClasses} test`}
                     key={`${j}-${i}`}
                   >
-                    <div className="flex">
+                    <div className="flex items-center">
                       <p>{showText}</p>
                       {enableCopier ? <TextCopier text={valueText} /> : ""}
                     </div>
