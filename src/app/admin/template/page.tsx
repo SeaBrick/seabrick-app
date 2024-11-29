@@ -4,10 +4,14 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import * as ejs from "ejs";
+import { createClient } from "@/lib/supabase/client";
+import { zeroHash } from "viem";
 export default function RenderTest() {
   const [activeEditor, setActiveEditor] = useState(false);
   const [activateInstructions, setActivateInstructions] = useState(true);
+  const [originalTemplate, setOriginalTemplate] = useState("");
   const [template, setTemplate] = useState("");
+
   // get template for useContext
   // and set it automatically
   const [render, setRender] = useState("<p>Your result Here</p>");
@@ -22,6 +26,28 @@ export default function RenderTest() {
       "The blockchain transaction hash that verified the creation of the tokens",
     logoUrl: "The Seabrick logo URL",
   };
+
+  async function getReceiptTemplate() {
+    const { error, data } = await createClient()
+      .from("email_templates")
+      .select("raw_html")
+      .eq("id", "receipt")
+      .single<{ raw_html: string }>();
+
+    // TODO: Add some error catcher
+    if (error) {
+      console.error(error);
+      throw error;
+    }
+
+    setOriginalTemplate(data.raw_html);
+    setTemplate(data.raw_html);
+    setRender(data.raw_html);
+  }
+
+  useEffect(() => {
+    getReceiptTemplate();
+  }, []);
 
   useEffect(() => {
     const listener = (event: KeyboardEvent) => {
@@ -40,14 +66,13 @@ export default function RenderTest() {
     const raw = formData.get("raw") as string;
     // define variables to be used
     const html = ejs.render(raw, {
-      user: "Jhon",
+      email: "jhon@seabrick.com",
       date: new Date().toLocaleDateString(),
-      token_id: 0,
-      address: "0x000000000000000000000000000000",
-      hash: "1x11111111111111111111111111",
-      img_url: "/brick.webp",
+      tokenIds: [1, 6, 20],
+      txHash: zeroHash,
+      img_url: "/seabrick.svg",
     });
-    // document.getElementById("render")!.innerHTML = html
+
     setRender(html);
     setTemplate(raw);
   }
@@ -55,6 +80,7 @@ export default function RenderTest() {
   function saveTemplate() {
     console.log(template); // Este es pa guardar
   }
+
   return (
     <div>
       <form className="h-[65vh] flex flex-col p-4 gap-2" action={captureText}>
@@ -70,7 +96,7 @@ export default function RenderTest() {
 
             <button
               className="px-4 py-2 bg-light-gray text-white text-base rounded-md hover:cursor-pointer hover:bg-gray-600 active:bg-gray-400"
-              onClick={() => router.push("/")}
+              onClick={() => router.push("/admin")}
               type="button"
             >
               Go Back
@@ -103,7 +129,13 @@ export default function RenderTest() {
             <button
               className="px-4 py-2 bg-amber-500 text-white text-base rounded-md hover:cursor-pointer hover:bg-amber-600 active:bg-amber-400"
               type="button"
-              onClick={() => setActivateInstructions(!activateInstructions)}
+              onClick={() => {
+                if (activateInstructions) {
+                  // this mean we close
+                  setTemplate(originalTemplate);
+                }
+                setActivateInstructions(!activateInstructions);
+              }}
             >
               {activateInstructions
                 ? "Close Instructions"
