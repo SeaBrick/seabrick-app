@@ -1,8 +1,8 @@
 "use client"; // Error boundaries must be Client Components
 
-import { HomeIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
+import ReloadButton from "@/components/buttons/ReloadButton";
+import { HomeIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function Error({
@@ -11,12 +11,6 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const router = useRouter();
-
-  function reload() {
-    router.refresh();
-  }
-
   useEffect(() => {
     // Log the error to an error reporting service
     console.error(error);
@@ -39,14 +33,7 @@ export default function Error({
             <HomeIcon className="size-5" />
             <span>Go to Home</span>
           </Link>
-          <button
-            onClick={reload}
-            className="flex items-center gap-x-2 px-4 py-2 text-white bg-seabrick-green rounded hover:bg-seabrick-green/85"
-          >
-            <ArrowPathIcon className="size-5" />
-
-            <span>Reload page</span>
-          </button>
+          <ReloadButton />
         </div>
       </div>
     </div>
