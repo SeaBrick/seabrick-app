@@ -1,20 +1,21 @@
-"use client";
+"use client"
 
-import { ChangeEvent, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { ChangeEvent, useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 
-import * as ejs from "ejs";
-import { createClient } from "@/lib/supabase/client";
-import { zeroHash } from "viem";
-import { toast } from "react-toastify";
+import * as ejs from "ejs"
+import { createClient } from "@/lib/supabase/client"
+import { zeroHash } from "viem"
+import { toast } from "react-toastify"
 export default function RenderTest() {
-  const [activeEditor, setActiveEditor] = useState(false);
-  const [activateInstructions, setActivateInstructions] = useState(true);
-  const [originalTemplate, setOriginalTemplate] = useState("");
-  const [template, setTemplate] = useState("");
-  const [render, setRender] = useState("<p>Your result Here</p>");
+  const [activeEditor, setActiveEditor] = useState(false)
+  const [activateInstructions, setActivateInstructions] = useState(true)
+  const [originalTemplate, setOriginalTemplate] = useState("")
+  const [disableSave, setDisableSave] = useState(true)
+  const [template, setTemplate] = useState("")
+  const [render, setRender] = useState("<p>Your result Here</p>")
 
-  const router = useRouter();
+  const router = useRouter()
 
   const variables = {
     email: "The email of the token buyer",
@@ -23,10 +24,11 @@ export default function RenderTest() {
     txHash:
       "The blockchain transaction hash that verified the creation of the tokens",
     logoUrl: "The Seabrick logo URL",
-  };
+  }
 
   function templateOnChange(e: ChangeEvent<HTMLTextAreaElement>) {
-    setTemplate(e.target.value);
+    setTemplate(e.target.value)
+    setDisableSave(true)
   }
 
   function renderRawHtml(rawHtml: string): string {
@@ -38,41 +40,41 @@ export default function RenderTest() {
         tokenIds: [1, 6, 20],
         txHash: zeroHash,
         img_url: "/seabrick.svg",
-      });
-      return html;
+      })
+      return html
     } catch (error) {
-      let errorMessage = "Failed to render the HTML provided";
+      let errorMessage = "Failed to render the HTML provided"
+      setDisableSave(true)
       if (error instanceof Error) {
-        console.log(error);
-        errorMessage = error.message;
+        errorMessage = error.message.match(/(.*? is not defined)/)![1]
       }
 
-      toast.error(errorMessage);
-      return rawHtml;
+      toast.error(errorMessage)
+      return rawHtml
     }
   }
 
   function captureText(formData: FormData) {
-    const raw = formData.get("raw") as string;
-    const html = renderRawHtml(raw);
-
-    setRender(html);
-    setTemplate(raw);
+    const raw = formData.get("raw") as string
+    setDisableSave(false)
+    const html = renderRawHtml(raw)
+    setRender(html)
+    setTemplate(raw)
   }
 
   async function saveTemplate() {
     const { error } = await createClient()
       .from("email_templates")
       .update({ raw_html: template })
-      .eq("id", "receipt");
+      .eq("id", "receipt")
 
     if (error) {
-      console.error(error);
-      toast.error("Failed to save the template");
-      return;
+      console.error(error)
+      toast.error("Failed to save the template")
+      return
     }
-
-    toast.success("Template saved succesfully!");
+    toast.success("Template saved succesfully!")
+    setDisableSave(true)
   }
 
   useEffect(() => {
@@ -81,48 +83,49 @@ export default function RenderTest() {
         .from("email_templates")
         .select("raw_html")
         .eq("id", "receipt")
-        .single<{ raw_html: string }>();
+        .single<{ raw_html: string }>()
 
       // TODO: Add some error catcher
       if (error) {
-        console.error(error);
-        throw error;
+        console.error(error)
+        throw error
       }
 
       // Save the raw html
-      setOriginalTemplate(data.raw_html);
-      setTemplate(data.raw_html);
+      setOriginalTemplate(data.raw_html)
+      setTemplate(data.raw_html)
 
       // Render it with some mocke data
-      const html = renderRawHtml(data.raw_html);
-      setRender(html);
+      const html = renderRawHtml(data.raw_html)
+      setRender(html)
     }
 
     // Call the function
-    getReceiptTemplate();
-  }, []);
+    getReceiptTemplate()
+  }, [])
 
   useEffect(() => {
     const listener = (event: KeyboardEvent) => {
-      if (event.altKey && event.key === "r") {
-        const renderButton = document.getElementById("render-button");
-        renderButton?.click();
+      if (event.ctrlKey && event.key === "Enter") {
+        const renderButton = document.getElementById("render-button")
+        renderButton?.click()
       }
-    };
-    document.addEventListener("keydown", listener);
+    }
+    document.addEventListener("keydown", listener)
     return () => {
-      document.removeEventListener("keydown", listener);
-    };
-  }, []);
+      document.removeEventListener("keydown", listener)
+    }
+  }, [])
 
   return (
     <div>
-      <form className="h-[65vh] flex flex-col p-4 gap-2" action={captureText}>
+      <form className="h-full flex flex-col p-4 gap-2" action={captureText}>
         <div className="w-full flex justify-between">
           <div className="w-full flex justify-start gap-2">
             <button
-              className="px-4 py-2 text-white text-base rounded-md hover:cursor-pointer bg-seabrick-green active:bg-teal-400 hover:bg-teal-700"
+              className="px-4 py-2 text-white text-base rounded-md hover:cursor-pointer bg-seabrick-green active:bg-teal-400 hover:bg-teal-700 disabled:bg-gray-300 disabled:text-gray-600 disabled:hover:cursor-default"
               onClick={saveTemplate}
+              disabled={disableSave}
               type="button"
             >
               Save
@@ -140,7 +143,7 @@ export default function RenderTest() {
             {activeEditor && (
               <>
                 <span className="self-center mr-2 text-gray-800">
-                  Press Alt+R to Render
+                  Press Ctrl + Enter to Render
                 </span>
                 <button
                   id="render-button"
@@ -154,7 +157,13 @@ export default function RenderTest() {
             <button
               className="px-4 py-2 bg-seabrick-blue text-white text-base rounded-md hover:cursor-pointer hover:bg-blue-600 active:bg-[#4290d6]"
               type="button"
-              onClick={() => setActiveEditor(!activeEditor)}
+              onClick={() => {
+                if (activeEditor) {
+                  // this mean we close
+                  setTemplate(originalTemplate)
+                }
+                setActiveEditor(!activeEditor)
+              }}
             >
               {activeEditor ? "Close Editor" : "Open Editor"}
             </button>
@@ -162,11 +171,7 @@ export default function RenderTest() {
               className="px-4 py-2 bg-amber-500 text-white text-base rounded-md hover:cursor-pointer hover:bg-amber-600 active:bg-amber-400"
               type="button"
               onClick={() => {
-                if (activateInstructions) {
-                  // this mean we close
-                  setTemplate(originalTemplate);
-                }
-                setActivateInstructions(!activateInstructions);
+                setActivateInstructions(!activateInstructions)
               }}
             >
               {activateInstructions
@@ -214,7 +219,7 @@ export default function RenderTest() {
                       <span className="mr-1">:</span>
                       <span>{text}</span>
                     </li>
-                  );
+                  )
                 })}
               </ul>
             </div>
@@ -223,6 +228,21 @@ export default function RenderTest() {
               Press the{" "}
               <span className="bg-red-300 p-1 rounded-md">Render</span> button
               to visualize your code.
+            </p>
+            <p>
+              After rendering, you can press{" "}
+              <span className="bg-green-300 p-1 rounded-md">Save</span> button
+              to save the template.
+            </p>
+            <p>
+              For more information about conditionals and loops, visit the EJS
+              documentation{" "}
+              <a
+                className="text-seabrick-blue underline"
+                href="https://ejs.co/#docs"
+              >
+                here
+              </a>
             </p>
           </div>
 
@@ -236,6 +256,7 @@ export default function RenderTest() {
                 name="raw"
                 value={template}
                 onChange={templateOnChange}
+                spellCheck="false"
                 placeholder={`Your code here`}
               ></textarea>
             </div>
@@ -243,7 +264,7 @@ export default function RenderTest() {
 
           <div
             id="preview-area"
-            className={`h-full w-full bg-white rounded-xl p-4 overflow-auto border-2 border-seabrick-green`}
+            className={`h-auto w-full bg-white rounded-xl p-4 overflow-auto border-2 border-seabrick-green`}
           >
             <div
               id="render"
@@ -253,5 +274,5 @@ export default function RenderTest() {
         </div>
       </form>
     </div>
-  );
+  )
 }

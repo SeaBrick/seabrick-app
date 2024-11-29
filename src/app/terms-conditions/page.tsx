@@ -1,5 +1,5 @@
 export default function TermsAndConditions() {
-  // todo: add go back
+  // TODO: add go back
   const termsConditions = [
     {
       title: "Payment for Pre-Purchase",
