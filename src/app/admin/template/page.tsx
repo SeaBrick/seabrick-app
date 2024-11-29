@@ -1,34 +1,43 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-import * as ejs from "ejs"
+import * as ejs from "ejs";
 export default function RenderTest() {
-  const [activeEditor, setActiveEditor] = useState(false)
-  const [activateInstructions, setActivateInstructions] = useState(false)
-  const [template, setTemplate] = useState("")
+  const [activeEditor, setActiveEditor] = useState(false);
+  const [activateInstructions, setActivateInstructions] = useState(true);
+  const [template, setTemplate] = useState("");
   // get template for useContext
   // and set it automatically
-  const [render, setRender] = useState("<p>Your result Here</p>")
+  const [render, setRender] = useState("<p>Your result Here</p>");
 
-  const router = useRouter()
+  const router = useRouter();
+
+  const variables = {
+    email: "The email of the token buyer",
+    tokenIds: "The IDs of the token obtained",
+    date: "Date of the buy",
+    txHash:
+      "The blockchain transaction hash that verified the creation of the tokens",
+    logoUrl: "The Seabrick logo URL",
+  };
 
   useEffect(() => {
     const listener = (event: KeyboardEvent) => {
       if (event.altKey && event.key === "r") {
-        const renderButton = document.getElementById("render-button")
-        renderButton?.click()
+        const renderButton = document.getElementById("render-button");
+        renderButton?.click();
       }
-    }
-    document.addEventListener("keydown", listener)
+    };
+    document.addEventListener("keydown", listener);
     return () => {
-      document.removeEventListener("keydown", listener)
-    }
-  }, [])
+      document.removeEventListener("keydown", listener);
+    };
+  }, []);
 
   function captureText(formData: FormData) {
-    const raw = formData.get("raw") as string
+    const raw = formData.get("raw") as string;
     // define variables to be used
     const html = ejs.render(raw, {
       user: "Jhon",
@@ -37,22 +46,22 @@ export default function RenderTest() {
       address: "0x000000000000000000000000000000",
       hash: "1x11111111111111111111111111",
       img_url: "/brick.webp",
-    })
+    });
     // document.getElementById("render")!.innerHTML = html
-    setRender(html)
-    setTemplate(raw)
+    setRender(html);
+    setTemplate(raw);
   }
 
   function saveTemplate() {
-    console.log(template) // Este es pa guardar
+    console.log(template); // Este es pa guardar
   }
   return (
-    <>
+    <div>
       <form className="h-[65vh] flex flex-col p-4 gap-2" action={captureText}>
         <div className="w-full flex justify-between">
           <div className="w-full flex justify-start gap-2">
             <button
-              className="px-4 py-2 text-white text-base rounded-[5px] hover:cursor-pointer bg-seabrick-green active:bg-teal-400 hover:bg-teal-700"
+              className="px-4 py-2 text-white text-base rounded-md hover:cursor-pointer bg-seabrick-green active:bg-teal-400 hover:bg-teal-700"
               onClick={saveTemplate}
               type="button"
             >
@@ -60,7 +69,7 @@ export default function RenderTest() {
             </button>
 
             <button
-              className="px-4 py-2 bg-light-gray text-white text-base rounded-[5px] hover:cursor-pointer hover:bg-gray-600 active:bg-gray-400"
+              className="px-4 py-2 bg-light-gray text-white text-base rounded-md hover:cursor-pointer hover:bg-gray-600 active:bg-gray-400"
               onClick={() => router.push("/")}
               type="button"
             >
@@ -75,7 +84,7 @@ export default function RenderTest() {
                 </span>
                 <button
                   id="render-button"
-                  className="px-4 py-2 bg-red-600 text-white text-base rounded-[5px] hover:cursor-pointer hover:bg-red-700 active:bg-red-500"
+                  className="px-4 py-2 bg-red-600 text-white text-base rounded-md hover:cursor-pointer hover:bg-red-700 active:bg-red-500"
                   type="submit"
                 >
                   Render
@@ -85,14 +94,14 @@ export default function RenderTest() {
               ""
             )}
             <button
-              className="px-4 py-2 bg-seabrick-blue text-white text-base rounded-[5px] hover:cursor-pointer hover:bg-blue-600 active:bg-[#4290d6]"
+              className="px-4 py-2 bg-seabrick-blue text-white text-base rounded-md hover:cursor-pointer hover:bg-blue-600 active:bg-[#4290d6]"
               type="button"
               onClick={() => setActiveEditor(!activeEditor)}
             >
               {activeEditor ? "Close Editor" : "Open Editor"}
             </button>
             <button
-              className="px-4 py-2 bg-amber-500 text-white text-base rounded-[5px] hover:cursor-pointer hover:bg-amber-600 active:bg-amber-400"
+              className="px-4 py-2 bg-amber-500 text-white text-base rounded-md hover:cursor-pointer hover:bg-amber-600 active:bg-amber-400"
               type="button"
               onClick={() => setActivateInstructions(!activateInstructions)}
             >
@@ -106,74 +115,58 @@ export default function RenderTest() {
         <div id="render-area" className="w-full h-full flex gap-4">
           <div
             id="instructions-area"
-            className={`w-full flex-col rounded-[10px] bg-sky-200	text-sky-900 p-4 ${activateInstructions ? "block" : "hidden"}`}
+            className={`w-full flex gap-y-2 flex-col rounded-xl border-2 border-seabrick-green bg-white p-3 ${activateInstructions ? "block" : "hidden"}`}
           >
             <p>
-              This is an HTML Editor, please write everything in plain HTML.
+              This is an HTML Editor powered by <strong>ejs</strong>. Please
+              write everything in plain HTML.
             </p>
-            <p>To add variables, to it in the format:</p>
-            <code className="bg-sky-300 p-[1px] rounded-[5px]">{`<%={variable}%>`}</code>
-            <p>Example:</p>
-            <code className="bg-sky-300 p-[1px] rounded-[5px]">{`<p>Hello <%=user%>!</p>`}</code>
+
+            <p className="flex gap-x-2">
+              <span>To add variables, to it in the format:</span>
+              <code className="bg-gray-200 py-[1px] px-1 rounded-md">{`<%={variable}%>`}</code>
+            </p>
+            <p className="flex flex-col">
+              <span>Example:</span>
+              <code className="bg-gray-200 p-4 rounded-md">{`<p>Hello <%=user%>!</p>`}</code>
+            </p>
+
+            <p className="flex flex-col">
+              <span>Expected Output:</span>
+              <code className="bg-gray-200 p-5 rounded-md">Hello John!</code>
+            </p>
+
+            <div className="my-2">
+              <p> These are the variables availables to be use:</p>
+              <ul className="list-disc pl-5 ">
+                {Object.entries(variables).map(([name, text], index) => {
+                  return (
+                    <li key={`${name}-${index}`}>
+                      <code className="bg-gray-200 py-[1px] px-1 rounded-md">
+                        {name}
+                      </code>
+                      <span className="mr-1">:</span>
+                      <span>{text}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+
             <p>
-              Expected Output:{" "}
-              <code className="bg-sky-300 p-[1px] rounded-[5px]">
-                Hello John!
-              </code>{" "}
+              Press the{" "}
+              <span className="bg-red-300 p-1 rounded-md">Render</span> button
+              to visualize your code.
             </p>
-            <p> Available Variables:</p>
-            <p>
-              {" "}
-              - <code className="bg-sky-300 p-[1px]rounded-[5px]">
-                user:
-              </code>{" "}
-              The name of the token buyer{" "}
-            </p>
-            <p>
-              {" "}
-              - <code className="bg-sky-300 p-[1px] rounded-[5px]">
-                date:
-              </code>{" "}
-              {`Today's`} date{" "}
-            </p>
-            <p>
-              {" "}
-              -{" "}
-              <code className="bg-sky-300 p-[1px] rounded-[5px]">
-                token_id:
-              </code>{" "}
-              {`Token's`} identifier{" "}
-            </p>
-            <p>
-              {" "}
-              -{" "}
-              <code className="bg-sky-300 p-[1px] rounded-[5px]">
-                address:
-              </code>{" "}
-              Destination Address{" "}
-            </p>
-            <p>
-              {" "}
-              - <code className="bg-sky-300 p-[1px] rounded-[5px]">
-                hash:
-              </code>{" "}
-              Transaction Hash{" "}
-            </p>
-            <p>
-              -{" "}
-              <code className="bg-sky-300 p-[1px] rounded-[5px]">img_url:</code>{" "}
-              Seabrick logo url
-            </p>
-            <p>Press the {`"Render"`} button to visualize your code</p>
           </div>
 
           <div
             id="editor-area"
-            className={`w-full flex-col rounded-[10px] ${activeEditor ? "flex" : "hidden"}`}
+            className={`w-full flex-col rounded-xl ${activeEditor ? "flex" : "hidden"}`}
           >
             <div id="input-area" className="flex w-full h-full">
               <textarea
-                className="bg-white text-red-700 border-sky-700 border-2 w-full h-full p-3 rounded-[10px]"
+                className="bg-white border-sky-700 border-2 w-full h-full p-3 rounded-xl"
                 name="raw"
                 placeholder={`Your code here`}
               ></textarea>
@@ -182,7 +175,7 @@ export default function RenderTest() {
 
           <div
             id="preview-area"
-            className={`h-full w-full bg-white rounded-[10px] p-4 overflow-auto`}
+            className={`h-full w-full bg-white rounded-xl p-4 overflow-auto border-2 border-seabrick-green`}
           >
             <div
               id="render"
@@ -191,6 +184,6 @@ export default function RenderTest() {
           </div>
         </div>
       </form>
-    </>
-  )
+    </div>
+  );
 }
