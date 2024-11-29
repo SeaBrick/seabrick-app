@@ -145,7 +145,6 @@ const OrderDetails: React.FC = () => {
       await sleep(4000);
 
       try {
-        // ALL the error are catched by the Error.tsx boundary
         if (type === "crypto") {
           if (!hash || !isHash(hash)) {
             // throw new Error("Invalid hash for Crypto transaction");
