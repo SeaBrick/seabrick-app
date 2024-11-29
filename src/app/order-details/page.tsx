@@ -1,12 +1,17 @@
 "use client";
 import Link from "next/link";
-import { HomeIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowPathIcon,
+  HomeIcon,
+  ShoppingCartIcon,
+} from "@heroicons/react/24/outline";
 import DetailsTable, { type DetailsTableProps } from "./DetailsTable";
 import { type Hex, isHash } from "viem";
 import { getBuysByTransaction } from "@/lib/subgraph";
 import { createClient } from "@/lib/supabase/client";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 async function getBuysCrypto(txHash: Hex): Promise<DetailsTableProps> {
   const resp = await getBuysByTransaction(txHash);
@@ -120,6 +125,11 @@ const OrderDetails: React.FC = () => {
   const type = searchParams.get("type");
   const hash = searchParams.get("hash");
   const session_id = searchParams.get("session_id");
+  const router = useRouter();
+
+  function reload() {
+    router.refresh();
+  }
 
   const [tableDetails, setTableDetails] = useState<DetailsTableProps>();
   const [error, setError] = useState<string>();
@@ -189,19 +199,31 @@ const OrderDetails: React.FC = () => {
         {loading ? (
           <p>Loading...</p>
         ) : error !== undefined || tableDetails === undefined ? (
-          <div className="text-center p-24 bg-white rounded-lg shadow-xl flex flex-col gap-y-5">
-            <h1 className="text-5xl font-bold text-seabrick-blue">Error</h1>
-            <div>
-              <p className="text-gray-500">Oops! Something went wrong!</p>
-              {error && <p className="text-gray-500">{error}</p>}
-            </div>
-            <div>
-              <Link
-                href="/"
-                className="inline-block px-4 py-2 text-white bg-seabrick-blue rounded hover:bg-blue-600"
-              >
-                Go Back to Home
-              </Link>
+          <div className="flex items-center justify-center h-screen bg-gray-100">
+            <div className="text-center p-24 bg-white rounded-lg shadow-xl flex flex-col gap-y-5">
+              <h1 className="text-5xl font-bold text-seabrick-blue">Error</h1>
+              <div className="flex flex-col gap-y-4">
+                <p className="text-gray-500">Oops! Something went wrong!</p>
+                {error && <p className="text-gray-500">{error}</p>}
+                <p className="text-gray-500">You can try reloading the page</p>
+              </div>
+              <div className="flex gap-x-4">
+                <Link
+                  href="/"
+                  className="flex items-center gap-x-2 px-4 py-2 text-white bg-seabrick-blue rounded hover:bg-seabrick-blue/85"
+                >
+                  <HomeIcon className="size-5" />
+                  <span>Go to Home</span>
+                </Link>
+                <button
+                  onClick={reload}
+                  className="flex items-center gap-x-2 px-4 py-2 text-white bg-seabrick-green rounded hover:bg-seabrick-green/85"
+                >
+                  <ArrowPathIcon className="size-5" />
+
+                  <span>Reload page</span>
+                </button>
+              </div>
             </div>
           </div>
         ) : (

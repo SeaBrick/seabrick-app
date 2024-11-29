@@ -40,7 +40,6 @@ export default function Error({
             <span>Go to Home</span>
           </Link>
           <button
-            // href="/"
             onClick={reload}
             className="flex items-center gap-x-2 px-4 py-2 text-white bg-seabrick-green rounded hover:bg-seabrick-green/85"
           >
