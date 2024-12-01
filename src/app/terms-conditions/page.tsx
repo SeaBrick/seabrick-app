@@ -1,5 +1,6 @@
+import BackButton from "@/components/buttons/BackButton";
+
 export default function TermsAndConditions() {
-  // todo: add go back
   const termsConditions = [
     {
       title: "Payment for Pre-Purchase",
@@ -56,10 +57,11 @@ export default function TermsAndConditions() {
       description:
         "This agreement may be amended from time to time at the discretion of the Seller, provided that the essential entitlement to 1 ton of biogenic carbon credits and a priority right to purchase SeaBrick  is not compromised.",
     },
-  ]
+  ];
   return (
     <>
       <div className="py-4 px-32 w-full">
+        <BackButton />
         <p className="text-5xl w-full mt-8 mb-5 font-bold text-seabrick-blue">
           Terms and Conditions
         </p>
@@ -74,10 +76,10 @@ export default function TermsAndConditions() {
                 <p className="mt-1 text-lg font-bold">{d.title}</p>
                 <span className="text-lg">{d.description}</span>
               </li>
-            )
+            );
           })}
         </ul>
       </div>
     </>
-  )
+  );
 }
