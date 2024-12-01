@@ -4,7 +4,7 @@ import { validateEmail } from "@/components/utils/ValidateEmail"
 import { ModalDone } from "./ModalDone"
 import { XMarkIcon } from "@heroicons/react/16/solid";
 
-export default function AddAdminModal({
+export default function TranferOwnershipModal({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   open,
   setOpen,

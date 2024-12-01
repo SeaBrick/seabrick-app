@@ -1,8 +1,9 @@
-import { ArrowLeftIcon } from "@heroicons/react/24/outline"
-import { useRouter } from "next/navigation"
+"use client";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 
 export default function BackButton() {
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <button
@@ -13,5 +14,5 @@ export default function BackButton() {
       <ArrowLeftIcon className="w-5 h-5 group-hover:-translate-x-1 duration-300 group-hover:text-white group-active:text-white group-active:-translate-x-1" />
       Go back
     </button>
-  )
+  );
 }

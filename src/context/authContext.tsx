@@ -13,7 +13,7 @@ import type {
   AuthContextAuthenticated,
   AuthContextUnauthenticated,
   UserRole,
-  UserType, //   // Somehow adding a query fix this
+  UserType, 
 } from "@/lib/interfaces/auth";
 import { decodeJWT, getUserRole } from "@/lib/utils/auth";
 import { getAddress, type Address } from "viem";

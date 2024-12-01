@@ -1,10 +1,9 @@
 export interface TableColumn {
-  key: string
-  label: string
+  key: string;
+  label: string;
 }
-import { processTime, timeAgo, truncateString } from "@/lib/utils"
-import TextCopier from "../TextCopier"
-
+import { processTime, timeAgo, truncateString } from "@/lib/utils";
+import TextCopier from "../TextCopier";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function Table({
@@ -12,10 +11,10 @@ function Table({
   data,
   textExtraClasses = "",
 }: {
-  columns: TableColumn[]
+  columns: TableColumn[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: { [s: string]: any }[]
-  textExtraClasses?: string
+  data: { [s: string]: any }[];
+  textExtraClasses?: string;
 }) {
   return (
     <div className="overflow-auto w-full rounded-t-[10px]">
@@ -39,39 +38,39 @@ function Table({
               key={j}
             >
               {columns.map((column, i) => {
-                let enableCopier = false
-                let valueText = ""
-                let showText = row[column.key]
+                let enableCopier = false;
+                let valueText = "";
+                let showText = row[column.key];
                 if (row[column.key] && row[column.key].length > 13) {
-                  enableCopier = true
-                  valueText = row[column.key]
-                  showText = truncateString(row[column.key])
+                  enableCopier = true;
+                  valueText = row[column.key];
+                  showText = truncateString(row[column.key]);
                 }
                 if (column.key === "claimed") {
                   showText =
-                    row[column.key] === false ? "Not Claimed" : "Claimed"
+                    row[column.key] === false ? "Not Claimed" : "Claimed";
                 }
                 if (column.key === "blockTimestamp") {
-                  showText = timeAgo(processTime(row[column.key]))
+                  showText = timeAgo(processTime(row[column.key]));
                 }
                 return (
                   <td
-                    className={`text-black text-justify text-base font-normal font-['Noto_Sans'] table-cell p-3 inline-flex ${textExtraClasses} test`}
+                    className={`text-black text-justify text-base font-normal font-['Noto_Sans'] table-cell p-3 ${textExtraClasses} test`}
                     key={`${j}-${i}`}
                   >
-                    <div className="flex">
+                    <div className="flex items-center">
                       <p>{showText}</p>
                       {enableCopier ? <TextCopier text={valueText} /> : ""}
                     </div>
                   </td>
-                )
+                );
               })}
             </tr>
           ))}
         </tbody>
       </table>
     </div>
-  )
+  );
 }
 
-export default Table
+export default Table;
